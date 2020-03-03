@@ -13,9 +13,10 @@
  */
 
 import {waitForElementToBeRemoved} from '@testing-library/dom';
-import {cleanup, render} from '@testing-library/react';
+import {act, cleanup, render} from '@testing-library/react';
+import {createMemoryHistory} from 'history';
 import React from 'react';
-import {HashRouter as Router} from 'react-router-dom';
+import {HashRouter, Router} from 'react-router-dom';
 
 import ListView from '../../../../src/main/resources/META-INF/resources/js/components/list-view/ListView.es';
 import {
@@ -36,7 +37,7 @@ describe('ListView', () => {
 		fetch.mockResponse(JSON.stringify(RESPONSES.NO_ITEMS));
 
 		const {queryByText} = render(
-			<Router>
+			<HashRouter>
 				<ListView
 					actions={ACTIONS}
 					columns={COLUMNS}
@@ -45,7 +46,7 @@ describe('ListView', () => {
 				>
 					{BODY}
 				</ListView>
-			</Router>
+			</HashRouter>
 		);
 
 		await waitForElementToBeRemoved(() =>
@@ -60,7 +61,7 @@ describe('ListView', () => {
 		fetch.mockResponse(JSON.stringify(RESPONSES.ONE_ITEM));
 
 		const {container, queryAllByTestId} = render(
-			<Router>
+			<HashRouter>
 				<ListView
 					actions={ACTIONS}
 					columns={COLUMNS}
@@ -69,7 +70,7 @@ describe('ListView', () => {
 				>
 					{BODY}
 				</ListView>
-			</Router>
+			</HashRouter>
 		);
 
 		await waitForElementToBeRemoved(() =>
@@ -84,7 +85,7 @@ describe('ListView', () => {
 		fetch.mockResponse(JSON.stringify(RESPONSES.TWENTY_ONE_ITEMS));
 
 		const {container, queryAllByTestId, queryAllByText} = render(
-			<Router>
+			<HashRouter>
 				<ListView
 					actions={ACTIONS}
 					columns={COLUMNS}
@@ -93,7 +94,7 @@ describe('ListView', () => {
 				>
 					{BODY}
 				</ListView>
-			</Router>
+			</HashRouter>
 		);
 
 		await waitForElementToBeRemoved(() => {
@@ -107,5 +108,92 @@ describe('ListView', () => {
 				.textContent
 		).toBe('1');
 		expect(queryAllByText('Showing 1 to 20 of 21').length).toBe(1);
+	});
+
+	it('current page is greater than total pages', async () => {
+		const history = createMemoryHistory();
+		history.push('/test?page=2');
+		fetch.mockResponse(JSON.stringify(RESPONSES.ONE_ITEM));
+		const {container, queryAllByTestId} = render(
+			<Router history={history}>
+				<ListView
+					actions={ACTIONS}
+					columns={COLUMNS}
+					emptyState={EMPTY_STATE}
+					endpoint={ENDPOINT}
+					history={history}
+				>
+					{BODY}
+				</ListView>
+			</Router>
+		);
+
+		await waitForElementToBeRemoved(() => {
+			return document.querySelector('span.loading-animation');
+		});
+
+		expect(queryAllByTestId('item').length).toBe(1);
+		expect(container.querySelectorAll('li.page-item').length).toBe(0);
+	});
+
+	it('calls actions promises', async () => {
+		const refreshAction = jest.fn().mockResolvedValue(true);
+		const nonRefreshAction = jest.fn().mockResolvedValue(false);
+		fetch.mockResponse(JSON.stringify(RESPONSES.ONE_ITEM));
+
+		const actions = [
+			{
+				name: 'Action without action',
+			},
+			{
+				action: refreshAction,
+				name: 'Action that forces refresh',
+			},
+			{
+				action: nonRefreshAction,
+				name: "Action that doesn't refresh",
+			},
+		];
+
+		const {getAllByRole} = render(
+			<HashRouter>
+				<ListView
+					actions={actions}
+					columns={COLUMNS}
+					emptyState={EMPTY_STATE}
+					endpoint={ENDPOINT}
+					history={history}
+				>
+					{BODY}
+				</ListView>
+			</HashRouter>
+		);
+
+		await waitForElementToBeRemoved(() => {
+			return document.querySelector('span.loading-animation');
+		});
+
+		let buttons = getAllByRole('button');
+
+		const refreshButton = buttons[buttons.length - 2];
+
+		await act(async () => {
+			refreshButton.dispatchEvent(
+				new MouseEvent('click', {bubbles: true})
+			);
+		});
+
+		expect(refreshAction.mock.calls.length).toBe(1);
+
+		buttons = getAllByRole('button');
+		const nonRefreshButton = buttons[buttons.length - 1];
+
+		await act(async () => {
+			nonRefreshButton.dispatchEvent(
+				new MouseEvent('click', {bubbles: true})
+			);
+		});
+
+		expect(nonRefreshAction.mock.calls.length).toBe(1);
 	});
 });

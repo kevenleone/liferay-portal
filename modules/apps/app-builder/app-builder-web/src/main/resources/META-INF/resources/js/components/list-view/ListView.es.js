@@ -13,7 +13,7 @@
  */
 
 import {useResource} from '@clayui/data-provider';
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {withRouter} from 'react-router-dom';
 
 import useQuery from '../../hooks/useQuery.es';
@@ -44,7 +44,10 @@ export default withRouter(
 			...queryParams,
 		});
 
-		const dispatch = action => setQuery(reducer(query, action));
+		const dispatch = useCallback(
+			action => setQuery(reducer(query, action)),
+			[query, setQuery]
+		);
 
 		const {refetch, resource} = useResource({
 			fetchDelay: 0,
@@ -63,11 +66,13 @@ export default withRouter(
 
 		if (resource) {
 			({items = [], totalCount, lastPage: totalPages} = resource);
+		}
 
+		useEffect(() => {
 			if (query.page > totalPages) {
 				dispatch({page: totalPages, type: 'CHANGE_PAGE'});
 			}
-		}
+		}, [dispatch, query.page, totalPages]);
 
 		let refetchOnActions;
 
