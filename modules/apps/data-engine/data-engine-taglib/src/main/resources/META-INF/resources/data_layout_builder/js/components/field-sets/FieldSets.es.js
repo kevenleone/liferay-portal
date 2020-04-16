@@ -12,31 +12,47 @@
  * details.
  */
 
-import React, {useContext} from 'react';
+import ClayButton from '@clayui/button';
+import React, {useContext, useState} from 'react';
 
 import AppContext from '../../AppContext.es';
 import {DRAG_FIELDSET} from '../../drag-and-drop/dragTypes.es';
 import {containsFieldSet} from '../../utils/dataDefinition.es';
 import FieldType from '../field-types/FieldType.es';
+import FieldSetsModal from './FieldSetsModal.es';
 
 export default function FieldSets() {
 	const [{dataDefinition, fieldSets}] = useContext(AppContext);
+	const [isVisible, setIsVisible] = useState(false);
 
 	return (
 		<>
-			{fieldSets.map((fieldSet) => (
-				<FieldType
-					description={`${
-						fieldSet.dataDefinitionFields.length
-					} ${Liferay.Language.get('fields')}`}
-					disabled={containsFieldSet(dataDefinition, fieldSet.id)}
-					dragType={DRAG_FIELDSET}
-					fieldSet={fieldSet}
-					icon="forms"
-					key={fieldSet.dataDefinitionKey}
-					label={fieldSet.name[themeDisplay.getLanguageId()]}
-				/>
-			))}
+			<ClayButton
+				block
+				displayType="secondary"
+				onClick={() => setIsVisible(true)}
+			>
+				{Liferay.Language.get('new-fieldset')}
+			</ClayButton>
+			<div className="mt-3">
+				{fieldSets.map(fieldSet => (
+					<FieldType
+						description={`${
+							fieldSet.dataDefinitionFields.length
+						} ${Liferay.Language.get('fields')}`}
+						disabled={containsFieldSet(dataDefinition, fieldSet.id)}
+						dragType={DRAG_FIELDSET}
+						fieldSet={fieldSet}
+						icon="forms"
+						key={fieldSet.dataDefinitionKey}
+						label={fieldSet.name[themeDisplay.getLanguageId()]}
+					/>
+				))}
+			</div>
+			<FieldSetsModal
+				isVisible={isVisible}
+				onClose={() => setIsVisible(false)}
+			/>
 		</>
 	);
 }
