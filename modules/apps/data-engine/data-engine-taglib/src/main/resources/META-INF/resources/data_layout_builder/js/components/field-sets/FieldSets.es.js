@@ -32,7 +32,7 @@ export default function FieldSets() {
 				displayType="secondary"
 				onClick={() => setIsVisible(true)}
 			>
-				{Liferay.Language.get('new-fieldset')}
+				{Liferay.Language.get('add-fieldset')}
 			</ClayButton>
 			<div className="mt-3">
 				{fieldSets.map(fieldSet => (

@@ -34,7 +34,7 @@ export default ({fieldSet, isVisible, onClose}) => {
 			<ClayModal.Header>
 				{fieldSet
 					? Liferay.Language.get('edit-fieldset')
-					: Liferay.Language.get('new-fieldset')}
+					: Liferay.Language.get('add-fieldset')}
 			</ClayModal.Header>
 			<ClayModal.Body>
 				<div className="pl-4 pr-4">Working</div>
