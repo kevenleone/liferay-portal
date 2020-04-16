@@ -23,35 +23,73 @@ import FieldSetsModal from './FieldSetsModal.es';
 
 export default function FieldSets() {
 	const [{dataDefinition, fieldSets}] = useContext(AppContext);
-	const [isVisible, setIsVisible] = useState(false);
+	const [fieldSetState, setFieldSetState] = useState({
+		fieldSet: null,
+		isVisible: false,
+	});
+
+	const toggleFieldSet = fieldSet => {
+		setFieldSetState({
+			fieldSet,
+			isVisible: !fieldSetState.isVisible,
+		});
+	};
 
 	return (
 		<>
 			<ClayButton
 				block
 				displayType="secondary"
-				onClick={() => setIsVisible(true)}
+				onClick={() => toggleFieldSet()}
 			>
 				{Liferay.Language.get('add-fieldset')}
 			</ClayButton>
 			<div className="mt-3">
-				{fieldSets.map(fieldSet => (
-					<FieldType
-						description={`${
-							fieldSet.dataDefinitionFields.length
-						} ${Liferay.Language.get('fields')}`}
-						disabled={containsFieldSet(dataDefinition, fieldSet.id)}
-						dragType={DRAG_FIELDSET}
-						fieldSet={fieldSet}
-						icon="forms"
-						key={fieldSet.dataDefinitionKey}
-						label={fieldSet.name[themeDisplay.getLanguageId()]}
-					/>
-				))}
+				{fieldSets.map(fieldSet => {
+					const dropDownActions = [
+						{
+							action: () => toggleFieldSet(fieldSet),
+							name: Liferay.Language.get('edit'),
+						},
+						{
+							action: () => {
+								const confirmed = confirm(
+									Liferay.Language.get(
+										'are-you-sure-you-want-to-delete-this'
+									)
+								);
+
+								if (confirmed) {
+									alert('Removeu');
+								}
+							},
+							name: Liferay.Language.get('delete'),
+						},
+					];
+
+					return (
+						<FieldType
+							actions={dropDownActions}
+							description={`${
+								fieldSet.dataDefinitionFields.length
+							} ${Liferay.Language.get('fields')}`}
+							disabled={containsFieldSet(
+								dataDefinition,
+								fieldSet.id
+							)}
+							dragType={DRAG_FIELDSET}
+							fieldSet={fieldSet}
+							icon="forms"
+							key={fieldSet.dataDefinitionKey}
+							label={fieldSet.name[themeDisplay.getLanguageId()]}
+						/>
+					);
+				})}
 			</div>
 			<FieldSetsModal
-				isVisible={isVisible}
-				onClose={() => setIsVisible(false)}
+				fieldSet={fieldSetState.fieldSet}
+				isVisible={fieldSetState.isVisible}
+				onClose={() => toggleFieldSet()}
 			/>
 		</>
 	);

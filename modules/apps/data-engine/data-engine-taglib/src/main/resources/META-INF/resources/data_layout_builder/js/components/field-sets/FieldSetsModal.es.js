@@ -13,10 +13,14 @@
  */
 
 import ClayButton from '@clayui/button';
+import {ClayInput} from '@clayui/form';
 import ClayModal, {useModal} from '@clayui/modal';
-import React from 'react';
+import React, {useState} from 'react';
 
 export default ({fieldSet, isVisible, onClose}) => {
+	const [fieldSetName, setFieldSetName] = useState(
+		fieldSet ? fieldSet.name.en_US : ''
+	);
 	const {observer} = useModal({
 		onClose,
 	});
@@ -35,6 +39,26 @@ export default ({fieldSet, isVisible, onClose}) => {
 				{fieldSet
 					? Liferay.Language.get('edit-fieldset')
 					: Liferay.Language.get('add-fieldset')}
+			</ClayModal.Header>
+			<ClayModal.Header withTitle={false}>
+				<ClayInput.Group className="pl-4 pr-4">
+					<ClayInput.GroupItem>
+						<ClayInput
+							aria-label={Liferay.Language.get(
+								'untitled-fieldset'
+							)}
+							className="form-control-inline"
+							onChange={({target: {value}}) =>
+								setFieldSetName(value)
+							}
+							placeholder={Liferay.Language.get(
+								'untitled-fieldset'
+							)}
+							type="text"
+							value={fieldSetName}
+						/>
+					</ClayInput.GroupItem>
+				</ClayInput.Group>
 			</ClayModal.Header>
 			<ClayModal.Body>
 				<div className="pl-4 pr-4">Working</div>
