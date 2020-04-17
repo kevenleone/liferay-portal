@@ -40,7 +40,9 @@ const parseProps = ({
 });
 
 const AppContent = ({
+	caller,
 	dataLayoutBuilder,
+	setChildrenContext,
 	setDataLayoutBuilder,
 	sidebarConfig,
 	...props
@@ -53,7 +55,10 @@ const AppContent = ({
 		if (dataLayoutBuilder) {
 			dataLayoutBuilder.emit('contextUpdated', state);
 		}
-	}, [dataLayoutBuilder, state]);
+		if (caller === 'fieldset') {
+			setChildrenContext({dispatch, state});
+		}
+	}, [caller, dataLayoutBuilder, dispatch, setChildrenContext, state]);
 
 	return (
 		<>
@@ -93,6 +98,8 @@ const App = (props) => {
 		fieldTypesModules,
 		groupId,
 	} = parseProps(props);
+
+	window.AppProps = props;
 
 	const sidebarConfig = initializeSidebarConfig(props);
 

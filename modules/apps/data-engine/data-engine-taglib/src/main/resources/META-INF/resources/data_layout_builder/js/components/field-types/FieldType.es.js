@@ -142,7 +142,11 @@ export default (props) => {
 
 			<div className="autofit-col pr-2">
 				{actions && (
-					<DropDown actions={actions} dropDownSymbol="ellipsis-h" />
+					<DropDown
+						actions={actions}
+						disabled={disabled}
+						dropDownSymbol="ellipsis-h"
+					/>
 				)}
 			</div>
 

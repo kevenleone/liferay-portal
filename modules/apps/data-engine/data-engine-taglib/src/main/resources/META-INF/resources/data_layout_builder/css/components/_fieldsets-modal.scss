@@ -1,0 +1,13 @@
+body.has-control-menu {
+	.fieldsets-modal {
+		.multi-panel-sidebar {
+			top: 0;
+			position: absolute;
+			height: calc(100vh - 65px);
+		}
+
+		.multi-panel-sidebar__content {
+			position: absolute;
+		}
+	}
+}

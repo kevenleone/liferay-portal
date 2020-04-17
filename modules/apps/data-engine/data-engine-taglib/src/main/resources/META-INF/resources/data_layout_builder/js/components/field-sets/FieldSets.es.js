@@ -73,10 +73,10 @@ export default function FieldSets() {
 							description={`${
 								fieldSet.dataDefinitionFields.length
 							} ${Liferay.Language.get('fields')}`}
-							disabled={containsFieldSet(
-								dataDefinition,
-								fieldSet.id
-							)}
+							disabled={
+								fieldSet.disabled ||
+								containsFieldSet(dataDefinition, fieldSet.id)
+							}
 							dragType={DRAG_FIELDSET}
 							fieldSet={fieldSet}
 							icon="forms"

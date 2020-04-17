@@ -15,23 +15,51 @@
 import ClayButton from '@clayui/button';
 import {ClayInput} from '@clayui/form';
 import ClayModal, {useModal} from '@clayui/modal';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+
+import App from '../../App.es';
+import {UPDATE_FIELDSETS} from '../../actions.es';
 
 export default ({fieldSet, isVisible, onClose}) => {
-	const [fieldSetName, setFieldSetName] = useState(
-		fieldSet ? fieldSet.name.en_US : ''
-	);
+	const [fieldSetName, setFieldSetName] = useState('');
+
+	const [
+		{dispatch: childrenDispatch, state: childrenState},
+		setChildrenContext,
+	] = useState({dispatch: () => {}, state: {}});
+
 	const {observer} = useModal({
 		onClose,
 	});
+
+	useEffect(() => {
+		if (fieldSet) {
+			setFieldSetName(fieldSet.name.en_US);
+		}
+	}, [fieldSet]);
+
+	const childrenStringify = JSON.stringify(childrenState);
+
+	useEffect(() => {
+		const state = JSON.parse(childrenStringify);
+		if (state && state.fieldSets && state.fieldSets.length) {
+			const fieldSets = state.fieldSets.map(fieldset => ({
+				...fieldset,
+				disabled: true,
+			}));
+			childrenDispatch({payload: {fieldSets}, type: UPDATE_FIELDSETS});
+		}
+	}, [childrenDispatch, childrenStringify]);
 
 	if (!isVisible) {
 		return null;
 	}
 
+	const AppProps = window.AppProps;
+
 	return (
 		<ClayModal
-			className="data-layout-builder-rule-editor-modal"
+			className="data-layout-builder-editor-modal fieldsets-modal"
 			observer={observer}
 			size="full-screen"
 		>
@@ -61,7 +89,15 @@ export default ({fieldSet, isVisible, onClose}) => {
 				</ClayInput.Group>
 			</ClayModal.Header>
 			<ClayModal.Body>
-				<div className="pl-4 pr-4">Working</div>
+				<div className="pl-4 pr-4">
+					<App
+						{...window.AppProps}
+						caller="fieldset"
+						context={fieldSet ? AppProps.context : {}}
+						dataLayoutBuilderId={`${AppProps.dataLayoutBuilderId}_2`}
+						setChildrenContext={setChildrenContext}
+					/>
+				</div>
 			</ClayModal.Body>
 			<ClayModal.Footer
 				last={
