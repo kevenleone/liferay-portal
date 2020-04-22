@@ -55,7 +55,7 @@ const AppContent = ({
 		if (dataLayoutBuilder) {
 			dataLayoutBuilder.emit('contextUpdated', state);
 		}
-		if (caller === 'fieldset') {
+		if (caller) {
 			setChildrenContext({dispatch, state});
 		}
 	}, [caller, dataLayoutBuilder, dispatch, setChildrenContext, state]);
@@ -90,6 +90,7 @@ const AppContent = ({
 
 const App = (props) => {
 	const {
+		caller = 'App',
 		config,
 		contentType,
 		dataDefinitionId,
@@ -99,10 +100,8 @@ const App = (props) => {
 		groupId,
 	} = parseProps(props);
 
-	window.AppProps = props;
-
+	window[caller] = props;
 	const sidebarConfig = initializeSidebarConfig(props);
-
 	const [loaded, setLoaded] = useState(false);
 	const [dataLayoutBuilder, setDataLayoutBuilder] = useState(null);
 

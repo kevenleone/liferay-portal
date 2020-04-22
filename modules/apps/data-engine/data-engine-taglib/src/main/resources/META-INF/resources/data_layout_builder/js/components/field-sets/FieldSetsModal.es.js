@@ -20,13 +20,19 @@ import React, {useEffect, useState} from 'react';
 import App from '../../App.es';
 import {UPDATE_FIELDSETS} from '../../actions.es';
 
-export default ({fieldSet, isVisible, onClose}) => {
-	const [fieldSetName, setFieldSetName] = useState('');
+export default ({context, fieldSet, isVisible, onClose}) => {
+	const AppProps = window.App;
 
+	const [fieldSetName, setFieldSetName] = useState('');
 	const [
 		{dispatch: childrenDispatch, state: childrenState},
 		setChildrenContext,
-	] = useState({dispatch: () => {}, state: {}});
+	] = useState({
+		dispatch: () => {},
+		state: {},
+	});
+
+	const childrenStringify = JSON.stringify(childrenState);
 
 	const {observer} = useModal({
 		onClose,
@@ -38,24 +44,23 @@ export default ({fieldSet, isVisible, onClose}) => {
 		}
 	}, [fieldSet]);
 
-	const childrenStringify = JSON.stringify(childrenState);
-
 	useEffect(() => {
 		const state = JSON.parse(childrenStringify);
 		if (state && state.fieldSets && state.fieldSets.length) {
-			const fieldSets = state.fieldSets.map(fieldset => ({
-				...fieldset,
-				disabled: true,
-			}));
+			const fieldSets = state.fieldSets.map(fieldset => {
+				if (fieldset.name.en_US === fieldSetName) {
+					fieldset.disabled = true;
+				}
+
+				return fieldset;
+			});
 			childrenDispatch({payload: {fieldSets}, type: UPDATE_FIELDSETS});
 		}
-	}, [childrenDispatch, childrenStringify]);
+	}, [childrenDispatch, childrenStringify, fieldSetName]);
 
 	if (!isVisible) {
 		return null;
 	}
-
-	const AppProps = window.AppProps;
 
 	return (
 		<ClayModal
@@ -91,10 +96,11 @@ export default ({fieldSet, isVisible, onClose}) => {
 			<ClayModal.Body>
 				<div className="pl-4 pr-4">
 					<App
-						{...window.AppProps}
-						caller="fieldset"
-						context={fieldSet ? AppProps.context : {}}
+						{...AppProps}
+						caller="Fieldset"
+						context={context}
 						dataLayoutBuilderId={`${AppProps.dataLayoutBuilderId}_2`}
+						defaultLanguageId="en_US"
 						setChildrenContext={setChildrenContext}
 					/>
 				</div>
