@@ -165,7 +165,7 @@ export default ({children, dataLayoutBuilder}) => {
 	useEffect(() => {
 		const provider = dataLayoutBuilder.getLayoutProvider();
 
-		provider.props.fieldActions = [
+		let fieldActions = [
 			{
 				action: (event) =>
 					dataLayoutBuilder.dispatch('fieldDuplicated', event),
@@ -181,12 +181,7 @@ export default ({children, dataLayoutBuilder}) => {
 					dataLayoutBuilder.dispatch('fieldDeleted', event);
 				},
 				label: Liferay.Language.get('remove'),
-			},
-			{
-				action: (fieldName) => saveAsFieldSet(fieldName),
-				label: Liferay.Language.get('save-as-fieldset'),
 				separator: true,
-				showOnFieldSet: true,
 			},
 			{
 				action: ({fieldName}) => {
@@ -197,8 +192,30 @@ export default ({children, dataLayoutBuilder}) => {
 			},
 		];
 
+		if (focusedField && focusedField.type === 'fieldset') {
+			const saveFieldSetAction = {
+				action: ({fieldName}) => saveAsFieldSet(fieldName),
+				label: Liferay.Language.get('save-as-fieldset'),
+				separator: true,
+			};
+
+			fieldActions = fieldActions.map((action) => ({
+				...action,
+				separator: false,
+			}));
+			fieldActions.splice(2, 0, saveFieldSetAction);
+		}
+
+		provider.props.fieldActions = fieldActions;
+
 		provider.props.shouldAutoGenerateName = () => false;
-	}, [dataLayoutBuilder, dispatch, onDeleteDefinitionField, saveAsFieldSet]);
+	}, [
+		dataLayoutBuilder,
+		dispatch,
+		focusedField,
+		onDeleteDefinitionField,
+		saveAsFieldSet,
+	]);
 
 	useEffect(() => {
 		const provider = dataLayoutBuilder.getLayoutProvider();
