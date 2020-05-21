@@ -13,7 +13,6 @@
  */
 
 import {
-	DataDefinitionUtils,
 	DataLayoutBuilderActions,
 	DataLayoutVisitor,
 	DragTypes,
@@ -37,29 +36,49 @@ const getFieldTypes = ({
 }) => {
 	const dataDefinitionFields = [];
 	const {dataLayoutPages} = dataLayout;
+	const {dataDefinitionFields: fields} = dataDefinition;
 
-	DataDefinitionUtils.forEachDataDefinitionField(
-		dataDefinition,
-		({fieldType, label, name}) => {
-			if (fieldType === 'section') {
-				return;
-			}
+	const validateField = (field, nested) => {
+		if (field.fieldType === 'section') {
+			return;
+		}
 
+		const setDefinitionField = ({
+			customProperties: {ddmStructureId},
+			fieldType,
+			label,
+			name,
+			nestedDataDefinitionFields = [],
+		}) => {
 			const fieldTypeSettings = fieldTypes.find(({name}) => {
 				return name === fieldType;
 			});
 
-			if (label[editingLanguageId] && label[editingLanguageId] !== '') {
+			if (label[editingLanguageId]) {
 				label = label[editingLanguageId];
 			}
 			else {
 				label = label[Liferay.ThemeDisplay.getDefaultLanguageId()];
 			}
 
-			dataDefinitionFields.push({
+			const isFieldSet = ddmStructureId && fieldType === 'fieldset';
+
+			const FieldTypeLabel = isFieldSet
+				? Liferay.Language.get('fieldset')
+				: fieldTypeSettings.label;
+
+			const dataDefintionField = {
 				active: name === focusedCustomObjectField.name,
-				className: 'custom-object-field',
-				description: fieldTypeSettings.label,
+				className: nested
+					? 'custom-object-field-children'
+					: 'custom-object-field',
+				description: `${FieldTypeLabel} ${
+					nestedDataDefinitionFields.length
+						? `- ${
+								nestedDataDefinitionFields.length
+						  } ${Liferay.Language.get('fields')}`
+						: ''
+				}`,
 				disabled: DataLayoutVisitor.containsField(
 					dataLayoutPages,
 					name
@@ -67,11 +86,26 @@ const getFieldTypes = ({
 				dragAlignment: 'right',
 				dragType: DragTypes.DRAG_DATA_DEFINITION_FIELD,
 				icon: fieldTypeSettings.icon,
+				isFieldSet,
 				label,
 				name,
-			});
-		}
-	);
+				nestedDataDefinitionFields: nestedDataDefinitionFields.map(
+					(nestedField) => validateField(nestedField, true)
+				),
+			};
+
+			if (nested) {
+				return dataDefintionField;
+			}
+			dataDefinitionFields.push(dataDefintionField);
+		};
+
+		return setDefinitionField(field);
+	};
+
+	fields.forEach((fieldType) => {
+		validateField(fieldType);
+	});
 
 	return dataDefinitionFields;
 };
