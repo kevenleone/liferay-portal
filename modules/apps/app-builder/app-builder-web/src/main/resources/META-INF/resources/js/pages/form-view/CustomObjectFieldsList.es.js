@@ -122,6 +122,35 @@ export default ({keywords}) => {
 	};
 	const onDoubleClick = ({name}) => {
 		const {activePage, pages} = dataLayoutBuilder.getStore();
+		const indexes = {
+			columnIndex: 0,
+			pageIndex: activePage,
+			rowIndex: pages[activePage].rows.length,
+		};
+
+		const definitionField = dataDefinitionFields.find(
+			({name: fieldName}) => name === fieldName
+		);
+		if (definitionField.fieldType === 'fieldset') {
+			const {en_US: label} = definitionField.label;
+			const fieldSet =
+				state.fieldSets.find(({name}) => name.en_US === label) ||
+				definitionField;
+
+			dataLayoutBuilder.dispatch(
+				'fieldSetAdded',
+				DataLayoutBuilderActions.dropFieldSet({
+					dataLayoutBuilder,
+					fieldName: name,
+					fieldSet,
+					indexes,
+					parentFieldName: undefined,
+					useFieldName: name,
+				})
+			);
+
+			return;
+		}
 
 		dataLayoutBuilder.dispatch(
 			'fieldAdded',
@@ -130,11 +159,7 @@ export default ({keywords}) => {
 				dataDefinition,
 				dataDefinitionFieldName: name,
 				dataLayoutBuilder,
-				indexes: {
-					columnIndex: 0,
-					pageIndex: activePage,
-					rowIndex: pages[activePage].rows.length,
-				},
+				indexes,
 			})
 		);
 	};

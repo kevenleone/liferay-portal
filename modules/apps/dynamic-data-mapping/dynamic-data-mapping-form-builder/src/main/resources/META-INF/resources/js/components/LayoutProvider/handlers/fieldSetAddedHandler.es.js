@@ -19,7 +19,7 @@ import {addField} from './fieldAddedHandler.es';
  */
 
 const handleFieldSetAdded = (props, state, event) => {
-	const {fieldSet, indexes, parentFieldName} = event;
+	const {fieldSet, indexes, parentFieldName, useFieldName} = event;
 	const {pages} = state;
 	const visitor = new PagesVisitor(fieldSet.pages);
 
@@ -31,7 +31,7 @@ const handleFieldSetAdded = (props, state, event) => {
 
 	let fieldSetField = createFieldSet(
 		props,
-		{skipFieldNameGeneration: false},
+		{skipFieldNameGeneration: false, useFieldName},
 		nestedFields
 	);
 
