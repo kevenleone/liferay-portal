@@ -15,94 +15,51 @@
 import ClayButton from '@clayui/button';
 import {ClayInput} from '@clayui/form';
 import ClayModal, {useModal} from '@clayui/modal';
-import React, {useCallback, useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 
 import App from '../../App.es';
 import AppContext from '../../AppContext.es';
-import {UPDATE_FIELDSETS} from '../../actions.es';
+import ModalWithEventPrevented from '../modal/ModalWithEventPrevented.es';
+import useCreateFieldSet from './actions/useCreateFieldSet.es';
+import useSaveAsFieldSet from './actions/useSaveAsFieldSet.es';
 
-export default ({fieldSet, isVisible, onClose, otherProps}) => {
-	const [{appProps, fieldSets}, dispatch] = useContext(AppContext);
-	const [fieldSetName, setFieldSetName] = useState('');
-	const [
-		{dispatch: childrenDispatch, state: childrenContext},
-		setChildrenContext,
-	] = useState({
+const ModalContent = ({fieldSet, onClose, otherProps}) => {
+	const [{appProps}] = useContext(AppContext);
+	const [name, setName] = useState('');
+	const [childrenContext, setChildrenContext] = useState({
 		dispatch: () => {},
 		state: {},
 	});
 
 	const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
-	const childrenStringify = JSON.stringify(childrenContext);
 
-	const {observer} = useModal({
-		onClose,
+	useEffect(() => {
+		if (fieldSet) {
+			setName(fieldSet.name[defaultLanguageId]);
+		}
+	}, [defaultLanguageId, fieldSet]);
+
+	const createFieldSet = useCreateFieldSet({childrenContext});
+	const saveAsFieldSet = useSaveAsFieldSet({
+		childrenContext,
+		defaultLanguageId,
+		fieldSet,
+		otherProps,
 	});
 
-	const getFieldSetName = useCallback(({name}) => name[defaultLanguageId], [
-		defaultLanguageId,
-	]);
-
-	useEffect(() => {
+	const onSave = () => {
 		if (fieldSet) {
-			setFieldSetName(getFieldSetName(fieldSet));
+			saveAsFieldSet(name);
 		}
-	}, [fieldSet, getFieldSetName]);
-
-	useEffect(() => {
-		let {fieldSets = []} = JSON.parse(childrenStringify);
-
-		if (fieldSets.length) {
-			fieldSets = fieldSets.map((fieldset) => {
-				if (fieldset.name[defaultLanguageId] === fieldSetName) {
-					fieldset.disabled = true;
-				}
-
-				return fieldset;
-			});
-			childrenDispatch({payload: {fieldSets}, type: UPDATE_FIELDSETS});
-		}
-	}, [childrenDispatch, childrenStringify, defaultLanguageId, fieldSetName]);
-
-	if (!isVisible) {
-		return null;
-	}
-
-	const saveAsFieldset = () => {
-		let updatedFieldSets;
-		if (fieldSet) {
-			const {
-				dataDefinition: {dataDefinitionFields},
-			} = childrenContext;
-
-			updatedFieldSets = fieldSets.map((field) => {
-				if (fieldSetName === getFieldSetName(field)) {
-					return {
-						...field,
-						dataDefinitionFields,
-					};
-				}
-
-				return field;
-			});
-
-			dispatch({
-				payload: {
-					fieldSets: updatedFieldSets,
-				},
-				type: UPDATE_FIELDSETS,
-			});
+		else {
+			createFieldSet(name);
 		}
 
 		onClose();
 	};
 
 	return (
-		<ClayModal
-			className="data-layout-builder-editor-modal fieldset-modal"
-			observer={observer}
-			size="full-screen"
-		>
+		<>
 			<ClayModal.Header>
 				{fieldSet
 					? Liferay.Language.get('edit-fieldset')
@@ -116,14 +73,12 @@ export default ({fieldSet, isVisible, onClose, otherProps}) => {
 								'untitled-fieldset'
 							)}
 							className="form-control-inline"
-							onChange={({target: {value}}) =>
-								setFieldSetName(value)
-							}
+							onChange={({target: {value}}) => setName(value)}
 							placeholder={Liferay.Language.get(
 								'untitled-fieldset'
 							)}
 							type="text"
-							value={fieldSetName}
+							value={name}
 						/>
 					</ClayInput.GroupItem>
 				</ClayInput.Group>
@@ -145,12 +100,38 @@ export default ({fieldSet, isVisible, onClose, otherProps}) => {
 						<ClayButton displayType="secondary" onClick={onClose}>
 							{Liferay.Language.get('cancel')}
 						</ClayButton>
-						<ClayButton onClick={saveAsFieldset}>
+						<ClayButton onClick={onSave}>
 							{Liferay.Language.get('save')}
 						</ClayButton>
 					</ClayButton.Group>
 				}
 			/>
+		</>
+	);
+};
+
+const FieldSetModal = ({isVisible, onClose, ...props}) => {
+	const {observer} = useModal({
+		onClose,
+	});
+
+	if (!isVisible) {
+		return null;
+	}
+
+	return (
+		<ClayModal
+			className="data-layout-builder-editor-modal fieldset-modal"
+			observer={observer}
+			size="full-screen"
+		>
+			<ModalContent onClose={onClose} {...props} />
 		</ClayModal>
 	);
 };
+
+export default (props) => (
+	<ModalWithEventPrevented>
+		<FieldSetModal {...props} />
+	</ModalWithEventPrevented>
+);
