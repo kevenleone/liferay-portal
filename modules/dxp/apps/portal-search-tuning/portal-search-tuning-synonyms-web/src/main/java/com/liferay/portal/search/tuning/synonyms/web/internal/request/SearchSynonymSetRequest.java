@@ -28,6 +28,7 @@ import com.liferay.portal.search.query.Query;
 import com.liferay.portal.search.sort.Sort;
 import com.liferay.portal.search.sort.SortOrder;
 import com.liferay.portal.search.sort.Sorts;
+import com.liferay.portal.search.tuning.synonyms.web.internal.display.context.SynonymSetDisplayContext;
 import com.liferay.portal.search.tuning.synonyms.web.internal.index.SynonymSetFields;
 import com.liferay.portal.search.tuning.synonyms.web.internal.index.name.SynonymSetIndexName;
 
@@ -45,7 +46,7 @@ public class SearchSynonymSetRequest {
 	public SearchSynonymSetRequest(
 		SynonymSetIndexName synonymSetIndexName,
 		HttpServletRequest httpServletRequest, Queries queries, Sorts sorts,
-		SearchContainer searchContainer,
+		SearchContainer<SynonymSetDisplayContext> searchContainer,
 		SearchEngineAdapter searchEngineAdapter) {
 
 		_synonymSetIndexName = synonymSetIndexName;
@@ -109,7 +110,7 @@ public class SearchSynonymSetRequest {
 
 	private final HttpServletRequest _httpServletRequest;
 	private final Queries _queries;
-	private final SearchContainer _searchContainer;
+	private final SearchContainer<SynonymSetDisplayContext> _searchContainer;
 	private final SearchContext _searchContext;
 	private final SearchEngineAdapter _searchEngineAdapter;
 	private final Sorts _sorts;

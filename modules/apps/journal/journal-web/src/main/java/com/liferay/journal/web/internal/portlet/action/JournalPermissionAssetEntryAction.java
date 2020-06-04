@@ -46,7 +46,8 @@ import org.osgi.service.component.annotations.Reference;
 	},
 	service = AssetEntryAction.class
 )
-public class JournalPermissionAssetEntryAction implements AssetEntryAction {
+public class JournalPermissionAssetEntryAction
+	implements AssetEntryAction<JournalArticle> {
 
 	@Override
 	public String getDialogTitle(Locale locale) {
@@ -55,7 +56,8 @@ public class JournalPermissionAssetEntryAction implements AssetEntryAction {
 
 	@Override
 	public String getDialogURL(
-			HttpServletRequest httpServletRequest, AssetRenderer assetRenderer)
+			HttpServletRequest httpServletRequest,
+			AssetRenderer<JournalArticle> assetRenderer)
 		throws PortalException {
 
 		JournalArticle article = (JournalArticle)assetRenderer.getAssetObject();
@@ -90,7 +92,8 @@ public class JournalPermissionAssetEntryAction implements AssetEntryAction {
 
 	@Override
 	public boolean hasPermission(
-			PermissionChecker permissionChecker, AssetRenderer assetRenderer)
+			PermissionChecker permissionChecker,
+			AssetRenderer<JournalArticle> assetRenderer)
 		throws PortalException {
 
 		JournalArticle article = (JournalArticle)assetRenderer.getAssetObject();

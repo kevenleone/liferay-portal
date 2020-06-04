@@ -106,7 +106,7 @@ public class DepotAssetRendererFactoryTracker {
 		}
 
 		@Override
-		public AssetRendererFactory addingService(
+		public AssetRendererFactory<?> addingService(
 			ServiceReference<AssetRendererFactory<?>> serviceReference) {
 
 			AssetRendererFactory<?> assetRendererFactory =

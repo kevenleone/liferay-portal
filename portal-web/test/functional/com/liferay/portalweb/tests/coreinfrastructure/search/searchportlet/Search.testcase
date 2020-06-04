@@ -33,7 +33,7 @@ definition {
 
 			Vocabulary.tearDownCP();
 
-			Tag.tearDownCP();
+			Tag.tearDownCP(site = "Guest");
 
 			Page.tearDownCP();
 		}
@@ -166,6 +166,74 @@ definition {
 		}
 	}
 
+	@priority = "4"
+	test AssertIndexOnStartup {
+		property test.assert.warning.exceptions = "true";
+		property test.name.skip.portal.instance = "Search#AssertIndexOnStartup";
+
+		JSONWebcontent.addWebContent(
+			content = "WC WebContent Content",
+			groupName = "Guest",
+			title = "WC WebContent Title");
+
+		JSONDocument.addFile(
+			dmDocumentDescription = "DM Document Description",
+			dmDocumentTitle = "DM Document Title",
+			groupName = "Guest");
+
+		JSONBlog.addEntry(
+			entryContent = "Blogs Entry Content",
+			entryTitle = "Blogs Entry Title");
+
+		JSONLayout.addPublicLayout(
+			groupName = "Guest",
+			layoutName = "Asset Publisher Page");
+
+		var portalURL = PropsUtil.get("portal.url");
+
+		Navigator.openSpecificURL(url = "${portalURL}/web/guest/asset-publisher-page");
+
+		Portlet.addPG(portletName = "Asset Publisher");
+
+		Portlet.shutdownServer();
+
+		AntCommand(
+			locator1 = "build-test.xml",
+			value1 = "delete-portal-elasticsearch-dir");
+
+		var newProperty = "index.on.startup=true";
+
+		AntCommand(
+			locator1 = "build-test.xml",
+			value1 = "portal-ext-properties-update -Dadd.new.properties=true -Dupdate.properties=${newProperty}");
+
+		Portlet.startServer(deleteLiferayHome = "false");
+
+		Navigator.openSpecificURL(url = "${portalURL}/web/guest/asset-publisher-page");
+
+		AssetPublisherPortlet.viewAssetPG(
+			assetContent = "WC WebContent Content",
+			assetTitle = "WC WebContent Title");
+
+		// Workaround for LPS-113094
+
+		/*AssetPublisherPortlet.viewAssetPG(
+			assetContent = "DM Document Description",
+			assetTitle = "DM Document Title");*/
+
+		AssetPublisherPortlet.viewAssetPG(
+			assetContent = "Blogs Entry Content",
+			assetTitle = "Blogs Entry Title");
+
+		SearchPortlets.searchEmbedded(searchTerm = "test");
+
+		// Workaround for LPS-89026 and LPS-113094
+
+		SearchResultPortlet.viewMultipleSearchResults(
+			resultsList = "WC WebContent Title/Web Content Article,Blogs Entry Title/Blogs Entry",
+			searchTerm = "test");
+	}
+
 	test AssertNonAdminsCannotAddCertainWidgets {
 		property custom.properties = "jsonws.web.service.paths.excludes=";
 
@@ -206,68 +274,6 @@ definition {
 		Refresh();
 
 		Portlet.viewCannotAddPG(portletName = "Search Insights");
-	}
-
-	@priority = "4"
-	test AssertSearchFunctionalityWhenSettingIndexOnStartupToTrue {
-		property test.assert.warning.exceptions = "true";
-		property test.name.skip.portal.instance = "Search#AssertSearchFunctionalityWhenSettingIndexOnStartupToTrue";
-
-		JSONWebcontent.addWebContent(
-			content = "WC WebContent Content",
-			groupName = "Guest",
-			title = "WC WebContent Title");
-
-		JSONDocument.addFile(
-			dmDocumentDescription = "DM Document Description",
-			dmDocumentTitle = "DM Document Title",
-			groupName = "Guest");
-
-		JSONBlog.addEntry(
-			entryContent = "Blogs Entry Content",
-			entryTitle = "Blogs Entry Title");
-
-		JSONLayout.addPublicLayout(
-			groupName = "Guest",
-			layoutName = "Asset Publisher Page");
-
-		var portalURL = PropsUtil.get("portal.url");
-
-		Navigator.openSpecificURL(url = "${portalURL}/web/guest/asset-publisher-page");
-
-		Portlet.addPG(portletName = "Asset Publisher");
-
-		Portlet.shutdownServer();
-
-		AntCommand(
-			locator1 = "build-test.xml",
-			value1 = "prepare-portal-ext-properties -Dindex.on.startup=true");
-
-		Portlet.startServer(
-			deleteindexdata = "true",
-			deleteLiferayHome = "true");
-
-		Navigator.openSpecificURL(url = "${portalURL}/web/guest/asset-publisher-page");
-
-		AssetPublisherPortlet.viewAssetPG(
-			assetContent = "WC WebContent Content",
-			assetTitle = "WC WebContent Title");
-
-		AssetPublisherPortlet.viewAssetPG(
-			assetContent = "DM Document Description",
-			assetTitle = "DM Document Title");
-
-		AssetPublisherPortlet.viewAssetPG(
-			assetContent = "Blogs Entry Content",
-			assetTitle = "Blogs Entry Title");
-
-		SearchPortlets.searchEmbedded(searchTerm = "test");
-
-		// Wrokaround LPS-89026
-
-		SearchResultPortlet.viewMultipleSearchResults(
-			resultsList = "WC WebContent Title/Web Content Article,Blogs Entry Title/Blogs Entry,DM Document Title/Document",
-			searchTerm = "test");
 	}
 
 	@description = "This is a use case for LPS-89561."
@@ -388,7 +394,7 @@ definition {
 
 		IFrame.closeFrame();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "Search");
@@ -1079,7 +1085,7 @@ definition {
 	@description = "This test will set up a search page and search on a newly added site. It will also use different scopes to assert search results for assets from multiple sites"
 	@priority = "4"
 	test SearchDifferentScopesViaNewSite {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -1091,7 +1097,7 @@ definition {
 			groupName = "Guest",
 			title = "Apple");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -1108,7 +1114,7 @@ definition {
 			dmDocumentFile = "Document_1.doc",
 			dmDocumentTitle = "Apple");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -1203,7 +1209,7 @@ definition {
 			dmDocumentFile = "Document_1.doc",
 			dmDocumentTitle = "Potato Document");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -1353,7 +1359,7 @@ definition {
 	test SearchGlobalTemplateSmoke {
 		property portal.acceptance = "true";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -1419,7 +1425,7 @@ definition {
 
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1430,7 +1436,7 @@ definition {
 			userLastName = "userln",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1496,7 +1502,7 @@ definition {
 	test SearchUserWildcard {
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1507,7 +1513,7 @@ definition {
 			userLastName = "userln",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1824,6 +1830,8 @@ definition {
 	}
 
 	test SearchWithModifiedFacet {
+		property portal.upstream = "quarantine";
+
 		JSONWebcontent.addWebContent(
 			content = "WC Content",
 			groupName = "Guest",
@@ -2200,7 +2208,7 @@ definition {
 
 		// Workaround for LPS-89026
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "Search");
@@ -2316,7 +2324,7 @@ definition {
 			roleTitle = "Administrator",
 			userEmailAddress = "userea@liferay.com");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -2639,7 +2647,7 @@ definition {
 		property portal.acceptance = "true";
 		property test.name.skip.portal.instance = "Search#ViewSearchResultDetails";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "Search");
@@ -2702,7 +2710,7 @@ definition {
 
 	@priority = "4"
 	test ViewStagedAndLiveContentInSearchResults {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -2745,7 +2753,7 @@ definition {
 			searchAssetTitle = "Apple",
 			searchAssetType = "Web Content Article");
 
-		ProductMenu.gotoLiveSite();
+		ProductMenu.gotoLiveSite(site = "Site Name");
 
 		SearchPortlets.searchEmbedded(searchTerm = "Apple");
 
@@ -2798,7 +2806,7 @@ definition {
 			searchAssetTitle = "Apple",
 			searchAssetType = "Web Content Article");
 
-		ProductMenu.gotoLiveSite();
+		ProductMenu.gotoLiveSite(site = "Site Name");
 
 		SearchPortlets.searchEmbedded(searchTerm = "Apple");
 

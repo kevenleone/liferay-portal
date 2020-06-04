@@ -233,8 +233,8 @@ public class DDMFormAdminFieldSetDisplayContext
 	}
 
 	@Override
-	public String getFormLocalizedName() {
-		DDMStructure structure = getDDMStructure();
+	public <T> String getFormLocalizedName(T object) {
+		DDMStructure structure = (DDMStructure)object;
 
 		JSONObject jsonObject = jsonFactory.createJSONObject();
 

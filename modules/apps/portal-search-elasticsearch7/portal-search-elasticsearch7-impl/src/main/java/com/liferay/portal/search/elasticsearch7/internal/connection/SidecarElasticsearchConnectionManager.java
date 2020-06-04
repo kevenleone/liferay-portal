@@ -62,6 +62,29 @@ import org.osgi.service.component.annotations.ReferencePolicyOption;
 )
 public class SidecarElasticsearchConnectionManager {
 
+	protected static Path resolveHomePath(
+		Path workPath, ElasticsearchConfiguration elasticsearchConfiguration) {
+
+		workPath = workPath.toAbsolutePath();
+
+		Path sidecarHomePath = workPath.resolve(
+			elasticsearchConfiguration.sidecarHome());
+
+		if (!Files.isDirectory(sidecarHomePath)) {
+			sidecarHomePath = Paths.get(
+				elasticsearchConfiguration.sidecarHome());
+
+			if (!Files.isDirectory(sidecarHomePath)) {
+				throw new IllegalArgumentException(
+					"Sidecar Elasticsearch home " +
+						elasticsearchConfiguration.sidecarHome() +
+							" does not exist");
+			}
+		}
+
+		return sidecarHomePath;
+	}
+
 	@Activate
 	protected void activate(ComponentContext componentContext) {
 		BundleContext bundleContext = componentContext.getBundleContext();
@@ -93,8 +116,7 @@ public class SidecarElasticsearchConnectionManager {
 			}
 
 			ElasticsearchInstancePaths elasticsearchInstancePaths =
-				new SidecarElasticsearchInstancePaths(
-					_props, elasticsearchConfiguration);
+				getElasticsearchInstancePaths(elasticsearchConfiguration);
 
 			if (_clusterExecutor.isEnabled() && PortalRunMode.isTestMode()) {
 				ClusterableSidecar clusterableSidecar = new ClusterableSidecar(
@@ -113,10 +135,12 @@ public class SidecarElasticsearchConnectionManager {
 						clusterableSidecar, null);
 
 				elasticsearchConnection = new SidecarElasticsearchConnection(
+					elasticsearchConfiguration.restClientLoggerLevel(),
 					clusterableSidecar);
 			}
 			else {
 				elasticsearchConnection = new SidecarElasticsearchConnection(
+					elasticsearchConfiguration.restClientLoggerLevel(),
 					new Sidecar(
 						_clusterSettingsContext, elasticsearchConfiguration,
 						elasticsearchInstancePaths, null, _processExecutor,
@@ -156,6 +180,27 @@ public class SidecarElasticsearchConnectionManager {
 		}
 	}
 
+	protected ElasticsearchInstancePaths getElasticsearchInstancePaths(
+		ElasticsearchConfiguration elasticsearchConfiguration) {
+
+		ElasticsearchInstancePathsBuilder elasticsearchInstancePathsBuilder =
+			new ElasticsearchInstancePathsBuilder();
+
+		Path workPath = Paths.get(_props.get(PropsKeys.LIFERAY_HOME));
+
+		Path dataPath = workPath.resolve("data/elasticsearch7");
+
+		return elasticsearchInstancePathsBuilder.dataPath(
+			dataPath
+		).homePath(
+			resolveHomePath(workPath, elasticsearchConfiguration)
+		).indicesPath(
+			dataPath.resolve("indices")
+		).workPath(
+			workPath
+		).build();
+	}
+
 	protected void removeSettingsContributor(
 		SettingsContributor settingsContributor) {
 
@@ -189,57 +234,5 @@ public class SidecarElasticsearchConnectionManager {
 	private ServiceRegistration<ElasticsearchConnection> _serviceRegistration;
 	private final Set<SettingsContributor> _settingsContributors =
 		new ConcurrentSkipListSet<>();
-
-	private static class SidecarElasticsearchInstancePaths
-		implements ElasticsearchInstancePaths {
-
-		@Override
-		public Path getHomePath() {
-			return _homePath;
-		}
-
-		@Override
-		public Path getWorkPath() {
-			return _workPath;
-		}
-
-		protected static Path resolveHomePath(
-			Path workPath,
-			ElasticsearchConfiguration elasticsearchConfiguration) {
-
-			workPath = workPath.toAbsolutePath();
-
-			Path sidecarHomePath = workPath.resolve(
-				elasticsearchConfiguration.sidecarHome());
-
-			if (!Files.isDirectory(sidecarHomePath)) {
-				sidecarHomePath = Paths.get(
-					elasticsearchConfiguration.sidecarHome());
-
-				if (!Files.isDirectory(sidecarHomePath)) {
-					throw new IllegalArgumentException(
-						"Sidecar Elasticsearch home " +
-							elasticsearchConfiguration.sidecarHome() +
-								" does not exist");
-				}
-			}
-
-			return sidecarHomePath;
-		}
-
-		private SidecarElasticsearchInstancePaths(
-			Props props,
-			ElasticsearchConfiguration elasticsearchConfiguration) {
-
-			Path workPath = Paths.get(props.get(PropsKeys.LIFERAY_HOME));
-
-			_homePath = resolveHomePath(workPath, elasticsearchConfiguration);
-			_workPath = workPath;
-		}
-
-		private final Path _homePath;
-		private final Path _workPath;
-
-	}
 
 }

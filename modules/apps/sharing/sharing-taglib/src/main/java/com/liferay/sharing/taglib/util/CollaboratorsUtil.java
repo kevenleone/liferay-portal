@@ -135,7 +135,8 @@ public class CollaboratorsUtil {
 	private static JSONObject _getUserJSONObject(
 		long classNameId, long classPK, ThemeDisplay themeDisplay) {
 
-		AssetRenderer assetRenderer = _getAssetRenderer(classNameId, classPK);
+		AssetRenderer<?> assetRenderer = _getAssetRenderer(
+			classNameId, classPK);
 
 		if (assetRenderer == null) {
 			return JSONUtil.put(

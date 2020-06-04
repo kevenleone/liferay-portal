@@ -18,7 +18,9 @@
 
 <%@ taglib uri="http://liferay.com/tld/theme" prefix="liferay-theme" %>
 
-<%@ page import="com.liferay.info.item.renderer.InfoItemRenderer" %>
+<%@ page import="com.liferay.info.item.renderer.InfoItemRenderer" %><%@
+page import="com.liferay.info.item.renderer.InfoItemTemplatedRenderer" %><%@
+page import="com.liferay.portal.kernel.util.GetterUtil" %>
 
 <%@ page import="java.util.List" %>
 
@@ -27,4 +29,5 @@
 <%
 InfoItemRenderer infoItemRenderer = (InfoItemRenderer)request.getAttribute("liferay-info:info-list-grid:infoItemRenderer");
 List<Object> infoListObjects = (List<Object>)request.getAttribute("liferay-info:info-list-grid:infoListObjects");
+String templateKey = GetterUtil.getString(request.getAttribute("liferay-info:info-list-grid:templateKey"));
 %>

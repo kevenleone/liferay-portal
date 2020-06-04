@@ -63,7 +63,7 @@ public class RoleItemSelectorViewDisplayContext
 		return portletURL.toString();
 	}
 
-	public SearchContainer<Role> getSearchContainer() {
+	public SearchContainer<?> getSearchContainer() {
 		return searchContainer;
 	}
 

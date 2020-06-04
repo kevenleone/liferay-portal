@@ -18,7 +18,6 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Company;
 import com.liferay.portal.kernel.service.CompanyLocalService;
-import com.liferay.portal.kernel.service.PortalPreferencesLocalService;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.segments.asah.connector.internal.util.AsahUtil;
 
@@ -30,7 +29,7 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Sarai Díaz
  */
-@Component(immediate = true, service = AsahFaroBackendClientFactory.class)
+@Component(service = AsahFaroBackendClientFactory.class)
 public class AsahFaroBackendClientFactory {
 
 	public Optional<AsahFaroBackendClient> createAsahFaroBackendClient() {
@@ -46,12 +45,7 @@ public class AsahFaroBackendClientFactory {
 		}
 
 		return Optional.of(
-			new AsahFaroBackendClientImpl(
-				_jsonWebServiceClient,
-				AsahUtil.getAsahFaroBackendDataSourceId(company.getCompanyId()),
-				AsahUtil.getAsahFaroBackendSecuritySignature(
-					company.getCompanyId()),
-				AsahUtil.getAsahFaroBackendURL(company.getCompanyId())));
+			new AsahFaroBackendClientImpl(_jsonWebServiceClient));
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
@@ -65,8 +59,5 @@ public class AsahFaroBackendClientFactory {
 
 	@Reference
 	private Portal _portal;
-
-	@Reference
-	private PortalPreferencesLocalService _portalPreferencesLocalService;
 
 }

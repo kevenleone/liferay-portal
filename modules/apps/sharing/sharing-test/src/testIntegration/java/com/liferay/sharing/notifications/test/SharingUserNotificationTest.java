@@ -148,7 +148,7 @@ public class SharingUserNotificationTest extends BaseUserNotificationTestCase {
 			group.getName(LocaleUtil.getDefault()), " with you for viewing.");
 	}
 
-	private SharingEntry _share(BaseModel model, User fromUser, User toUser)
+	private SharingEntry _share(BaseModel<?> model, User fromUser, User toUser)
 		throws Exception {
 
 		long classNameId = _classNameLocalService.getClassNameId(

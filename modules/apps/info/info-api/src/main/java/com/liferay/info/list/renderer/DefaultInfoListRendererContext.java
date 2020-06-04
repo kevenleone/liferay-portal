@@ -43,16 +43,26 @@ public class DefaultInfoListRendererContext implements InfoListRendererContext {
 	}
 
 	@Override
-	public Optional<String> getListItemStyleKeyOptional() {
-		return Optional.ofNullable(_listItemStyleKey);
+	public Optional<String> getListItemRendererKeyOptional() {
+		return Optional.ofNullable(_listItemRendererKey);
 	}
 
-	public void setListItemStyleKey(String listItemStyleKey) {
-		_listItemStyleKey = listItemStyleKey;
+	@Override
+	public Optional<String> getTemplateKeyOptional() {
+		return Optional.ofNullable(_templateKey);
+	}
+
+	public void setListItemRendererKey(String listItemRendererKey) {
+		_listItemRendererKey = listItemRendererKey;
+	}
+
+	public void setTemplateKey(String templateKey) {
+		_templateKey = templateKey;
 	}
 
 	private final HttpServletRequest _httpServletRequest;
 	private final HttpServletResponse _httpServletResponse;
-	private String _listItemStyleKey;
+	private String _listItemRendererKey;
+	private String _templateKey;
 
 }

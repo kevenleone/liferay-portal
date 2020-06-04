@@ -14,6 +14,7 @@
 
 package com.liferay.info.list.renderer;
 
+import com.liferay.info.item.renderer.InfoItemRenderer;
 import com.liferay.portal.kernel.language.LanguageUtil;
 
 import java.util.Collections;
@@ -28,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface InfoListRenderer<T> {
 
-	public default List<InfoListItemStyle> getAvailableInfoListItemStyles() {
+	public default List<InfoItemRenderer> getAvailableInfoItemRenderers() {
 		return Collections.emptyList();
 	}
 

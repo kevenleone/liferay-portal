@@ -78,6 +78,10 @@ class FieldActionsDropDown extends Component {
 		const {fieldTypes, pages} = this.props;
 		const field = FormSupport.findFieldByFieldName(pages, fieldName);
 
+		if (field && isFieldSet(field)) {
+			return Liferay.Language.get('fieldset');
+		}
+
 		return (
 			field &&
 			fieldTypes.find((fieldType) => {
@@ -164,14 +168,11 @@ class FieldActionsDropDown extends Component {
 		const {dispatch} = this.context;
 		const {fieldName} = this.state;
 		const {pages} = this.props;
+		const field = FormSupport.findFieldByFieldName(pages, fieldName);
 
 		event.stopImmediatePropagation();
 		event.stopPropagation();
-
-		dispatch('fieldHovered', {
-			fieldName,
-			type: getField(pages, fieldName).type,
-		});
+		dispatch('fieldHovered', field);
 	}
 
 	_handleOnMouseLeave(event) {

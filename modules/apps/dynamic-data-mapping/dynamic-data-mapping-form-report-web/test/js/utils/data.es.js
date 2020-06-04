@@ -16,15 +16,18 @@ import toDataArray from '../../../src/main/resources/META-INF/resources/js/utils
 
 describe('toDataArray', () => {
 	it('sorts array from the highest to lower count values ', () => {
-		const sorted = toDataArray({
-			label1: 2,
-			label2: 4,
-		});
+		const sorted = toDataArray(
+			{label1: 'Label 1', label2: 'Label 2'},
+			{
+				label1: 2,
+				label2: 4,
+			}
+		);
 
 		const [first, second] = sorted;
 
-		expect(first.label === 'label2').toBeTruthy();
-		expect(second.label === 'label1').toBeTruthy();
+		expect(first.label === 'Label 2').toBeTruthy();
+		expect(second.label === 'Label 1').toBeTruthy();
 		expect(first.count > second.count).toBeTruthy();
 	});
 });

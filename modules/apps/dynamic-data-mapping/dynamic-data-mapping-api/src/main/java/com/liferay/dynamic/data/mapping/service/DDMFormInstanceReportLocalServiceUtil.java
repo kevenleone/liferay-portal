@@ -298,6 +298,15 @@ public class DDMFormInstanceReportLocalServiceUtil {
 		return getService().getPersistedModel(primaryKeyObj);
 	}
 
+	public static void processFormInstanceReportEvent(
+		long formInstanceReportId, long formInstanceRecordVersionId,
+		String formInstanceReportEvent) {
+
+		getService().processFormInstanceReportEvent(
+			formInstanceReportId, formInstanceRecordVersionId,
+			formInstanceReportEvent);
+	}
+
 	/**
 	 * Updates the ddm form instance report in the database or adds it if it does not yet exist. Also notifies the appropriate model listeners.
 	 *

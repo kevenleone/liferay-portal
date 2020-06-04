@@ -427,7 +427,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -438,7 +438,7 @@ definition {
 			userLastName = "userln",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -447,7 +447,7 @@ definition {
 			userEmailAddress = "userea@liferay.com",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -499,7 +499,7 @@ definition {
 			roleTitle = "Forms Site Role Name",
 			roleType = "site");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -547,7 +547,7 @@ definition {
 	@priority = "4"
 	test AddFormWithDuplicateTextFields {
 		property test.name.skip.portal.instance = "Forms#AddFormWithDuplicateTextFields";
-		property portal.acceptance = "quarantine";
+		property portal.acceptance = "true";
 		Navigator.openURL();
 
 		ProductMenu.gotoPortlet(
@@ -969,7 +969,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "System Settings");
@@ -1065,7 +1065,7 @@ definition {
 	@description = "This is a use case for LPS-60520."
 	@priority = "4"
 	test DeleteDateFieldAndViewEntries {
-		property portal.acceptance = "quarantine";
+		property portal.acceptance = "true";
 		property test.name.skip.portal.instance = "Forms#DeleteDateFieldAndViewEntries";
 
 		Navigator.openURL();
@@ -1174,7 +1174,7 @@ definition {
 	@priority = "5"
 	test DeletePages {
 		property test.name.skip.portal.instance = "Forms#DeletePages";
-		property portal.acceptance = "quarantine";
+		property portal.acceptance = "true";
 
 		Navigator.openURL();
 
@@ -1545,7 +1545,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "System Settings");
@@ -1741,7 +1741,7 @@ definition {
 
 		LexiconEntry.viewActiveDisplayStyle(displayStyle = "table");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "System Settings");
@@ -1768,7 +1768,7 @@ definition {
 
 		LexiconEntry.viewActiveDisplayStyle(displayStyle = "list");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "System Settings");
@@ -1876,7 +1876,7 @@ definition {
 	@priority = "4"
 	test EditTranslatedGridField {
 		property test.name.skip.portal.instance = "Forms#EditTranslatedGridField";
-		property portal.acceptance = "quarantine";
+		property portal.acceptance = "true";
 
 		Navigator.openURL();
 
@@ -2174,7 +2174,7 @@ definition {
 	@priority = "3"
 	test ReorderFieldOptions {
 		property test.name.skip.portal.instance = "Forms#ReorderFieldOptions";
-		property portal.acceptance = "quarantine";
+		property portal.acceptance = "true";
 
 		Navigator.openURL();
 
@@ -2726,7 +2726,7 @@ definition {
 
 		Pause(locator1 = "5000");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -2879,7 +2879,7 @@ definition {
 	@priority = "5"
 	test SubmitFormContainingCaptchaAndViewTextFieldValue {
 		property captcha.enabled = "true";
-		property portal.acceptance = "quarantine";
+		property portal.acceptance = "true";
 		property test.name.skip.portal.instance = "Forms#SubmitFormContainingCaptchaAndViewTextFieldValue";
 
 		Navigator.openURL();
@@ -4671,7 +4671,7 @@ definition {
 	test ViewSuccessPage {
 		property test.name.skip.portal.instance = "Forms#ViewSuccessPage";
 		property testray.component.names = "Training";
-		property portal.acceptance = "quarantine";
+		property portal.acceptance = "true";
 
 		Navigator.openURL();
 

@@ -35,9 +35,19 @@ const props = {
 		},
 	},
 	fields: [
-		{name: 'field1', type: 'radio'},
-		{name: 'field2', type: 'radio'},
-		{name: 'field3', type: 'radio'},
+		{
+			label: 'Field 1',
+			name: 'field1',
+			options: {option1: 'Option 1'},
+			type: 'radio',
+		},
+		{
+			label: 'Field 2',
+			name: 'field2',
+			options: {option2: 'Option 2'},
+			type: 'radio',
+		},
+		{label: 'Field 3', name: 'field3', type: 'radio'},
 	],
 };
 

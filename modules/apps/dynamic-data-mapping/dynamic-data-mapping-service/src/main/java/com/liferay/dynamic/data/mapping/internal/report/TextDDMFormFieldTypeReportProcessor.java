@@ -52,7 +52,7 @@ public class TextDDMFormFieldTypeReportProcessor
 		throws Exception {
 
 		DDMFormInstanceRecord formInstanceRecord =
-			_ddmFormInstanceRecordLocalService.getFormInstanceRecord(
+			ddmFormInstanceRecordLocalService.getFormInstanceRecord(
 				formInstanceRecordId);
 
 		JSONArray valuesJSONArray = JSONFactoryUtil.createJSONArray();
@@ -90,7 +90,7 @@ public class TextDDMFormFieldTypeReportProcessor
 						EVENT_DELETE_RECORD_VERSION)) {
 
 			List<DDMFormInstanceRecord> formInstanceRecords =
-				_ddmFormInstanceRecordLocalService.getFormInstanceRecords(
+				ddmFormInstanceRecordLocalService.getFormInstanceRecords(
 					formInstanceRecord.getFormInstanceId(),
 					WorkflowConstants.STATUS_APPROVED, 0, 5,
 					new DDMFormInstanceRecordModifiedDateComparator(false));
@@ -121,7 +121,7 @@ public class TextDDMFormFieldTypeReportProcessor
 
 		fieldJSONObject.put(
 			"totalEntries",
-			_ddmFormInstanceRecordLocalService.getFormInstanceRecordsCount(
+			ddmFormInstanceRecordLocalService.getFormInstanceRecordsCount(
 				formInstanceRecord.getFormInstanceId(),
 				WorkflowConstants.STATUS_APPROVED)
 		).put(
@@ -131,14 +131,14 @@ public class TextDDMFormFieldTypeReportProcessor
 		return fieldJSONObject;
 	}
 
+	@Reference
+	protected DDMFormInstanceRecordLocalService
+		ddmFormInstanceRecordLocalService;
+
 	private String _getValue(DDMFormFieldValue ddmFormFieldValue) {
 		Value value = ddmFormFieldValue.getValue();
 
 		return value.getString(value.getDefaultLocale());
 	}
-
-	@Reference
-	private DDMFormInstanceRecordLocalService
-		_ddmFormInstanceRecordLocalService;
 
 }

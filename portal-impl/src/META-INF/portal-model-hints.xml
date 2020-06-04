@@ -397,6 +397,7 @@
 	</model>
 	<model name="com.liferay.expando.kernel.model.ExpandoColumn">
 		<field name="mvccVersion" type="long" />
+		<field name="ctCollectionId" type="long" />
 		<field name="columnId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="tableId" type="long" />
@@ -413,6 +414,7 @@
 	</model>
 	<model name="com.liferay.expando.kernel.model.ExpandoRow">
 		<field name="mvccVersion" type="long" />
+		<field name="ctCollectionId" type="long" />
 		<field name="rowId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="modifiedDate" type="Date" />
@@ -421,6 +423,7 @@
 	</model>
 	<model name="com.liferay.expando.kernel.model.ExpandoTable">
 		<field name="mvccVersion" type="long" />
+		<field name="ctCollectionId" type="long" />
 		<field name="tableId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="classNameId" type="long" />
@@ -428,6 +431,7 @@
 	</model>
 	<model name="com.liferay.expando.kernel.model.ExpandoValue">
 		<field name="mvccVersion" type="long" />
+		<field name="ctCollectionId" type="long" />
 		<field name="valueId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="tableId" type="long" />
@@ -1600,6 +1604,7 @@
 	</model>
 	<model name="com.liferay.portal.kernel.model.WorkflowDefinitionLink">
 		<field name="mvccVersion" type="long" />
+		<field name="ctCollectionId" type="long" />
 		<field name="workflowDefinitionLinkId" type="long" />
 		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />
@@ -1615,6 +1620,7 @@
 	</model>
 	<model name="com.liferay.portal.kernel.model.WorkflowInstanceLink">
 		<field name="mvccVersion" type="long" />
+		<field name="ctCollectionId" type="long" />
 		<field name="workflowInstanceLinkId" type="long" />
 		<field name="groupId" type="long" />
 		<field name="companyId" type="long" />
@@ -1631,6 +1637,7 @@
 	</model>
 	<model name="com.liferay.ratings.kernel.model.RatingsEntry">
 		<field name="mvccVersion" type="long" />
+		<field name="ctCollectionId" type="long" />
 		<field name="uuid" type="String" />
 		<field name="entryId" type="long" />
 		<field name="companyId" type="long" />
@@ -1644,6 +1651,7 @@
 	</model>
 	<model name="com.liferay.ratings.kernel.model.RatingsStats">
 		<field name="mvccVersion" type="long" />
+		<field name="ctCollectionId" type="long" />
 		<field name="statsId" type="long" />
 		<field name="companyId" type="long" />
 		<field name="createDate" type="Date" />

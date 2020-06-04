@@ -10,6 +10,8 @@ Import-Package:\
 	\
 	!com.sun.*,\
 	\
+	!com.zaxxer.sparsebits.*,\
+	\
 	!net.sf.*,\
 	\
 	!org.apache.batik.*,\

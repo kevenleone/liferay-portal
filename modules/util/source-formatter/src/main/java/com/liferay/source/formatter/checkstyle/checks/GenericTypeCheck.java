@@ -169,7 +169,7 @@ public class GenericTypeCheck extends BaseCheck {
 
 		typeName =
 			JavaSourceUtil.getPackageName((String)fileText.getFullText()) +
-				StringPool.DOUBLE_PERIOD + typeName;
+				StringPool.PERIOD + typeName;
 
 		if (genericTypeNamesMap.containsKey(typeName)) {
 			return typeName;

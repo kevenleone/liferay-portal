@@ -73,59 +73,55 @@ pageContext.setAttribute("scopeAliasesDescriptionsMap", scopeAliasesDescriptions
 							<oauth2-tree:tree
 								trees="<%= (Collection)scopeAliasTreeNode.getTrees() %>"
 							>
-								<jsp:attribute
-									name="nodeJspFragment"
-								>
-								<li class='borderless list-group-item<c:if test="${assignedDeletedScopeAliases.contains(tree.value)}"> removed-scope</c:if>' id="${tree.value}-container">
-									<clay:row>
-											<c:choose>
-												<c:when test="${parentNodes.size() > 0}">
-												<div class="col-md-6">
-													<div class="scope-children-${parentNodes.size()}">
-														<aui:input checked="${assignedScopeAliases.contains(tree.value)}" data-has-childrens="true" data-parent="${parentNodes.getFirst().value}" disabled="${assignedDeletedScopeAliases.contains(tree.value)}" id="${tree.value}" label="${tree.value}" name="scopeAliases" type="checkbox" value="${tree.value}" />
+								<oauth2-tree:node>
+									<li class='borderless list-group-item<c:if test="${assignedDeletedScopeAliases.contains(tree.value)}"> removed-scope</c:if>' id="${tree.value}-container">
+										<clay:row>
+												<c:choose>
+													<c:when test="${parentNodes.size() > 0}">
+													<div class="col-md-6">
+														<div class="scope-children-${parentNodes.size()}">
+															<aui:input checked="${assignedScopeAliases.contains(tree.value)}" data-has-childrens="true" data-parent="${parentNodes.getFirst().value}" disabled="${assignedDeletedScopeAliases.contains(tree.value)}" id="${tree.value}" label="${tree.value}" name="scopeAliases" type="checkbox" value="${tree.value}" />
+														</div>
 													</div>
-												</div>
-												</c:when>
-												<c:otherwise>
-												<div class="col-md-6">
-													<aui:input checked="${assignedScopeAliases.contains(tree.value)}" data-has-childrens="true" disabled="${assignedDeletedScopeAliases.contains(tree.value)}" id="${tree.value}" label="${tree.value}" name="scopeAliases" type="checkbox" value="${tree.value}" />
-												</div>
-												</c:otherwise>
-											</c:choose>
-										<div class="col-md-6 text-left">
-											${scopeAliasesDescriptionsMap.get(tree.value)}
-										</div>
-									</clay:row>
-								</li>
-
-								<oauth2-tree:render-children />
-								</jsp:attribute>
-
-								<jsp:attribute
-									name="leafJspFragment"
-								>
-								<li class='borderless list-group-item<c:if test="${assignedDeletedScopeAliases.contains(tree.value)}"> removed-scope</c:if>' id="${tree.value}-container">
-									<clay:row>
-											<c:choose>
-												<c:when test="${parentNodes.size() > 0}">
-												<div class="col-md-6">
-													<div class="scope-children-${parentNodes.size()}">
-														<aui:input checked="${assignedScopeAliases.contains(tree.value)}" data-parent="${parentNodes.getFirst().value}" disabled="${assignedDeletedScopeAliases.contains(tree.value)}" id="${tree.value}" label="${tree.value}" name="scopeAliases" type="checkbox" value="${tree.value}" />
+													</c:when>
+													<c:otherwise>
+													<div class="col-md-6">
+														<aui:input checked="${assignedScopeAliases.contains(tree.value)}" data-has-childrens="true" disabled="${assignedDeletedScopeAliases.contains(tree.value)}" id="${tree.value}" label="${tree.value}" name="scopeAliases" type="checkbox" value="${tree.value}" />
 													</div>
-												</div>
-												</c:when>
-												<c:otherwise>
-												<div class="col-md-6">
-													<aui:input checked="${assignedScopeAliases.contains(tree.value)}" disabled="${assignedDeletedScopeAliases.contains(tree.value)}" id="${tree.value}" label="${tree.value}" name="scopeAliases" type="checkbox" value="${tree.value}" />
-												</div>
-												</c:otherwise>
-											</c:choose>
-										<div class="col-md-6 text-left">
-											${scopeAliasesDescriptionsMap.get(tree.value)}
-										</div>
-									</clay:row>
-								</li>
-								</jsp:attribute>
+													</c:otherwise>
+												</c:choose>
+											<div class="col-md-6 text-left">
+												${scopeAliasesDescriptionsMap.get(tree.value)}
+											</div>
+										</clay:row>
+									</li>
+
+									<oauth2-tree:render-children />
+								</oauth2-tree:node>
+
+								<oauth2-tree:leaf>
+									<li class='borderless list-group-item<c:if test="${assignedDeletedScopeAliases.contains(tree.value)}"> removed-scope</c:if>' id="${tree.value}-container">
+										<clay:row>
+												<c:choose>
+													<c:when test="${parentNodes.size() > 0}">
+													<div class="col-md-6">
+														<div class="scope-children-${parentNodes.size()}">
+															<aui:input checked="${assignedScopeAliases.contains(tree.value)}" data-parent="${parentNodes.getFirst().value}" disabled="${assignedDeletedScopeAliases.contains(tree.value)}" id="${tree.value}" label="${tree.value}" name="scopeAliases" type="checkbox" value="${tree.value}" />
+														</div>
+													</div>
+													</c:when>
+													<c:otherwise>
+													<div class="col-md-6">
+														<aui:input checked="${assignedScopeAliases.contains(tree.value)}" disabled="${assignedDeletedScopeAliases.contains(tree.value)}" id="${tree.value}" label="${tree.value}" name="scopeAliases" type="checkbox" value="${tree.value}" />
+													</div>
+													</c:otherwise>
+												</c:choose>
+											<div class="col-md-6 text-left">
+												${scopeAliasesDescriptionsMap.get(tree.value)}
+											</div>
+										</clay:row>
+									</li>
+								</oauth2-tree:leaf>
 							</oauth2-tree:tree>
 							</li>
 						</ul>

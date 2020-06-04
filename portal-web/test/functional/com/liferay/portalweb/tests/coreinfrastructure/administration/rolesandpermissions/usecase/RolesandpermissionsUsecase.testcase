@@ -87,7 +87,7 @@ definition {
 				roleType = "site");
 		}
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -107,7 +107,7 @@ definition {
 			userLastName = "userln",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -116,7 +116,7 @@ definition {
 			userEmailAddress = "userea@liferay.com",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -125,7 +125,7 @@ definition {
 			siteName = "Site Name",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -225,14 +225,14 @@ definition {
 
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Roles");
 
 		Role.add(roleTitle = "Group Scope Role Name");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Roles");
@@ -246,7 +246,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",
 			panel = "Site Administration",
-			portlet = "Pages");
+			portlet = "Pages",
+			site = "Guest");
 
 		SitePages.addPublicPage(pageName = "Bookmarks Page");
 
@@ -263,7 +264,7 @@ definition {
 
 		Navigator.gotoPage(pageName = "Bookmarks Page");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -304,7 +305,7 @@ definition {
 			userLastName = "userln",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -313,7 +314,7 @@ definition {
 			userEmailAddress = "userea@liferay.com",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -322,7 +323,7 @@ definition {
 			siteName = "${siteName}",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -331,7 +332,7 @@ definition {
 			siteName = "google.com Name",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -375,7 +376,7 @@ definition {
 	test NoGuestRolePermissionsFromPrivateLayout {
 		property custom.properties = "permissions.check.guest.enabled=false";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -416,7 +417,7 @@ definition {
 
 		JSONRole.addOrganizationRole(roleTitle = "Roles Orgrole Name");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Roles");
@@ -429,7 +430,7 @@ definition {
 
 		JSONOrganization.addOrganization(organizationName = "Organization Name");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -455,7 +456,7 @@ definition {
 				userEmailAddress = "userea${userNum}@liferay.com");
 		}
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -636,7 +637,7 @@ definition {
 			userLastName = "userln1",
 			userScreenName = "usersn1");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -645,7 +646,7 @@ definition {
 			userEmailAddress = "userea1@liferay.com",
 			userScreenName = "usersn1");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -654,7 +655,7 @@ definition {
 			siteName = "${siteName}",
 			userScreenName = "usersn1");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -669,7 +670,7 @@ definition {
 			userLastName = "userln2",
 			userScreenName = "usersn2");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -678,7 +679,7 @@ definition {
 			userEmailAddress = "userea2@liferay.com",
 			userScreenName = "usersn2");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -687,7 +688,7 @@ definition {
 			siteName = "${siteName}",
 			userScreenName = "usersn2");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -699,7 +700,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",
 			panel = "Site Administration",
-			portlet = "Pages");
+			portlet = "Pages",
+			site = "Guest");
 
 		SitePages.addPublicPage(pageName = "Dynamic Data Lists Page");
 
@@ -883,7 +885,7 @@ definition {
 	test RolesSiteSearch {
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Roles");
@@ -892,7 +894,7 @@ definition {
 
 		Role.add(roleTitle = "Roles Siterole Name");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Roles");
@@ -909,7 +911,7 @@ definition {
 			userLastName = "userln1",
 			userScreenName = "usersn1");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -918,7 +920,7 @@ definition {
 			userEmailAddress = "userea1@liferay.com",
 			userScreenName = "usersn1");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -933,7 +935,7 @@ definition {
 			userLastName = "userln2",
 			userScreenName = "usersn2");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -942,7 +944,7 @@ definition {
 			userEmailAddress = "userea2@liferay.com",
 			userScreenName = "usersn2");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -951,7 +953,7 @@ definition {
 			siteName = "${siteName}",
 			userScreenName = "usersn2");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -963,7 +965,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",
 			panel = "Site Administration",
-			portlet = "Pages");
+			portlet = "Pages",
+			site = "Guest");
 
 		SitePages.addPublicPage(pageName = "Documents and Media Page");
 
@@ -1069,7 +1072,7 @@ definition {
 				userLastName = "userln${userNumber}",
 				userScreenName = "usersn${userNumber}");
 
-			ProductMenu.gotoPortlet(
+			GlobalMenu.gotoPortlet(
 				category = "Users",
 				panel = "Control Panel",
 				portlet = "Users and Organizations");
@@ -1079,7 +1082,7 @@ definition {
 				userScreenName = "usersn${userNumber}");
 		}
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1088,7 +1091,7 @@ definition {
 			orgName = "Organization Name 1",
 			orgType = "Organization");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1097,7 +1100,7 @@ definition {
 			orgName = "Organization Name 2",
 			orgType = "Organization");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1108,7 +1111,7 @@ definition {
 			organizationSite = "Community Site",
 			orgName = "Organization Name 2");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1117,7 +1120,7 @@ definition {
 			orgName = "Organization Name 3",
 			orgType = "Organization");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1131,7 +1134,7 @@ definition {
 			userName = "userfn1 userln1",
 			userScreenName = "usersn1");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1145,7 +1148,7 @@ definition {
 			userName = "userfn2 userln2",
 			userScreenName = "usersn2");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1159,7 +1162,7 @@ definition {
 			userLastName = "userln2",
 			userScreenName = "usersn2");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1173,7 +1176,7 @@ definition {
 			userName = "userfn3 userln3",
 			userScreenName = "usersn3");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "User Groups");
@@ -1184,7 +1187,7 @@ definition {
 
 		UserGroup.addCP(userGroupName = "UG UserGroup3 Name");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "User Groups");
@@ -1193,7 +1196,7 @@ definition {
 			userGroupName = "UG UserGroup1 Name",
 			userScreenName = "usersn1");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "User Groups");
@@ -1202,7 +1205,7 @@ definition {
 			userGroupName = "UG UserGroup2 Name",
 			userScreenName = "usersn2");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "User Groups");
@@ -1211,7 +1214,7 @@ definition {
 			userGroupName = "UG UserGroup3 Name",
 			userScreenName = "usersn3");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -1522,7 +1525,7 @@ definition {
 
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Roles");
@@ -1531,7 +1534,7 @@ definition {
 
 		Role.add(roleTitle = "Roles Siterole Name");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Roles");
@@ -1568,7 +1571,7 @@ definition {
 			userLastName = "userln",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1577,7 +1580,7 @@ definition {
 			userEmailAddress = "userea@liferay.com",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1602,7 +1605,7 @@ definition {
 			password = "test",
 			userEmailAddress = "test@liferay.com");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1634,7 +1637,7 @@ definition {
 
 	@priority = "4"
 	test TeamPermissionsSite {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -1648,7 +1651,7 @@ definition {
 				userLastName = "userln${userNumber}",
 				userScreenName = "usersn${userNumber}");
 
-			ProductMenu.gotoPortlet(
+			GlobalMenu.gotoPortlet(
 				category = "Users",
 				panel = "Control Panel",
 				portlet = "Users and Organizations");
@@ -1657,7 +1660,7 @@ definition {
 				userEmailAddress = "userea${userNumber}@liferay.com",
 				userScreenName = "usersn${userNumber}");
 
-			ProductMenu.gotoPortlet(
+			GlobalMenu.gotoPortlet(
 				category = "Users",
 				panel = "Control Panel",
 				portlet = "Users and Organizations");
@@ -1702,7 +1705,9 @@ definition {
 			pageName = "USA Ice Hockey Team Blog",
 			pageTemplateName = "Blog");
 
-		PermissionsInline.gotoPagePG(pageName = "USA Ice Hockey Team Blog");
+		PermissionsInline.gotoPagePG(
+			pageName = "USA Ice Hockey Team Blog",
+			site = "Site Name");
 
 		Role.removePermissionPG(
 			permissionDefinitionKey = "CONTENT_PERMISSIONS_VIEW_CHECKBOX",
@@ -1759,14 +1764,14 @@ definition {
 
 	@priority = "4"
 	test ViewAutomaticAssignedRoles {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Roles");
 
 		Role.add(roleTitle = "Roles Regrole Name");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Roles");
@@ -1780,7 +1785,7 @@ definition {
 			permissionDefinitionValue = "View Control Panel Menu",
 			permissionNavigationValue = "Portal");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Roles");
@@ -1797,7 +1802,7 @@ definition {
 
 	@priority = "4"
 	test ViewDocumentsAndMediaAddRepositoryPermissionSiteMemberRole {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Roles");
@@ -1810,7 +1815,7 @@ definition {
 
 		AssertTextNotPresent(value1 = "action.ADD_REPOSITORY");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Roles");
@@ -1830,7 +1835,7 @@ definition {
 			userLastName = "userln",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1839,14 +1844,14 @@ definition {
 			userEmailAddress = "userea@liferay.com",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "User Groups");
 
 		UserGroup.addCP(userGroupName = "UG UserGroup Name");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "User Groups");
@@ -1858,7 +1863,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "People",
 			panel = "Site Administration",
-			portlet = "Memberships");
+			portlet = "Memberships",
+			site = "Guest");
 
 		Site.assignUserGroupAsMemberCP(userGroupName = "UG UserGroup Name");
 
@@ -1916,7 +1922,7 @@ definition {
 			resourceName = "com.liferay.dynamic.data.mapping.model.DDMStructure-com.liferay.journal.model.JournalArticle",
 			roleTitle = "Roles Regrole Name");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -1938,7 +1944,7 @@ definition {
 			userLastName = "userln",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1947,7 +1953,7 @@ definition {
 			userEmailAddress = "userea@liferay.com",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1956,7 +1962,7 @@ definition {
 			siteName = "Site Name",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1965,7 +1971,7 @@ definition {
 			roleTitle = "Roles Regrole Name",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1999,7 +2005,7 @@ definition {
 	test ViewUserPermissionSubdirectoryDisplays {
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Roles");

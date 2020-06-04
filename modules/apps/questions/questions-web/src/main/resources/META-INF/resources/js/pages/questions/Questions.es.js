@@ -13,7 +13,6 @@
  */
 
 import ClayButton from '@clayui/button';
-import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {ClayResultsBar} from '@clayui/management-toolbar';
 import React, {useContext, useEffect, useState} from 'react';
 import {withRouter} from 'react-router-dom';
@@ -22,7 +21,7 @@ import {AppContext} from '../../AppContext.es';
 import Error from '../../components/Error.es';
 import PaginatedList from '../../components/PaginatedList.es';
 import QuestionRow from '../../components/QuestionRow.es';
-import useQuery from '../../hooks/useQuery.es';
+import useQueryParams from '../../hooks/useQueryParams.es';
 import {getQuestionThreads} from '../../utils/client.es';
 import lang from '../../utils/lang.es';
 import {historyPushWithSlug, slugToText} from '../../utils/utils.es';
@@ -47,7 +46,7 @@ export default withRouter(
 		const [searchCallback, setSearchCallback] = useState();
 		const [section, setSection] = useState({});
 
-		const queryParams = useQuery(location);
+		const queryParams = useQueryParams(location);
 
 		const context = useContext(AppContext);
 
@@ -83,9 +82,9 @@ export default withRouter(
 				section,
 				siteKey
 			)
-				.then((data) => setQuestions(data || []))
-				.then(() => {
-					setLoading(false);
+				.then(({data, loading}) => {
+					setQuestions(data || []);
+					setLoading(loading);
 					if (searchCallback) {
 						searchCallback(false);
 					}
@@ -139,18 +138,18 @@ export default withRouter(
 						</div>
 
 						{!!search && (
-							<div className="c-mt-5 c-mt-md-1 c-mx-auto c-px-0 col-xl-10">
+							<div className="c-mt-5 c-mt-md-1 c-px-0 col-xl-12">
 								<ClayResultsBar>
 									<ClayResultsBar.Item expand>
 										<span className="component-text text-truncate-inline">
 											<span className="text-truncate">
 												{lang.sub(
 													Liferay.Language.get(
-														'x-results-for-query-with-terms-x'
+														'found-x-results-for-x'
 													),
 													[
 														questions.totalCount,
-														search,
+														slugToText(search),
 													]
 												)}
 											</span>
@@ -172,27 +171,24 @@ export default withRouter(
 						)}
 
 						<div className="c-mt-5 c-mx-auto c-px-0 col-xl-10">
-							{loading ? (
-								<ClayLoadingIndicator />
-							) : (
-								<PaginatedList
-									activeDelta={pageSize}
-									activePage={page}
-									changeDelta={setPageSize}
-									changePage={changePage}
-									data={questions}
-								>
-									{(question) => (
-										<QuestionRow
-											key={question.id}
-											question={question}
-											showSectionLabel={
-												!!section.numberOfMessageBoardSections
-											}
-										/>
-									)}
-								</PaginatedList>
-							)}
+							<PaginatedList
+								activeDelta={pageSize}
+								activePage={page}
+								changeDelta={setPageSize}
+								changePage={changePage}
+								data={questions}
+								loading={loading}
+							>
+								{(question) => (
+									<QuestionRow
+										key={question.id}
+										question={question}
+										showSectionLabel={
+											!!section.numberOfMessageBoardSections
+										}
+									/>
+								)}
+							</PaginatedList>
 
 							<Error error={error} />
 						</div>

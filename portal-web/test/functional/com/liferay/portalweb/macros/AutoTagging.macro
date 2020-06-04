@@ -14,7 +14,7 @@ definition {
 
 	macro disableAutoTagging {
 		if ("${disableAutoTaggingFor}" == "System Settings") {
-			ProductMenu.gotoPortlet(
+			GlobalMenu.gotoPortlet(
 				category = "Configuration",
 				panel = "Control Panel",
 				portlet = "System Settings");
@@ -41,7 +41,8 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "Configuration",
 				panel = "Site Administration",
-				portlet = "Settings");
+				portlet = "Settings",
+				site = "${site}");
 
 			Panel.expandPanel(panel = "Asset Auto Tagging");
 
@@ -59,7 +60,7 @@ definition {
 
 	macro enableAutoTagging {
 		if ("${enableAutoTaggingFor}" == "System Settings") {
-			ProductMenu.gotoPortlet(
+			GlobalMenu.gotoPortlet(
 				category = "Configuration",
 				panel = "Control Panel",
 				portlet = "System Settings");
@@ -97,7 +98,8 @@ definition {
 			ProductMenu.gotoPortlet(
 				category = "Configuration",
 				panel = "Site Administration",
-				portlet = "Settings");
+				portlet = "Settings",
+				site = "${site}");
 
 			Panel.expandPanel(panel = "Asset Auto Tagging");
 
@@ -131,7 +133,7 @@ definition {
 	}
 
 	macro enableOpenNLP {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "System Settings");
@@ -164,7 +166,7 @@ definition {
 	}
 
 	macro enableTensorFlow {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "System Settings");

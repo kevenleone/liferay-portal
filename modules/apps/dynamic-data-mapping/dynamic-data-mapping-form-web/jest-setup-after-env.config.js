@@ -19,3 +19,25 @@ Liferay.DDM = {
 		spritemap: '/lexicon/icons.svg',
 	},
 };
+
+window.themeDisplay = {
+	getLanguageId: () => 'en_US',
+};
+
+window.Liferay = {
+	...(window.Liferay || {}),
+	ThemeDisplay: window.themeDisplay,
+};
+
+const REGEX_SUB = /\x$/g;
+
+window.Liferay.Util.sub = function (string, data) {
+	if (
+		arguments.length > 2 ||
+		(typeof data !== 'object' && typeof data !== 'function')
+	) {
+		data = Array.prototype.slice.call(arguments, 1);
+	}
+
+	return string.replace(REGEX_SUB, data);
+};

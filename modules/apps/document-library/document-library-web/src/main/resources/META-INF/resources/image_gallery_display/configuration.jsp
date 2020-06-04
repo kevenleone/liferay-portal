@@ -105,38 +105,31 @@ DLPortletInstanceSettingsHelper dlPortletInstanceSettingsHelper = new DLPortletI
 
 	if (openFolderSelectorButton) {
 		openFolderSelectorButton.addEventListener('click', function (event) {
-			Liferay.Util.selectEntity(
-				{
-					dialog: {
-						constrain: true,
-						destroyOnHide: true,
-						modal: true,
-						width: 680,
-					},
-					id:
-						'_<%= HtmlUtil.escapeJS(igRequestHelper.getPortletResource()) %>_selectFolder',
-					title:
-						'<liferay-ui:message arguments="folder" key="select-x" />',
-
-					<liferay-portlet:renderURL portletName="<%= igRequestHelper.getPortletResource() %>" var="selectFolderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
-						<portlet:param name="mvcRenderCommandName" value="/document_library/select_folder" />
-						<portlet:param name="folderId" value="<%= String.valueOf(rootFolderId) %>" />
-						<portlet:param name="ignoreRootFolder" value="<%= Boolean.TRUE.toString() %>" />
-					</liferay-portlet:renderURL>
-
-					uri: '<%= HtmlUtil.escapeJS(selectFolderURL.toString()) %>',
-				},
-				function (event) {
+			Liferay.Util.getOpener().Liferay.Util.openModal({
+				id:
+					'_<%= HtmlUtil.escapeJS(igRequestHelper.getPortletResource()) %>_selectFolder',
+				onSelect: function (selectedItem) {
 					var folderData = {
 						idString: 'rootFolderId',
-						idValue: event.folderid,
+						idValue: selectedItem.folderid,
 						nameString: 'rootFolderName',
-						nameValue: event.foldername,
+						nameValue: selectedItem.foldername,
 					};
 
 					Liferay.Util.selectFolder(folderData, '<portlet:namespace />');
-				}
-			);
+				},
+				selectEventName:
+					'_<%= HtmlUtil.escapeJS(igRequestHelper.getPortletResource()) %>_selectFolder',
+				title: '<liferay-ui:message arguments="folder" key="select-x" />',
+
+				<liferay-portlet:renderURL portletName="<%= igRequestHelper.getPortletResource() %>" var="selectFolderURL" windowState="<%= LiferayWindowState.POP_UP.toString() %>">
+					<portlet:param name="mvcRenderCommandName" value="/document_library/select_folder" />
+					<portlet:param name="folderId" value="<%= String.valueOf(rootFolderId) %>" />
+					<portlet:param name="ignoreRootFolder" value="<%= Boolean.TRUE.toString() %>" />
+				</liferay-portlet:renderURL>
+
+				url: '<%= HtmlUtil.escapeJS(selectFolderURL.toString()) %>',
+			});
 		});
 	}
 

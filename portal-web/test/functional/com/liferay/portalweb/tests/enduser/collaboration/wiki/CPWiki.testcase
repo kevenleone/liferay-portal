@@ -135,7 +135,7 @@ definition {
 		property portal.acceptance = "true";
 		property test.name.skip.portal.instance = "CPWiki#CKEditorSmoke";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "System Settings");
@@ -342,6 +342,7 @@ definition {
 			portlet = "Wiki");
 
 		LAR.importPortlet(
+			initializeLiferayEvent = "true",
 			larFileName = "space-history-wiki.lar",
 			uploadFrom = "dependencies");
 
@@ -508,6 +509,7 @@ definition {
 		WikiEntry.viewPageContentBody(wikiPageContent = "Wiki Page Content");
 
 		WikiPage.viewRSS(
+			site = "Guest",
 			version = "1.0",
 			wikiNodeName = "Main",
 			wikiPageContent = "Wiki Page Content",

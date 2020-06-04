@@ -415,9 +415,9 @@ definition {
 
 	macro duplicateSingleApproverWorkflow {
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Click(
@@ -671,9 +671,9 @@ definition {
 	}
 
 	macro tearDownPortalWorkflow {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Navigator.gotoNavItem(navItem = "Schemes");
@@ -713,9 +713,9 @@ definition {
 	}
 
 	macro tearDownSpecificWorkflowDefinition {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		var key_workflowDefinitionTitle = "${workflowDefinitionTitle}";
@@ -723,9 +723,9 @@ definition {
 		while (IsElementPresent(locator1 = "WorkflowDefinition#DEFINITION_TABLE_SPECIFIC_DEFINITION_ELLIPSIS")) {
 			Workflow.unpublishWorkflowDefinition(workflowDefinitionTitle = "${workflowDefinitionTitle}");
 
-			ProductMenu.gotoPortlet(
+			GlobalMenu.gotoPortlet(
 				category = "Workflow",
-				panel = "Control Panel",
+				panel = "Applications",
 				portlet = "Process Builder");
 
 			Workflow.deleteWorkflowDefinition(workflowDefinitionTitle = "${workflowDefinitionTitle}");
@@ -735,9 +735,9 @@ definition {
 	macro tearDownWorkflowDefinitions {
 		var key_workflowDefinitionTitle = "${workflowDefinitionTitle}";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		while (IsElementPresent(locator1 = "WorkflowDefinition#DEFINITION_TABLE_TITLE")) {

@@ -17,7 +17,7 @@
 <%@ include file="/blogs/init.jsp" %>
 
 <%
-SearchContainer<BaseModel> searchContainer = (SearchContainer)request.getAttribute("view_entry_content.jsp-searchContainer");
+SearchContainer<BaseModel<?>> searchContainer = (SearchContainer)request.getAttribute("view_entry_content.jsp-searchContainer");
 
 BlogsEntry entry = (BlogsEntry)request.getAttribute("view_entry_content.jsp-entry");
 

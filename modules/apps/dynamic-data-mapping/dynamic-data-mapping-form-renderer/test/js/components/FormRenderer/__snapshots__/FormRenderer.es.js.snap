@@ -9,7 +9,7 @@ exports[`FormRenderer does not render the layout with the field empty in non-edi
         <div class="form-builder-layout">
           <h5 class="pagination"> </h5>
           <div class="active ddm-form-page lfr-ddm-form-page" data-ddm-page="0">
-            <h3 class="lfr-ddm-form-page-title">Untitled name</h3>
+            <h2 class="lfr-ddm-form-page-title">Untitled name</h2>
             <div class="position-relative row">
               <div class="col-md-3 col-ddm" data-ddm-field-row="0" data-ddm-field-page="0" data-ddm-field-column="0">
                 <div class="ddm-field" data-field-name="radio"></div>
@@ -38,6 +38,12 @@ exports[`FormRenderer does not render the layout with the field empty in non-edi
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="ddm-paginated-builder-reorder" data-ddm-reorder-page-actions="0">
+        <div class="tooltip fade clay-tooltip-top" role="tooltip">
+          <div class="arrow"></div>
+          <div class="tooltip-inner"></div>
         </div>
       </div>
       <div class="ddm-paginated-builder-dropdown" data-ddm-success-page-actions="0">
@@ -72,7 +78,7 @@ exports[`FormRenderer renders a layout in editable mode 1`] = `
         <div class="form-builder-layout">
           <h5 class="pagination"> </h5>
           <div class="active ddm-form-page lfr-ddm-form-page" data-ddm-page="0">
-            <h3 class="lfr-ddm-form-page-title">Untitled name</h3>
+            <h2 class="lfr-ddm-form-page-title">Untitled name</h2>
             <div class="placeholder row">
               <div class="col col-ddm col-empty col-md-12" data-ddm-field-row="0" data-ddm-field-page="0">
                 <div class="ddm-target"></div>
@@ -173,6 +179,12 @@ exports[`FormRenderer renders a layout in editable mode 1`] = `
           </div>
         </div>
       </div>
+      <div class="ddm-paginated-builder-reorder" data-ddm-reorder-page-actions="0">
+        <div class="tooltip fade clay-tooltip-top" role="tooltip">
+          <div class="arrow"></div>
+          <div class="tooltip-inner"></div>
+        </div>
+      </div>
       <div class="ddm-paginated-builder-dropdown" data-ddm-success-page-actions="0">
         <div class="dropdown dropdown-action"><button aria-expanded="false" aria-haspopup="true" class="dropdown-toggle btn btn-unstyled" ref="triggerButton" title="actions" type="button"><svg class="lexicon-icon lexicon-icon-ellipsis-v" focusable="false" role="presentation">
               <use xlink:href="icons.svg#ellipsis-v"></use>
@@ -205,7 +217,7 @@ exports[`FormRenderer renders a layout in pagination mode 1`] = `
         <div class="fade tab-pane active show" role="tabpanel">
           <div class="form-builder-layout">
             <div class="active ddm-form-page lfr-ddm-form-page" data-ddm-page="0">
-              <h3 class="lfr-ddm-form-page-title">Untitled name</h3>
+              <h2 class="lfr-ddm-form-page-title">Untitled name</h2>
               <div class="position-relative row">
                 <div class="col-md-3 col-ddm" data-ddm-field-row="0" data-ddm-field-page="0" data-ddm-field-column="0">
                   <div class="ddm-field" data-field-name="radio"></div>
@@ -254,7 +266,7 @@ exports[`FormRenderer renders a layout in wizard mode 1`] = `
         <div class="form-builder-layout">
           <h5 class="pagination"> </h5>
           <div class="active ddm-form-page lfr-ddm-form-page" data-ddm-page="0">
-            <h3 class="lfr-ddm-form-page-title">Untitled name</h3>
+            <h2 class="lfr-ddm-form-page-title">Untitled name</h2>
             <div class="position-relative row">
               <div class="col-md-3 col-ddm" data-ddm-field-row="0" data-ddm-field-page="0" data-ddm-field-column="0">
                 <div class="ddm-field" data-field-name="radio"></div>
@@ -280,6 +292,12 @@ exports[`FormRenderer renders a layout in wizard mode 1`] = `
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="ddm-paginated-builder-reorder" data-ddm-reorder-page-actions="0">
+        <div class="tooltip fade clay-tooltip-top" role="tooltip">
+          <div class="arrow"></div>
+          <div class="tooltip-inner"></div>
         </div>
       </div>
       <div class="ddm-paginated-builder-dropdown" data-ddm-success-page-actions="0">
@@ -314,7 +332,7 @@ exports[`FormRenderer renders a layout with an empty field only in editable mode
         <div class="form-builder-layout">
           <h5 class="pagination"> </h5>
           <div class="active ddm-form-page lfr-ddm-form-page" data-ddm-page="0">
-            <h3 class="lfr-ddm-form-page-title">Untitled name</h3>
+            <h2 class="lfr-ddm-form-page-title">Untitled name</h2>
             <div class="placeholder row">
               <div class="col col-ddm col-empty col-md-12" data-ddm-field-row="0" data-ddm-field-page="0">
                 <div class="ddm-target"></div>
@@ -423,6 +441,12 @@ exports[`FormRenderer renders a layout with an empty field only in editable mode
           </div>
         </div>
       </div>
+      <div class="ddm-paginated-builder-reorder" data-ddm-reorder-page-actions="0">
+        <div class="tooltip fade clay-tooltip-top" role="tooltip">
+          <div class="arrow"></div>
+          <div class="tooltip-inner"></div>
+        </div>
+      </div>
       <div class="ddm-paginated-builder-dropdown" data-ddm-success-page-actions="0">
         <div class="dropdown dropdown-action"><button aria-expanded="false" aria-haspopup="true" class="dropdown-toggle btn btn-unstyled" ref="triggerButton" title="actions" type="button"><svg class="lexicon-icon lexicon-icon-ellipsis-v" focusable="false" role="presentation">
               <use xlink:href="icons.svg#ellipsis-v"></use>
@@ -455,7 +479,7 @@ exports[`FormRenderer renders a layout with pages in mode of list 1`] = `
         <div class="form-builder-layout">
           <h5 class="pagination"> </h5>
           <div class="active ddm-form-page lfr-ddm-form-page" data-ddm-page="0">
-            <h3 class="lfr-ddm-form-page-title">Untitled name</h3>
+            <h2 class="lfr-ddm-form-page-title">Untitled name</h2>
             <div class="position-relative row">
               <div class="col-md-3 col-ddm" data-ddm-field-row="0" data-ddm-field-page="0" data-ddm-field-column="0">
                 <div class="ddm-field" data-field-name="radio"></div>
@@ -481,6 +505,12 @@ exports[`FormRenderer renders a layout with pages in mode of list 1`] = `
               </div>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="ddm-paginated-builder-reorder" data-ddm-reorder-page-actions="0">
+        <div class="tooltip fade clay-tooltip-top" role="tooltip">
+          <div class="arrow"></div>
+          <div class="tooltip-inner"></div>
         </div>
       </div>
       <div class="ddm-paginated-builder-dropdown" data-ddm-success-page-actions="0">
@@ -515,7 +545,7 @@ exports[`FormRenderer renders default markup with Success Page enabled 1`] = `
         <div class="form-builder-layout">
           <h5 class="pagination"> </h5>
           <div class="active ddm-form-page lfr-ddm-form-page" data-ddm-page="0">
-            <h3 class="lfr-ddm-form-page-title">Untitled name</h3>
+            <h2 class="lfr-ddm-form-page-title">Untitled name</h2>
             <div class="position-relative row">
               <div class="col-md-3 col-ddm" data-ddm-field-row="0" data-ddm-field-page="0" data-ddm-field-column="0">
                 <div class="ddm-field" data-field-name="radio"></div>
@@ -543,6 +573,12 @@ exports[`FormRenderer renders default markup with Success Page enabled 1`] = `
           </div>
         </div>
       </div>
+      <div class="ddm-paginated-builder-reorder" data-ddm-reorder-page-actions="0">
+        <div class="tooltip fade clay-tooltip-top" role="tooltip">
+          <div class="arrow"></div>
+          <div class="tooltip-inner"></div>
+        </div>
+      </div>
       <div class="ddm-paginated-builder-dropdown" data-ddm-page-actions="0">
         <div class="dropdown dropdown-action"><button aria-expanded="false" aria-haspopup="true" class="dropdown-toggle btn btn-unstyled" ref="triggerButton" title="actions" type="button"><svg class="lexicon-icon lexicon-icon-ellipsis-v" focusable="false" role="presentation">
               <use xlink:href="icons.svg#ellipsis-v"></use>
@@ -558,6 +594,12 @@ exports[`FormRenderer renders default markup with Success Page enabled 1`] = `
         <div class="form-builder-layout">
           <h5 class="pagination">success-page</h5>
           <div class="active ddm-form-page lfr-ddm-form-page form-builder-success-page"><input class="form-builder-page-header-title form-control p-0" maxlength="120" placeholder="" data-setting="title" type="text" value=""><input class="form-builder-page-header-description form-control p-0" data-setting="body" type="text" maxlength="120" placeholder="" value=""></div>
+        </div>
+      </div>
+      <div class="ddm-paginated-builder-reorder" data-ddm-reorder-page-actions="1">
+        <div class="tooltip fade clay-tooltip-top" role="tooltip">
+          <div class="arrow"></div>
+          <div class="tooltip-inner"></div>
         </div>
       </div>
       <div class="ddm-paginated-builder-dropdown" data-ddm-success-page-actions="1">

@@ -24,8 +24,8 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration;
 import com.liferay.portal.search.elasticsearch7.internal.index.contributor.IndexContributorReceiver;
 import com.liferay.portal.search.elasticsearch7.internal.settings.SettingsBuilder;
-import com.liferay.portal.search.elasticsearch7.internal.util.LogUtil;
 import com.liferay.portal.search.elasticsearch7.internal.util.ResourceUtil;
+import com.liferay.portal.search.elasticsearch7.internal.util.SearchLogHelperUtil;
 import com.liferay.portal.search.elasticsearch7.settings.IndexSettingsContributor;
 import com.liferay.portal.search.elasticsearch7.settings.IndexSettingsHelper;
 import com.liferay.portal.search.index.IndexNameBuilder;
@@ -100,7 +100,7 @@ public class CompanyIndexFactory
 			ActionResponse actionResponse = indicesClient.delete(
 				deleteIndexRequest, RequestOptions.DEFAULT);
 
-			LogUtil.logActionResponse(_log, actionResponse);
+			SearchLogHelperUtil.logActionResponse(_log, actionResponse);
 		}
 		catch (IOException ioException) {
 			throw new RuntimeException(ioException);
@@ -172,7 +172,7 @@ public class CompanyIndexFactory
 			ActionResponse actionResponse = indicesClient.create(
 				createIndexRequest, RequestOptions.DEFAULT);
 
-			LogUtil.logActionResponse(_log, actionResponse);
+			SearchLogHelperUtil.logActionResponse(_log, actionResponse);
 		}
 		catch (IOException ioException) {
 			throw new RuntimeException(ioException);

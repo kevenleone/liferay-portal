@@ -11,9 +11,9 @@ definition {
 
 		User.firstLoginPG();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Change Lists",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Settings");
 
 		ChangeList.enableChangeList();
@@ -26,9 +26,9 @@ definition {
 			PortalInstances.tearDownCP();
 		}
 		else {
-			ProductMenu.gotoPortlet(
+			GlobalMenu.gotoPortlet(
 				category = "Change Lists",
-				panel = "Control Panel",
+				panel = "Applications",
 				portlet = "Settings");
 
 			ChangeList.disableChangeList();
@@ -40,7 +40,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content &amp; Data",
 			panel = "Site Administration",
-			portlet = "Web Content");
+			portlet = "Web Content",
+			site = "Guest");
 
 		WebContentNavigator.gotoAddCP();
 
@@ -61,9 +62,9 @@ definition {
 			key_contentTitle = "First Web Content",
 			locator1 = "ChangeList#CHECK_CIRCLE");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Change Lists",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Overview");
 
 		ChangeList.addNewChangeList(
@@ -73,7 +74,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content &amp; Data",
 			panel = "Site Administration",
-			portlet = "Web Content");
+			portlet = "Web Content",
+			site = "Guest");
 
 		WebContentNavigator.gotoAddCP();
 
@@ -101,9 +103,9 @@ definition {
 
 	@priority = "4"
 	test ViewChangeListInformationOnWebContentHistoryDeletion {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Change Lists",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Overview");
 
 		ChangeList.addNewChangeList(
@@ -113,7 +115,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content &amp; Data",
 			panel = "Site Administration",
-			portlet = "Web Content");
+			portlet = "Web Content",
+			site = "Guest");
 
 		WebContentNavigator.gotoAddCP();
 
@@ -144,9 +147,9 @@ definition {
 
 		Alert.viewSuccessMessage();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Change Lists",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Overview");
 
 		ChangeList.viewDeletedItemCounter(nbrOfDeletedItems = "0");
@@ -154,9 +157,9 @@ definition {
 
 	@priority = "4"
 	test ViewChangeListOverviewScreenFromWebContentHistory {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Change Lists",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Overview");
 
 		ChangeList.addNewChangeList(
@@ -166,7 +169,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content &amp; Data",
 			panel = "Site Administration",
-			portlet = "Web Content");
+			portlet = "Web Content",
+			site = "Guest");
 
 		WebContentNavigator.gotoAddCP();
 

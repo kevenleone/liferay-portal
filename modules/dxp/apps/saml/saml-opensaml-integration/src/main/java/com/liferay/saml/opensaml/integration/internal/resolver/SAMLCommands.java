@@ -53,7 +53,7 @@ public interface SAMLCommands {
 
 		return new UserResolverSAMLCommand<>(
 			messageContext -> {
-				InOutOperationContext inOutOperationContext =
+				InOutOperationContext<?, ?> inOutOperationContext =
 					messageContext.getSubcontext(
 						InOutOperationContext.class, false);
 
@@ -61,7 +61,7 @@ public interface SAMLCommands {
 					return Collections.emptyMap();
 				}
 
-				MessageContext inboundMessageContext =
+				MessageContext<?> inboundMessageContext =
 					inOutOperationContext.getInboundMessageContext();
 
 				if (inboundMessageContext == null) {

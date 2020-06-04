@@ -48,7 +48,7 @@ public class ProjectTemplatesServiceWrapperTest
 	@Parameterized.Parameters(name = "Testcase-{index}: testing {0}")
 	public static Iterable<Object[]> data() {
 		return Arrays.asList(
-			new Object[][] {{"7.0.6"}, {"7.1.3"}, {"7.2.1"}, {"7.3.1"}});
+			new Object[][] {{"7.0.6"}, {"7.1.3"}, {"7.2.1"}, {"7.3.2"}});
 	}
 
 	@BeforeClass
@@ -120,6 +120,24 @@ public class ProjectTemplatesServiceWrapperTest
 		if (isBuildProjects()) {
 			File gradleOutputDir = new File(gradleProjectDir, "build/libs");
 			File mavenOutputDir = new File(mavenProjectDir, "target");
+
+			if (_liferayVersion.equals("7.3.2")) {
+				File buildGradleFile = testExists(
+					gradleProjectDir, "build.gradle");
+				File pomXmlFile = testExists(mavenProjectDir, "pom.xml");
+
+				BaseProjectTemplatesTestCase.addGradleDependency(
+					buildGradleFile,
+					"compileOnly group: \"com.liferay\", name: " +
+						"\"com.liferay.petra.function\"");
+
+				editXml(
+					pomXmlFile,
+					document ->
+						BaseProjectTemplatesTestCase.addMavenDependencyElement(
+							document, "com.liferay",
+							"com.liferay.petra.function", "provided"));
+			}
 
 			buildProjects(
 				_gradleDistribution, mavenExecutor, gradleWorkspaceDir,

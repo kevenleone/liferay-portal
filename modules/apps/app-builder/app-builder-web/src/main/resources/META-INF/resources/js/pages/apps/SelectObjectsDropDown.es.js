@@ -22,7 +22,7 @@ import {addItem, getItem} from '../../utils/client.es';
 import CustomObjectPopover from '../custom-object/CustomObjectPopover.es';
 import DropDownWithSearch from './DropDownWithSearch.es';
 
-export default ({onSelect, selectedValue}) => {
+export default ({onSelect, selectedValue, visible}) => {
 	const {basePortletURL} = useContext(AppContext);
 	const [state, setState] = useState({
 		error: null,
@@ -104,9 +104,7 @@ export default ({onSelect, selectedValue}) => {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const handleOnSelect = (event, newValue) => {
-		event.stopPropagation();
-
+	const handleOnSelect = (newValue) => {
 		onSelect(newValue);
 	};
 
@@ -158,9 +156,8 @@ export default ({onSelect, selectedValue}) => {
 		<>
 			<DropDownWithSearch
 				{...state}
-				items={items}
+				isEmpty={items.length === 0}
 				label={Liferay.Language.get('select-object')}
-				onSelect={handleOnSelect}
 				stateProps={stateProps}
 				trigger={
 					<ClayButton
@@ -181,7 +178,16 @@ export default ({onSelect, selectedValue}) => {
 						/>
 					</ClayButton>
 				}
-			/>
+				visible={visible}
+			>
+				<DropDownWithSearch.Items
+					emptyResultMessage={Liferay.Language.get(
+						'no-objects-found-with-this-name-try-searching-again-with-a-different-name'
+					)}
+					items={items}
+					onSelect={handleOnSelect}
+				/>
+			</DropDownWithSearch>
 
 			<CustomObjectPopover
 				alignElement={selectRef.current}

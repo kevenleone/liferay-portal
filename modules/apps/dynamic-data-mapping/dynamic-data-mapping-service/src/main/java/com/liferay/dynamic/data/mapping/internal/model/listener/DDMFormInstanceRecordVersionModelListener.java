@@ -51,7 +51,7 @@ public class DDMFormInstanceRecordVersionModelListener
 				return;
 			}
 
-			_updateDDMFormInstanceReport(
+			_processFormInstanceReportEvent(
 				ddmFormInstanceRecordVersion,
 				DDMFormInstanceReportConstants.EVENT_ADD_RECORD_VERSION);
 		}
@@ -88,7 +88,7 @@ public class DDMFormInstanceRecordVersionModelListener
 						ddmFormInstanceRecordVersion.getFormInstanceRecordId(),
 						WorkflowConstants.STATUS_APPROVED);
 
-			_updateDDMFormInstanceReport(
+			_processFormInstanceReportEvent(
 				latestDDMFormInstanceRecordVersion,
 				DDMFormInstanceReportConstants.EVENT_DELETE_RECORD_VERSION);
 		}
@@ -107,7 +107,7 @@ public class DDMFormInstanceRecordVersionModelListener
 		}
 	}
 
-	private void _updateDDMFormInstanceReport(
+	private void _processFormInstanceReportEvent(
 			DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion,
 			String formInstanceReportEvent)
 		throws PortalException {
@@ -118,7 +118,7 @@ public class DDMFormInstanceRecordVersionModelListener
 					getFormInstanceReportByFormInstanceId(
 						ddmFormInstanceRecordVersion.getFormInstanceId());
 
-			_ddmFormInstanceReportLocalService.updateFormInstanceReport(
+			_ddmFormInstanceReportLocalService.processFormInstanceReportEvent(
 				ddmFormInstanceReport.getFormInstanceReportId(),
 				ddmFormInstanceRecordVersion.getFormInstanceRecordVersionId(),
 				formInstanceReportEvent);

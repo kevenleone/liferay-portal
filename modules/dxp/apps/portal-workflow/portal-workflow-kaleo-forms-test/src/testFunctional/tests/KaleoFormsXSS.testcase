@@ -11,16 +11,14 @@ definition {
 
 		User.firstLoginPG();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.uploadDefinition(
 			workflowDefinitionFile = "workflow_definition_xss.xml",
 			workflowDefinitionTitle = '''<script>alert(123);</script>''');
-
-		Navigator.openURL();
 
 		Navigator.openURL();
 

@@ -227,7 +227,9 @@ definition {
 				pageName = "Test Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addLayoutRow();
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Row");
 
 			AssertElementNotPresent(
 				key_elementType = "Section",
@@ -238,9 +240,9 @@ definition {
 		task ("Assert add the second Row in column 1 of the first Row") {
 			DragAndDrop.javaScriptDragAndDropToObject(
 				key_columnNumber = "1",
-				key_elementType = "Row",
+				key_fragmentName = "Row",
 				key_position = "1",
-				locator1 = "PageEditor#SECTION_BUILDER_LAYOUT_ELEMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#ROW_COLUMN",
 				value1 = "");
 
@@ -256,9 +258,9 @@ definition {
 		task ("Assert add the third Row in column 1 of the first Row") {
 			DragAndDrop.javaScriptDragAndDropToObject(
 				key_columnNumber = "1",
-				key_elementType = "Row",
+				key_fragmentName = "Row",
 				key_position = "1",
-				locator1 = "PageEditor#SECTION_BUILDER_LAYOUT_ELEMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#ROW_COLUMN",
 				value1 = "");
 
@@ -314,7 +316,9 @@ definition {
 		}
 
 		task ("Add a Section to page") {
-			PageEditor.addLayoutSection(dropTarget = "//div[contains(@class,'page-editor__root page-editor__topper')]");
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Section");
 		}
 
 		task ("Add the Language Selector into Section") {
@@ -330,9 +334,9 @@ definition {
 				value1 = "Language Selector");
 
 			DragAndDrop.javaScriptDragAndDropToObject(
-				key_portletName = "Language Selector",
+				key_fragmentName = "Language Selector",
 				key_position = "1",
-				locator1 = "PageEditor#WIDGETS_ADD_PORTLET_DRAG_BUTTON",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#SECTION_CONTAINER",
 				value1 = "Language Selector");
 
@@ -395,7 +399,9 @@ definition {
 				pageName = "Test Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addLayoutRow();
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Row");
 
 			PageEditor.editLayoutRow(
 				columnCount = "2",
@@ -410,7 +416,9 @@ definition {
 		}
 
 		task ("Add a section layout") {
-			PageEditor.addLayoutSection(dropTarget = "//div[contains(@class,'page-editor__root page-editor__topper')]");
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Section");
 		}
 
 		task ("Assert the Section has Fixed Width, padding bottom x1 and padding top x1") {
@@ -652,7 +660,7 @@ definition {
 		DragAndDrop.javaScriptDragAndDropToObject(
 			key_fragmentName = "Button",
 			key_index = "2",
-			locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+			locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 			locator2 = "PageEditor#FRAGMENT_WITH_DROP_TARGET",
 			value1 = "");
 
@@ -670,7 +678,9 @@ definition {
 				pageName = "Test Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addLayoutSection(dropTarget = "//div[contains(@class,'page-editor__root page-editor__topper')]");
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Section");
 		}
 
 		task ("Add a Row into Section") {
@@ -680,9 +690,9 @@ definition {
 				locator1 = "PageEditor#LAYOUT_ELEMENTS_HEADER");
 
 			DragAndDrop.javaScriptDragAndDropToObject(
-				key_elementType = "Row",
+				key_fragmentName = "Row",
 				key_position = "1",
-				locator1 = "PageEditor#SECTION_BUILDER_LAYOUT_ELEMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#SECTION_CONTAINER",
 				value1 = "");
 
@@ -712,7 +722,9 @@ definition {
 				pageName = "Test Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addLayoutRow();
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Row");
 		}
 
 		task ("Add a Web Content Display widget to column 1") {
@@ -724,9 +736,9 @@ definition {
 
 			DragAndDrop.javaScriptDragAndDropToObject(
 				key_columnNumber = "1",
-				key_portletName = "Web Content Display",
+				key_fragmentName = "Web Content Display",
 				key_position = "1",
-				locator1 = "PageEditor#WIDGETS_ADD_PORTLET_DRAG_BUTTON",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#ROW_COLUMN",
 				value1 = "Web Content Display");
 
@@ -748,7 +760,7 @@ definition {
 				key_columnNumber = "2",
 				key_fragmentName = "Heading",
 				key_position = "1",
-				locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#ROW_COLUMN",
 				value1 = "");
 
@@ -768,7 +780,7 @@ definition {
 				key_columnNumber = "3",
 				key_fragmentName = "Button",
 				key_position = "1",
-				locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#ROW_COLUMN",
 				value1 = "");
 
@@ -814,7 +826,9 @@ definition {
 				pageName = "Test Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addLayoutSection(dropTarget = "//div[contains(@class,'page-editor__root page-editor__topper')]");
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Section");
 		}
 
 		task ("Add a Row into Section") {
@@ -824,9 +838,9 @@ definition {
 				locator1 = "PageEditor#LAYOUT_ELEMENTS_HEADER");
 
 			DragAndDrop.javaScriptDragAndDropToObject(
-				key_elementType = "Row",
+				key_fragmentName = "Row",
 				key_position = "1",
-				locator1 = "PageEditor#SECTION_BUILDER_LAYOUT_ELEMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#SECTION_CONTAINER",
 				value1 = "");
 
@@ -1258,6 +1272,65 @@ definition {
 			locator1 = "PageEditor#VIEWPOINT_RESIZER");
 	}
 
+	@description = "This is a test for LPS-111548. Undo can make the page editor come back to previous state up to X last states when the page has X states that is less than 20."
+	@priority = "5"
+	test UndoPagechangeThreeTimes {
+		property osgi.module.configuration.file.names = "com.liferay.layout.content.page.editor.web.internal.configuration.FFLayoutContentPageEditorConfiguration.config";
+		property osgi.module.configurations = "undoEnabled = true";
+
+		ContentPagesNavigator.openEditContentPage(
+			pageName = "Test Content Page Name",
+			siteName = "Test Site Name");
+
+		PageEditor.addFragment(
+			collectionName = "Layout Elements",
+			fragmentName = "Row");
+
+		PageEditor.viewRowStyle(
+			columnCount = "3",
+			position = "1");
+
+		PageEditor.editLayoutRow(columnCount = "1");
+
+		PageEditor.viewRowStyle(
+			columnCount = "1",
+			position = "1");
+
+		Click.clickNoMouseOver(
+			key_elementType = "Row",
+			locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON");
+
+		PageEditor.editLayoutRow(columnCount = "2");
+
+		PageEditor.viewRowStyle(
+			columnCount = "2",
+			position = "1");
+
+		Click(
+			key_text = "undo",
+			locator1 = "Icon#ANY");
+
+		PageEditor.viewRowStyle(
+			columnCount = "1",
+			position = "1");
+
+		Click(
+			key_text = "undo",
+			locator1 = "Icon#ANY");
+
+		PageEditor.viewRowStyle(
+			columnCount = "3",
+			position = "1");
+
+		Click(
+			key_text = "undo",
+			locator1 = "Icon#ANY");
+
+		AssertElementPresent(
+			key_text = "undo",
+			locator1 = "Icon#ANY_DISABLED");
+	}
+
 	@description = "This is a test for LPS-107285. When the Section fragment is duplicated, the configuration of it and its components should also be duplicated."
 	@priority = "4"
 	test ViewConfigurationDuplicatedWhenDuplicateSectionWithHeading {
@@ -1266,7 +1339,9 @@ definition {
 				pageName = "Test Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addLayoutSection(dropTarget = "//div[contains(@class,'page-editor__root page-editor__topper')]");
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Section");
 		}
 
 		task ("Add a Heading fragment into Section") {
@@ -1280,7 +1355,7 @@ definition {
 			DragAndDrop.javaScriptDragAndDropToObject(
 				key_fragmentName = "Heading",
 				key_position = "1",
-				locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#SECTION_CONTAINER",
 				value1 = "");
 
@@ -1331,7 +1406,9 @@ definition {
 				pageName = "Test Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addLayoutSection(dropTarget = "//div[contains(@class,'page-editor__root page-editor__topper')]");
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Section");
 		}
 
 		task ("Add a Heading fragment into Section") {
@@ -1345,7 +1422,7 @@ definition {
 			DragAndDrop.javaScriptDragAndDropToObject(
 				key_fragmentName = "Heading",
 				key_position = "1",
-				locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#SECTION_CONTAINER",
 				value1 = "");
 
@@ -1550,7 +1627,9 @@ definition {
 				pageName = "Test Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addLayoutSection(dropTarget = "//div[contains(@class,'page-editor__root page-editor__topper')]");
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Section");
 		}
 
 		task ("Add a Heading fragment into Section") {
@@ -1564,7 +1643,7 @@ definition {
 			DragAndDrop.javaScriptDragAndDropToObject(
 				key_fragmentName = "Heading",
 				key_position = "1",
-				locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#SECTION_CONTAINER",
 				value1 = "");
 
@@ -1617,12 +1696,15 @@ definition {
 				pageName = "Test Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addLayoutSection(dropTarget = "//div[contains(@class,'page-editor__root page-editor__topper')]");
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Section");
 		}
 
 		task ("Add the second Section to page") {
-			PageEditor.addLayoutSection(
-				dropTarget = "//div[contains(@class,'page-editor__root page-editor__topper')]",
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Section",
 				position = "2");
 		}
 
@@ -1662,19 +1744,23 @@ definition {
 	@description = "This is a test for LPS-109717. The restriction visual feedback is shown when the Section draggable card is placed over the container of another Section."
 	@priority = "5"
 	test ViewRestrictionVisualFeedbackWhenDragSectionCardOverAnotherOne {
+		property portal.acceptance = "true";
+
 		task ("Add a Section to page") {
 			ContentPagesNavigator.openEditContentPage(
 				pageName = "Test Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addLayoutSection(dropTarget = "//div[contains(@class,'page-editor__root page-editor__topper')]");
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Section");
 		}
 
 		task ("Assert restriction visual feedback shown when drag Section card over another one") {
 			DragOver(
-				key_elementType = "Section",
+				key_fragmentName = "Section",
 				key_position = "1",
-				locator1 = "PageEditor#SECTION_BUILDER_LAYOUT_ELEMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#SECTION_CONTAINER");
 
 			AssertVisible(
@@ -1690,9 +1776,9 @@ definition {
 			PageEditor.expandFragmentCollection(collectionName = "Layout Elements");
 
 			DragAndDrop.javaScriptDragAndDropToObject(
-				key_elementType = "Section",
+				key_fragmentName = "Section",
 				key_position = "1",
-				locator1 = "PageEditor#SECTION_BUILDER_LAYOUT_ELEMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#SECTION_CONTAINER",
 				value1 = "");
 
@@ -1705,20 +1791,25 @@ definition {
 	@description = "This is a test for LPS-109717. The restriction visual feedback is shown when the Section draggable card is placed over the column of Row."
 	@priority = "5"
 	test ViewRestrictionVisualFeedbackWhenDragSectionCardOverColumnOfRow {
+		property portal.acceptance = "true";
+		property portal.upstream = "quarantine";
+
 		task ("Add a Row to page") {
 			ContentPagesNavigator.openEditContentPage(
 				pageName = "Test Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addLayoutRow();
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Row");
 		}
 
 		task ("Assert restriction visual feedback shown when drag Section card over column of Row") {
 			DragOver(
 				key_columnNumber = "1",
-				key_elementType = "Section",
+				key_fragmentName = "Section",
 				key_position = "1",
-				locator1 = "PageEditor#SECTION_BUILDER_LAYOUT_ELEMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#ROW_COLUMN");
 
 			AssertVisible(
@@ -1736,9 +1827,9 @@ definition {
 
 			DragAndDrop.javaScriptDragAndDropToObject(
 				key_columnNumber = "1",
-				key_elementType = "Section",
+				key_fragmentName = "Section",
 				key_position = "1",
-				locator1 = "PageEditor#SECTION_BUILDER_LAYOUT_ELEMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#ROW_COLUMN",
 				value1 = "");
 
@@ -1756,18 +1847,22 @@ definition {
 				pageName = "Test Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addLayoutRow();
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Row");
 		}
 
 		task ("Add a section layout and add a Heading to section") {
-			PageEditor.addLayoutSection(dropTarget = "//div[contains(@class,'page-editor__root page-editor__topper')]");
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Section");
 
 			PageEditor.expandFragmentCollection(collectionName = "Basic Components");
 
 			DragAndDrop.javaScriptDragAndDropToObject(
 				key_fragmentName = "Heading",
 				key_position = "1",
-				locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#SECTION_CONTAINER",
 				value1 = "");
 
@@ -1838,7 +1933,9 @@ definition {
 		}
 
 		task ("Add a Section to page") {
-			PageEditor.addLayoutSection(dropTarget = "//div[contains(@class,'page-editor__root page-editor__topper')]");
+			PageEditor.addFragment(
+				collectionName = "Layout Elements",
+				fragmentName = "Section");
 		}
 
 		task ("Add a Heading fragment into Section") {
@@ -1852,7 +1949,7 @@ definition {
 			DragAndDrop.javaScriptDragAndDropToObject(
 				key_fragmentName = "Heading",
 				key_position = "1",
-				locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#SECTION_CONTAINER",
 				value1 = "");
 

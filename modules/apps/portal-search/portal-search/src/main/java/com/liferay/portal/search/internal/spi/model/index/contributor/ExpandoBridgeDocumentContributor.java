@@ -33,10 +33,13 @@ import org.osgi.service.component.annotations.Reference;
  * @author Michael C. Han
  */
 @Component(immediate = true, service = DocumentContributor.class)
-public class ExpandoBridgeDocumentContributor implements DocumentContributor {
+public class ExpandoBridgeDocumentContributor
+	implements DocumentContributor<ExpandoBridge> {
 
 	@Override
-	public void contribute(Document document, BaseModel baseModel) {
+	public void contribute(
+		Document document, BaseModel<ExpandoBridge> baseModel) {
+
 		ExpandoBridgeRetriever expandoBridgeRetriever =
 			_expandoBridgeIndexers.getService(baseModel.getModelClassName());
 

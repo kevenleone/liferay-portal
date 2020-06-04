@@ -421,6 +421,25 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 				continue;
 			}
 
+			long classPK = targetLayout.getPlid();
+
+			if (_isDraft(targetLayout)) {
+				classPK = targetLayout.getClassPK();
+			}
+
+			SegmentsExperience existingSegmentsExperience =
+				_segmentsExperienceLocalService.fetchSegmentsExperience(
+					segmentsExperience.getGroupId(), classNameId, classPK,
+					segmentsExperience.getPriority());
+
+			if (existingSegmentsExperience != null) {
+				segmentsExperienceIds.put(
+					segmentsExperience.getSegmentsExperienceId(),
+					existingSegmentsExperience.getSegmentsExperienceId());
+
+				continue;
+			}
+
 			SegmentsExperience newSegmentsExperience =
 				(SegmentsExperience)segmentsExperience.clone();
 
@@ -436,13 +455,7 @@ public class LayoutCopyHelperImpl implements LayoutCopyHelper {
 			newSegmentsExperience.setSegmentsExperienceKey(
 				String.valueOf(_counterLocalService.increment()));
 			newSegmentsExperience.setClassNameId(classNameId);
-
-			if (_isDraft(targetLayout)) {
-				newSegmentsExperience.setClassPK(targetLayout.getClassPK());
-			}
-			else {
-				newSegmentsExperience.setClassPK(targetLayout.getPlid());
-			}
+			newSegmentsExperience.setClassPK(classPK);
 
 			_segmentsExperienceLocalService.addSegmentsExperience(
 				newSegmentsExperience);

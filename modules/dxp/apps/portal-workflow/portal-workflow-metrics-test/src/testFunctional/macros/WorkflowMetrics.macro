@@ -75,6 +75,18 @@ definition {
 		}
 	}
 
+	macro assertAssignees {
+		Click(locator1 = "WorkflowReassignModal#SEARCH_NEW_ASSIGNEE");
+
+		AssertElementPresent(
+			key_nameOfAssignee = "Test Test",
+			locator1 = "WorkflowReassignModal#REASSIGN_TASK_NEW_ASSIGNEE_DROPDOWN");
+
+		AssertElementNotPresent(
+			key_nameOfAssignee = "userfn userls",
+			locator1 = "WorkflowReassignModal#REASSIGN_TASK_NEW_ASSIGNEE_DROPDOWN");
+	}
+
 	macro assertBulkCount {
 		Click(
 			key_rowNumber = "1",
@@ -88,24 +100,31 @@ definition {
 	}
 
 	macro assertBulkModalTable {
-		echo("Checking table");
 
 		AssertTextEquals(
 			key_columnName = "ID",
 			locator1 = "WorkflowReassignModal#COLUMN_CHECK",
 			value1 = "ID");
 
-		AssertElementPresent(
+		AssertTextEquals(
 			key_columnName = "Item Subject",
-			locator1 = "WorkflowReassignModal#COLUMN_CHECK");
+			locator1 = "WorkflowReassignModal#COLUMN_CHECK",
+			value1 = "Item Subject");
 
-		AssertElementPresent(
+		AssertTextEquals(
 			key_columnName = "Process Step",
-			locator1 = "WorkflowReassignModal#COLUMN_CHECK");
+			locator1 = "WorkflowReassignModal#COLUMN_CHECK",
+			value1 = "Process Step");
 
-		AssertElementPresent(
+		AssertTextEquals(
 			key_columnName = "Current Assignee",
-			locator1 = "WorkflowReassignModal#COLUMN_CHECK");
+			locator1 = "WorkflowReassignModal#COLUMN_CHECK",
+			value1 = "Current Assignee");
+
+		AssertTextEquals(
+			key_columnName = "New Assignee",
+			locator1 = "WorkflowReassignModal#COLUMN_CHECK",
+			value1 = "New Assignee");
 	}
 
 	macro assertChartIsPresent {
@@ -168,6 +187,14 @@ definition {
 		AssertTextEquals(
 			locator1 = "WorkflowMetrics#METRICS_COMPLETION_VELOCITY_CHART_UNIT_LABEL",
 			value1 = "inst / day");
+	}
+
+	macro assertNoAssignees {
+		Click(locator1 = "WorkflowReassignModal#SEARCH_NEW_ASSIGNEE");
+
+		AssertElementPresent(
+			key_nameOfAssignee = "No results found.",
+			locator1 = "WorkflowReassignModal#REASSIGN_TASK_NEW_ASSIGNEE_DROPDOWN");
 	}
 
 	macro assertWorkloadByAssigneeCardEmptyMessage {
@@ -242,9 +269,9 @@ definition {
 
 	macro checkWorkflowReports {
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Metrics");
 
 		AssertTextEquals(
@@ -292,7 +319,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow");
+			portlet = "Workflow",
+			site = "${site}");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver",
@@ -320,7 +348,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow");
+			portlet = "Workflow",
+			site = "${site}");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver",
@@ -362,7 +391,7 @@ definition {
 	}
 
 	macro createUsersGroovy {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "Server Administration");
@@ -411,7 +440,7 @@ definition {
 	macro executeWorkflowScript {
 		var key_scriptName = "${scriptName}";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "Server Administration");
@@ -511,10 +540,19 @@ definition {
 		Click(locator1 = "WorkflowMetrics#DASHBOARD_TOTAL_${key_workflowFilterOption}_ITEMS_TITLE");
 	}
 
+	macro goToReassignSelectTask {
+
+		Click(
+			locator1 = "WorkflowAllItems#KEBAB_DROPDOWN",
+			task = "1");
+
+		Click(locator1 = "WorkflowAllItems#REASSIGN_TASK_DROPDOWN");
+	}
+
 	macro goToWorkflowAllItems {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Metrics");
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
@@ -525,15 +563,15 @@ definition {
 	macro goToWorkflowProcessMetrics {
 		var key_workflowProcessName = "${workflowProcessName}";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Metrics");
 
 		while (IsElementNotPresent(locator1 = "WorkflowMetrics#METRICS_WORKFLOW_PROCESS_NAME") && (maxIterations = "10")) {
-			ProductMenu.gotoPortlet(
+			GlobalMenu.gotoPortlet(
 				category = "Workflow",
-				panel = "Control Panel",
+				panel = "Applications",
 				portlet = "Metrics");
 
 			Pause(locator1 = "6000");
@@ -631,12 +669,25 @@ definition {
 		Click(locator1 = "WorkflowMetrics#METRICS_COMPLETION_VELOCITY_CUSTOM_RANGE_APPLY");
 	}
 
+	macro selectNewAssignee {
+		Click(locator1 = "WorkflowReassignModal#SEARCH_NEW_ASSIGNEE");
+
+		Click(
+			key_nameOfAssignee = "Test Test",
+			locator1 = "WorkflowReassignModal#REASSIGN_TASK_NEW_ASSIGNEE_DROPDOWN");
+
+		Click(locator1 = "WorkflowReassignModal#REASSIGN_BUTTON");
+	}
+
 	macro selectNewAssigneeBulkTask {
 		Click(locator1 = "WorkflowReassignModal#SELECT_ALL");
+
 		Click(locator1 = "WorkflowReassignModal#BULK_NEW_ASSIGNEE");
+
 		Click(
 			key_nameOfAssignee = "${nameOfAssignee}",
 			locator1 = "WorkflowReassignModal#REASSIGN_TASK_NEW_ASSIGNEE_DROPDOWN");
+
 		Click(locator1 = "WorkflowReassignModal#NEXT_BUTTON");
 	}
 
@@ -725,6 +776,28 @@ definition {
 		if (IsElementPresent(locator1 = "WorkflowMetrics#METRICS_WORKLOAD_BY_ASSIGNEE_SEARCH_ASSIGNEE_NAME")) {
 			Click(locator1 = "WorkflowMetrics#METRICS_WORKLOAD_BY_ASSIGNEE_SEARCH_ASSIGNEE_NAME");
 		}
+	}
+
+	macro singleReassignSetup {
+
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Site Administration",
+			portlet = "Workflow");
+
+		Workflow.configureWorkflow(
+			workflowDefinition = "Single Approver",
+			workflowResourceValue = "Blogs Entry");
+
+		JSONUser.addUser(
+			userEmailAddress = "userea@liferay.com",
+			userFirstName = "userfn",
+			userLastName = "userln",
+			userScreenName = "usersn");
+
+		JSONBlog.addEntry(
+			entryContent = "Blogs Entry 1 Content",
+			entryTitle = "Blogs Entry Title 1");
 	}
 
 	macro tearDown {

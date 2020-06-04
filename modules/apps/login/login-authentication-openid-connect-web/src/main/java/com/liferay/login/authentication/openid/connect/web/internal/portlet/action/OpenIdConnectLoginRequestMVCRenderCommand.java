@@ -76,7 +76,8 @@ public class OpenIdConnectLoginRequestMVCRenderCommand
 
 		httpServletRequest.setAttribute(
 			OpenIdConnectWebKeys.OPEN_ID_CONNECT_PROVIDER_NAMES,
-			_openIdConnectProviderRegistry.getOpenIdConnectProviderNames());
+			_openIdConnectProviderRegistry.getOpenIdConnectProviderNames(
+				themeDisplay.getCompanyId()));
 
 		RequestDispatcher requestDispatcher =
 			_servletContext.getRequestDispatcher(_JSP_PATH);

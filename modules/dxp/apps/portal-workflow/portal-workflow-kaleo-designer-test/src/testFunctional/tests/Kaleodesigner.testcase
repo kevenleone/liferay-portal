@@ -29,9 +29,9 @@ definition {
 	test AddConditionNodeEditNameAndDesciptionAndDeleteViaViewTab {
 		property test.name.skip.portal.instance = "Kaleodesigner#AddConditionNodeEditNameAndDesciptionAndDeleteViaViewTab";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -53,9 +53,9 @@ definition {
 	test AddEndNodeEditNameAndDesciptionAndDeleteViaViewTab {
 		property test.name.skip.portal.instance = "Kaleodesigner#AddEndNodeEditNameAndDesciptionAndDeleteViaViewTab";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -78,9 +78,9 @@ definition {
 
 		property test.name.skip.portal.instance = "Kaleodesigner#AddForkNodeEditNameAndDesciptionAndDeleteViaViewTab";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -102,9 +102,9 @@ definition {
 	test AddJoinNodeEditNameAndDesciptionAndDeleteViaViewTab {
 		property test.name.skip.portal.instance = "Kaleodesigner#AddJoinNodeEditNameAndDesciptionAndDeleteViaViewTab";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -126,9 +126,9 @@ definition {
 	test AddJoinXORNodeEditNameAndDesciptionAndDeleteViaViewTab {
 		property test.name.skip.portal.instance = "Kaleodesigner#AddJoinXORNodeEditNameAndDesciptionAndDeleteViaViewTab";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -153,9 +153,9 @@ definition {
 		property test.name.skip.portal.instance = "Kaleodesigner#AddJoinXORNodeEditNameAndDesciptionAndDeleteViaViewTab";
 		property testray.component.names = "Training";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		AssertElementPresent(
@@ -165,8 +165,6 @@ definition {
 		AssertTextEquals(
 			locator1 = "Portlet#HEADER",
 			value1 = "Process Builder");
-
-		ProductMenuHelper.closeProductMenu();
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
 
@@ -239,9 +237,9 @@ definition {
 	test AddNewWorkflowDefinitionViaViewTab {
 		property test.name.skip.portal.instance = "Kaleodesigner#AddNewWorkflowDefinitionViaViewTab";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -278,9 +276,9 @@ definition {
 
 		PortletEntry.publish();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.gotoEditWorkflowDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -300,9 +298,9 @@ definition {
 	test AddStartNodeEditNameAndDesciptionAndDeleteViaViewTab {
 		property test.name.skip.portal.instance = "Kaleodesigner#AddStartNodeEditNameAndDesciptionAndDeleteViaViewTab";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -326,9 +324,9 @@ definition {
 	test AddStateNodeEditNameAndDesciptionAndDeleteViaViewTab {
 		property test.name.skip.portal.instance = "Kaleodesigner#AddStateNodeEditNameAndDesciptionAndDeleteViaViewTab";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -355,9 +353,9 @@ definition {
 		property test.name.skip.portal.instance = "Kaleodesigner#AddTaskNodeEditNameAndDesciptionAndNotificationsAndDeleteViaViewTab";
 		property testray.component.names = "Training";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -405,9 +403,9 @@ definition {
 	test AddTaskNodeViaSourceTabAndEditNameAndDesciptionAndDeleteViaViewTab {
 		property test.name.skip.portal.instance = "Kaleodesigner#AddTaskNodeViaSourceTabAndEditNameAndDesciptionAndDeleteViaViewTab";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -435,9 +433,9 @@ definition {
 
 		var fileContent = TestCase.getFileContent(fileName = "workflow_definition_task_timers.xml");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -457,13 +455,11 @@ definition {
 	@description = "This is a use case for LPS-37209."
 	@priority = "4"
 	test ConfigureTaskTimersViaViewTab {
-		property portal.upstream = "quarantine";
-
 		property test.name.skip.portal.instance = "Kaleodesigner#ConfigureTaskTimersViaViewTab";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -497,10 +493,22 @@ definition {
 
 		KaleoDesigner.viewSourceXMLLine(
 			kdSourceXML = '''<name>Timer Name</name>''',
-			line = "17");
+			line = "13");
+
+		KaleoDesigner.viewSourceXMLLine(
+			kdSourceXML = '''<description>Timer Description</description>''',
+			line = "14");
 
 		KaleoDesigner.viewSourceXMLLine(
 			kdSourceXML = '''<duration>5</duration>''',
+			line = "16");
+
+		KaleoDesigner.viewSourceXMLLine(
+			kdSourceXML = '''<scale>hour</scale>''',
+			line = "17");
+
+		KaleoDesigner.viewSourceXMLLine(
+			kdSourceXML = '''<duration>6</duration>''',
 			line = "20");
 
 		KaleoDesigner.viewSourceXMLLine(
@@ -508,32 +516,28 @@ definition {
 			line = "21");
 
 		KaleoDesigner.viewSourceXMLLine(
-			kdSourceXML = '''<duration>6</duration>''',
-			line = "24");
-
-		KaleoDesigner.viewSourceXMLLine(
-			kdSourceXML = '''<scale>hour</scale>''',
-			line = "25");
+			kdSourceXML = '''<blocking>true</blocking>''',
+			line = "23");
 
 		KaleoDesigner.viewSourceXMLLine(
 			kdSourceXML = '''<timer-action>''',
-			line = "29");
+			line = "25");
 
 		KaleoDesigner.viewSourceXMLLine(
 			kdSourceXML = '''<name>Blocker Name</name>''',
-			line = "30");
+			line = "26");
 
 		KaleoDesigner.viewSourceXMLLine(
 			kdSourceXML = '''<description>Blocker Description</description>''',
-			line = "31");
-
-		KaleoDesigner.viewSourceXMLLine(
-			kdSourceXML = '''Test Script''',
-			line = "33");
-
-		KaleoDesigner.viewSourceXMLLine(
-			kdSourceXML = '''<blocking>true</blocking>''',
 			line = "27");
+
+		KaleoDesigner.viewSourceXMLLine(
+			kdSourceXML = '''<script><![CDATA[Test Script]]></script>''',
+			line = "28");
+
+		KaleoDesigner.viewSourceXMLLine(
+			kdSourceXML = '''<script-language>groovy</script-language>''',
+			line = "29");
 	}
 
 	@priority = "5"
@@ -542,9 +546,9 @@ definition {
 		property test.name.skip.portal.instance = "Kaleodesigner#DeleteConnectors";
 		property testray.component.names = "Training";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -591,9 +595,9 @@ definition {
 
 		Workflow.saveDefinition();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.gotoEditWorkflowDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -613,9 +617,9 @@ definition {
 	test DeleteWorkflowDefinitionDraft {
 		property test.name.skip.portal.instance = "Kaleodesigner#DeleteWorkflowDefinitionDraft";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition");
@@ -624,9 +628,9 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.viewDefinitionUnpublished(workflowDefinitionTitle = "New Workflow Definition");
@@ -642,9 +646,9 @@ definition {
 		property test.name.skip.portal.instance = "Kaleodesigner#EditAssignmentsForTaskNodeKDCP";
 		property testray.component.names = "Training";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -673,20 +677,18 @@ definition {
 	@description = "This is a use case for LPS-71924."
 	@priority = "5"
 	test PublishDefaultWorkflowDefinition {
-		property portal.upstream = "quarantine";
-
 		property test.name.skip.portal.instance = "Kaleodesigner#PublishDefaultWorkflowDefinition";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
 
 		KaleoDesigner.viewSourceXMLLine(
 			kdSourceXML = '''<script-language>groovy</script-language>''',
-			line = "32");
+			line = "24");
 
 		PortletEntry.publish();
 	}
@@ -696,22 +698,22 @@ definition {
 	test PublishFromSourceTabAndViewNameChange {
 		property test.name.skip.portal.instance = "Kaleodesigner#PublishFromSourceTabAndViewNameChange";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "Test Definition");
 
 		KaleoDesigner.editSourceXML(
 			kdSourceXML = '''<name>NAME EDIT''',
-			line = "5");
+			line = "3");
 
 		PortletEntry.publish();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.viewDefinitionPublished(
@@ -722,7 +724,7 @@ definition {
 
 		KaleoDesigner.viewSourceXMLLine(
 			kdSourceXML = '''<name>NAME EDIT</name>''',
-			line = "5");
+			line = "3");
 	}
 
 	@priority = "3"
@@ -730,9 +732,9 @@ definition {
 		property test.name.skip.portal.instance = "Kaleodesigner#PublishWorkflowDefinitionWithConnectorPointingToStartNodeAndViewErrorMessage";
 		property portal.acceptance = "true";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -773,9 +775,9 @@ definition {
 	test PublishWorkflowDefinitionWithInvalidConditionNodeAndViewErrorMessage {
 		property test.name.skip.portal.instance = "Kaleodesigner#PublishWorkflowDefinitionWithInvalidConditionNodeAndViewErrorMessage";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -853,9 +855,9 @@ definition {
 
 ''';
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -901,9 +903,9 @@ definition {
 	test PublishWorkflowDefinitionWithInvalidForkNodeAndViewErrorMessage {
 		property test.name.skip.portal.instance = "Kaleodesigner#PublishWorkflowDefinitionWithInvalidForkNodeAndViewErrorMessage";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -945,9 +947,9 @@ definition {
 	test PublishWorkflowDefinitionWithInvalidJoinNodeAndViewErrorMessage {
 		property test.name.skip.portal.instance = "Kaleodesigner#PublishWorkflowDefinitionWithInvalidJoinNodeAndViewErrorMessage";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -989,9 +991,9 @@ definition {
 	test PublishWorkflowDefinitionWithInvalidJoinXORNodeAndViewErrorMessage {
 		property test.name.skip.portal.instance = "Kaleodesigner#PublishWorkflowDefinitionWithInvalidJoinXORNodeAndViewErrorMessage";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -1033,9 +1035,9 @@ definition {
 	test PublishWorkflowDefinitionWithMultipleStartNodesAndViewErrorMessage {
 		property test.name.skip.portal.instance = "Kaleodesigner#PublishWorkflowDefinitionWithMultipleStartNodesAndViewErrorMessage";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -1054,9 +1056,9 @@ definition {
 		property test.name.skip.portal.instance = "Kaleodesigner#PublishWorkflowDefinitionWithNoConnectorsAndViewErrorMessage";
 		property portal.acceptance = "true";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -1071,9 +1073,9 @@ definition {
 		property test.name.skip.portal.instance = "Kaleodesigner#PublishWorkflowDefinitionWithNoEndNodeAndViewErrorMessage";
 		property portal.acceptance = "true";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -1090,9 +1092,9 @@ definition {
 		property test.name.skip.portal.instance = "Kaleodesigner#PublishWorkflowDefinitionWithNoStartNodeAndViewErrorMessage";
 		property portal.acceptance = "true";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -1108,9 +1110,9 @@ definition {
 	test SaveInvalidWorkflowDefinitionAsDraft {
 		property test.name.skip.portal.instance = "Kaleodesigner#SaveInvalidWorkflowDefinitionAsDraft";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -1126,9 +1128,9 @@ definition {
 	test UndoDraftDefinition {
 		property test.name.skip.portal.instance = "Kaleodesigner#UndoDraftDefinition";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -1189,9 +1191,9 @@ definition {
 
 		KaleoDesigner.viewConnectorNotPresent(connectorLabel = "Complete");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.gotoEditWorkflowDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
@@ -1223,9 +1225,9 @@ definition {
 	test ViewAndPublishWorkflowDefinitionDraft {
 		property test.name.skip.portal.instance = "Kaleodesigner#ViewAndPublishWorkflowDefinitionDraft";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition");
@@ -1234,18 +1236,18 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.viewDefinitionUnpublished(workflowDefinitionTitle = "New Workflow Definition");
 
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.gotoEditWorkflowDefinition(workflowDefinitionTitle = "New Workflow Definition");
@@ -1254,9 +1256,9 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.viewDefinitionPublished(workflowDefinitionTitle = "New Workflow Definition");
@@ -1265,28 +1267,26 @@ definition {
 	@description = "This is a use case for LPS-48590."
 	@priority = "4"
 	test ViewSourceXMLNotErasedWhenInvalid {
-		property portal.upstream = "quarantine";
-
 		property test.name.skip.portal.instance = "Kaleodesigner#ViewSourceXMLNotErasedWhenInvalid";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");
 
 		KaleoDesigner.editSourceXML(
 			kdSourceXML = " ",
-			line = "18");
+			line = "14");
 
 		KaleoDesigner.viewViewTab();
 
 		KaleoDesigner.viewNodeNotPresent(nodeNodeLabel = "EndNode");
 
 		KaleoDesigner.editSourceXML(
-			kdSourceXML = '''</transitions></state>''',
-			line = "18");
+			kdSourceXML = '''</transitions>''',
+			line = "14");
 
 		KaleoDesigner.viewViewTab();
 
@@ -1300,9 +1300,9 @@ definition {
 	test ViewWorkflowDefinitionButtons {
 		property test.name.skip.portal.instance = "Kaleodesigner#ViewWorkflowDefinitionButtons";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.addNewDefinition(workflowDefinitionTitle = "New Workflow Definition Title");

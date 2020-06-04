@@ -49,7 +49,7 @@ public class ScreenNavigationRegistry {
 		return ListUtil.filter(
 			screenNavigationCategories,
 			screenNavigationCategory -> {
-				List<ScreenNavigationEntry> screenNavigationEntries =
+				List<ScreenNavigationEntry<T>> screenNavigationEntries =
 					getScreenNavigationEntries(
 						screenNavigationCategory, user, context);
 
@@ -57,7 +57,7 @@ public class ScreenNavigationRegistry {
 			});
 	}
 
-	public <T> List<ScreenNavigationEntry> getScreenNavigationEntries(
+	public <T> List<ScreenNavigationEntry<T>> getScreenNavigationEntries(
 		ScreenNavigationCategory screenNavigationCategory, User user,
 		T context) {
 
@@ -65,8 +65,9 @@ public class ScreenNavigationRegistry {
 			screenNavigationCategory.getScreenNavigationKey(),
 			screenNavigationCategory.getCategoryKey());
 
-		List<ScreenNavigationEntry> screenNavigationEntries =
-			_screenNavigationEntriesMap.getService(key);
+		List<ScreenNavigationEntry<T>> screenNavigationEntries =
+			(List<ScreenNavigationEntry<T>>)
+				(List<?>)_screenNavigationEntriesMap.getService(key);
 
 		if (ListUtil.isEmpty(screenNavigationEntries)) {
 			return Collections.emptyList();
@@ -91,7 +92,10 @@ public class ScreenNavigationRegistry {
 						"screen.navigation.category.order")));
 		_screenNavigationEntriesMap =
 			ServiceTrackerMapFactory.openMultiValueMap(
-				bundleContext, ScreenNavigationEntry.class, null,
+				bundleContext,
+				(Class<ScreenNavigationEntry<?>>)
+					(Class<?>)ScreenNavigationEntry.class,
+				null,
 				ServiceReferenceMapperFactory.create(
 					bundleContext,
 					(screenNavigationEntry, emitter) -> emitter.emit(
@@ -117,7 +121,7 @@ public class ScreenNavigationRegistry {
 
 	private ServiceTrackerMap<String, List<ScreenNavigationCategory>>
 		_screenNavigationCategoriesMap;
-	private ServiceTrackerMap<String, List<ScreenNavigationEntry>>
+	private ServiceTrackerMap<String, List<ScreenNavigationEntry<?>>>
 		_screenNavigationEntriesMap;
 
 }

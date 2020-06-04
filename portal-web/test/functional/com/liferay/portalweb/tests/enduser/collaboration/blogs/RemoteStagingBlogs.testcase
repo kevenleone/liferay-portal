@@ -95,7 +95,7 @@ definition {
 		property custom.properties = "tunneling.servlet.shared.secret=1234567890123456${line.separator}auth.verifier.TunnelAuthVerifier.hosts.allowed=";
 		property test.name.skip.portal.instance = "RemoteStagingBlogs#StagingRemoteLiveBlogsWithWorkflow";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "Search");
@@ -106,9 +106,9 @@ definition {
 
 		Staging.remoteStagingSetUp(siteName = "Site Name");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		NavItem.gotoConfiguration();

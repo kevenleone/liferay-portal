@@ -31,6 +31,7 @@ export default {
 		onNetworkStatus,
 		segmentsExperienceId,
 		size,
+		templateKey,
 	}) {
 		return serviceFetch(
 			config.getCollectionFieldURL,
@@ -41,6 +42,7 @@ export default {
 					listStyle,
 					segmentsExperienceId,
 					size,
+					templateKey,
 				},
 			},
 			onNetworkStatus

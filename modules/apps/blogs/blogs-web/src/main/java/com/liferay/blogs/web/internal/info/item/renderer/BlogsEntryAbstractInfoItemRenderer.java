@@ -49,13 +49,13 @@ public class BlogsEntryAbstractInfoItemRenderer
 		BlogsEntry entry, HttpServletRequest httpServletRequest,
 		HttpServletResponse httpServletResponse) {
 
-		AssetRendererFactory assetRendererFactory =
+		AssetRendererFactory<?> assetRendererFactory =
 			AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClass(
 				BlogsEntry.class);
 
 		try {
-			AssetRenderer assetRenderer = assetRendererFactory.getAssetRenderer(
-				entry.getEntryId());
+			AssetRenderer<?> assetRenderer =
+				assetRendererFactory.getAssetRenderer(entry.getEntryId());
 
 			httpServletRequest.setAttribute(
 				WebKeys.ASSET_RENDERER, assetRenderer);

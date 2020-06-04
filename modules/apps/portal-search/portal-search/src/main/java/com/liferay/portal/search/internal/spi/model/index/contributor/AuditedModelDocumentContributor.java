@@ -28,10 +28,13 @@ import org.osgi.service.component.annotations.Reference;
  * @author Michael C. Han
  */
 @Component(immediate = true, service = DocumentContributor.class)
-public class AuditedModelDocumentContributor implements DocumentContributor {
+public class AuditedModelDocumentContributor
+	implements DocumentContributor<AuditedModel> {
 
 	@Override
-	public void contribute(Document document, BaseModel baseModel) {
+	public void contribute(
+		Document document, BaseModel<AuditedModel> baseModel) {
+
 		if (!(baseModel instanceof AuditedModel)) {
 			return;
 		}

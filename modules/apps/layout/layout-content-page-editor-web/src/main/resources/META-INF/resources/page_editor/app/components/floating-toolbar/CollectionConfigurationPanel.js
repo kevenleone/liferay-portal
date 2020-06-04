@@ -12,7 +12,11 @@
  * details.
  */
 
-import ClayForm, {ClayInput, ClaySelectWithOption} from '@clayui/form';
+import ClayForm, {
+	ClayInput,
+	ClaySelect,
+	ClaySelectWithOption,
+} from '@clayui/form';
 import React, {useEffect, useState} from 'react';
 
 import {config} from '../../../app/config/index';
@@ -88,10 +92,12 @@ export const CollectionConfigurationPanel = ({item}) => {
 
 	useEffect(() => {
 		if (
-			item.config.listStyle &&
-			item.config.listStyle !== LIST_STYLE_GRID
+			(item.config.collection,
+			item.config.listStyle && item.config.listStyle !== LIST_STYLE_GRID)
 		) {
-			InfoItemService.getAvailableListItemStyles({
+			InfoItemService.getAvailableListItemRenderers({
+				itemSubtype: item.config.collection.itemSubtype,
+				itemType: item.config.collection.itemType,
 				listStyle: item.config.listStyle,
 			})
 				.then((response) => {
@@ -101,7 +107,7 @@ export const CollectionConfigurationPanel = ({item}) => {
 					setAvailableListItemStyles([]);
 				});
 		}
-	}, [item.config.listStyle]);
+	}, [item.config.collection, item.config.listStyle]);
 
 	return (
 		<>
@@ -115,6 +121,7 @@ export const CollectionConfigurationPanel = ({item}) => {
 							collection,
 							listItemStyle: null,
 							listStyle: LIST_STYLE_GRID,
+							templateKey: null,
 						})
 					}
 				/>
@@ -163,19 +170,93 @@ export const CollectionConfigurationPanel = ({item}) => {
 								<label htmlFor={collectionListItemStyleId}>
 									{Liferay.Language.get('list-item-style')}
 								</label>
-								<ClaySelectWithOption
+								<ClaySelect
 									aria-label={Liferay.Language.get(
 										'list-item-style'
 									)}
 									id={collectionListItemStyleId}
-									onChange={({target: {value}}) =>
+									onChange={({target}) =>
 										handleConfigurationChanged({
-											listItemStyle: value,
+											listItemStyle:
+												target.options[
+													target.selectedIndex
+												].dataset.key,
+											templateKey:
+												target.options[
+													target.selectedIndex
+												].dataset.templateKey,
 										})
 									}
-									options={availableListItemStyles}
-									value={item.config.listItemStyle}
-								/>
+								>
+									{availableListItemStyles.map(
+										(listItemStyle) => {
+											if (listItemStyle.templates) {
+												return (
+													<ClaySelect.OptGroup
+														key={
+															listItemStyle.label
+														}
+														label={
+															listItemStyle.label
+														}
+													>
+														{listItemStyle.templates.map(
+															(template) => (
+																<ClaySelect.Option
+																	data-key={
+																		template.key
+																	}
+																	data-template-key={
+																		template.templateKey
+																	}
+																	key={
+																		template.key
+																	}
+																	label={
+																		template.label
+																	}
+																	selected={
+																		item
+																			.config
+																			.listItemStyle ===
+																			template.key &&
+																		(!item
+																			.config
+																			.templateKey ||
+																			item
+																				.config
+																				.templateKey ===
+																				template.templateKey)
+																	}
+																/>
+															)
+														)}
+													</ClaySelect.OptGroup>
+												);
+											}
+											else {
+												return (
+													<ClaySelect.Option
+														data-key={
+															listItemStyle.key
+														}
+														key={
+															listItemStyle.label
+														}
+														label={
+															listItemStyle.label
+														}
+														selected={
+															item.config
+																.listItemStyle ===
+															listItemStyle.key
+														}
+													/>
+												);
+											}
+										}
+									)}
+								</ClaySelect>
 							</ClayForm.Group>
 						)}
 

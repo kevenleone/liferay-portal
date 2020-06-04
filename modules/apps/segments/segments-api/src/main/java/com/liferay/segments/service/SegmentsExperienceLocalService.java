@@ -220,6 +220,10 @@ public interface SegmentsExperienceLocalService
 
 	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
 	public SegmentsExperience fetchSegmentsExperience(
+		long groupId, long classNameId, long classPK, int priority);
+
+	@Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
+	public SegmentsExperience fetchSegmentsExperience(
 		long groupId, String segmentsExperienceKey);
 
 	/**

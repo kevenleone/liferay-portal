@@ -15,8 +15,10 @@
 package com.liferay.segments.asah.connector.internal.client;
 
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.test.ReflectionTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
-import com.liferay.portal.kernel.util.GetterUtil;
+import com.liferay.portal.kernel.util.PrefsProps;
+import com.liferay.portal.kernel.util.PrefsPropsUtil;
 import com.liferay.segments.asah.connector.internal.client.model.ExperimentSettings;
 
 import org.junit.Assert;
@@ -38,8 +40,11 @@ public class AsahFaroBackendClientImplTest {
 		_jsonWebServiceClient = Mockito.mock(JSONWebServiceClient.class);
 
 		_asahFaroBackendClient = new AsahFaroBackendClientImpl(
-			_jsonWebServiceClient, RandomTestUtil.randomString(),
-			RandomTestUtil.randomString(), RandomTestUtil.randomString());
+			_jsonWebServiceClient);
+
+		ReflectionTestUtil.setFieldValue(
+			PrefsPropsUtil.class, "_prefsProps",
+			Mockito.mock(PrefsProps.class));
 	}
 
 	@Test
@@ -49,17 +54,17 @@ public class AsahFaroBackendClientImplTest {
 		Mockito.when(
 			_jsonWebServiceClient.doPost(
 				Mockito.eq(String.class), Mockito.anyString(),
-				Mockito.any(ExperimentSettings.class),
+				Mockito.anyString(), Mockito.any(ExperimentSettings.class),
 				Mockito.anyMapOf(String.class, String.class))
 		).thenReturn(
 			days
 		);
 
 		Assert.assertEquals(
-			GetterUtil.getLong(days),
+			Long.valueOf(days),
 			_asahFaroBackendClient.calculateExperimentEstimatedDaysDuration(
-				RandomTestUtil.randomString(), new ExperimentSettings()),
-			0);
+				RandomTestUtil.randomLong(), RandomTestUtil.randomString(),
+				new ExperimentSettings()));
 	}
 
 	@Test
@@ -67,7 +72,7 @@ public class AsahFaroBackendClientImplTest {
 		Mockito.when(
 			_jsonWebServiceClient.doPost(
 				Mockito.eq(String.class), Mockito.anyString(),
-				Mockito.any(ExperimentSettings.class),
+				Mockito.anyString(), Mockito.any(ExperimentSettings.class),
 				Mockito.anyMapOf(String.class, String.class))
 		).thenReturn(
 			StringPool.BLANK
@@ -75,7 +80,8 @@ public class AsahFaroBackendClientImplTest {
 
 		Assert.assertNull(
 			_asahFaroBackendClient.calculateExperimentEstimatedDaysDuration(
-				RandomTestUtil.randomString(), new ExperimentSettings()));
+				RandomTestUtil.randomLong(), RandomTestUtil.randomString(),
+				new ExperimentSettings()));
 	}
 
 	@Test
@@ -83,7 +89,7 @@ public class AsahFaroBackendClientImplTest {
 		Mockito.when(
 			_jsonWebServiceClient.doPost(
 				Mockito.eq(String.class), Mockito.anyString(),
-				Mockito.any(ExperimentSettings.class),
+				Mockito.anyString(), Mockito.any(ExperimentSettings.class),
 				Mockito.anyMapOf(String.class, String.class))
 		).thenReturn(
 			RandomTestUtil.randomString()
@@ -91,7 +97,8 @@ public class AsahFaroBackendClientImplTest {
 
 		Assert.assertNull(
 			_asahFaroBackendClient.calculateExperimentEstimatedDaysDuration(
-				RandomTestUtil.randomString(), new ExperimentSettings()));
+				RandomTestUtil.randomLong(), RandomTestUtil.randomString(),
+				new ExperimentSettings()));
 	}
 
 	private AsahFaroBackendClient _asahFaroBackendClient;

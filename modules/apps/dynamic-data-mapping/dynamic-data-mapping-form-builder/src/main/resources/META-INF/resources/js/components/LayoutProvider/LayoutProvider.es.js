@@ -102,6 +102,7 @@ class LayoutProvider extends Component {
 			pageAdded: this._handlePageAdded.bind(this),
 			pageDeleted: this._handlePageDeleted.bind(this),
 			pageReset: this._handlePageReset.bind(this),
+			pagesSwapped: this._handlePagesSwapped.bind(this),
 			pagesUpdated: this._handlePagesUpdated.bind(this),
 			paginationItemClicked: this._handlePaginationItemClicked.bind(this),
 			paginationModeUpdated: this._handlePaginationModeUpdated.bind(this),
@@ -468,6 +469,25 @@ class LayoutProvider extends Component {
 		});
 	}
 
+	_handlePagesSwapped({firstIndex, secondIndex}) {
+		const {pages} = this.state;
+
+		const [firstPage, secondPage] = [pages[firstIndex], pages[secondIndex]];
+
+		this.setState({
+			pages: pages.map((page, index) => {
+				if (index === firstIndex) {
+					return secondPage;
+				}
+				else if (index === secondIndex) {
+					return firstPage;
+				}
+
+				return page;
+			}),
+		});
+	}
+
 	_handlePagesUpdated(pages) {
 		this.setState({
 			pages: [...pages],
@@ -818,10 +838,7 @@ LayoutProvider.STATE = {
 	 * @memberof LayoutProvider
 	 * @type {?object}
 	 */
-	fieldHovered: Config.shapeOf({
-		fieldName: Config.string().value(''),
-		type: Config.string().value(''),
-	}).value({}),
+	fieldHovered: Config.object().value({}),
 
 	/**
 	 * @default {}

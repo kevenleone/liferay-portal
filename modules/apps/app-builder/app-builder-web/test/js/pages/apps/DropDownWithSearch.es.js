@@ -14,10 +14,12 @@
 
 import ClayButton from '@clayui/button';
 import {cleanup, fireEvent, render} from '@testing-library/react';
-import React from 'react';
+import React, {useState} from 'react';
 
 import EmptyState from '../../../../src/main/resources/META-INF/resources/js/components/table/EmptyState.es';
 import DropDownWithSearch from '../../../../src/main/resources/META-INF/resources/js/pages/apps/DropDownWithSearch.es';
+
+import '@testing-library/jest-dom/extend-expect';
 
 const ITEMS = (size) => {
 	const items = [];
@@ -28,40 +30,53 @@ const ITEMS = (size) => {
 
 	return items;
 };
-const onSelect = jest.fn();
 const doFetch = jest.fn();
+let onSelect = jest.fn();
 
-describe('DropDownWithSearch', () => {
-	let asFragment, getByPlaceholderText, getByText;
+const DropDownContainer = () => {
+	const [buttonName, setButtonName] = useState('Button');
 
-	beforeAll(() => {
-		const component = render(
-			<DropDownWithSearch
+	onSelect = jest.fn((newName) => {
+		setButtonName(newName.name);
+	});
+
+	return (
+		<DropDownWithSearch
+			stateProps={{
+				emptyProps: {
+					emptyState: () => <EmptyState />,
+				},
+				errorProps: {
+					children: (
+						<ClayButton displayType="link" onClick={doFetch}>
+							{'retry'}
+						</ClayButton>
+					),
+					label: 'unable-to-retrieve-the-objects',
+				},
+				loading: {
+					label: 'retrieving-all-objects',
+				},
+			}}
+			trigger={<ClayButton>{buttonName}</ClayButton>}
+		>
+			<DropDownWithSearch.Items
+				emptyResultMessage="empty message"
 				items={ITEMS(10)}
 				onSelect={onSelect}
-				stateProps={{
-					emptyProps: {
-						emptyState: () => <EmptyState />,
-					},
-					errorProps: {
-						children: (
-							<ClayButton displayType="link" onClick={doFetch}>
-								{Liferay.Language.get('retry')}
-							</ClayButton>
-						),
-						label: Liferay.Language.get(
-							'unable-to-retrieve-the-objects'
-						),
-					},
-					loading: {
-						label: Liferay.Language.get('retrieving-all-objects'),
-					},
-				}}
-				trigger={<ClayButton>Button</ClayButton>}
 			/>
-		);
+		</DropDownWithSearch>
+	);
+};
+
+describe('DropDownWithSearch', () => {
+	let asFragment, container, getByPlaceholderText, getByText;
+
+	beforeAll(() => {
+		const component = render(<DropDownContainer />);
 
 		asFragment = component.asFragment;
+		container = component.container;
 		getByPlaceholderText = component.getByPlaceholderText;
 		getByText = component.getByText;
 	});
@@ -80,15 +95,17 @@ describe('DropDownWithSearch', () => {
 		expect(dropDownMenu.children[1].children.length).toEqual(10);
 	});
 
-	it('selects a option and triggers onSelect after clicking in it', () => {
+	it('selects an option and triggers onSelect after clicking in it', () => {
 		const search = getByPlaceholderText('search');
 		const dropDownMenu = document.querySelector('.select-dropdown-menu');
+
+		expect(container.children[0].children[0]).toHaveTextContent('Button');
 
 		fireEvent.change(search, {target: {value: 'object 9'}});
 
 		fireEvent.click(dropDownMenu.children[1].children[0].children[0]);
 
-		expect(onSelect).toHaveBeenCalled();
+		expect(container.children[0].children[0]).toHaveTextContent('object 9');
 	});
 
 	it('shows loading state while fetching data', () => {
@@ -96,9 +113,7 @@ describe('DropDownWithSearch', () => {
 
 		render(
 			<DropDownWithSearch
-				error={false}
 				isLoading={true}
-				onSelect={onSelect}
 				stateProps={{
 					emptyProps: {
 						emptyState: () => <EmptyState />,
@@ -106,19 +121,22 @@ describe('DropDownWithSearch', () => {
 					errorProps: {
 						children: (
 							<ClayButton displayType="link" onClick={doFetch}>
-								{Liferay.Language.get('retry')}
+								{'retry'}
 							</ClayButton>
 						),
-						label: Liferay.Language.get(
-							'unable-to-retrieve-the-objects'
-						),
+						label: 'unable-to-retrieve-the-objects',
 					},
 					loading: {
-						label: Liferay.Language.get('retrieving-all-objects'),
+						label: 'retrieving-all-objects',
 					},
 				}}
 				trigger={<ClayButton>Button</ClayButton>}
-			/>
+			>
+				<DropDownWithSearch.Items
+					emptyResultMessage="empty message"
+					onSelect={onSelect}
+				/>
+			</DropDownWithSearch>
 		);
 
 		expect(
@@ -132,8 +150,6 @@ describe('DropDownWithSearch', () => {
 		render(
 			<DropDownWithSearch
 				error={true}
-				isLoading={false}
-				onSelect={onSelect}
 				stateProps={{
 					emptyProps: {
 						emptyState: () => <EmptyState />,
@@ -141,23 +157,66 @@ describe('DropDownWithSearch', () => {
 					errorProps: {
 						children: (
 							<ClayButton displayType="link" onClick={doFetch}>
-								{Liferay.Language.get('retry')}
+								{'retry'}
 							</ClayButton>
 						),
-						label: Liferay.Language.get(
-							'unable-to-retrieve-the-objects'
-						),
+						label: 'unable-to-retrieve-the-objects',
 					},
 					loading: {
-						label: Liferay.Language.get('retrieving-all-objects'),
+						label: 'retrieving-all-objects',
 					},
 				}}
 				trigger={<ClayButton>Button</ClayButton>}
-			/>
+			>
+				<DropDownWithSearch.Items
+					emptyResultMessage="empty message"
+					onSelect={onSelect}
+				/>
+			</DropDownWithSearch>
 		);
 
 		expect(
 			document.querySelector('.error-state-dropdown-menu')
 		).toBeTruthy();
+	});
+
+	it('shows empty state when has no items', () => {
+		cleanup();
+
+		render(
+			<DropDownWithSearch
+				isEmpty={true}
+				stateProps={{
+					emptyProps: {
+						emptyState: () => <EmptyState />,
+					},
+					errorProps: {
+						children: (
+							<ClayButton displayType="link" onClick={doFetch}>
+								{'retry'}
+							</ClayButton>
+						),
+						label: 'unable-to-retrieve-the-objects',
+					},
+					loading: {
+						label: 'retrieving-all-objects',
+					},
+				}}
+				trigger={<ClayButton>Button</ClayButton>}
+			>
+				<DropDownWithSearch.Items
+					emptyResultMessage="empty message"
+					onSelect={onSelect}
+				/>
+			</DropDownWithSearch>
+		);
+
+		expect(
+			document.querySelector('.empty-state-dropdown-menu')
+		).toBeTruthy();
+
+		const search = getByPlaceholderText('search');
+
+		expect(search).toBeDisabled();
 	});
 });

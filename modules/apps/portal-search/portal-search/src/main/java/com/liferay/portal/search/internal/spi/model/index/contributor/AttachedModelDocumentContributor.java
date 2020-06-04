@@ -26,10 +26,13 @@ import org.osgi.service.component.annotations.Component;
  * @author Michael C. Han
  */
 @Component(immediate = true, service = DocumentContributor.class)
-public class AttachedModelDocumentContributor implements DocumentContributor {
+public class AttachedModelDocumentContributor
+	implements DocumentContributor<AttachedModel> {
 
 	@Override
-	public void contribute(Document document, BaseModel baseModel) {
+	public void contribute(
+		Document document, BaseModel<AttachedModel> baseModel) {
+
 		if (!(baseModel instanceof AttachedModel)) {
 			return;
 		}

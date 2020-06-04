@@ -12,18 +12,22 @@
  * details.
  */
 
+import ClayEmptyState from '@clayui/empty-state';
 import {ClayPaginationBarWithBasicItems} from '@clayui/pagination-bar';
 import React from 'react';
 
+import {withLoading} from './Loading.es';
+
 const scrollToTop = () => window.scrollTo({behavior: 'smooth', top: 0});
 
-export default ({
+const PaginatedList = ({
 	activeDelta,
 	activePage,
 	changeDelta,
 	changePage,
 	children,
 	data,
+	showEmptyState,
 }) => {
 	const deltaValues = [4, 8, 20, 40, 60];
 
@@ -31,23 +35,35 @@ export default ({
 
 	return (
 		<>
-			{data.items && data.items.map((data) => children(data))}
-
-			{data.totalCount > deltaValues[0] && (
-				<ClayPaginationBarWithBasicItems
-					activeDelta={activeDelta}
-					activePage={activePage}
-					className="w-100"
-					deltas={deltas}
-					ellipsisBuffer={3}
-					onDeltaChange={changeDelta}
-					onPageChange={(page) => {
-						changePage(page);
-						scrollToTop(top);
-					}}
-					totalItems={data.totalCount}
+			{showEmptyState && !data.totalCount && (
+				<ClayEmptyState
+					description={Liferay.Language.get('there-are-no-results')}
+					title={Liferay.Language.get('there-are-no-results')}
 				/>
+			)}
+			{data.totalCount > 0 && (
+				<>
+					{data.items && data.items.map((data) => children(data))}
+
+					{data.totalCount > deltaValues[0] && (
+						<ClayPaginationBarWithBasicItems
+							activeDelta={activeDelta}
+							activePage={activePage}
+							className="w-100"
+							deltas={deltas}
+							ellipsisBuffer={3}
+							onDeltaChange={changeDelta}
+							onPageChange={(page) => {
+								changePage(page);
+								scrollToTop(top);
+							}}
+							totalItems={data.totalCount}
+						/>
+					)}
+				</>
 			)}
 		</>
 	);
 };
+
+export default withLoading(PaginatedList);

@@ -75,8 +75,11 @@ public class AsahSegmentsExperimentProcessor {
 		_asahFaroBackendClient = asahFaroBackendClientOptional.get();
 
 		Experiment experiment = _asahFaroBackendClient.addExperiment(
+			segmentsExperiment.getCompanyId(),
 			ExperimentUtil.toExperiment(
-				_companyLocalService, _asahFaroBackendClient.getDataSourceId(),
+				_companyLocalService,
+				_asahFaroBackendClient.getDataSourceId(
+					segmentsExperiment.getCompanyId()),
 				_groupLocalService, _layoutLocalService,
 				LocaleUtil.getSiteDefault(), _portal,
 				_segmentsEntryLocalService, _segmentsExperienceLocalService,
@@ -102,6 +105,7 @@ public class AsahSegmentsExperimentProcessor {
 		_asahFaroBackendClient = asahFaroBackendClientOptional.get();
 
 		_asahFaroBackendClient.deleteExperiment(
+			segmentsExperiment.getCompanyId(),
 			segmentsExperiment.getSegmentsExperimentKey());
 	}
 
@@ -123,8 +127,11 @@ public class AsahSegmentsExperimentProcessor {
 		_asahFaroBackendClient = asahFaroBackendClientOptional.get();
 
 		_asahFaroBackendClient.updateExperiment(
+			segmentsExperiment.getCompanyId(),
 			ExperimentUtil.toExperiment(
-				_companyLocalService, _asahFaroBackendClient.getDataSourceId(),
+				_companyLocalService,
+				_asahFaroBackendClient.getDataSourceId(
+					segmentsExperiment.getCompanyId()),
 				_groupLocalService, _layoutLocalService,
 				LocaleUtil.getSiteDefault(), _portal,
 				_segmentsEntryLocalService, _segmentsExperienceLocalService,
@@ -152,8 +159,11 @@ public class AsahSegmentsExperimentProcessor {
 		_asahFaroBackendClient = asahFaroBackendClientOptional.get();
 
 		_asahFaroBackendClient.updateExperiment(
+			segmentsExperiment.getCompanyId(),
 			ExperimentUtil.toExperiment(
-				_companyLocalService, _asahFaroBackendClient.getDataSourceId(),
+				_companyLocalService,
+				_asahFaroBackendClient.getDataSourceId(
+					segmentsExperiment.getCompanyId()),
 				_groupLocalService, segmentsExperimentLayout,
 				LocaleUtil.getSiteDefault(), _portal,
 				_segmentsEntryLocalService, _segmentsExperienceLocalService,
@@ -161,7 +171,7 @@ public class AsahSegmentsExperimentProcessor {
 	}
 
 	public void processUpdateSegmentsExperimentRel(
-			String segmentsExperimentKey,
+			long companyId, String segmentsExperimentKey,
 			List<SegmentsExperimentRel> segmentsExperimentRels)
 		throws PortalException {
 
@@ -179,7 +189,7 @@ public class AsahSegmentsExperimentProcessor {
 		_asahFaroBackendClient = asahFaroBackendClientOptional.get();
 
 		_asahFaroBackendClient.updateExperimentDXPVariants(
-			segmentsExperimentKey,
+			companyId, segmentsExperimentKey,
 			DXPVariantUtil.toDXPVariants(
 				LocaleUtil.getSiteDefault(), segmentsExperimentRels));
 	}

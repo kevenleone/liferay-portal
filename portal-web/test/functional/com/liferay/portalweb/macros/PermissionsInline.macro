@@ -142,7 +142,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",
 			panel = "Site Administration",
-			portlet = "Pages");
+			portlet = "Pages",
+			site = "${site}");
 
 		SitePages.gotoPageMenuItem(
 			menuItem = "Permissions",
@@ -188,7 +189,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",
 			panel = "Site Administration",
-			portlet = "Pages");
+			portlet = "Pages",
+			site = "${site}");
 
 		SitePages.gotoPageMenuItem(
 			menuItem = "Permissions",
@@ -196,7 +198,7 @@ definition {
 	}
 
 	macro gotoUserGroupSitePermissionsCP {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "User Groups");

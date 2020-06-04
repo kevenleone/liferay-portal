@@ -12,12 +12,11 @@
  * details.
  */
 
+import {useMutation, useQuery} from '@apollo/client';
 import ClayButton from '@clayui/button';
 import ClayForm from '@clayui/form';
 import ClayIcon from '@clayui/icon';
-import ClayLink from '@clayui/link';
 import ClayNavigationBar from '@clayui/navigation-bar';
-import {Editor} from 'frontend-editor-ckeditor-web';
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {withRouter} from 'react-router-dom';
 
@@ -28,29 +27,28 @@ import CreatorRow from '../../components/CreatorRow.es';
 import Link from '../../components/Link.es';
 import Modal from '../../components/Modal.es';
 import PaginatedList from '../../components/PaginatedList.es';
+import QuestionsEditor from '../../components/QuestionsEditor';
 import Rating from '../../components/Rating.es';
 import RelatedQuestions from '../../components/RelatedQuestions.es';
 import SectionLabel from '../../components/SectionLabel.es';
 import Subscription from '../../components/Subscription.es';
 import TagList from '../../components/TagList.es';
+import useQueryParams from '../../hooks/useQueryParams.es';
 import {
-	createAnswer,
-	deleteMessageBoardThread,
-	getMessages,
-	getThread,
-	markAsAnswerMessageBoardMessage,
+	client,
+	createAnswerQuery,
+	deleteMessageBoardThreadQuery,
+	getMessagesQuery,
+	getThreadQuery,
+	markAsAnswerMessageBoardMessageQuery,
 } from '../../utils/client.es';
 import lang from '../../utils/lang.es';
-import {
-	dateToBriefInternationalHuman,
-	getCKEditorConfig,
-	onBeforeLoadCKEditor,
-} from '../../utils/utils.es';
+import {dateToBriefInternationalHuman} from '../../utils/utils.es';
 
 export default withRouter(
 	({
 		history,
-		location: key,
+		location,
 		match: {
 			params: {questionId},
 			url,
@@ -58,62 +56,100 @@ export default withRouter(
 	}) => {
 		const context = useContext(AppContext);
 
-		const [answers, setAnswers] = useState({});
+		const queryParams = useQueryParams(location);
+
+		const sort = queryParams.get('sort') || 'active';
+
 		const [articleBody, setArticleBody] = useState();
 		const [deleteModalVisible, setDeleteModalVisible] = useState(false);
 		const [page, setPage] = useState(1);
 		const [pageSize, setPageSize] = useState(20);
-		const [question, setQuestion] = useState();
-		const [sort, setSort] = useState('active');
 
-		useEffect(() => {
-			getThread(questionId, context.siteKey).then((data) => {
-				setQuestion(data);
-
-				return data;
-			});
-		}, [key, context.siteKey, questionId]);
-
-		useEffect(() => {
-			if (question) {
-				getMessages(question.id, page, pageSize, sort).then((data) => {
-					setAnswers(data);
-				});
-			}
-		}, [question, page, pageSize, sort]);
-
-		const postAnswer = () => {
-			createAnswer(articleBody, question.id)
-				.then(() => {
-					setArticleBody('');
-
-					return getMessages(question.id, page, pageSize, sort);
-				})
-				.then((data) => {
-					setAnswers(data);
-				});
-		};
-
-		const updateMarkAsAnswer = useCallback(
-			(answerId) => {
-				setAnswers({
-					...answers,
-					items: [
-						...answers.items.map((otherAnswer) => {
-							otherAnswer.showAsAnswer =
-								otherAnswer.id === answerId;
-
-							return otherAnswer;
-						}),
-					],
-				});
+		const {
+			loading,
+			data: {messageBoardThreadByFriendlyUrlPath: question = {}} = {},
+		} = useQuery(getThreadQuery, {
+			context: {
+				uri: '/o/graphql?nestedFields=lastPostDate',
 			},
-			[answers]
-		);
+			variables: {
+				friendlyUrlPath: questionId,
+				siteKey: context.siteKey,
+			},
+		});
 
-		const deleteThread = () => {
-			deleteMessageBoardThread(question.id).then(() => history.goBack());
-		};
+		const {
+			data: {messageBoardThreadMessageBoardMessages = {}} = {},
+			refetch,
+		} = useQuery(getMessagesQuery, {
+			context: {
+				uri: '/o/graphql?nestedFields=lastPostDate',
+			},
+			skip: !question || !question.id,
+			variables: {
+				messageBoardThreadId: question.id,
+				page: sort === 'votes' ? 1 : page,
+				pageSize: sort === 'votes' ? 100 : pageSize,
+				sort:
+					sort === 'votes' || sort === 'active'
+						? 'dateModified:desc'
+						: 'dateCreated:desc',
+			},
+		});
+
+		const [answers, setAnswers] = useState({});
+
+		useEffect(() => {
+			if (messageBoardThreadMessageBoardMessages.totalCount) {
+				if (sort !== 'votes') {
+					setAnswers({...messageBoardThreadMessageBoardMessages});
+				}
+				else {
+					const items = [
+						...[
+							...messageBoardThreadMessageBoardMessages.items,
+						].sort((answer1, answer2) => {
+							if (answer2.showAsAnswer) {
+								return 1;
+							}
+							if (answer1.showAsAnswer) {
+								return -1;
+							}
+
+							const ratingValue1 =
+								(answer1.aggregateRating &&
+									answer1.aggregateRating.ratingValue) ||
+								0;
+							const ratingValue2 =
+								(answer2.aggregateRating &&
+									answer2.aggregateRating.ratingValue) ||
+								0;
+
+							return ratingValue2 - ratingValue1;
+						}),
+					];
+
+					setAnswers({
+						...messageBoardThreadMessageBoardMessages,
+						items,
+					});
+				}
+			}
+		}, [messageBoardThreadMessageBoardMessages, pageSize, sort]);
+
+		const [createAnswer] = useMutation(createAnswerQuery, {
+			onCompleted() {
+				setArticleBody('');
+				refetch();
+			},
+		});
+
+		const [deleteThread] = useMutation(deleteMessageBoardThreadQuery, {
+			onCompleted() {
+				client.resetStore();
+				history.goBack();
+			},
+		});
 
 		const deleteAnswer = useCallback(
 			(answer) => {
@@ -124,9 +160,19 @@ export default withRouter(
 							(otherAnswer) => answer.id !== otherAnswer.id
 						),
 					],
+					totalCount: answers.totalCount - 1,
 				});
 			},
 			[answers]
+		);
+
+		const [markAsAnswerMessageBoardMessage] = useMutation(
+			markAsAnswerMessageBoardMessageQuery,
+			{
+				onCompleted() {
+					refetch();
+				},
+			}
 		);
 
 		const answerChange = useCallback(
@@ -136,23 +182,21 @@ export default withRouter(
 				);
 
 				if (answer) {
-					markAsAnswerMessageBoardMessage(answer.id, false).then(
-						() => {
-							updateMarkAsAnswer(answerId);
-						}
-					);
-				}
-				else {
-					updateMarkAsAnswer(answerId);
+					markAsAnswerMessageBoardMessage({
+						variables: {
+							messageBoardMessageId: answer.id,
+							showAsAnswer: false,
+						},
+					});
 				}
 			},
-			[answers, updateMarkAsAnswer]
+			[markAsAnswerMessageBoardMessage, answers.items]
 		);
 
 		return (
 			<section className="c-mt-5 questions-section questions-section-single">
 				<div className="questions-container">
-					{question && (
+					{!loading && (
 						<div className="row">
 							<div className="col-md-1 text-md-center">
 								<Rating
@@ -217,12 +261,9 @@ export default withRouter(
 												<Subscription
 													onSubscription={(
 														subscribed
-													) =>
-														setQuestion({
-															...question,
-															subscribed,
-														})
-													}
+													) => {
+														question.subscribed = subscribed;
+													}}
 													question={question}
 												/>
 											)}
@@ -233,7 +274,14 @@ export default withRouter(
 														body={Liferay.Language.get(
 															'do-you-want-to-delete–this-thread'
 														)}
-														callback={deleteThread}
+														callback={() => {
+															deleteThread({
+																variables: {
+																	messageBoardThreadId:
+																		question.id,
+																},
+															});
+														}}
 														onClose={() =>
 															setDeleteModalVisible(
 																false
@@ -281,7 +329,13 @@ export default withRouter(
 								</div>
 
 								<div className="c-mt-4">
-									<TagList tags={question.keywords} />
+									<TagList
+										sectionTitle={
+											question.messageBoardSection &&
+											question.messageBoardSection.title
+										}
+										tags={question.keywords}
+									/>
 								</div>
 
 								<div className="c-mt-4 position-relative questions-creator text-center text-md-right">
@@ -299,49 +353,40 @@ export default withRouter(
 											<ClayNavigationBar.Item
 												active={sort === 'active'}
 											>
-												<ClayLink
-													className="nav-link"
-													displayType="unstyled"
-													onClick={() =>
-														setSort('active')
-													}
+												<Link
+													className="link-unstyled nav-link"
+													to={`${url}?sort=active`}
 												>
 													{Liferay.Language.get(
 														'active'
 													)}
-												</ClayLink>
+												</Link>
 											</ClayNavigationBar.Item>
 
 											<ClayNavigationBar.Item
 												active={sort === 'oldest'}
 											>
-												<ClayLink
-													className="nav-link"
-													displayType="unstyled"
-													onClick={() =>
-														setSort('oldest')
-													}
+												<Link
+													className="link-unstyled nav-link"
+													to={`${url}?sort=oldest`}
 												>
 													{Liferay.Language.get(
 														'oldest'
 													)}
-												</ClayLink>
+												</Link>
 											</ClayNavigationBar.Item>
 
 											<ClayNavigationBar.Item
 												active={sort === 'votes'}
 											>
-												<ClayLink
-													className="nav-link"
-													displayType="unstyled"
-													onClick={() =>
-														setSort('votes')
-													}
+												<Link
+													className="link-unstyled nav-link"
+													to={`${url}?sort=votes`}
 												>
 													{Liferay.Language.get(
 														'votes'
 													)}
-												</ClayLink>
+												</Link>
 											</ClayNavigationBar.Item>
 										</ClayNavigationBar>
 									</div>
@@ -383,22 +428,17 @@ export default withRouter(
 													</label>
 
 													<div className="c-mt-2">
-														<Editor
-															config={getCKEditorConfig()}
-															data={articleBody}
-															onBeforeLoad={(
-																editor
-															) =>
-																onBeforeLoadCKEditor(
-																	editor,
-																	context.imageBrowseURL
-																)
+														<QuestionsEditor
+															contents={
+																articleBody
 															}
-															onChange={(event) =>
+															onChange={(
+																event
+															) => {
 																setArticleBody(
 																	event.editor.getData()
-																)
-															}
+																);
+															}}
 														/>
 													</div>
 												</ClayForm.Group>
@@ -407,7 +447,15 @@ export default withRouter(
 											<ClayButton
 												disabled={!articleBody}
 												displayType="primary"
-												onClick={postAnswer}
+												onClick={() => {
+													createAnswer({
+														variables: {
+															articleBody,
+															messageBoardThreadId:
+																question.id,
+														},
+													});
+												}}
 											>
 												{Liferay.Language.get(
 													'post-answer'

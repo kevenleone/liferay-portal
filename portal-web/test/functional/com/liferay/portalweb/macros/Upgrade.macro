@@ -195,7 +195,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content &amp; Data",
 			panel = "Site Administration",
-			portlet = "Dynamic Data Lists");
+			portlet = "Dynamic Data Lists",
+			site = "${site}");
 
 		AssertTextEquals(
 			locator1 = "Message#EMPTY_INFO",
@@ -245,7 +246,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content &amp; Data",
 			panel = "Site Administration",
-			portlet = "Forms");
+			portlet = "Forms",
+			site = "${site}");
 
 		AssertElementPresent(locator1 = "Message#EMPTY_INFO_TAGLIB");
 
@@ -336,7 +338,7 @@ definition {
 	}
 
 	macro addOrganization {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -367,7 +369,7 @@ definition {
 			organizationName = "Organization1",
 			userEmailAddress = "user2@liferay.com");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -383,7 +385,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -402,7 +404,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -425,7 +427,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -438,7 +440,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -451,7 +453,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -462,7 +464,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -473,7 +475,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -486,7 +488,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -497,7 +499,7 @@ definition {
 
 		Navigator.openURL();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -934,7 +936,7 @@ definition {
 
 		AssertElementNotPresent(locator1 = "Home#PORTLET");
 
-		ProductMenu.gotoStagingSite();
+		ProductMenu.gotoStagingSite(site = "Staging Site");
 
 		WebContent.viewPGViaWCD(
 			webContentContent = "Web Content Content",
@@ -944,7 +946,7 @@ definition {
 
 		Staging.publishToLive();
 
-		ProductMenu.gotoLiveSite();
+		ProductMenu.gotoLiveSite(site = "Staging Site");
 
 		WebContent.viewPGViaWCD(
 			webContentContent = "Web Content Content",
@@ -987,9 +989,9 @@ definition {
 		var testRunEnvironment = PropsUtil.get("test.run.environment");
 
 		if ("${testRunEnvironment}" == "EE") {
-			ProductMenu.gotoPortlet(
+			GlobalMenu.gotoPortlet(
 				category = "Workflow",
-				panel = "Control Panel",
+				panel = "Applications",
 				portlet = "Process Builder");
 
 			Workflow.viewDefinitionUnpublished(workflowDefinitionTitle = "New Workflow Definition Draft");
@@ -1411,7 +1413,7 @@ definition {
 	}
 
 	macro viewAndEditUser {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1488,7 +1490,7 @@ definition {
 			locator1 = "UsersAndOrganizationsEditUser#DISPLAY_SETTINGS_GREETING_FIELD",
 			value1 = "Welcome Organization Usersn! This is a pre-upgrade edit!");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1511,7 +1513,7 @@ definition {
 			locator1 = "Permissions#CONTENT_PERMISSIONS_ROLE_NAME",
 			value1 = "Organization Administrator");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1550,7 +1552,7 @@ definition {
 			userLoginEmailAddress = "test@liferay.com",
 			userLoginFullName = "Test Test");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1582,7 +1584,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1613,7 +1615,7 @@ definition {
 			locator1 = "UsersAndOrganizationsEditUser#DISPLAY_SETTINGS_GREETING_FIELD",
 			value1 = "Welcome Organization Usersn! This is a post-upgrade edit!");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1636,7 +1638,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1659,7 +1661,7 @@ definition {
 
 		PortletEntry.save();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1668,7 +1670,7 @@ definition {
 
 		User.deleteCP();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1677,7 +1679,7 @@ definition {
 
 		User.viewNoUsersFoundCP();
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -1828,7 +1830,7 @@ definition {
 	}
 
 	macro ViewDroolsAppManager {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Apps",
 			panel = "Control Panel",
 			portlet = "App Manager");
@@ -2399,7 +2401,7 @@ definition {
 	}
 
 	macro viewSystemSettings {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "System Settings");
@@ -2447,7 +2449,7 @@ definition {
 
 		FormFields.viewCheckboxNotChecked(fieldName = "articleViewPermissionsCheckEnabled");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "System Settings");
@@ -2465,7 +2467,7 @@ definition {
 
 		FormFields.viewCheckboxNotChecked(fieldName = "journalArticleForceAutogenerateId");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "System Settings");
@@ -2487,7 +2489,7 @@ definition {
 
 		FormFields.viewCheckboxNotChecked(fieldName = "emailArticleUpdatedEnabled");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "System Settings");
@@ -2533,7 +2535,7 @@ definition {
 			fieldName = "rssAbstractLength",
 			fieldValue = "500");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "System Settings");
@@ -2556,7 +2558,7 @@ definition {
 		// Ignore test until LPS-97976 is resolved
 
 		/*
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "System Settings");
@@ -2580,7 +2582,7 @@ definition {
 			fieldName = "smallImageMaxSize",
 			fieldValue = "5120");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Control Panel",
 			portlet = "System Settings");

@@ -1091,7 +1091,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content &amp; Data",
 			panel = "Site Administration",
-			portlet = "Documents and Media");
+			portlet = "Documents and Media",
+			site = "${site}");
 
 		DMNavigator.gotoDocumentCP(dmDocumentTitle = "${dmDocumentTitle}");
 
@@ -1371,7 +1372,12 @@ definition {
 	}
 
 	macro sharePG {
-		IFrame.selectModalFrame();
+		if (isSet(liferayEvent)) {
+			SelectFrame.selectFrameNoLoading(locator1 = "IFrame#MODAL_IFRAME");
+		}
+		else {
+			IFrame.selectModalFrame();
+		}
 
 		if (isSet(noAutocomplete)) {
 			Type.sendKeys(

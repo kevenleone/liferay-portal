@@ -96,7 +96,7 @@ public class AlloyServiceInvoker {
 		}
 	}
 
-	public BaseModel addModel(BaseModel baseModel) throws Exception {
+	public BaseModel<?> addModel(BaseModel<?> baseModel) throws Exception {
 		return (BaseModel<?>)addModelMethod.invoke(
 			identifiableOSGiService, baseModel);
 	}
@@ -129,7 +129,7 @@ public class AlloyServiceInvoker {
 		return dynamicQuery;
 	}
 
-	public BaseModel createModel(long id) throws Exception {
+	public BaseModel<?> createModel(long id) throws Exception {
 		return (BaseModel<?>)createModelMethod.invoke(
 			identifiableOSGiService, id);
 	}
@@ -231,7 +231,7 @@ public class AlloyServiceInvoker {
 		return (Integer)getModelsCountMethod.invoke(identifiableOSGiService);
 	}
 
-	public BaseModel<?> updateModel(BaseModel baseModel) throws Exception {
+	public BaseModel<?> updateModel(BaseModel<?> baseModel) throws Exception {
 		return (BaseModel<?>)updateModelMethod.invoke(
 			identifiableOSGiService, baseModel);
 	}

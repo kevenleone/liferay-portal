@@ -42,10 +42,11 @@ import org.osgi.service.component.annotations.Reference;
  * @author Michael C. Han
  */
 @Component(immediate = true, service = DocumentContributor.class)
-public class AssetTagDocumentContributor implements DocumentContributor {
+public class AssetTagDocumentContributor
+	implements DocumentContributor<AssetTag> {
 
 	@Override
-	public void contribute(Document document, BaseModel baseModel) {
+	public void contribute(Document document, BaseModel<AssetTag> baseModel) {
 		String className = document.get(Field.ENTRY_CLASS_NAME);
 
 		long classNameId = portal.getClassNameId(className);
@@ -71,7 +72,8 @@ public class AssetTagDocumentContributor implements DocumentContributor {
 	}
 
 	protected void contributeAssetTagNamesLocalized(
-		Document document, List<AssetTag> assetTags, BaseModel baseModel) {
+		Document document, List<AssetTag> assetTags,
+		BaseModel<AssetTag> baseModel) {
 
 		Long groupId = getGroupId(baseModel);
 
@@ -94,7 +96,7 @@ public class AssetTagDocumentContributor implements DocumentContributor {
 		document.addText(Field.ASSET_TAG_NAMES, getNames(assetTags));
 	}
 
-	protected Long getGroupId(BaseModel baseModel) {
+	protected Long getGroupId(BaseModel<?> baseModel) {
 		if (baseModel instanceof GroupedModel) {
 			GroupedModel groupedModel = (GroupedModel)baseModel;
 

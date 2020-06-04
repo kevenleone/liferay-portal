@@ -93,7 +93,7 @@ public class AssetEntryInfoItemFieldSetProviderImpl
 			String itemClassName, long itemClassPK)
 		throws NoSuchInfoItemException {
 
-		AssetRendererFactory assetRendererFactory =
+		AssetRendererFactory<?> assetRendererFactory =
 			AssetRendererFactoryRegistryUtil.getAssetRendererFactoryByClassName(
 				itemClassName);
 

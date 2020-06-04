@@ -558,7 +558,7 @@ definition {
 
 		Page.viewLayoutLogoPG(assertLayoutLogoPresent = "true");
 
-		ProductMenu.gotoStagingSite();
+		ProductMenu.gotoStagingSite(site = "Site Name");
 
 		Page.deleteLogoPG(page = "Staging Test Page");
 
@@ -581,7 +581,7 @@ definition {
 
 		Navigator.openSiteURL(siteName = "Site Name");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -589,7 +589,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Publishing",
 			panel = "Site Administration",
-			portlet = "Staging");
+			portlet = "Staging",
+			site = "Site Name");
 
 		Staging.activateStagingCP(
 			pageVersioningEnabled = "true",
@@ -687,7 +688,7 @@ definition {
 
 		Staging.publishToLive();
 
-		ProductMenu.gotoLiveSite();
+		ProductMenu.gotoLiveSite(site = "Site Name");
 
 		var key_portletTitleName = "Web Content Display";
 
@@ -847,6 +848,7 @@ definition {
 		property app.server.bundles.size = "1";
 		property custom.properties = "tunneling.servlet.shared.secret=1234567890123456${line.separator}auth.verifier.TunnelAuthVerifier.hosts.allowed=";
 		property databases.size = "1";
+		property portal.upstream = "quarantine";
 		property test.name.skip.portal.instance = "PGStaging#PublishWCWithPagesVariationViaRemoteStaging";
 
 		Staging.remoteStagingSetUp(

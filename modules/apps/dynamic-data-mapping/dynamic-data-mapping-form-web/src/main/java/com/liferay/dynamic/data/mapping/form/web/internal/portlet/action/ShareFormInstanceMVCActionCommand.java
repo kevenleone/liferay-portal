@@ -19,8 +19,6 @@ import com.liferay.dynamic.data.mapping.service.DDMFormInstanceService;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
 import com.liferay.portal.kernel.language.LanguageUtil;
-import com.liferay.portal.kernel.log.Log;
-import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.portlet.JSONPortletResponseUtil;
 import com.liferay.portal.kernel.portlet.bridges.mvc.BaseMVCActionCommand;
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCActionCommand;
@@ -69,8 +67,6 @@ public class ShareFormInstanceMVCActionCommand extends BaseMVCActionCommand {
 				actionRequest, actionResponse, jsonObject);
 		}
 		catch (Exception exception) {
-			_log.error("Unable to send form email", exception);
-
 			HttpServletResponse httpServletResponse =
 				_portal.getHttpServletResponse(actionResponse);
 
@@ -86,9 +82,6 @@ public class ShareFormInstanceMVCActionCommand extends BaseMVCActionCommand {
 				actionRequest, actionResponse, jsonObject);
 		}
 	}
-
-	private static final Log _log = LogFactoryUtil.getLog(
-		ShareFormInstanceMVCActionCommand.class);
 
 	@Reference
 	private DDMFormInstanceService _ddmFormInstanceService;

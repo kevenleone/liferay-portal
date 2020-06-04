@@ -15,50 +15,35 @@
 package com.liferay.document.library.web.internal.info.list.renderer;
 
 import com.liferay.document.library.web.internal.info.item.renderer.FileEntryTitleInfoItemRenderer;
+import com.liferay.info.item.renderer.InfoItemRenderer;
+import com.liferay.info.item.renderer.InfoItemRendererTracker;
 import com.liferay.info.list.renderer.DefaultInfoListRendererContext;
-import com.liferay.info.list.renderer.InfoListItemStyle;
-import com.liferay.info.list.renderer.InfoListRenderer;
 import com.liferay.info.list.renderer.InfoListRendererContext;
-import com.liferay.info.taglib.list.renderer.BasicListInfoListItemStyle;
+import com.liferay.info.taglib.list.renderer.BasicInfoListRenderer;
 import com.liferay.info.taglib.servlet.taglib.InfoListBasicListTag;
-import com.liferay.portal.kernel.language.LanguageUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.repository.model.FileEntry;
+import com.liferay.portal.kernel.util.Validator;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Pavel Savinov
  */
-@Component(immediate = true, service = InfoListRenderer.class)
-public class FileEntryBasicListInfoListRenderer
-	implements InfoListRenderer<FileEntry> {
+public abstract class FileEntryBasicListInfoListRenderer
+	implements BasicInfoListRenderer<FileEntry> {
 
 	@Override
-	public List<InfoListItemStyle> getAvailableInfoListItemStyles() {
-		return Stream.of(
-			BasicListInfoListItemStyle.values()
-		).map(
-			basicListInfoListItemStyle ->
-				basicListInfoListItemStyle.getInfoListItemStyle()
-		).collect(
-			Collectors.toList()
-		);
-	}
-
-	@Override
-	public String getLabel(Locale locale) {
-		return LanguageUtil.get(locale, "basic-list");
+	public List<InfoItemRenderer> getAvailableInfoItemRenderers() {
+		return infoItemRendererTracker.getInfoItemRenderers(
+			FileEntry.class.getName());
 	}
 
 	@Override
@@ -80,16 +65,22 @@ public class FileEntryBasicListInfoListRenderer
 		InfoListBasicListTag infoListBasicListTag = new InfoListBasicListTag();
 
 		infoListBasicListTag.setInfoListObjects(fileEntries);
-		infoListBasicListTag.setItemRendererKey(
-			FileEntryTitleInfoItemRenderer.class.getName());
 
-		Optional<String> infoListItemStyleKeyOptional =
-			infoListRendererContext.getListItemStyleKeyOptional();
+		Optional<String> infoListItemRendererKeyOptional =
+			infoListRendererContext.getListItemRendererKeyOptional();
 
-		if (infoListItemStyleKeyOptional.isPresent()) {
-			infoListBasicListTag.setListItemStyleKey(
-				infoListItemStyleKeyOptional.get());
+		if (infoListItemRendererKeyOptional.isPresent() &&
+			Validator.isNotNull(infoListItemRendererKeyOptional.get())) {
+
+			infoListBasicListTag.setItemRendererKey(
+				infoListItemRendererKeyOptional.get());
 		}
+		else {
+			infoListBasicListTag.setItemRendererKey(
+				FileEntryTitleInfoItemRenderer.class.getName());
+		}
+
+		infoListBasicListTag.setListStyleKey(getListStyle());
 
 		try {
 			infoListBasicListTag.doTag(
@@ -100,6 +91,9 @@ public class FileEntryBasicListInfoListRenderer
 			_log.error("Unable to render file entries list", exception);
 		}
 	}
+
+	@Reference
+	protected InfoItemRendererTracker infoItemRendererTracker;
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		FileEntryBasicListInfoListRenderer.class);

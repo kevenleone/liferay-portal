@@ -28,7 +28,7 @@ import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.search.configuration.CrossClusterReplicationConfigurationWrapper;
 import com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration;
 import com.liferay.portal.search.elasticsearch7.internal.index.IndexFactory;
-import com.liferay.portal.search.elasticsearch7.internal.util.LogUtil;
+import com.liferay.portal.search.elasticsearch7.internal.util.SearchLogHelperUtil;
 
 import java.net.InetAddress;
 
@@ -376,7 +376,7 @@ public class ElasticsearchConnectionManager
 
 		setOperationMode(
 			translate(_elasticsearchConfiguration.operationMode()));
-		LogUtil.setRestClientLoggerLevel(
+		SearchLogHelperUtil.setRESTClientLoggerLevel(
 			_elasticsearchConfiguration.restClientLoggerLevel());
 	}
 

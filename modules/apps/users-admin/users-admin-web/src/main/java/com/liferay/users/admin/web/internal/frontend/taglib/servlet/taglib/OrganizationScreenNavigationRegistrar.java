@@ -194,17 +194,19 @@ public class OrganizationScreenNavigationRegistrar {
 	}
 
 	private void _registerScreenNavigationEntry(
-		ScreenNavigationEntry screenNavigationEntry,
+		ScreenNavigationEntry<?> screenNavigationEntry,
 		Dictionary<String, Object> properties) {
 
 		_screenNavigationEntryServiceRegistrations.add(
 			_bundleContext.registerService(
-				ScreenNavigationEntry.class, screenNavigationEntry,
-				properties));
+				(Class<ScreenNavigationEntry<?>>)
+					(Class<?>)ScreenNavigationEntry.class,
+				screenNavigationEntry, properties));
 	}
 
 	private void _registerScreenNavigationEntry(
-		ScreenNavigationEntry screenNavigationEntry, Integer serviceRanking) {
+		ScreenNavigationEntry<?> screenNavigationEntry,
+		Integer serviceRanking) {
 
 		_registerScreenNavigationEntry(
 			screenNavigationEntry, _getProperties(serviceRanking));
@@ -232,7 +234,7 @@ public class OrganizationScreenNavigationRegistrar {
 
 	private final List<ServiceRegistration<ScreenNavigationCategory>>
 		_screenNavigationCategoryServiceRegistrations = new ArrayList<>();
-	private final List<ServiceRegistration<ScreenNavigationEntry>>
+	private final List<ServiceRegistration<ScreenNavigationEntry<?>>>
 		_screenNavigationEntryServiceRegistrations = new ArrayList<>();
 
 }

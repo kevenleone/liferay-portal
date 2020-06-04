@@ -17,7 +17,7 @@ definition {
 
 		if ("${testPortalInstance}" != "true") {
 
-			ProductMenu.gotoPortlet(
+			GlobalMenu.gotoPortlet(
 				category = "Configuration",
 				panel = "Control Panel",
 				portlet = "Search");
@@ -25,16 +25,16 @@ definition {
 			SearchAdministration.executeSearchActions(actionsDescription = "Reindex all search indexes.");
 		}
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Metrics");
 
 		WorkflowMetrics.executeIndexActions(actionDescription = "Workflow Indexes");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Metrics");
 	}
 
@@ -46,15 +46,16 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow");
+			portlet = "Workflow",
+			site = "Guest");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "No Workflow",
 			workflowResourceValue = "Blogs Entry");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Metrics");
 
 		WorkflowMetrics.tearDown();
@@ -288,7 +289,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow");
+			portlet = "Workflow",
+			site = "Guest");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver",
@@ -296,13 +298,14 @@ definition {
 
 		WorkflowMetrics.createUsersAndAssignInstancesWithGroovy(
 			numberOfBlogInstances = "3",
-			numberOfUsers = "3");
+			numberOfUsers = "3",
+			site = "Guest");
 
 		WorkflowMetrics.executeWorkflowScript(scriptName = "CompleteTasksAssignedToUsers.groovy");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Metrics");
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
@@ -387,20 +390,22 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow");
+			portlet = "Workflow",
+			site = "Guest");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver",
 			workflowResourceValue = "Blogs Entry");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Metrics");
 
 		WorkflowMetrics.createUsersAndAssignInstancesWithGroovy(
 			numberOfBlogInstances = "5",
-			numberOfUsers = "5");
+			numberOfUsers = "5",
+			site = "Guest");
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
@@ -508,7 +513,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow");
+			portlet = "Workflow",
+			site = "Guest");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver",
@@ -719,7 +725,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow");
+			portlet = "Workflow",
+			site = "Guest");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver",
@@ -910,7 +917,8 @@ definition {
 
 		WorkflowMetrics.createUsersAndAssignInstances(
 			numberOfBlogInstances = "4",
-			numberOfUsers = "3");
+			numberOfUsers = "3",
+			site = "Guest");
 
 		ProductMenu.gotoPortlet(
 			category = "Content &amp; Data",
@@ -992,6 +1000,46 @@ definition {
 			taskName = "Completed");
 	}
 
+	@description = "LRQA-55452 Automate LPS-102663: [Dashboard] Reassign Workflow instances individually"
+	@priority = "5"
+	test ReassignWorkflowInstance {
+		property portal.acceptance = "true";
+
+		WorkflowMetrics.singleReassignSetup();
+		WorkflowMetrics.goToWorkflowAllItems();
+		WorkflowMetrics.goToReassignSelectTask();
+		WorkflowMetrics.assertBulkModalTable();
+
+		AssertElementPresent(locator1 = "WorkflowReassignModal#REASSIGN_MODAL");
+
+		WorkflowMetrics.assertAssignees();
+
+		WorkflowMetrics.selectNewAssignee();
+		MouseOver(
+			locator1 = "WorkflowAllItems#KEBAB_DROPDOWN",
+			task = "1");
+		Click(
+			locator1 = "WorkflowAllItems#REASSIGN_ICON",
+			task = "1");
+		AssertElementPresent(locator1 = "WorkflowReassignModal#REASSIGN_MODAL");
+		Click(locator1 = "WorkflowReassignModal#SEARCH_NEW_ASSIGNEE");
+		WorkflowMetrics.assertNoAssignees();
+
+		UserBar.gotoDropdownItem(dropdownItem = "My Workflow Tasks");
+		Workflow.approveTaskByActions(
+			workflowAssetTitle = "Blogs Entry Title 1",
+			workflowAssetType = "Blogs Entry",
+			workflowTask = "Review");
+		WorkflowMetrics.goToWorkflowAllItems();
+		Click(locator1 = "WorkflowAllItems#CLEAR_ALL_BUTTON");
+		MouseOver(
+			locator1 = "WorkflowAllItems#KEBAB_DROPDOWN",
+			task = "1");
+		AssertElementNotPresent(
+			locator1 = "WorkflowAllItems#REASSIGN_ICON",
+			task = "1");
+	}
+
 	@description = "LRQA-53638 Automate LPS-100677: [Performance] Search for a step in all steps performance list and LRQA-53637 Automate LPS-100678: [Performance] Filter all step performance by completion period"
 	@priority = "5"
 	test SearchAndFilterOnPerformanceByStepPage {
@@ -1001,7 +1049,8 @@ definition {
 
 		WorkflowMetrics.createUsersAndAssignInstancesWithGroovy(
 			numberOfBlogInstances = "4",
-			numberOfUsers = "3");
+			numberOfUsers = "3",
+			site = "Guest");
 
 		WorkflowMetrics.executeWorkflowScript(scriptName = "CompleteTasksAssignedToUsers.groovy");
 
@@ -1097,7 +1146,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow");
+			portlet = "Workflow",
+			site = "Guest");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver",
@@ -1105,13 +1155,14 @@ definition {
 
 		WorkflowMetrics.createUsersAndAssignInstancesWithGroovy(
 			numberOfBlogInstances = "3",
-			numberOfUsers = "3");
+			numberOfUsers = "3",
+			site = "Guest");
 
 		WorkflowMetrics.executeWorkflowScript(scriptName = "CompleteTasksAssignedToUsers.groovy");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Metrics");
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
@@ -1179,7 +1230,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow");
+			portlet = "Workflow",
+			site = "Guest");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver",
@@ -1239,6 +1291,7 @@ definition {
 	@priority = "5"
 	test VerifyAllItemsFilterFromMetrics {
 		property portal.acceptance = "true";
+		property portal.upstream = "quarantine";
 		property test.name.skip.portal.instance = "WorkflowMetrics#VerifyAllItemsFilterFromMetrics";
 
 		var key_workflowInstanceName = "Blog Entry Title";
@@ -1247,7 +1300,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow");
+			portlet = "Workflow",
+			site = "Guest");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "${key_workflowProcessName}",
@@ -1336,11 +1390,13 @@ definition {
 	@priority = "5"
 	test VerifyCustomRangeDateInput {
 		property portal.acceptance = "true";
+		property portal.upstream = "quarantine";
 
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow");
+			portlet = "Workflow",
+			site = "Guest");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver",
@@ -1362,9 +1418,9 @@ definition {
 			workflowAssetType = "Blogs Entry",
 			workflowTask = "Review");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Metrics");
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
@@ -1425,7 +1481,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow");
+			portlet = "Workflow",
+			site = "Guest");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver",
@@ -1455,9 +1512,9 @@ definition {
 			workflowAssetType = "Blogs Entry",
 			workflowTask = "Review");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Metrics");
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
@@ -1488,6 +1545,7 @@ definition {
 	@priority = "5"
 	test ViewPendingItems {
 		property portal.acceptance = "true";
+		property portal.upstream = "quarantine";
 
 		property test.name.skip.portal.instance = "WorkflowMetrics#ViewPendingItems";
 
@@ -1576,11 +1634,13 @@ definition {
 	@priority = "5"
 	test ViewPerformanceByAssigneePage {
 		property portal.acceptance = "true";
+		property portal.upstream = "quarantine";
 		property test.name.skip.portal.instance = "WorkflowMetrics#ViewPerformanceByAssigneePage";
 
 		WorkflowMetrics.createUsersAndAssignInstances(
 			numberOfBlogInstances = "4",
-			numberOfUsers = "3");
+			numberOfUsers = "3",
+			site = "Guest");
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
@@ -1641,7 +1701,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow");
+			portlet = "Workflow",
+			site = "Guest");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver",
@@ -1684,9 +1745,9 @@ definition {
 			workflowAssetType = "Blogs Entry",
 			workflowTask = "Review");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Metrics");
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
@@ -1707,7 +1768,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow");
+			portlet = "Workflow",
+			site = "Guest");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver",
@@ -1767,7 +1829,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow");
+			portlet = "Workflow",
+			site = "Guest");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver",
@@ -1775,7 +1838,8 @@ definition {
 
 		WorkflowMetrics.createUsersAndAssignInstancesWithGroovy(
 			numberOfBlogInstances = "1",
-			numberOfUsers = "1");
+			numberOfUsers = "1",
+			site = "Guest");
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 
@@ -1797,9 +1861,9 @@ definition {
 
 		WorkflowMetrics.executeWorkflowScript(scriptName = "CompleteTasksAssignedToUsers.groovy");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Metrics");
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
@@ -1831,7 +1895,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Configuration",
 			panel = "Site Administration",
-			portlet = "Workflow");
+			portlet = "Workflow",
+			site = "Guest");
 
 		Workflow.configureWorkflow(
 			workflowDefinition = "Single Approver",
@@ -1862,9 +1927,9 @@ definition {
 			workflowAssetType = "Blogs Entry",
 			workflowTask = "Review");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Metrics");
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
@@ -1878,7 +1943,8 @@ definition {
 
 		WorkflowMetrics.createUsersAndAssignInstancesWithGroovy(
 			numberOfBlogInstances = "10",
-			numberOfUsers = "10");
+			numberOfUsers = "10",
+			site = "Guest");
 
 		WorkflowMetrics.executeWorkflowScript(scriptName = "CompleteTasksAssignedToUsers.groovy");
 
@@ -1929,7 +1995,8 @@ definition {
 
 		WorkflowMetrics.createUsersAndAssignInstances(
 			numberOfBlogInstances = "3",
-			numberOfUsers = "3");
+			numberOfUsers = "3",
+			site = "Guest");
 
 		JSONBlog.addEntry(
 			entryContent = "Blogs Entry 4 Content",
@@ -2000,11 +2067,13 @@ definition {
 	@priority = "5"
 	test ViewWorkloadByAssigneePage {
 		property portal.acceptance = "true";
+		property portal.upstream = "quarantine";
 		property test.name.skip.portal.instance = "WorkflowMetrics#ViewWorkloadByAssigneePage";
 
 		WorkflowMetrics.createUsersAndAssignInstances(
 			numberOfBlogInstances = "4",
-			numberOfUsers = "3");
+			numberOfUsers = "3",
+			site = "Guest");
 
 		WorkflowMetrics.goToWorkflowProcessMetrics(workflowProcessName = "Single Approver");
 

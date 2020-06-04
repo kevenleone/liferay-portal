@@ -37,10 +37,10 @@ import org.osgi.service.component.annotations.Reference;
 	immediate = true, property = "service.ranking:Integer=-10000",
 	service = DocumentContributor.class
 )
-public class StagingDocumentContributor implements DocumentContributor {
+public class StagingDocumentContributor implements DocumentContributor<Object> {
 
 	@Override
-	public void contribute(Document document, BaseModel baseModel) {
+	public void contribute(Document document, BaseModel<Object> baseModel) {
 		String className = document.get(Field.ENTRY_CLASS_NAME);
 
 		if (Validator.isNull(className)) {

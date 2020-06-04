@@ -84,10 +84,12 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
+import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
@@ -1278,7 +1280,7 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 
 		dir = dir.getCanonicalFile();
 
-		for (File file : dir.listFiles()) {
+		for (File file : _listConfigs(dir)) {
 			method.invoke(configInstaller, file);
 		}
 	}
@@ -1380,6 +1382,58 @@ public class ModuleFrameworkImpl implements ModuleFramework {
 		}
 
 		return true;
+	}
+
+	private List<File> _listConfigs(File dir) {
+		if (!dir.isDirectory()) {
+			return Collections.<File>emptyList();
+		}
+
+		BundleContext bundleContext = _framework.getBundleContext();
+
+		String subdirMode = bundleContext.getProperty(
+			"felix.fileinstall.subdir.mode");
+
+		if (Objects.equals(subdirMode, "recurse")) {
+			Queue<File> queue = new LinkedList<>();
+
+			queue.add(dir);
+
+			List<File> files = new ArrayList<>();
+
+			File curDir = null;
+
+			while ((curDir = queue.poll()) != null) {
+				for (File file : curDir.listFiles()) {
+					if (file.isDirectory()) {
+						queue.add(file);
+					}
+					else {
+						String name = file.getName();
+
+						if (name.endsWith(".cfg") || name.endsWith(".config")) {
+							files.add(file);
+						}
+					}
+				}
+			}
+
+			return files;
+		}
+
+		return Arrays.asList(
+			dir.listFiles(
+				file -> {
+					if (file.isFile()) {
+						String name = file.getName();
+
+						if (name.endsWith(".cfg") || name.endsWith(".config")) {
+							return true;
+						}
+					}
+
+					return false;
+				}));
 	}
 
 	private String _parseBundleSymbolicName(Attributes attributes) {

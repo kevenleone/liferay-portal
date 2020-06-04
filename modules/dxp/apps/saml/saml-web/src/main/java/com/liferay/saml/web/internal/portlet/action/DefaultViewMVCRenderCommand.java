@@ -131,7 +131,7 @@ public class DefaultViewMVCRenderCommand implements MVCRenderCommand {
 			(ThemeDisplay)httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
 
-		SearchContainer searchContainer = new SearchContainer(
+		SearchContainer<?> searchContainer = new SearchContainer(
 			renderRequest, null, null, SearchContainer.DEFAULT_CUR_PARAM, 0,
 			SearchContainer.DEFAULT_DELTA, renderResponse.createRenderURL(),
 			null, null);
@@ -167,7 +167,7 @@ public class DefaultViewMVCRenderCommand implements MVCRenderCommand {
 
 		PortletURL portletURL = renderResponse.createRenderURL();
 
-		SearchContainer searchContainer = new SearchContainer(
+		SearchContainer<?> searchContainer = new SearchContainer(
 			renderRequest, null, null, SearchContainer.DEFAULT_CUR_PARAM, 0,
 			SearchContainer.DEFAULT_DELTA, portletURL, null, null);
 

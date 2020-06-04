@@ -23,7 +23,7 @@ import com.liferay.portal.configuration.metatype.annotations.ExtendedObjectClass
  */
 @ExtendedObjectClassDefinition(
 	category = "sso", factoryInstanceLabelAttribute = "providerName",
-	scope = ExtendedObjectClassDefinition.Scope.SYSTEM
+	scope = ExtendedObjectClassDefinition.Scope.COMPANY
 )
 @Meta.OCD(
 	factory = true,

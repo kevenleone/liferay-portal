@@ -246,6 +246,14 @@ public class SegmentsExperienceLocalServiceImpl
 
 	@Override
 	public SegmentsExperience fetchSegmentsExperience(
+		long groupId, long classNameId, long classPK, int priority) {
+
+		return segmentsExperiencePersistence.fetchByG_C_C_P(
+			groupId, classNameId, classPK, priority);
+	}
+
+	@Override
+	public SegmentsExperience fetchSegmentsExperience(
 		long groupId, String segmentsExperienceKey) {
 
 		return segmentsExperiencePersistence.fetchByG_S(

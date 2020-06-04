@@ -39,6 +39,8 @@ definition {
 	@description = "This is a use case for LPS-113740."
 	@priority = "4"
 	test ChangeSitePageVariationInPagesAdmin {
+		property portal.upstream = "quarantine";
+
 		Staging.addSitePagesVariationPG(
 			copySitePagesVariationName = "Main Variation",
 			sitePagesVariationName = "Summer");
@@ -80,6 +82,8 @@ definition {
 
 	@priority = "4"
 	test DeleteChildPageFromVariationWhereNotEnabled {
+		property portal.upstream = "quarantine";
+
 		Staging.addSitePagesVariationPG(
 			copySitePagesVariationName = "Main Variation",
 			sitePagesVariationName = "Summer");
@@ -114,6 +118,8 @@ definition {
 
 	@priority = "4"
 	test EnableAndDeleteSitePageVariationPage {
+		property portal.upstream = "quarantine";
+
 		Staging.addSitePagesVariationPG(
 			copySitePagesVariationName = "Main Variation",
 			sitePagesVariationName = "Test Site Pages Variation");
@@ -308,7 +314,7 @@ definition {
 
 		Staging.publishToLive();
 
-		ProductMenu.gotoLiveSite();
+		ProductMenu.gotoLiveSite(site = "Site Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
@@ -342,7 +348,7 @@ definition {
 
 		Staging.publishToLive();
 
-		ProductMenu.gotoLiveSite();
+		ProductMenu.gotoLiveSite(site = "Site Name");
 
 		Portlet.viewSpecificPG(portletName = "Web Content Display");
 
@@ -369,7 +375,7 @@ definition {
 
 		Staging.publishToLive();
 
-		ProductMenu.gotoLiveSite();
+		ProductMenu.gotoLiveSite(site = "Site Name");
 
 		Navigator.gotoStagedSitePage(
 			pageName = "Staging Test Page",
@@ -391,7 +397,7 @@ definition {
 
 		Staging.publishToLive();
 
-		ProductMenu.gotoLiveSite();
+		ProductMenu.gotoLiveSite(site = "Site Name");
 
 		Portlet.viewSpecificPG(portletName = "Web Content Display");
 
@@ -400,6 +406,8 @@ definition {
 
 	@priority = "4"
 	test StagingMergeSitePagesVariation1 {
+		property portal.upstream = "quarantine";
+
 		Navigator.openSiteURL(siteName = "Site Name");
 
 		Navigator.gotoStagedSitePage(
@@ -440,7 +448,7 @@ definition {
 
 		Staging.publishToLive();
 
-		ProductMenu.gotoLiveSite();
+		ProductMenu.gotoLiveSite(site = "Site Name");
 
 		Navigator.gotoSitePage(
 			pageName = "Page 2",
@@ -453,6 +461,8 @@ definition {
 
 	@priority = "4"
 	test StagingMergeSitePagesVariation2 {
+		property portal.upstream = "quarantine";
+
 		Navigator.openSiteURL(siteName = "Site Name");
 
 		Navigator.gotoStagedSitePage(
@@ -526,7 +536,7 @@ definition {
 
 		Staging.publishToLive();
 
-		ProductMenu.gotoLiveSite();
+		ProductMenu.gotoLiveSite(site = "Site Name");
 
 		Navigator.gotoSitePage(
 			pageName = "Staging Test Page",
@@ -719,6 +729,8 @@ definition {
 
 	@priority = "5"
 	test StagingSiteVariationIncompletePage {
+		property portal.upstream = "quarantine";
+
 		Staging.addSitePagesVariationPG(sitePagesVariationName = "Site Pages Variation Name");
 
 		SitePages.openPagesAdmin(siteURLKey = "site-name-staging");

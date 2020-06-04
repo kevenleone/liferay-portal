@@ -30,6 +30,27 @@
 		"react-dnd-html5-backend": "10.0.1",
 		"react-router-dom": "^5.0.1"
 	},
+	"jest": {
+		"collectCoverageFrom": [
+			"src/main/resources/META-INF/resources/data_layout_builder/js/**/*.es.js"
+		],
+		"moduleNameMapper": {
+			"^dynamic-data-mapping-form-builder$": "<rootDir>/test/mock/dynamic-data-mapping-form-builder.es.js"
+		},
+		"setupFilesAfterEnv": [
+			"<rootDir>/jest-setup.config.js"
+		],
+		"snapshotSerializers": [
+			"metal-jest-serializer"
+		],
+		"testMatch": [
+			"<rootDir>/test/js/**/*.es.js"
+		],
+		"testPathIgnorePatterns": [
+			"<rootDir>/test/mock",
+			"<rootDir>/jest-setup.config.js"
+		]
+	},
 	"main": "data_layout_builder/js/index.es.js",
 	"name": "data-engine-taglib",
 	"private": true,

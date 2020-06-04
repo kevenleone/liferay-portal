@@ -30,12 +30,13 @@ import javax.ws.rs.core.UriInfo;
 public class CreatorStatisticsUtil {
 
 	public static CreatorStatistics toCreatorStatistics(
-			MBStatsUserLocalService mbStatsUserLocalService, String languageId,
-			UriInfo uriInfo, User user)
+			long groupId, String languageId,
+			MBStatsUserLocalService mbStatsUserLocalService, UriInfo uriInfo,
+			User user)
 		throws PortalException {
 
 		String[] ranks = mbStatsUserLocalService.getUserRank(
-			user.getGroupId(), languageId, user.getUserId());
+			groupId, languageId, user.getUserId());
 
 		return new CreatorStatistics() {
 			{

@@ -116,6 +116,7 @@ public class CalculateSegmentsExperimentEstimatedDurationMVCActionCommand
 		}
 
 		return _asahFaroBackendClient.calculateExperimentEstimatedDaysDuration(
+			segmentsExperiment.getCompanyId(),
 			segmentsExperiment.getSegmentsExperimentKey(),
 			ExperimentSettingsUtil.toExperimentSettings(
 				confidenceLevel, segmentsExperienceKeySplitMap,

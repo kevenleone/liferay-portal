@@ -94,7 +94,7 @@ renderResponse.setTitle((formInstance == null) ? LanguageUtil.get(request, "new-
 		<aui:input name="formInstanceId" type="hidden" value="<%= formInstanceId %>" />
 		<aui:input name="groupId" type="hidden" value="<%= groupId %>" />
 		<aui:input name="ddmStructureId" type="hidden" value="<%= ddmStructureId %>" />
-		<aui:input name="name" type="hidden" value="<%= ddmFormAdminDisplayContext.getFormLocalizedName() %>" />
+		<aui:input name="name" type="hidden" value="<%= ddmFormAdminDisplayContext.getFormLocalizedName(formInstance) %>" />
 		<aui:input name="description" type="hidden" value="<%= ddmFormAdminDisplayContext.getFormLocalizedDescription() %>" />
 		<aui:input name="serializedFormBuilderContext" type="hidden" value="<%= serializedFormBuilderContext %>" />
 		<aui:input name="serializedSettingsContext" type="hidden" value="" />
@@ -195,6 +195,8 @@ renderResponse.setTitle((formInstance == null) ? LanguageUtil.get(request, "new-
 
 					Liferay.Forms.instance = new packageName.Form(
 						{
+							autocompleteUserURL:
+								'<%= ddmFormAdminDisplayContext.getAutocompleteUserURL() %>',
 							context: context,
 							dataProviderInstanceParameterSettingsURL:
 								'<%= dataProviderInstanceParameterSettingsURL %>',
@@ -211,16 +213,14 @@ renderResponse.setTitle((formInstance == null) ? LanguageUtil.get(request, "new-
 							functionsURL: '<%= functionsURL %>',
 							groupId: <%= groupId %>,
 							localizedDescription: <%= ddmFormAdminDisplayContext.getFormLocalizedDescription() %>,
-							localizedName: <%= ddmFormAdminDisplayContext.getFormLocalizedName() %>,
+							localizedName: <%= ddmFormAdminDisplayContext.getFormLocalizedName(formInstance) %>,
 							namespace: '<portlet:namespace />',
 							published: <%= ddmFormAdminDisplayContext.isFormPublished() %>,
 							rolesURL: '<%= rolesURL %>',
 							rules: <%= serializedDDMFormRules %>,
 							saved: <%= formInstance != null %>,
 							shareFormInstanceURL:
-								'<%= ddmFormAdminDisplayContext.getShareFormInstanceURL() %>',
-							sharingUserAutocompleteURL:
-								'<%= ddmFormAdminDisplayContext.getSharingUserAutocompleteURL() %>',
+								'<%= ddmFormAdminDisplayContext.getShareFormInstanceURL(formInstance) %>',
 							showPublishAlert: <%= ddmFormAdminDisplayContext.isShowPublishAlert() %>,
 							spritemap: Liferay.DDM.FormSettings.spritemap,
 							strings: Liferay.DDM.FormSettings.strings,

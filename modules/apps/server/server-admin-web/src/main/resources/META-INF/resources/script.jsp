@@ -38,7 +38,7 @@ String scriptOutput = (String)SessionMessages.get(renderRequest, "scriptOutput")
 	ScriptingException se = (ScriptingException)errorException;
 	%>
 
-	<pre><%= se.getMessage() %></pre>
+	<pre><%= HtmlUtil.escape(se.getMessage()) %></pre>
 </liferay-ui:error>
 
 <aui:fieldset-group markupView="lexicon">
@@ -64,7 +64,7 @@ String scriptOutput = (String)SessionMessages.get(renderRequest, "scriptOutput")
 <c:if test="<%= Validator.isNotNull(scriptOutput) %>">
 	<b><liferay-ui:message key="output" /></b>
 
-	<pre><%= scriptOutput %></pre>
+	<pre><%= HtmlUtil.escape(scriptOutput) %></pre>
 </c:if>
 
 <aui:button-row>

@@ -18,6 +18,7 @@ import com.liferay.info.item.renderer.template.InfoItemRendererTemplate;
 import com.liferay.portal.kernel.util.ListUtil;
 import com.liferay.portal.kernel.util.LocaleUtil;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
@@ -29,8 +30,20 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface InfoItemTemplatedRenderer<T> extends InfoItemRenderer<T> {
 
+	public default List<InfoItemRendererTemplate> getInfoItemRendererTemplates(
+		String className, String classTypeKey, Locale locale) {
+
+		return Collections.emptyList();
+	}
+
 	public List<InfoItemRendererTemplate> getInfoItemRendererTemplates(
 		T t, Locale locale);
+
+	public default String getInfoItemRendererTemplatesGroupLabel(
+		String className, String classTypeKey, Locale locale) {
+
+		return getLabel(locale);
+	}
 
 	public default String getInfoItemRendererTemplatesGroupLabel(
 		T t, Locale locale) {

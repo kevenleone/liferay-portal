@@ -26,6 +26,8 @@ import './WizardPageRenderer.soy';
 
 import 'clay-button';
 
+import 'clay-tooltip';
+
 import 'clay-dropdown';
 
 import templates from './PageRenderer.soy';
@@ -217,6 +219,26 @@ class PageRenderer extends Component {
 		this.emit('fieldFocused', event);
 	}
 
+	_handleMovePageDownClicked() {
+		const {pageIndex} = this;
+		const {dispatch} = this.context;
+
+		dispatch('pagesSwapped', {
+			firstIndex: pageIndex,
+			secondIndex: pageIndex + 1,
+		});
+	}
+
+	_handleMovePageUpClicked() {
+		const {pageIndex} = this;
+		const {dispatch} = this.context;
+
+		dispatch('pagesSwapped', {
+			firstIndex: pageIndex,
+			secondIndex: pageIndex - 1,
+		});
+	}
+
 	_pageSettingsItems(pages) {
 		const {successPageSettings} = this;
 		const pageSettingsItems = [
@@ -338,7 +360,10 @@ PageRenderer.STATE = {
 
 	strings: Config.object().value({
 		'add-success-page': Liferay.Language.get('add-success-page'),
+		'move-page-down': Liferay.Language.get('move-page-down'),
+		'move-page-up': Liferay.Language.get('move-page-up'),
 		'new-page': Liferay.Language.get('new-page'),
+		'page-options': Liferay.Language.get('page-options'),
 		'success-page': Liferay.Language.get('success-page'),
 	}),
 

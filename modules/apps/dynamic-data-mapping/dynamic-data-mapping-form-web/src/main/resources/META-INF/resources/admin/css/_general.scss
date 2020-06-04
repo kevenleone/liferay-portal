@@ -211,6 +211,15 @@ td.lfr-name-column {
 		width: inherit;
 	}
 
+	.forms-management-bar,
+	.navigation-bar-secondary,
+	.management-bar {
+		position: sticky;
+		top: 56px;
+		width: 100%;
+		z-index: 10;
+	}
+
 	.icon-asterisk {
 		margin-left: 4px;
 	}
@@ -223,6 +232,10 @@ td.lfr-name-column {
 		margin-top: -25px;
 		position: absolute;
 		z-index: 2;
+	}
+
+	.management-bar {
+		top: 102px;
 	}
 
 	.radio-inline {

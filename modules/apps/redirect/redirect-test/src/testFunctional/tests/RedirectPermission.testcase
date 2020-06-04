@@ -1,8 +1,6 @@
 @component-name = "portal-collaboration"
 definition {
 
-	property osgi.module.configuration.file.names = "com.liferay.redirect.internal.configuration.FFRedirectConfiguration.config";
-	property osgi.module.configurations = "enabled=B&quot;true&quot;";
 	property portal.release = "true";
 	property portal.upstream = "true";
 	property testray.main.component.name = "Redirect";
@@ -251,11 +249,9 @@ definition {
 			roleTitle = "Redirect Orgrole Name",
 			roleType = "Organization");
 
-		Redirect.openRedirectAdmin(siteURLKey = "organization-name");
-
-		Redirect.addEntry(
+		JSONRedirect.addRedirect(
 			destinationURL = "${portalURL}/web/organization-name/test-destination-page",
-			siteName = "organization-name",
+			groupName = "Organization Name",
 			sourceURL = "test-source-page");
 
 		User.logoutAndLoginPG(
@@ -319,11 +315,9 @@ definition {
 			resourceName = "com.liferay.redirect.model.RedirectEntry",
 			roleTitle = "Redirect Regrole Name");
 
-		Redirect.openRedirectAdmin(siteURLKey = "guest");
-
-		Redirect.addEntry(
+		JSONRedirect.addRedirect(
 			destinationURL = "${portalURL}/web/guest/test-destination-page",
-			siteName = "guest",
+			groupName = "Guest",
 			sourceURL = "test-source-page");
 
 		User.logoutAndLoginPG(
@@ -393,11 +387,9 @@ definition {
 			roleTitle = "Redirect Siterole Name",
 			roleType = "site");
 
-		Redirect.openRedirectAdmin(siteURLKey = "test-site-name");
-
-		Redirect.addEntry(
+		JSONRedirect.addRedirect(
 			destinationURL = "${portalURL}/web/test-site-name/test-destination-page",
-			siteName = "test-site-name",
+			groupName = "Test Site Name",
 			sourceURL = "test-source-page");
 
 		User.logoutAndLoginPG(
@@ -464,11 +456,9 @@ definition {
 			roleTitle = "Redirect Orgrole Name",
 			roleType = "organization");
 
-		Redirect.openRedirectAdmin(siteURLKey = "organization-name");
-
-		Redirect.addEntry(
+		JSONRedirect.addRedirect(
 			destinationURL = "${portalURL}/web/organization-name/test-destination-page",
-			siteName = "organization-name",
+			groupName = "Organization Name",
 			sourceURL = "test-source-page");
 
 		User.logoutAndLoginPG(
@@ -537,11 +527,9 @@ definition {
 			resourceName = "com.liferay.redirect.model.RedirectEntry",
 			roleTitle = "Redirect Regrole Name");
 
-		Redirect.openRedirectAdmin(siteURLKey = "guest");
-
-		Redirect.addEntry(
+		JSONRedirect.addRedirect(
 			destinationURL = "${portalURL}/web/guest/test-destination-page",
-			siteName = "guest",
+			groupName = "Guest",
 			sourceURL = "test-source-page");
 
 		User.logoutAndLoginPG(
@@ -616,11 +604,9 @@ definition {
 			roleTitle = "Redirect Siterole Name",
 			roleType = "site");
 
-		Redirect.openRedirectAdmin(siteURLKey = "test-site-name");
-
-		Redirect.addEntry(
+		JSONRedirect.addRedirect(
 			destinationURL = "${portalURL}/web/test-site-name/test-destination-page",
-			siteName = "test-site-name",
+			groupName = "Test Site Name",
 			sourceURL = "test-source-page");
 
 		User.logoutAndLoginPG(
@@ -686,11 +672,9 @@ definition {
 			roleTitle = "Redirect Orgrole Name",
 			roleType = "organization");
 
-		Redirect.openRedirectAdmin(siteURLKey = "organization-name");
-
-		Redirect.addEntry(
+		JSONRedirect.addRedirect(
 			destinationURL = "${portalURL}/web/organization-name/test-destination-page",
-			siteName = "organization-name",
+			groupName = "Organization Name",
 			sourceURL = "test-source-page");
 
 		User.logoutAndLoginPG(
@@ -726,11 +710,9 @@ definition {
 			groupName = "Guest",
 			layoutName = "Test Destination Page");
 
-		Redirect.openRedirectAdmin(siteURLKey = "guest");
-
-		Redirect.addEntry(
+		JSONRedirect.addRedirect(
 			destinationURL = "${portalURL}/web/guest/test-destination-page",
-			siteName = "guest",
+			groupName = "Guest",
 			sourceURL = "test-source-page");
 
 		Permissions.setUpRegRoleLoginUserCP(
@@ -816,11 +798,9 @@ definition {
 			roleTitle = "Redirect Siterole Name",
 			roleType = "site");
 
-		Redirect.openRedirectAdmin(siteURLKey = "test-site-name");
-
-		Redirect.addEntry(
+		JSONRedirect.addRedirect(
 			destinationURL = "${portalURL}/web/test-site-name/test-destination-page",
-			siteName = "test-site-name",
+			groupName = "Test Site Name",
 			sourceURL = "test-source-page");
 
 		User.logoutAndLoginPG(

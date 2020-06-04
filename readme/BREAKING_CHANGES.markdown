@@ -20,7 +20,7 @@ Here are some of the types of changes documented in this file:
   replaces an old API, in spite of the old API being kept in Liferay Portal for
   backwards compatibility.
 
-*This document has been reviewed through commit `4f326e662e58`.*
+*This document has been reviewed through commit `b0f131f64818`.*
 
 ## Breaking Changes Contribution Guidelines
 
@@ -587,13 +587,13 @@ initialized by default.
 
 #### Who is affected?
 
-This affects any code that relies on `Liferay.Poller`; this is
-usually done via a call to `Liferay.Poller.init()` in a JSP.
+This affects any code that relies on `Liferay.Poller`; this is usually done via
+a call to `Liferay.Poller.init()` in a JSP.
 
 #### How should I update my code?
 
-There's no direct replacement for the `Liferay.Poller` utility.  If you
-need to initialize `Liferay.Poller`, do the following:
+There's no direct replacement for the `Liferay.Poller` utility. If you must
+initialize `Liferay.Poller`, update your JSP to use the code below:
 
 ```
 <%@ page import="com.liferay.petra.encryptor.Encryptor" %>
@@ -625,57 +625,82 @@ common case.
 
 #### What changed?
 
-ContentTransformerListener is now disabled by default.
+`ContentTransformerListener` is now disabled by default.
 
 #### Who is affected?
 
-Liferay installations who were using legacy web content features provided by the
-ContentTransformerListener such as embedding web content inside another web
-content, a legacy edit in place infrastructure, token replacements
-(@article_group_id@, @articleId;elementName@), etc.
+This affects Liferay Portal installations using legacy web content features
+provided by the `ContentTransformerListener`, such as embedding web content
+inside another web content, a legacy edit in place infrastructure, token
+replacements (`@article_group_id@`, `@articleId;elementName@`), etc.
 
 #### How should I update my code?
 
 There's no need to update your code. If you still want to use
-ContentTransformerListener, you can enable it in System Settings.
+`ContentTransformerListener`, you can enable it in System Settings via the
+*Enable ContentTransformerListener* property under *Content & Data* &rarr; *Web
+Content* &rarr; *Virtual Instance Scope* &rarr; *Web Content*.
 
 #### Why was this change made?
 
-ContentTransformerListener does a lot of string processing on article elements
-(calling HtmlUtil.stripComments and HtmlUtil.stripHtml on article fields). We
-disabled it to improve performance.
+`ContentTransformerListener` was disabled to improve performance, due to its
+expensive string processing on article elements (calling
+`HtmlUtil.stripComments` and `HtmlUtil.stripHtml` on article fields).
 
 ---------------------------------------
+
 ### Liferay.BrowserSelectors.run Is No Longer Called
 - **Date:** 2020-May-26
 - **JIRA Ticket:** [LPS-112983](https://issues.liferay.com/browse/LPS-112983)
 
 #### What changed?
 
-The `Liferay.BrowserSelectors.run()` function is no longer called on all pages
-and as a result some CSS classes are no longer present in the opening `<html>`
-tag. Many of these are now added to the `<body>` element instead.
+The `Liferay.BrowserSelectors.run()` function is no longer called on pages,
+which as a result removes some CSS classes from the opening `<html>` tag. Many
+of these are now added to the `<body>` element instead.
 
 #### Who is affected?
 
-This affects any code that relies on having the following CSS classes set on the
-`<html>` element: `aol`, `camino`, `edgeHTML` `edge`, `firefox`, `flock`
-`gecko`, `icab`, `ie11`, `ie6`, `ie7`, `ie9`, `ie`, `js` `konqueror`, `mac`
-`mozilla`, `netscape`, `opera`, `presto`, `safari` `secure`, `touch`, `trident`,
-`webkit`, and `win`.
+This affects any code that relies on these CSS classes in the `<html>` element:
 
-Instead, depending on which browser is being used, the following classes are
-added to the `<body>` element: `chrome`, `edge`, `firefox`, `ie`, `mobile`,
-and `other`.
+- `aol`
+- `camino`
+- `edgeHTML` or `edge`
+- `firefox`
+- `flock`
+- `gecko`
+- `icab`
+- `ie`, `ie6`, `ie7`, `ie9`, or `ie11`
+- `js`
+- `konqueror`
+- `mac`
+- `mozilla`
+- `netscape`
+- `opera`
+- `presto`
+- `safari`
+- `secure`
+- `touch`
+- `trident`
+- `webkit`
+- `win`
 
 #### How should I update my code?
 
-There's no direct replacement for the `Liferay.BrowserSelectors.run()`
-function, but you can adapt your CSS and JS to target the new classes on
-the `<body>` element instead.
+There's no direct replacement for the `Liferay.BrowserSelectors.run()` function,
+but you can adapt your CSS and JavaScript to target new classes on the `<body>`
+element instead. These classes are added to the `<body>` element to reflect
+the browser you're currently using:
 
-Alternatively, you can still invoke `Liferay.BrowserSelectors.run()` to
-apply the old classes to the `<html>` element with the following code:
+- `chrome`
+- `edge`
+- `firefox`
+- `ie`
+- `mobile`
+- `other`
+
+Alternatively, you can still invoke `Liferay.BrowserSelectors.run()` to apply
+the old classes to the `<html>` element with the code below:
 
 ```
 <aui:script use="liferay-browser-selectors">
@@ -685,10 +710,9 @@ apply the old classes to the `<html>` element with the following code:
 
 #### Why was this change made?
 
-The classes added to the top `<html>` element were being added via
-legacy JavaScript that depended on Alloy UI. With this change it is now
-done on the server side, streamlining page loads. Additionally, some of
-the previously added CSS classes were related to older browsers and are
-no longer relevant.
+The classes, some of which referred to outdated browsers, were being added to
+the top `<html>` element via legacy JavaScript that depended on Alloy UI. This
+change, which removes the outdated browser references, is now done on the server
+side, improving page loading times.
 
 ---------------------------------------

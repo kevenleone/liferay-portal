@@ -274,7 +274,7 @@ public class AnalyticsConfigurationTrackerImpl
 
 		message.put("command", AnalyticsMessagesProcessorCommand.ADD);
 
-		BaseModel baseModel = baseModels.get(0);
+		BaseModel<?> baseModel = baseModels.get(0);
 
 		message.put(
 			"entityModelListener",

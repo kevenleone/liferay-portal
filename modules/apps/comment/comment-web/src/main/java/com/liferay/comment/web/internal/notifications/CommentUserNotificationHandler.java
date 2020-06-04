@@ -69,7 +69,7 @@ public class CommentUserNotificationHandler
 	}
 
 	@Override
-	protected AssetRenderer getAssetRenderer(JSONObject jsonObject) {
+	protected AssetRenderer<?> getAssetRenderer(JSONObject jsonObject) {
 		MBDiscussion mbDiscussion = fetchDiscussion(jsonObject);
 
 		if (mbDiscussion == null) {
@@ -87,7 +87,7 @@ public class CommentUserNotificationHandler
 
 	@Override
 	protected String getTitle(
-		JSONObject jsonObject, AssetRenderer assetRenderer,
+		JSONObject jsonObject, AssetRenderer<?> assetRenderer,
 		ServiceContext serviceContext) {
 
 		MBDiscussion mbDiscussion = fetchDiscussion(jsonObject);

@@ -311,7 +311,7 @@ public class XMLSecurityTest extends BaseSamlTestCase {
 			_webSsoProfileImpl.decodeAuthnRequest(
 				mockHttpServletRequest, mockHttpServletResponse);
 
-		MessageContext samlMessageContext =
+		MessageContext<?> samlMessageContext =
 			samlSsoRequestContext.getSAMLMessageContext();
 
 		InOutOperationContext<AuthnRequest, ?> inOutOperationContext =

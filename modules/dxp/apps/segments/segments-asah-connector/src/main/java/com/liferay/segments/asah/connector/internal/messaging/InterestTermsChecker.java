@@ -36,10 +36,10 @@ import org.osgi.service.component.annotations.Reference;
 /**
  * @author Sarai Díaz
  */
-@Component(immediate = true, service = InterestTermsChecker.class)
+@Component(service = InterestTermsChecker.class)
 public class InterestTermsChecker {
 
-	public void checkInterestTerms(String userId) {
+	public void checkInterestTerms(long companyId, String userId) {
 		if (_asahInterestTermCache.getInterestTerms(userId) != null) {
 			return;
 		}
@@ -56,7 +56,7 @@ public class InterestTermsChecker {
 		}
 
 		Results<Topic> interestTermsResults =
-			_asahFaroBackendClient.getInterestTermsResults(userId);
+			_asahFaroBackendClient.getInterestTermsResults(companyId, userId);
 
 		if (interestTermsResults == null) {
 			if (_log.isDebugEnabled()) {

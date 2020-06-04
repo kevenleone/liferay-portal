@@ -10,8 +10,34 @@ DataLayoutBuilder {
     "events": Object {},
   },
   "props": Object {
-    "readOnly": false,
-    "spritemap": "icons.svg",
+    "appContext": Array [
+      Object {},
+      [Function],
+    ],
+    "config": Object {
+      "allowFieldSets": true,
+      "allowMultiplePages": false,
+      "allowRules": false,
+      "allowSuccessPage": false,
+      "disabledProperties": Array [
+        "predefinedValue",
+      ],
+      "disabledTabs": Array [
+        "Autocomplete",
+      ],
+      "unimplementedProperties": Array [
+        "fieldNamespace",
+        "indexType",
+        "readOnly",
+        "validation",
+        "visibilityExpression",
+      ],
+    },
+    "context": Object {},
+    "dataLayoutBuilderId": "_com_liferay_journal_web_portlet_JournalPortlet_dataLayoutBuilder",
+    "fieldTypes": Array [],
+    "localizable": true,
+    "portletNamespace": "com_liferay_journal_web_portlet_JournalPortlet",
   },
   "refs": Object {},
   "state": Object {},

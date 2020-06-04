@@ -16,7 +16,7 @@ package com.liferay.portal.search.elasticsearch7.internal.cluster;
 
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
-import com.liferay.portal.search.elasticsearch7.internal.util.LogUtil;
+import com.liferay.portal.search.elasticsearch7.internal.util.SearchLogHelperUtil;
 
 import org.elasticsearch.action.ActionResponse;
 import org.elasticsearch.action.admin.indices.settings.put.UpdateSettingsRequest;
@@ -50,7 +50,7 @@ public class ReplicasManagerImpl implements ReplicasManager {
 			ActionResponse actionResponse = _indicesClient.putSettings(
 				updateSettingsRequest, RequestOptions.DEFAULT);
 
-			LogUtil.logActionResponse(_log, actionResponse);
+			SearchLogHelperUtil.logActionResponse(_log, actionResponse);
 		}
 		catch (Exception exception) {
 			if (_log.isWarnEnabled()) {

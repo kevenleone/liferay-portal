@@ -22,8 +22,8 @@ import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.search.elasticsearch7.internal.settings.SettingsBuilder;
-import com.liferay.portal.search.elasticsearch7.internal.util.LogUtil;
 import com.liferay.portal.search.elasticsearch7.internal.util.ResourceUtil;
+import com.liferay.portal.search.elasticsearch7.internal.util.SearchLogHelperUtil;
 import com.liferay.portal.search.elasticsearch7.settings.TypeMappingsHelper;
 
 import java.io.IOException;
@@ -69,7 +69,7 @@ public class LiferayDocumentTypeFactory implements TypeMappingsHelper {
 			ActionResponse actionResponse = _indicesClient.putMapping(
 				putMappingRequest, RequestOptions.DEFAULT);
 
-			LogUtil.logActionResponse(_log, actionResponse);
+			SearchLogHelperUtil.logActionResponse(_log, actionResponse);
 		}
 		catch (IOException ioException) {
 			throw new RuntimeException(ioException);

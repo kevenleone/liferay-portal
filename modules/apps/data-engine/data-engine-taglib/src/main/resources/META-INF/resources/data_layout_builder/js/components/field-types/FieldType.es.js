@@ -23,6 +23,7 @@ import {getEmptyImage} from 'react-dnd-html5-backend';
 
 import {DRAG_FIELD_TYPE} from '../../drag-and-drop/dragTypes.es';
 import Button from '../button/Button.es';
+import DropDown from '../drop-down/DropDown.es';
 import FieldTypeDragPreview from './FieldTypeDragPreview.es';
 
 const ICONS = {
@@ -35,6 +36,7 @@ const ICONS = {
 
 export default (props) => {
 	const {
+		actions,
 		active,
 		className,
 		deleteLabel = Liferay.Language.get('delete'),
@@ -46,9 +48,9 @@ export default (props) => {
 		icon,
 		label,
 		name,
-		onClick = () => {},
+		onClick,
 		onDelete,
-		onDoubleClick = () => {},
+		onDoubleClick,
 	} = props;
 
 	const [{dragging}, drag, preview] = useDrag({
@@ -68,10 +70,6 @@ export default (props) => {
 	}, [preview]);
 
 	const handleOnClick = () => {
-		if (disabled) {
-			return;
-		}
-
 		onClick({...props});
 	};
 
@@ -102,8 +100,8 @@ export default (props) => {
 				}
 			)}
 			data-field-type-name={name}
-			onClick={() => handleOnClick()}
-			onDoubleClick={() => handleOnDoubleClick()}
+			onClick={onClick && handleOnClick}
+			onDoubleClick={onDoubleClick && handleOnDoubleClick}
 			ref={drag}
 		>
 			{dragAlignment === 'left' && (
@@ -135,6 +133,12 @@ export default (props) => {
 					<p className="list-group-subtitle text-truncate">
 						<small>{description}</small>
 					</p>
+				)}
+			</div>
+
+			<div className="autofit-col pr-2">
+				{actions && (
+					<DropDown actions={actions} dropDownSymbol="ellipsis-h" />
 				)}
 			</div>
 

@@ -46,6 +46,52 @@ public class RadioDDMFormFieldTypeReportProcessorTest extends PowerMockito {
 	}
 
 	@Test
+	public void testProcessDDMFormInstanceReportOnDeleteEvent()
+		throws Exception {
+
+		DDMFormFieldValue ddmFormFieldValue = mock(DDMFormFieldValue.class);
+
+		when(
+			ddmFormFieldValue.getName()
+		).thenReturn(
+			"field1"
+		);
+
+		when(
+			ddmFormFieldValue.getType()
+		).thenReturn(
+			DDMFormFieldType.RADIO
+		);
+
+		Value value = new LocalizedValue();
+
+		value.addString(value.getDefaultLocale(), "option1");
+		value.setDefaultLocale(LocaleUtil.US);
+
+		when(
+			ddmFormFieldValue.getValue()
+		).thenReturn(
+			value
+		);
+
+		JSONObject fieldJSONObject = JSONUtil.put(
+			"type", DDMFormFieldType.RADIO
+		).put(
+			"values", JSONFactoryUtil.createJSONObject("{option1 : 1}")
+		);
+
+		JSONObject processedFieldJSONObject =
+			_radioDDMFormFieldTypeReportProcessor.process(
+				ddmFormFieldValue, fieldJSONObject, 0,
+				DDMFormInstanceReportConstants.EVENT_DELETE_RECORD_VERSION);
+
+		JSONObject valuesJSONObject = processedFieldJSONObject.getJSONObject(
+			"values");
+
+		Assert.assertEquals(0, valuesJSONObject.getLong("option1"));
+	}
+
+	@Test
 	public void testProcessDDMFormInstanceReportWithEmptyData()
 		throws Exception {
 
@@ -74,12 +120,8 @@ public class RadioDDMFormFieldTypeReportProcessorTest extends PowerMockito {
 			value
 		);
 
-		RadioDDMFormFieldTypeReportProcessor
-			radioDDMFormFieldTypeReportProcessor =
-				new RadioDDMFormFieldTypeReportProcessor();
-
 		JSONObject processedFieldJSONObject =
-			radioDDMFormFieldTypeReportProcessor.process(
+			_radioDDMFormFieldTypeReportProcessor.process(
 				ddmFormFieldValue,
 				JSONUtil.put(
 					"type", DDMFormFieldType.RADIO
@@ -126,12 +168,8 @@ public class RadioDDMFormFieldTypeReportProcessorTest extends PowerMockito {
 			value
 		);
 
-		RadioDDMFormFieldTypeReportProcessor
-			radioDDMFormFieldTypeReportProcessor =
-				new RadioDDMFormFieldTypeReportProcessor();
-
 		JSONObject processedFieldJSONObject =
-			radioDDMFormFieldTypeReportProcessor.process(
+			_radioDDMFormFieldTypeReportProcessor.process(
 				ddmFormFieldValue,
 				JSONUtil.put(
 					"type", DDMFormFieldType.RADIO
@@ -178,12 +216,8 @@ public class RadioDDMFormFieldTypeReportProcessorTest extends PowerMockito {
 			value
 		);
 
-		RadioDDMFormFieldTypeReportProcessor
-			radioDDMFormFieldTypeReportProcessor =
-				new RadioDDMFormFieldTypeReportProcessor();
-
 		JSONObject processedFieldJSONObject =
-			radioDDMFormFieldTypeReportProcessor.process(
+			_radioDDMFormFieldTypeReportProcessor.process(
 				ddmFormFieldValue,
 				JSONUtil.put(
 					"type", DDMFormFieldType.RADIO
@@ -203,5 +237,9 @@ public class RadioDDMFormFieldTypeReportProcessorTest extends PowerMockito {
 
 		jsonFactoryUtil.setJSONFactory(new JSONFactoryImpl());
 	}
+
+	private final RadioDDMFormFieldTypeReportProcessor
+		_radioDDMFormFieldTypeReportProcessor =
+			new RadioDDMFormFieldTypeReportProcessor();
 
 }

@@ -267,6 +267,15 @@ public class SegmentsExperienceLocalServiceWrapper
 
 	@Override
 	public com.liferay.segments.model.SegmentsExperience
+		fetchSegmentsExperience(
+			long groupId, long classNameId, long classPK, int priority) {
+
+		return _segmentsExperienceLocalService.fetchSegmentsExperience(
+			groupId, classNameId, classPK, priority);
+	}
+
+	@Override
+	public com.liferay.segments.model.SegmentsExperience
 		fetchSegmentsExperience(long groupId, String segmentsExperienceKey) {
 
 		return _segmentsExperienceLocalService.fetchSegmentsExperience(

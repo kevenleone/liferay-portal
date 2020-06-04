@@ -39,10 +39,13 @@ import org.osgi.service.component.annotations.Reference;
  * @author Eudaldo Alonso
  */
 @Component(immediate = true, service = DocumentContributor.class)
-public class TrashedModelDocumentContributor implements DocumentContributor {
+public class TrashedModelDocumentContributor
+	implements DocumentContributor<TrashedModel> {
 
 	@Override
-	public void contribute(Document document, BaseModel baseModel) {
+	public void contribute(
+		Document document, BaseModel<TrashedModel> baseModel) {
+
 		if ((baseModel == null) || !(baseModel instanceof TrashedModel)) {
 			return;
 		}

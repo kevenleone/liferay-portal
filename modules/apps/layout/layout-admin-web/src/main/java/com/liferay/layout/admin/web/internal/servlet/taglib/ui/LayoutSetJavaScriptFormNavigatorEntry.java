@@ -71,7 +71,8 @@ public class LayoutSetJavaScriptFormNavigatorEntry
 		properties.put("form.navigator.entry.order", 200);
 
 		_serviceRegistration = bundleContext.registerService(
-			FormNavigatorEntry.class, this, properties);
+			(Class<FormNavigatorEntry<?>>)(Class<?>)FormNavigatorEntry.class,
+			this, properties);
 	}
 
 	@Deactivate
@@ -86,6 +87,6 @@ public class LayoutSetJavaScriptFormNavigatorEntry
 		return "/layout_set/javascript.jsp";
 	}
 
-	private ServiceRegistration<FormNavigatorEntry> _serviceRegistration;
+	private ServiceRegistration<FormNavigatorEntry<?>> _serviceRegistration;
 
 }

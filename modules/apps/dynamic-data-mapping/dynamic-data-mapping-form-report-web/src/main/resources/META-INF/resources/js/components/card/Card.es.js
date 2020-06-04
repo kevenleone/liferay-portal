@@ -19,7 +19,7 @@ import React from 'react';
 
 import EmptyState from '../empty-state/EmptyState.es';
 
-export default ({children, field: {icon, name, title}, totalEntries}) => (
+export default ({children, field: {icon, label, title}, totalEntries}) => (
 	<div className="col-md-8">
 		<div className="sheet">
 			<div className="col-md-12">
@@ -38,7 +38,7 @@ export default ({children, field: {icon, name, title}, totalEntries}) => (
 
 						<div className="field-info">
 							<ClayCard.Description displayType="title">
-								{name}
+								{label}
 							</ClayCard.Description>
 
 							<ClayCard.Description

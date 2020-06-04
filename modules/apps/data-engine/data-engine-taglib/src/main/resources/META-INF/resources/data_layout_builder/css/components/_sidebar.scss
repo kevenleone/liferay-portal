@@ -28,6 +28,7 @@
 
 		.sidebar-body {
 			height: calc(100vh - 224px);
+			overflow: hidden;
 
 			.component-tbar {
 				height: auto;

@@ -235,11 +235,12 @@ public class SingleLogoutProfileIntegrationTest extends BaseSamlTestCase {
 			SAMLConstants.SAML2_REDIRECT_BINDING_URI);
 
 		MessageContext<LogoutRequest> messageContext =
-			_singleLogoutProfileImpl.decodeSamlMessage(
-				mockHttpServletRequest, mockHttpServletResponse, samlBinding,
-				true);
+			(MessageContext<LogoutRequest>)
+				_singleLogoutProfileImpl.decodeSamlMessage(
+					mockHttpServletRequest, mockHttpServletResponse,
+					samlBinding, true);
 
-		InOutOperationContext inOutOperationContext =
+		InOutOperationContext<LogoutRequest, ?> inOutOperationContext =
 			messageContext.getSubcontext(InOutOperationContext.class);
 
 		MessageContext<LogoutRequest> inboundMessageContext =
@@ -308,15 +309,15 @@ public class SingleLogoutProfileIntegrationTest extends BaseSamlTestCase {
 		SamlBinding samlBinding = _singleLogoutProfileImpl.getSamlBinding(
 			SAMLConstants.SAML2_REDIRECT_BINDING_URI);
 
-		MessageContext messageContext =
+		MessageContext<?> messageContext =
 			_singleLogoutProfileImpl.decodeSamlMessage(
 				mockHttpServletRequest, mockHttpServletResponse, samlBinding,
 				true);
 
-		InOutOperationContext inOutOperationContext =
+		InOutOperationContext<?, ?> inOutOperationContext =
 			messageContext.getSubcontext(InOutOperationContext.class);
 
-		MessageContext inboundMessageContext =
+		MessageContext<?> inboundMessageContext =
 			inOutOperationContext.getInboundMessageContext();
 
 		LogoutRequest logoutRequest =

@@ -173,7 +173,7 @@ renderResponse.setTitle((structure == null) ? LanguageUtil.get(request, "new-ele
 							fieldTypes: <%= ddmFormAdminDisplayContext.getDDMFormFieldTypesJSONArray() %>,
 							groupId: <%= groupId %>,
 							localizedDescription: <%= ddmFormAdminDisplayContext.getFormLocalizedDescription() %>,
-							localizedName: <%= ddmFormAdminDisplayContext.getFormLocalizedName() %>,
+							localizedName: <%= ddmFormAdminDisplayContext.getFormLocalizedName(structure) %>,
 							namespace: '<portlet:namespace />',
 							redirectURL: '<%= HtmlUtil.escape(redirect) %>',
 							spritemap: Liferay.DDM.FormSettings.spritemap,

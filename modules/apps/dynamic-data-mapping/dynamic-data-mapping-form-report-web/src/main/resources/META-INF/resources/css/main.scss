@@ -14,6 +14,7 @@ body,
 .card {
 	box-shadow: none;
 	margin-bottom: 0;
+	padding: 0 12px;
 	width: 100%;
 
 	.card-header {
@@ -25,6 +26,8 @@ body,
 
 	.card-body {
 		display: flex;
+		min-height: 242px;
+		padding: 0;
 
 		.dim {
 			opacity: 0.4;
@@ -90,7 +93,7 @@ body,
 		border-radius: 4px;
 		color: #6b6c7e;
 		height: 40px;
-		padding: 10px;
+		padding: 5px 10px 0;
 		width: 40px;
 
 		&:hover {
@@ -146,10 +149,78 @@ body,
 	}
 }
 
+.entries-list {
+	font-size: 14px;
+	list-style: none;
+	padding: 0;
+	width: 100%;
+
+	li {
+		border-bottom: 1px solid #e7e7ed;
+		padding: 16px;
+
+		button {
+			font-size: 14px;
+			padding: 0;
+		}
+
+		button:not(:disabled):not(:disabled):active:focus {
+			box-shadow: none;
+		}
+
+		button:focus {
+			box-shadow: none;
+		}
+	}
+}
+
 .form-report {
 	align-items: center;
 	display: flex;
 	flex-direction: column;
+
+	.sidebar-container {
+		width: 720px !important;
+
+		p {
+			margin: 0;
+			padding-left: 12px;
+
+			&.title {
+				color: #272833;
+				font-size: 18px;
+				font-weight: 600;
+			}
+
+			&.description {
+				font-size: 14px;
+				font-weight: normal;
+			}
+		}
+
+		.component-tbar {
+			height: 88px;
+			padding: 18px 8px;
+		}
+
+		.icon {
+			background: #f7f8f9;
+			border-radius: 4px;
+			color: #6b6c7e;
+			height: 40px;
+			padding: 5px 10px 0;
+			width: 40px;
+
+			.lexicon-icon {
+				height: 100%;
+				width: 100%;
+			}
+		}
+
+		.tbar-item-expand {
+			text-align: left;
+		}
+	}
 }
 
 .legend-container {

@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.servlet.taglib.BaseJSPDynamicInclude;
 import com.liferay.portal.kernel.servlet.taglib.DynamicInclude;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
 import com.liferay.portal.kernel.util.ParamUtil;
+import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.WebKeys;
 import com.liferay.portal.security.sso.openid.connect.OpenIdConnect;
 import com.liferay.portal.security.sso.openid.connect.OpenIdConnectProviderRegistry;
@@ -54,7 +55,8 @@ public class OpenIdConnectNavigationPreJSPDynamicInclude
 		throws IOException {
 
 		Collection<String> openIdConnectProviderNames =
-			_openIdConnectProviderRegistry.getOpenIdConnectProviderNames();
+			_openIdConnectProviderRegistry.getOpenIdConnectProviderNames(
+				_portal.getCompanyId(httpServletRequest));
 
 		if (openIdConnectProviderNames.isEmpty()) {
 			return;
@@ -113,5 +115,8 @@ public class OpenIdConnectNavigationPreJSPDynamicInclude
 
 	@Reference
 	private OpenIdConnectProviderRegistry _openIdConnectProviderRegistry;
+
+	@Reference
+	private Portal _portal;
 
 }

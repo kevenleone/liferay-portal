@@ -27,6 +27,7 @@ import com.liferay.portal.search.query.Queries;
 import com.liferay.portal.search.sort.Sort;
 import com.liferay.portal.search.sort.SortOrder;
 import com.liferay.portal.search.sort.Sorts;
+import com.liferay.portal.search.tuning.rankings.web.internal.display.context.RankingEntryDisplayContext;
 import com.liferay.portal.search.tuning.rankings.web.internal.index.RankingFields;
 import com.liferay.portal.search.tuning.rankings.web.internal.index.name.RankingIndexName;
 
@@ -44,7 +45,7 @@ public class SearchRankingRequest {
 	public SearchRankingRequest(
 		HttpServletRequest httpServletRequest, Queries queries,
 		RankingIndexName rankingIndexName, Sorts sorts,
-		SearchContainer searchContainer,
+		SearchContainer<RankingEntryDisplayContext> searchContainer,
 		SearchEngineAdapter searchEngineAdapter) {
 
 		_httpServletRequest = httpServletRequest;
@@ -108,7 +109,7 @@ public class SearchRankingRequest {
 	private final HttpServletRequest _httpServletRequest;
 	private final Queries _queries;
 	private final RankingIndexName _rankingIndexName;
-	private final SearchContainer _searchContainer;
+	private final SearchContainer<RankingEntryDisplayContext> _searchContainer;
 	private final SearchContext _searchContext;
 	private final SearchEngineAdapter _searchEngineAdapter;
 	private final Sorts _sorts;

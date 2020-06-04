@@ -42,6 +42,7 @@ import com.liferay.portal.kernel.test.rule.Sync;
 import com.liferay.portal.kernel.test.util.GroupTestUtil;
 import com.liferay.portal.kernel.test.util.RandomTestUtil;
 import com.liferay.portal.kernel.test.util.TestPropsValues;
+import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.UnicodeProperties;
@@ -100,6 +101,11 @@ public class GetCollectionFieldMVCResourceCommandTest {
 
 		_infoListProviderServiceRegistration = registry.registerService(
 			InfoListProvider.class, new TestInfoListProvider());
+
+		_originalThemeDisplayDefaultLocale =
+			LocaleThreadLocal.getThemeDisplayLocale();
+
+		LocaleThreadLocal.setThemeDisplayLocale(LocaleUtil.US);
 	}
 
 	@After
@@ -109,6 +115,9 @@ public class GetCollectionFieldMVCResourceCommandTest {
 		if (_infoListProviderServiceRegistration != null) {
 			_infoListProviderServiceRegistration.unregister();
 		}
+
+		LocaleThreadLocal.setThemeDisplayLocale(
+			_originalThemeDisplayDefaultLocale);
 	}
 
 	@Test
@@ -129,12 +138,12 @@ public class GetCollectionFieldMVCResourceCommandTest {
 			_mvcResourceCommand, "_getCollectionFieldsJSONObject",
 			new Class<?>[] {
 				HttpServletRequest.class, HttpServletResponse.class,
-				String.class, String.class, String.class, Locale.class,
-				long.class, int.class
+				String.class, String.class, String.class, String.class,
+				Locale.class, long.class, int.class
 			},
 			new MockHttpServletRequest(), new MockHttpServletResponse(),
 			layoutObjectReferenceJSONObject.toString(), StringPool.BLANK,
-			StringPool.BLANK, LocaleUtil.US, 0, 1);
+			StringPool.BLANK, StringPool.BLANK, LocaleUtil.US, 0, 1);
 
 		Assert.assertEquals(1, jsonObject.getInt("length"));
 
@@ -174,12 +183,12 @@ public class GetCollectionFieldMVCResourceCommandTest {
 			_mvcResourceCommand, "_getCollectionFieldsJSONObject",
 			new Class<?>[] {
 				HttpServletRequest.class, HttpServletResponse.class,
-				String.class, String.class, String.class, Locale.class,
-				long.class, int.class
+				String.class, String.class, String.class, String.class,
+				Locale.class, long.class, int.class
 			},
 			new MockHttpServletRequest(), new MockHttpServletResponse(),
 			layoutObjectReferenceJSONObject.toString(), StringPool.BLANK,
-			StringPool.BLANK, LocaleUtil.US, 0, 2);
+			StringPool.BLANK, StringPool.BLANK, LocaleUtil.US, 0, 2);
 
 		Assert.assertEquals(2, jsonObject.getInt("length"));
 
@@ -225,12 +234,12 @@ public class GetCollectionFieldMVCResourceCommandTest {
 			_mvcResourceCommand, "_getCollectionFieldsJSONObject",
 			new Class<?>[] {
 				HttpServletRequest.class, HttpServletResponse.class,
-				String.class, String.class, String.class, Locale.class,
-				long.class, int.class
+				String.class, String.class, String.class, String.class,
+				Locale.class, long.class, int.class
 			},
 			new MockHttpServletRequest(), new MockHttpServletResponse(),
 			layoutObjectReferenceJSONObject.toString(), StringPool.BLANK,
-			StringPool.BLANK, LocaleUtil.US, 0, 1);
+			StringPool.BLANK, StringPool.BLANK, LocaleUtil.US, 0, 1);
 
 		Assert.assertEquals(2, jsonObject.getInt("length"));
 
@@ -282,6 +291,8 @@ public class GetCollectionFieldMVCResourceCommandTest {
 
 	@Inject(filter = "mvc.command.name=/content_layout/get_collection_field")
 	private MVCResourceCommand _mvcResourceCommand;
+
+	private Locale _originalThemeDisplayDefaultLocale;
 
 	@Inject
 	private Portal _portal;

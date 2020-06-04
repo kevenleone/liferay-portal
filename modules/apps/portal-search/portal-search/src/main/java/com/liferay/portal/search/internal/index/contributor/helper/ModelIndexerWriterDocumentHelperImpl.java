@@ -36,7 +36,7 @@ public class ModelIndexerWriterDocumentHelperImpl
 	}
 
 	@Override
-	public Document getDocument(BaseModel baseModel) {
+	public <T extends BaseModel<?>> Document getDocument(T baseModel) {
 		try {
 			return _indexerDocumentBuilder.getDocument(baseModel);
 		}

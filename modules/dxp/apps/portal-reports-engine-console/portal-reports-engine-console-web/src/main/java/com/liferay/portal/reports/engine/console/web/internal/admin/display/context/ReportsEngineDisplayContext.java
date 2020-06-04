@@ -227,7 +227,7 @@ public class ReportsEngineDisplayContext {
 		return portletURL;
 	}
 
-	public SearchContainer getSearchContainer() throws PortalException {
+	public SearchContainer<?> getSearchContainer() throws PortalException {
 		if (_searchContainer == null) {
 			if (isDefinitionsTabSelected()) {
 				_searchContainer = _getDefinitionSearch();
@@ -272,7 +272,7 @@ public class ReportsEngineDisplayContext {
 	}
 
 	public int getTotalItems() throws PortalException {
-		SearchContainer searchContainer = getSearchContainer();
+		SearchContainer<?> searchContainer = getSearchContainer();
 
 		return searchContainer.getTotal();
 	}
@@ -551,7 +551,7 @@ public class ReportsEngineDisplayContext {
 	private String _orderByType;
 	private final PortalPreferences _portalPreferences;
 	private final ReportsEngineRequestHelper _reportsEngineRequestHelper;
-	private SearchContainer _searchContainer;
+	private SearchContainer<?> _searchContainer;
 	private final ThemeDisplay _themeDisplay;
 
 }

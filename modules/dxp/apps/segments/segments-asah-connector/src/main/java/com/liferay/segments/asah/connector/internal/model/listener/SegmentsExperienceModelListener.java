@@ -104,6 +104,7 @@ public class SegmentsExperienceModelListener
 		}
 
 		_asahSegmentsExperimentProcessor.processUpdateSegmentsExperimentRel(
+			segmentsExperiment.getCompanyId(),
 			segmentsExperiment.getSegmentsExperimentKey(),
 			_segmentsExperimentRelLocalService.getSegmentsExperimentRels(
 				segmentsExperiment.getSegmentsExperimentId()));

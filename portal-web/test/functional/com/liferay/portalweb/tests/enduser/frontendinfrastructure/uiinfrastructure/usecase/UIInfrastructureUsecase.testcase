@@ -18,14 +18,57 @@ definition {
 		if ("${testPortalInstance}" == "true") {
 			PortalInstances.tearDownCP();
 		}
+		else {
+			Page.tearDownCP();
+
+			JSONUser.tearDownNonAdminUsers();
+		}
+	}
+
+	// Ignored due to LPS-113623
+
+	@ignore = "true"
+	@priority = "5"
+	test CheckAUIPreloadConfiguration {
+		property test.name.skip.portal.instance = "UIInfrastructureUsecase#CheckAUIPreloadConfiguration";
+
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Control Panel",
+			portlet = "System Settings");
+
+		SystemSettings.gotoConfiguration(
+			configurationCategory = "Third Party",
+			configurationName = "AUI",
+			configurationScope = "System Scope");
+
+		FormFields.viewCheckboxChecked(fieldName = "enableAUIPreload");
+
+		SystemSettings.configureSystemSetting(
+			enableSetting = "false",
+			settingFieldName = "Preload Widely Used AUI Modules");
+
+		ProductMenu.gotoPortlet(
+			category = "Configuration",
+			panel = "Control Panel",
+			portlet = "System Settings");
+
+		SystemSettings.gotoConfiguration(
+			configurationCategory = "Third Party",
+			configurationName = "AUI",
+			configurationScope = "System Scope");
+
+		FormFields.viewCheckboxNotChecked(fieldName = "enableAUIPreload");
+
+		Navigator.gotoPage(pageName = "Home");
+
+		Portlet.viewTitle(portletName = "Hello World");
 	}
 
 	@description = "This is a use case for LPS-95157. It checks the nav-bar menu icons on guest page level after page refresh."
 	@priority = "5"
 	test RefreshHomePage {
-		property portal.acceptance = "false";
-		property portal.upstream = "quarantine";
-		property test.name.skip.portal.instance = "UIInfrastructureUsecase#RefreshHomePage";
+		property portal.acceptance = "true";
 
 		Navigator.gotoPage(pageName = "Home");
 
@@ -51,8 +94,7 @@ definition {
 	@description = "This is a use case for LPS-95157. It checks the nav-bar menu icons on admin page level after page refresh."
 	@priority = "5"
 	test RefreshWebContent {
-		property portal.acceptance = "false";
-		property test.name.skip.portal.instance = "UIInfrastructureUsecase#RefreshWebContent";
+		property portal.acceptance = "true";
 
 		ProductMenu.gotoPortlet(
 			category = "Content &amp; Data",
@@ -192,7 +234,7 @@ definition {
 	test ViewNonASCIICharactersWithSPADisabled {
 		property custom.properties = "javascript.single.page.application.enabled=false";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -203,7 +245,7 @@ definition {
 			userLastName = "Ääkkönen",
 			userScreenName = "uskandi");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -218,7 +260,7 @@ definition {
 	@description = "Checks for each portlet having defined boundaries."
 	@priority = "5"
 	test ViewPortletBoundaries {
-		property portal.acceptance = "false";
+		property portal.acceptance = "true";
 
 		ProductMenu.gotoPortlet(
 			category = "Site Builder",

@@ -23,7 +23,7 @@ List<FormNavigatorEntry<Object>> formNavigatorEntries = (List<FormNavigatorEntry
 <liferay-frontend:fieldset-group>
 
 	<%
-	final FormNavigatorEntry formNavigatorEntry = formNavigatorEntries.get(0);
+	final FormNavigatorEntry<Object> formNavigatorEntry = formNavigatorEntries.get(0);
 
 	String sectionId = namespace + _getSectionId(formNavigatorEntry.getKey());
 
@@ -63,7 +63,7 @@ List<FormNavigatorEntry<Object>> formNavigatorEntries = (List<FormNavigatorEntry
 
 	<%
 	for (int i = 1; i < formNavigatorEntries.size(); i++) {
-		final FormNavigatorEntry curFormNavigatorEntry = formNavigatorEntries.get(i);
+		final FormNavigatorEntry<Object> curFormNavigatorEntry = formNavigatorEntries.get(i);
 
 		sectionId = namespace + _getSectionId(curFormNavigatorEntry.getKey());
 	%>

@@ -36,7 +36,7 @@ public class TasksEntryAssetRendererFactory
 	public static final String TYPE = "tasks";
 
 	@Override
-	public AssetRenderer getAssetRenderer(long classPK, int type)
+	public AssetRenderer<TasksEntry> getAssetRenderer(long classPK, int type)
 		throws PortalException {
 
 		return new TasksEntryAssetRenderer(

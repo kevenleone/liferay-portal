@@ -3557,7 +3557,7 @@ public class PortalImpl implements Portal {
 		String contextPath = getPathContext();
 
 		if (Validator.isNotNull(contextPath) &&
-			requestURI.contains(contextPath)) {
+			requestURI.startsWith(contextPath)) {
 
 			requestURI = requestURI.substring(contextPath.length());
 		}
@@ -8374,10 +8374,7 @@ public class PortalImpl implements Portal {
 						);
 					}
 
-					if (_containsHostname(virtualHostnames, portalDomain) ||
-						PropsValues.VIRTUAL_HOSTS_DEFAULT_SITE_NAME.equals(
-							group.getGroupKey())) {
-
+					if (_containsHostname(virtualHostnames, portalDomain)) {
 						String path = StringPool.BLANK;
 
 						if (themeDisplay.isWidget()) {

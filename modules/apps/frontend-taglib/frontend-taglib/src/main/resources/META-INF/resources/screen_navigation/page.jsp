@@ -27,9 +27,9 @@ String menubarCssClass = (String)request.getAttribute("liferay-frontend:screen-n
 String navCssClass = (String)request.getAttribute("liferay-frontend:screen-navigation:navCssClass");
 PortletURL portletURL = (PortletURL)request.getAttribute("liferay-frontend:screen-navigation:portletURL");
 ScreenNavigationCategory selectedScreenNavigationCategory = (ScreenNavigationCategory)request.getAttribute("liferay-frontend:screen-navigation:selectedScreenNavigationCategory");
-ScreenNavigationEntry selectedScreenNavigationEntry = (ScreenNavigationEntry)request.getAttribute("liferay-frontend:screen-navigation:selectedScreenNavigationEntry");
+ScreenNavigationEntry<?> selectedScreenNavigationEntry = (ScreenNavigationEntry<?>)request.getAttribute("liferay-frontend:screen-navigation:selectedScreenNavigationEntry");
 List<ScreenNavigationCategory> screenNavigationCategories = (List<ScreenNavigationCategory>)request.getAttribute("liferay-frontend:screen-navigation:screenNavigationCategories");
-List<ScreenNavigationEntry> screenNavigationEntries = (List<ScreenNavigationEntry>)request.getAttribute("liferay-frontend:screen-navigation:screenNavigationEntries");
+List<ScreenNavigationEntry<Object>> screenNavigationEntries = (List<ScreenNavigationEntry<Object>>)request.getAttribute("liferay-frontend:screen-navigation:screenNavigationEntries");
 
 LiferayPortletResponse finalLiferayPortletResponse = liferayPortletResponse;
 %>
@@ -76,7 +76,7 @@ LiferayPortletResponse finalLiferayPortletResponse = liferayPortletResponse;
 							<ul class="nav nav-nested">
 
 								<%
-								for (ScreenNavigationEntry screenNavigationEntry : screenNavigationEntries) {
+								for (ScreenNavigationEntry<Object> screenNavigationEntry : screenNavigationEntries) {
 									PortletURL screenNavigationEntryURL = PortletURLUtil.clone(portletURL, liferayPortletResponse);
 
 									screenNavigationEntryURL.setParameter("screenNavigationCategoryKey", screenNavigationEntry.getCategoryKey());

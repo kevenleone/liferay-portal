@@ -107,7 +107,9 @@ definition {
 
 		ContentPages.addPage(pageName = "Test Content Page Name");
 
-		PageEditor.addLayoutSection(dropTarget = "//div[contains(@class,'page-editor__root page-editor__topper')]");
+		PageEditor.addFragment(
+			collectionName = "Layout Elements",
+			fragmentName = "Section");
 
 		PageEditor.editLayoutSection(
 			backgroundImage = "Manual Selection",
@@ -161,7 +163,8 @@ definition {
 		ProductMenu.gotoPortlet(
 			category = "Content &amp; Data",
 			panel = "Site Administration",
-			portlet = "Blogs");
+			portlet = "Blogs",
+			site = "Site Name");
 
 		BlogsNavigator.gotoAddEntry();
 

@@ -194,7 +194,8 @@ public class DefaultWikiListPagesDisplayContext
 	}
 
 	@Override
-	public void populateResultsAndTotal(SearchContainer searchContainer)
+	public void populateResultsAndTotal(
+			SearchContainer<WikiPage> searchContainer)
 		throws PortalException {
 
 		WikiPage page = (WikiPage)_httpServletRequest.getAttribute(

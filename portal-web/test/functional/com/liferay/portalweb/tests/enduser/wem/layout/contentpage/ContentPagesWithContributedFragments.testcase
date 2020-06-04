@@ -90,7 +90,9 @@ definition {
 				pageName = "Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addCollectionDisplay(fragmentName = "Collection Display");
+			PageEditor.addFragment(
+				collectionName = "Content Display",
+				fragmentName = "Collection Display");
 		}
 
 		task ("Select the dynamic collection") {
@@ -100,18 +102,10 @@ definition {
 		}
 
 		task ("Add a Button fragment to the first cell") {
-			PageEditor.gotoTab(tabName = "Fragments");
-
-			PageEditor.expandFragmentCollection(collectionName = "Basic Components");
-
-			DragAndDrop.javaScriptDragAndDropToObject(
-				key_entryTitle = "Third Web Content",
-				key_fragmentName = "Button",
-				locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
-				locator2 = "PageEditor#COLLECTION_CELL",
-				value1 = "");
-
-			PageEditor.waitForAutoSave();
+			PageEditor.addFragmentToCollectionDisplay(
+				collectionName = "Basic Components",
+				entryTitle = "Third Web Content",
+				fragmentName = "Button");
 
 			AssertElementPresent(
 				key_colPosition = "1",
@@ -260,7 +254,9 @@ definition {
 				pageName = "Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addCollectionDisplay(fragmentName = "Collection Display");
+			PageEditor.addFragment(
+				collectionName = "Content Display",
+				fragmentName = "Collection Display");
 		}
 
 		task ("Assert both collections are unavailable to Collection Display") {
@@ -280,6 +276,41 @@ definition {
 		}
 	}
 
+	@description = "This is a use case for for LPS-111548. Reloading the page will clean all Undo states."
+	@priority = "4"
+	test ConfigureHeadingFragmentAndRefreshPageWithUndoEnabled {
+		property osgi.module.configuration.file.names = "com.liferay.layout.content.page.editor.web.internal.configuration.FFLayoutContentPageEditorConfiguration.config";
+		property osgi.module.configurations = "undoEnabled = true";
+
+		ContentPagesNavigator.openEditContentPage(
+			pageName = "Content Page Name",
+			siteName = "Test Site Name");
+
+		PageEditor.addFragment(
+			collectionName = "Basic Components",
+			fragmentName = "Heading");
+
+		PageEditor.waitForAutoSave();
+
+		AssertVisible(
+			key_text = "undo",
+			locator1 = "Icon#ANY_ENABLED");
+
+		PageEditor.gotoConfiguration(fragmentName = "Heading");
+
+		PageEditor.configureFragment(textAlign = "Center");
+
+		PageEditor.viewFragmentStyle(
+			alignment = "center",
+			fragmentName = "heading");
+
+		Refresh();
+
+		AssertElementPresent(
+			key_text = "undo",
+			locator1 = "Icon#ANY_DISABLED");
+	}
+
 	@description = "Given a content page with a configured Content fragment, when the content is deleted the fragment should not be visible in view mode and a message should be shown in page editor."
 	@priority = "4"
 	test DeletedContentInContentDisplayFragmentIsNotVisible {
@@ -292,7 +323,9 @@ definition {
 			pageName = "Content Page Name",
 			siteName = "Test Site Name");
 
-		PageEditor.addContentDisplay(fragmentName = "Content");
+		PageEditor.addFragment(
+			collectionName = "Content Display",
+			fragmentName = "Content");
 
 		PageEditor.editContentDisplay(
 			fragmentName = "Content",
@@ -340,7 +373,9 @@ definition {
 			pageName = "Content Page Name",
 			siteName = "Test Site Name");
 
-		PageEditor.addContentDisplay(fragmentName = "Content");
+		PageEditor.addFragment(
+			collectionName = "Content Display",
+			fragmentName = "Content");
 
 		PageEditor.editContentDisplay(
 			blogs = "true",
@@ -388,7 +423,9 @@ definition {
 				pageName = "Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addCollectionDisplay(fragmentName = "Collection Display");
+			PageEditor.addFragment(
+				collectionName = "Content Display",
+				fragmentName = "Collection Display");
 		}
 
 		task ("Select the dynamic collection") {
@@ -405,7 +442,7 @@ definition {
 			DragAndDrop.javaScriptDragAndDropToObject(
 				key_entryTitle = "Third Web Content",
 				key_fragmentName = "Heading",
-				locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#COLLECTION_CELL",
 				value1 = "");
 
@@ -489,7 +526,9 @@ definition {
 			pageName = "Content Page Name",
 			siteName = "Test Site Name");
 
-		PageEditor.addContentDisplay(fragmentName = "Content");
+		PageEditor.addFragment(
+			collectionName = "Content Display",
+			fragmentName = "Content");
 
 		PageEditor.editContentDisplay(
 			documentandmedia = "true",
@@ -519,7 +558,9 @@ definition {
 			pageName = "Content Page Name",
 			siteName = "Test Site Name");
 
-		PageEditor.addContentDisplay(fragmentName = "Content");
+		PageEditor.addFragment(
+			collectionName = "Content Display",
+			fragmentName = "Content");
 
 		PageEditor.editContentDisplay(
 			fragmentName = "Content",
@@ -622,7 +663,7 @@ definition {
 		}
 
 		task ("Disable autogenerate structure key") {
-			ProductMenu.gotoPortlet(
+			GlobalMenu.gotoPortlet(
 				category = "Configuration",
 				panel = "Control Panel",
 				portlet = "System Settings");
@@ -828,7 +869,9 @@ definition {
 				pageName = "Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addCollectionDisplay(fragmentName = "Collection Display");
+			PageEditor.addFragment(
+				collectionName = "Content Display",
+				fragmentName = "Collection Display");
 		}
 
 		task ("Select the dynamic collection and 3 Columns") {
@@ -846,7 +889,7 @@ definition {
 			DragAndDrop.javaScriptDragAndDropToObject(
 				key_entryTitle = "Third Document",
 				key_fragmentName = "Heading",
-				locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#COLLECTION_CELL",
 				value1 = "");
 
@@ -934,7 +977,9 @@ definition {
 			pageName = "Content Page Name",
 			siteName = "Test Site Name");
 
-		PageEditor.addContentDisplay(fragmentName = "Content");
+		PageEditor.addFragment(
+			collectionName = "Content Display",
+			fragmentName = "Content");
 
 		PageEditor.editContentDisplay(
 			customWebcontenttemplate = "WC Template Name",
@@ -1011,7 +1056,9 @@ definition {
 				pageName = "Content Page Name",
 				siteName = "Test Site Name");
 
-			PageEditor.addCollectionDisplay(fragmentName = "Collection Display");
+			PageEditor.addFragment(
+				collectionName = "Content Display",
+				fragmentName = "Collection Display");
 		}
 
 		task ("Select the dynamic collection") {
@@ -1080,7 +1127,9 @@ definition {
 			pageName = "Content Page Name",
 			siteName = "Test Site Name");
 
-		PageEditor.addContentDisplay(fragmentName = "Content");
+		PageEditor.addFragment(
+			collectionName = "Content Display",
+			fragmentName = "Content");
 
 		PageEditor.clickPublish();
 
@@ -1093,6 +1142,251 @@ definition {
 				key_pageName = "Content Page Name",
 				locator1 = "PageEditor#CONTENT_PAGE_TEXT_CONTENT");
 		}
+	}
+
+	@description = "This is a use case for for LPS-111548. Undo can make the page editor come back to previous state up to 20 last states when the page has more than 20 states."
+	@priority = "5"
+	test UndoPagechangeTwentyTimes {
+		property osgi.module.configuration.file.names = "com.liferay.layout.content.page.editor.web.internal.configuration.FFLayoutContentPageEditorConfiguration.config";
+		property osgi.module.configurations = "undoEnabled = true";
+
+		ContentPagesNavigator.openEditContentPage(
+			pageName = "Content Page Name",
+			siteName = "Test Site Name");
+
+		PageEditor.addFragment(
+			collectionName = "Basic Components",
+			fragmentName = "Tabs");
+
+		for (var i : list "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20") {
+			PageEditor.gotoConfiguration(fragmentName = "Tabs");
+
+			PageEditor.configureFragment(numberOfTabs = "${i}");
+
+			Click.clickNoMouseOver(
+				key_elementType = "Fragment",
+				locator1 = "PageEditor#FRAGMENT_BODY_TOOLBAR_CONFIGURATION_BUTTON");
+		}
+
+		for (var i : list "1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20") {
+			Click(
+				key_text = "undo",
+				locator1 = "Icon#ANY");
+		}
+
+		AssertVisible(
+			key_navItem = "Tab 4",
+			locator1 = "Fragment#NAV_ITEM_TAB");
+
+		AssertElementNotPresent(
+			key_navItem = "Tab 5",
+			locator1 = "Fragment#NAV_ITEM_TAB");
+
+		AssertElementPresent(
+			key_text = "undo",
+			locator1 = "Icon#ANY_DISABLED");
+	}
+
+	@description = "This is a test for LPS-112093. The Blogs Entries of collection are displayed using Full Content when add a Content Display to Collection Display."
+	@priority = "4"
+	test ViewBlogEntryViaContentInCollectionDisplay {
+		for (var i : list "1,2,3") {
+			JSONBlog.addEntry(
+				entryContent = "Blogs Entry Content ${i}",
+				entryTitle = "Blogs Entry Title ${i}",
+				groupName = "Test Site Name");
+		}
+
+		JSONAssetlist.addDynamicAssetListEntry(
+			groupName = "Test Site Name",
+			title = "Dynamic Asset List Test");
+
+		AssetListsAdmin.openAssetListsAdmin(siteURLKey = "test-site-name");
+
+		AssetListsAdmin.editAssetList(assetListTitle = "Dynamic Asset List Test");
+
+		AssetListsAdmin.configureAssetEntryType(selectedAsset = "Blogs Entry");
+
+		ContentPagesNavigator.openEditContentPage(
+			pageName = "Content Page Name",
+			siteName = "Test Site Name");
+
+		PageEditor.addFragment(
+			collectionName = "Content Display",
+			fragmentName = "Collection Display");
+
+		PageEditor.editCollectionDisplay(
+			assetListName = "Dynamic Asset List Test",
+			fragmentName = "Collection Display");
+
+		for (var i : list "1,2,3") {
+			if ("${i}" == "1") {
+				AssertVisible(
+					key_colPosition = "1",
+					key_entryTitle = "Blogs Entry Title 3",
+					key_fragmentName = "Collection Display",
+					key_rowPosition = "${i}",
+					locator1 = "PageEditor#COLLECTION_ITEM_TITLE");
+			}
+			if ("${i}" == "2") {
+				AssertVisible(
+					key_colPosition = "1",
+					key_entryTitle = "Blogs Entry Title ${i}",
+					key_fragmentName = "Collection Display",
+					key_rowPosition = "${i}",
+					locator1 = "PageEditor#COLLECTION_ITEM_TITLE");
+			}
+			if ("${i}" == "3") {
+				AssertVisible(
+					key_colPosition = "1",
+					key_entryTitle = "Blogs Entry Title 1",
+					key_fragmentName = "Collection Display",
+					key_rowPosition = "${i}",
+					locator1 = "PageEditor#COLLECTION_ITEM_TITLE");
+			}
+		}
+
+		PageEditor.addFragmentToCollectionDisplay(
+			collectionName = "Content Display",
+			entryName = "Blogs Entry Title 3",
+			fragmentName = "Content");
+
+		for (var i : list "1,2,3") {
+			if ("${i}" == "1") {
+				AssertVisible(
+					key_colPosition = "1",
+					key_entryContent = "Blogs Entry Content 3",
+					key_fragmentName = "Collection Display",
+					key_rowPosition = "${i}",
+					locator1 = "PageEditor#COLLECTION_ITEM_CONTENT");
+			}
+			if ("${i}" == "2") {
+				AssertVisible(
+					key_colPosition = "1",
+					key_entryContent = "Blogs Entry Content ${i}",
+					key_fragmentName = "Collection Display",
+					key_rowPosition = "${i}",
+					locator1 = "PageEditor#COLLECTION_ITEM_CONTENT");
+			}
+			if ("${i}" == "3") {
+				AssertVisible(
+					key_colPosition = "1",
+					key_entryContent = "Blogs Entry Content 1",
+					key_fragmentName = "Collection Display",
+					key_rowPosition = "${i}",
+					locator1 = "PageEditor#COLLECTION_ITEM_CONTENT");
+			}
+		}
+
+		PageEditor.waitForAutoSave();
+
+		PageEditor.gotoConfiguration(fragmentName = "Content");
+
+		AssertSelectedLabel(
+			key_fieldLabel = "Template",
+			locator1 = "Select#GENERIC_SELECT_FIELD",
+			value1 = "Full Content");
+	}
+
+	@description = "This is a test for LPS-112093. The Web Content Articles of collection are displayed using Default Template when add a Content Display to Collection Display."
+	@priority = "5"
+	test ViewWebContentViaContentInCollectionDisplay {
+		for (var i : list "1,2,3") {
+			JSONWebcontent.addWebContent(
+				content = "WC WebContent Content ${i}",
+				groupName = "Test Site Name",
+				title = "WC WebContent Title ${i}");
+		}
+
+		JSONAssetlist.addDynamicAssetListEntry(
+			groupName = "Test Site Name",
+			title = "Dynamic Asset List Test");
+
+		AssetListsAdmin.openAssetListsAdmin(siteURLKey = "test-site-name");
+
+		AssetListsAdmin.editAssetList(assetListTitle = "Dynamic Asset List Test");
+
+		AssetListsAdmin.configureAssetEntryType(selectedAsset = "Web Content Article");
+
+		ContentPagesNavigator.openEditContentPage(
+			pageName = "Content Page Name",
+			siteName = "Test Site Name");
+
+		PageEditor.addFragment(
+			collectionName = "Content Display",
+			fragmentName = "Collection Display");
+
+		PageEditor.editCollectionDisplay(
+			assetListName = "Dynamic Asset List Test",
+			fragmentName = "Collection Display");
+
+		for (var i : list "1,2,3") {
+			if ("${i}" == "1") {
+				AssertVisible(
+					key_colPosition = "1",
+					key_entryTitle = "WC WebContent Title 3",
+					key_fragmentName = "Collection Display",
+					key_rowPosition = "${i}",
+					locator1 = "PageEditor#COLLECTION_ITEM_TITLE");
+			}
+			if ("${i}" == "2") {
+				AssertVisible(
+					key_colPosition = "1",
+					key_entryTitle = "WC WebContent Title ${i}",
+					key_fragmentName = "Collection Display",
+					key_rowPosition = "${i}",
+					locator1 = "PageEditor#COLLECTION_ITEM_TITLE");
+			}
+			if ("${i}" == "3") {
+				AssertVisible(
+					key_colPosition = "1",
+					key_entryTitle = "WC WebContent Title 1",
+					key_fragmentName = "Collection Display",
+					key_rowPosition = "${i}",
+					locator1 = "PageEditor#COLLECTION_ITEM_TITLE");
+			}
+		}
+
+		PageEditor.addFragmentToCollectionDisplay(
+			collectionName = "Content Display",
+			entryName = "WC WebContent Title 3",
+			fragmentName = "Content");
+
+		for (var i : list "1,2,3") {
+			if ("${i}" == "1") {
+				AssertVisible(
+					key_colPosition = "1",
+					key_entryContent = "WC WebContent Content 3",
+					key_fragmentName = "Collection Display",
+					key_rowPosition = "${i}",
+					locator1 = "PageEditor#COLLECTION_ITEM_CONTENT");
+			}
+			if ("${i}" == "2") {
+				AssertVisible(
+					key_colPosition = "1",
+					key_entryContent = "WC WebContent Content ${i}",
+					key_fragmentName = "Collection Display",
+					key_rowPosition = "${i}",
+					locator1 = "PageEditor#COLLECTION_ITEM_CONTENT");
+			}
+			if ("${i}" == "3") {
+				AssertVisible(
+					key_colPosition = "1",
+					key_entryContent = "WC WebContent Content 1",
+					key_fragmentName = "Collection Display",
+					key_rowPosition = "${i}",
+					locator1 = "PageEditor#COLLECTION_ITEM_CONTENT");
+			}
+		}
+
+		PageEditor.waitForAutoSave();
+
+		PageEditor.gotoConfiguration(fragmentName = "Content");
+
+		AssertSelectedLabel(
+			key_fieldLabel = "Template",
+			locator1 = "Select#GENERIC_SELECT_FIELD",
+			value1 = "Default Template");
 	}
 
 }

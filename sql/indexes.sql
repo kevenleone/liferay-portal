@@ -179,19 +179,25 @@ create index IX_2A2CB130 on EmailAddress (companyId, classNameId, classPK, prima
 create index IX_7B43CD8 on EmailAddress (userId);
 create index IX_F74AB912 on EmailAddress (uuid_[$COLUMN_LENGTH:75$], companyId);
 
-create unique index IX_FEFC8DA7 on ExpandoColumn (tableId, name[$COLUMN_LENGTH:75$]);
+create index IX_8B26D246 on ExpandoColumn (tableId, ctCollectionId);
+create unique index IX_4A7D3605 on ExpandoColumn (tableId, name[$COLUMN_LENGTH:75$], ctCollectionId);
 
-create index IX_49EB3118 on ExpandoRow (classPK);
-create unique index IX_81EFBFF5 on ExpandoRow (tableId, classPK);
+create index IX_BCC0D776 on ExpandoRow (classPK, ctCollectionId);
+create unique index IX_488E0C53 on ExpandoRow (tableId, classPK, ctCollectionId);
+create index IX_5C47920C on ExpandoRow (tableId, ctCollectionId);
 
-create unique index IX_37562284 on ExpandoTable (companyId, classNameId, name[$COLUMN_LENGTH:75$]);
+create index IX_A905B6E3 on ExpandoTable (companyId, classNameId, ctCollectionId);
+create unique index IX_87D370E2 on ExpandoTable (companyId, classNameId, name[$COLUMN_LENGTH:75$], ctCollectionId);
 
-create index IX_B29FEF17 on ExpandoValue (classNameId, classPK);
-create unique index IX_9DDD21E5 on ExpandoValue (columnId, rowId_);
-create index IX_9112A7A0 on ExpandoValue (rowId_);
-create index IX_1BD3F4C on ExpandoValue (tableId, classPK);
-create unique index IX_D27B03E7 on ExpandoValue (tableId, columnId, classPK);
-create index IX_B71E92D5 on ExpandoValue (tableId, rowId_);
+create index IX_FF8FB775 on ExpandoValue (classNameId, classPK, ctCollectionId);
+create index IX_B5A9F1E5 on ExpandoValue (columnId, ctCollectionId);
+create unique index IX_E6D98E43 on ExpandoValue (columnId, rowId_, ctCollectionId);
+create index IX_FC7A3DFE on ExpandoValue (rowId_, ctCollectionId);
+create index IX_3D37FDAA on ExpandoValue (tableId, classPK, ctCollectionId);
+create unique index IX_D8C72C45 on ExpandoValue (tableId, columnId, classPK, ctCollectionId);
+create index IX_8AF759DA on ExpandoValue (tableId, columnId, ctCollectionId);
+create index IX_EEA372D5 on ExpandoValue (tableId, ctCollectionId);
+create index IX_4E7B1F33 on ExpandoValue (tableId, rowId_, ctCollectionId);
 
 create index IX_1827A2E5 on ExportImportConfiguration (companyId);
 create index IX_38FA468D on ExportImportConfiguration (groupId, status);
@@ -348,11 +354,13 @@ create index IX_C77A74AD on PortletPreferences (plid, ctCollectionId);
 create index IX_67E205D4 on PortletPreferences (plid, portletId[$COLUMN_LENGTH:200$], ctCollectionId);
 create index IX_8D0717FF on PortletPreferences (portletId[$COLUMN_LENGTH:200$], ctCollectionId);
 
-create index IX_A1A8CB8B on RatingsEntry (classNameId, classPK, score);
-create unique index IX_B47E3C11 on RatingsEntry (userId, classNameId, classPK);
-create index IX_9F242DF6 on RatingsEntry (uuid_[$COLUMN_LENGTH:75$], companyId);
+create index IX_FD0395B5 on RatingsEntry (classNameId, classPK, ctCollectionId);
+create index IX_66592BE9 on RatingsEntry (classNameId, classPK, score, ctCollectionId);
+create unique index IX_B938D06F on RatingsEntry (userId, classNameId, classPK, ctCollectionId);
+create index IX_CBD05854 on RatingsEntry (uuid_[$COLUMN_LENGTH:75$], companyId, ctCollectionId);
+create index IX_A4389D50 on RatingsEntry (uuid_[$COLUMN_LENGTH:75$], ctCollectionId);
 
-create unique index IX_A6E99284 on RatingsStats (classNameId, classPK);
+create unique index IX_C286E0E2 on RatingsStats (classNameId, classPK, ctCollectionId);
 create index IX_5EC6007D on RatingsStats (classNameId, createDate);
 create index IX_11A5584A on RatingsStats (classNameId, modifiedDate);
 
@@ -562,7 +570,11 @@ create index IX_1AA07A6D on Website (companyId, classNameId, classPK, primary_);
 create index IX_F75690BB on Website (userId);
 create index IX_712BCD35 on Website (uuid_[$COLUMN_LENGTH:75$], companyId);
 
-create index IX_A4DB1F0F on WorkflowDefinitionLink (companyId, workflowDefinitionName[$COLUMN_LENGTH:75$], workflowDefinitionVersion);
-create index IX_705B40EE on WorkflowDefinitionLink (groupId, companyId, classNameId, classPK, typePK);
+create index IX_6483FCD4 on WorkflowDefinitionLink (companyId, ctCollectionId);
+create index IX_701BF76D on WorkflowDefinitionLink (companyId, workflowDefinitionName[$COLUMN_LENGTH:75$], workflowDefinitionVersion, ctCollectionId);
+create index IX_B6C5C563 on WorkflowDefinitionLink (groupId, companyId, classNameId, classPK, ctCollectionId);
+create index IX_65327B4C on WorkflowDefinitionLink (groupId, companyId, classNameId, classPK, typePK, ctCollectionId);
+create index IX_5E9866FC on WorkflowDefinitionLink (groupId, companyId, classNameId, ctCollectionId);
 
-create index IX_415A7007 on WorkflowInstanceLink (groupId, companyId, classNameId, classPK);
+create index IX_688A5865 on WorkflowInstanceLink (groupId, companyId, classNameId, classPK, ctCollectionId);
+create index IX_6E4C09BA on WorkflowInstanceLink (groupId, companyId, classNameId, ctCollectionId);

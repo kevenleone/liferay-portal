@@ -49,10 +49,10 @@ public class JSONWebServiceClientImpl implements JSONWebServiceClient {
 
 	@Override
 	public String doDelete(
-		String url, Map<String, String> parameters,
+		String baseURI, String url, Map<String, String> parameters,
 		Map<String, String> headers) {
 
-		WebTarget webTarget = _client.target(_baseURI);
+		WebTarget webTarget = _client.target(baseURI);
 
 		webTarget = webTarget.path(url);
 
@@ -76,10 +76,10 @@ public class JSONWebServiceClientImpl implements JSONWebServiceClient {
 
 	@Override
 	public String doGet(
-		String url, MultivaluedMap<String, Object> parameters,
+		String baseURI, String url, MultivaluedMap<String, Object> parameters,
 		Map<String, String> headers) {
 
-		WebTarget webTarget = _client.target(_baseURI);
+		WebTarget webTarget = _client.target(baseURI);
 
 		webTarget = webTarget.path(url);
 
@@ -106,8 +106,10 @@ public class JSONWebServiceClientImpl implements JSONWebServiceClient {
 	}
 
 	@Override
-	public <T> void doPatch(String url, T object, Map<String, String> headers) {
-		WebTarget webTarget = _client.target(_baseURI);
+	public <T> void doPatch(
+		String baseURI, String url, T object, Map<String, String> headers) {
+
+		WebTarget webTarget = _client.target(baseURI);
 
 		webTarget = webTarget.path(url);
 
@@ -127,9 +129,10 @@ public class JSONWebServiceClientImpl implements JSONWebServiceClient {
 
 	@Override
 	public <T, V> V doPost(
-		Class<V> clazz, String url, T object, Map<String, String> headers) {
+		Class<V> clazz, String baseURI, String url, T object,
+		Map<String, String> headers) {
 
-		WebTarget webTarget = _client.target(_baseURI);
+		WebTarget webTarget = _client.target(baseURI);
 
 		webTarget = webTarget.path(url);
 
@@ -148,8 +151,10 @@ public class JSONWebServiceClientImpl implements JSONWebServiceClient {
 	}
 
 	@Override
-	public <T> void doPut(String url, T object, Map<String, String> headers) {
-		WebTarget webTarget = _client.target(_baseURI);
+	public <T> void doPut(
+		String baseURI, String url, T object, Map<String, String> headers) {
+
+		WebTarget webTarget = _client.target(baseURI);
 
 		webTarget = webTarget.path(url);
 
@@ -164,16 +169,6 @@ public class JSONWebServiceClientImpl implements JSONWebServiceClient {
 			Entity.entity(object, MediaType.APPLICATION_JSON_TYPE));
 
 		_validateResponse(response);
-	}
-
-	@Override
-	public String getBaseURI() {
-		return _baseURI;
-	}
-
-	@Override
-	public void setBaseURI(String baseURI) {
-		_baseURI = baseURI;
 	}
 
 	@Activate
@@ -205,7 +200,6 @@ public class JSONWebServiceClientImpl implements JSONWebServiceClient {
 		}
 	}
 
-	private String _baseURI;
 	private Client _client;
 
 	@Reference

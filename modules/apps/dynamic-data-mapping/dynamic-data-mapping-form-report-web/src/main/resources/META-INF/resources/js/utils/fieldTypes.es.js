@@ -25,4 +25,8 @@ export default {
 		icon: 'list',
 		title: Liferay.Language.get('select-field-type-label'),
 	},
+	text: {
+		icon: 'text',
+		title: Liferay.Language.get('text-field-type-label'),
+	},
 };

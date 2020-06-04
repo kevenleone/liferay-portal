@@ -12,15 +12,17 @@
  * details.
  */
 
+import {useQuery} from '@apollo/client';
 import {ClayButtonWithIcon} from '@clayui/button';
 import {ClayInput} from '@clayui/form';
-import React, {useContext, useEffect, useState} from 'react';
+import ClayLoadingIndicator from '@clayui/loading-indicator';
+import React, {useContext, useState} from 'react';
 import {withRouter} from 'react-router-dom';
 
 import {AppContext} from '../../AppContext.es';
 import Link from '../../components/Link.es';
 import PaginatedList from '../../components/PaginatedList.es';
-import {getTags} from '../../utils/client.es';
+import {getTagsQuery} from '../../utils/client.es';
 import lang from '../../utils/lang.es';
 import {useDebounceCallback} from '../../utils/utils.es';
 
@@ -34,18 +36,14 @@ export default withRouter(
 
 		const [page, setPage] = useState(1);
 		const [pageSize, setPageSize] = useState(20);
-		const [tags, setTags] = useState({});
+		const [search, setSearch] = useState('');
 
-		useEffect(() => {
-			getTags(page, pageSize, context.siteKey).then((data) =>
-				setTags(data)
-			);
-		}, [page, context.siteKey, pageSize]);
+		const {data, loading} = useQuery(getTagsQuery, {
+			variables: {page, pageSize, search, siteKey: context.siteKey},
+		});
 
 		const [debounceCallback] = useDebounceCallback((search) => {
-			getTags(page, pageSize, context.siteKey, search).then((data) =>
-				setTags(data)
-			);
+			setSearch(search);
 		}, 500);
 
 		return (
@@ -71,11 +69,16 @@ export default withRouter(
 										className="bg-transparent"
 										tag="span"
 									>
-										<ClayButtonWithIcon
-											displayType="unstyled"
-											symbol="search"
-											type="submit"
-										/>
+										{loading && (
+											<ClayLoadingIndicator small />
+										)}
+										{!loading && (
+											<ClayButtonWithIcon
+												displayType="unstyled"
+												symbol="search"
+												type="submit"
+											/>
+										)}
 									</ClayInput.GroupInsetItem>
 								</ClayInput.GroupItem>
 							</ClayInput.Group>
@@ -88,7 +91,8 @@ export default withRouter(
 							activePage={page}
 							changeDelta={setPageSize}
 							changePage={setPage}
-							data={tags}
+							data={data && data.keywordsRanked}
+							loading={loading}
 						>
 							{(tag) => (
 								<div

@@ -35,10 +35,12 @@ import com.liferay.segments.asah.connector.internal.client.model.Topic;
 import com.liferay.segments.asah.connector.internal.client.util.FilterBuilder;
 import com.liferay.segments.asah.connector.internal.client.util.FilterConstants;
 import com.liferay.segments.asah.connector.internal.client.util.OrderByField;
+import com.liferay.segments.asah.connector.internal.util.AsahUtil;
 
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,40 +54,33 @@ import javax.ws.rs.core.MultivaluedMap;
 public class AsahFaroBackendClientImpl implements AsahFaroBackendClient {
 
 	public AsahFaroBackendClientImpl(
-		JSONWebServiceClient jsonWebServiceClient, String dataSourceId,
-		String asahFaroBackendSecuritySignature, String asahFaroBackendURL) {
+		JSONWebServiceClient jsonWebServiceClient) {
 
 		_jsonWebServiceClient = jsonWebServiceClient;
-
-		_dataSourceId = dataSourceId;
-
-		_headers.put(
-			"OSB-Asah-Faro-Backend-Security-Signature",
-			asahFaroBackendSecuritySignature);
-
-		_jsonWebServiceClient.setBaseURI(asahFaroBackendURL);
 	}
 
 	@Override
-	public Experiment addExperiment(Experiment experiment) {
+	public Experiment addExperiment(long companyId, Experiment experiment) {
 		if (experiment == null) {
 			return null;
 		}
 
 		return _jsonWebServiceClient.doPost(
-			Experiment.class, _PATH_EXPERIMENTS, experiment, _headers);
+			Experiment.class, _getBaseURI(companyId), _PATH_EXPERIMENTS,
+			experiment, _getHeaders(companyId));
 	}
 
 	@Override
 	public Long calculateExperimentEstimatedDaysDuration(
-		String experimentId, ExperimentSettings experimentSettings) {
+		long companyId, String experimentId,
+		ExperimentSettings experimentSettings) {
 
 		String days = _jsonWebServiceClient.doPost(
-			String.class,
+			String.class, _getBaseURI(companyId),
 			StringUtil.replace(
 				_PATH_EXPERIMENTS_ESTIMATED_DAYS_DURATION, "{experimentId}",
 				experimentId),
-			experimentSettings, _headers);
+			experimentSettings, _getHeaders(companyId));
 
 		if (Validator.isNull(days)) {
 			return null;
@@ -104,29 +99,30 @@ public class AsahFaroBackendClientImpl implements AsahFaroBackendClient {
 	}
 
 	@Override
-	public void deleteExperiment(String experimentId) {
+	public void deleteExperiment(long companyId, String experimentId) {
 		if (experimentId == null) {
 			return;
 		}
 
 		_jsonWebServiceClient.doDelete(
+			_getBaseURI(companyId),
 			StringUtil.replace(
 				_PATH_EXPERIMENTS_EXPERIMENT, "{experimentId}", experimentId),
-			new HashMap<>(), _headers);
+			new HashMap<>(), _getHeaders(companyId));
 	}
 
 	@Override
-	public String getDataSourceId() {
-		return _dataSourceId;
+	public String getDataSourceId(long companyId) {
+		return AsahUtil.getAsahFaroBackendDataSourceId(companyId);
 	}
 
 	@Override
-	public Individual getIndividual(String individualPK) {
+	public Individual getIndividual(long companyId, String individualPK) {
 		FilterBuilder filterBuilder = new FilterBuilder();
 
 		filterBuilder.addFilter(
 			"dataSourceId", FilterConstants.COMPARISON_OPERATOR_EQUALS,
-			getDataSourceId());
+			getDataSourceId(companyId));
 		filterBuilder.addFilter(
 			"dataSourceIndividualPKs/individualPKs",
 			FilterConstants.COMPARISON_OPERATOR_EQUALS, individualPK);
@@ -138,12 +134,12 @@ public class AsahFaroBackendClientImpl implements AsahFaroBackendClient {
 
 		try {
 			String response = _jsonWebServiceClient.doGet(
-				_PATH_INDIVIDUALS,
+				_getBaseURI(companyId), _PATH_INDIVIDUALS,
 				_getParameters(
 					filterBuilder,
 					FilterConstants.FIELD_NAME_CONTEXT_INDIVIDUAL, 1, 1, null,
 					uriVariables),
-				_headers);
+				_getHeaders(companyId));
 
 			Results<Individual> individualResults =
 				_individualJSONObjectMapper.mapToResults(response);
@@ -164,11 +160,12 @@ public class AsahFaroBackendClientImpl implements AsahFaroBackendClient {
 
 	@Override
 	public Results<Individual> getIndividualResults(
-		String individualSegmentId, int cur, int delta,
+		long companyId, String individualSegmentId, int cur, int delta,
 		List<OrderByField> orderByFields) {
 
 		try {
 			String response = _jsonWebServiceClient.doGet(
+				_getBaseURI(companyId),
 				StringUtil.replace(
 					_PATH_INDIVIDUAL_SEGMENTS_INDIVIDUALS, "{id}",
 					individualSegmentId),
@@ -176,7 +173,7 @@ public class AsahFaroBackendClientImpl implements AsahFaroBackendClient {
 					new FilterBuilder(),
 					FilterConstants.FIELD_NAME_CONTEXT_INDIVIDUAL, cur, delta,
 					orderByFields),
-				_headers);
+				_getHeaders(companyId));
 
 			return _individualJSONObjectMapper.mapToResults(response);
 		}
@@ -188,7 +185,7 @@ public class AsahFaroBackendClientImpl implements AsahFaroBackendClient {
 
 	@Override
 	public Results<IndividualSegment> getIndividualSegmentResults(
-		int cur, int delta, List<OrderByField> orderByFields) {
+		long companyId, int cur, int delta, List<OrderByField> orderByFields) {
 
 		FilterBuilder filterBuilder = new FilterBuilder();
 
@@ -201,12 +198,12 @@ public class AsahFaroBackendClientImpl implements AsahFaroBackendClient {
 
 		try {
 			String response = _jsonWebServiceClient.doGet(
-				_PATH_INDIVIDUAL_SEGMENTS,
+				_getBaseURI(companyId), _PATH_INDIVIDUAL_SEGMENTS,
 				_getParameters(
 					filterBuilder,
 					FilterConstants.FIELD_NAME_CONTEXT_INDIVIDUAL_SEGMENT, cur,
 					delta, orderByFields),
-				_headers);
+				_getHeaders(companyId));
 
 			return _individualSegmentJSONObjectMapper.mapToResults(response);
 		}
@@ -217,11 +214,14 @@ public class AsahFaroBackendClientImpl implements AsahFaroBackendClient {
 	}
 
 	@Override
-	public Results<Topic> getInterestTermsResults(String userId) {
+	public Results<Topic> getInterestTermsResults(
+		long companyId, String userId) {
+
 		try {
 			String response = _jsonWebServiceClient.doGet(
+				_getBaseURI(companyId),
 				StringUtil.replace(_PATH_INTERESTS_TERMS, "{userId}", userId),
-				new MultivaluedHashMap<>(), _headers);
+				new MultivaluedHashMap<>(), _getHeaders(companyId));
 
 			return _interestTermsJSONObjectMapper.mapToResults(response);
 		}
@@ -233,21 +233,22 @@ public class AsahFaroBackendClientImpl implements AsahFaroBackendClient {
 	}
 
 	@Override
-	public void updateExperiment(Experiment experiment) {
+	public void updateExperiment(long companyId, Experiment experiment) {
 		if (Validator.isNull(experiment.getId())) {
 			throw new IllegalArgumentException("Experiment ID is null");
 		}
 
 		_jsonWebServiceClient.doPatch(
+			_getBaseURI(companyId),
 			StringUtil.replace(
 				_PATH_EXPERIMENTS_EXPERIMENT, "{experimentId}",
 				experiment.getId()),
-			experiment, _headers);
+			experiment, _getHeaders(companyId));
 	}
 
 	@Override
 	public void updateExperimentDXPVariants(
-		String experimentId, DXPVariants dxpVariants) {
+		long companyId, String experimentId, DXPVariants dxpVariants) {
 
 		if (Validator.isNull(experimentId)) {
 			throw new IllegalArgumentException("Experiment ID is null");
@@ -258,9 +259,20 @@ public class AsahFaroBackendClientImpl implements AsahFaroBackendClient {
 		}
 
 		_jsonWebServiceClient.doPut(
+			_getBaseURI(companyId),
 			StringUtil.replace(
 				_PATH_EXPERIMENTS_DXP_VARIANTS, "{experimentId}", experimentId),
-			dxpVariants, _headers);
+			dxpVariants, _getHeaders(companyId));
+	}
+
+	private String _getBaseURI(long companyId) {
+		return AsahUtil.getAsahFaroBackendURL(companyId);
+	}
+
+	private Map<String, String> _getHeaders(long companyId) {
+		return Collections.singletonMap(
+			"OSB-Asah-Faro-Backend-Security-Signature",
+			AsahUtil.getAsahFaroBackendSecuritySignature(companyId));
 	}
 
 	private MultivaluedMap<String, Object> _getParameters(
@@ -361,8 +373,6 @@ public class AsahFaroBackendClientImpl implements AsahFaroBackendClient {
 	private static final InterestTermsJSONObjectMapper
 		_interestTermsJSONObjectMapper = new InterestTermsJSONObjectMapper();
 
-	private final String _dataSourceId;
-	private final Map<String, String> _headers = new HashMap<>();
 	private final JSONWebServiceClient _jsonWebServiceClient;
 
 }

@@ -24,11 +24,42 @@ import org.osgi.annotation.versioning.ProviderType;
 @ProviderType
 public interface OpenIdConnectProviderRegistry<S, T> {
 
-	public OpenIdConnectProvider<S, T> findOpenIdConnectProvider(String name)
+	public OpenIdConnectProvider<S, T> findOpenIdConnectProvider(
+			long companyId, String name)
 		throws OpenIdConnectServiceException.ProviderException;
 
-	public OpenIdConnectProvider<S, T> getOpenIdConnectProvider(String name);
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
+	public default OpenIdConnectProvider<S, T> findOpenIdConnectProvider(
+			String name)
+		throws OpenIdConnectServiceException.ProviderException {
 
-	public Collection<String> getOpenIdConnectProviderNames();
+		throw new UnsupportedOperationException();
+	}
+
+	public OpenIdConnectProvider<S, T> getOpenIdConnectProvider(
+		long companyId, String name);
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
+	public default OpenIdConnectProvider<S, T> getOpenIdConnectProvider(
+		String name) {
+
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * @deprecated As of Athanasius (7.3.x)
+	 */
+	@Deprecated
+	public default Collection<String> getOpenIdConnectProviderNames() {
+		throw new UnsupportedOperationException();
+	}
+
+	public Collection<String> getOpenIdConnectProviderNames(long companyId);
 
 }

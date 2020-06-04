@@ -86,7 +86,7 @@ public class CTDisplayRendererRegistry {
 		HttpServletRequest httpServletRequest, CTEntry ctEntry) {
 
 		CTDisplayRenderer<T> ctDisplayRenderer =
-			_ctDisplayServiceTrackerMap.getService(
+			(CTDisplayRenderer<T>)_ctDisplayServiceTrackerMap.getService(
 				ctEntry.getModelClassNameId());
 
 		if (ctDisplayRenderer == null) {
@@ -169,7 +169,8 @@ public class CTDisplayRendererRegistry {
 		Locale locale, T model, long modelClassNameId) {
 
 		CTDisplayRenderer<T> ctDisplayRenderer =
-			_ctDisplayServiceTrackerMap.getService(modelClassNameId);
+			(CTDisplayRenderer<T>)_ctDisplayServiceTrackerMap.getService(
+				modelClassNameId);
 
 		String name = null;
 
@@ -204,7 +205,8 @@ public class CTDisplayRendererRegistry {
 		Locale locale, long modelClassNameId) {
 
 		CTDisplayRenderer<T> ctDisplayRenderer =
-			_ctDisplayServiceTrackerMap.getService(modelClassNameId);
+			(CTDisplayRenderer<T>)_ctDisplayServiceTrackerMap.getService(
+				modelClassNameId);
 
 		String name = null;
 
@@ -319,7 +321,8 @@ public class CTDisplayRendererRegistry {
 		throws Exception {
 
 		CTDisplayRenderer<T> ctDisplayRenderer =
-			_ctDisplayServiceTrackerMap.getService(modelClassNameId);
+			(CTDisplayRenderer<T>)_ctDisplayServiceTrackerMap.getService(
+				modelClassNameId);
 
 		if (ctDisplayRenderer == null) {
 			ctDisplayRenderer = CTModelDisplayRendererAdapter.getInstance();
@@ -358,7 +361,9 @@ public class CTDisplayRendererRegistry {
 	protected void activate(BundleContext bundleContext) {
 		_ctDisplayServiceTrackerMap =
 			ServiceTrackerMapFactory.openSingleValueMap(
-				bundleContext, CTDisplayRenderer.class, null,
+				bundleContext,
+				(Class<CTDisplayRenderer<?>>)(Class<?>)CTDisplayRenderer.class,
+				null,
 				(serviceReference, emitter) -> {
 					CTDisplayRenderer<?> ctDisplayRenderer =
 						bundleContext.getService(serviceReference);
@@ -400,7 +405,7 @@ public class CTDisplayRendererRegistry {
 	@Reference
 	private ClassNameLocalService _classNameLocalService;
 
-	private ServiceTrackerMap<Long, CTDisplayRenderer>
+	private ServiceTrackerMap<Long, CTDisplayRenderer<?>>
 		_ctDisplayServiceTrackerMap;
 	private ServiceTrackerMap<Long, CTService> _ctServiceServiceTrackerMap;
 

@@ -62,7 +62,7 @@ portletURL.setParameter("tabs1", tabs1);
 	/>
 
 	<%
-	SearchContainer searchContainer = new SearchContainer(renderRequest, null, null, SearchContainer.DEFAULT_CUR_PARAM, 10, portletURL, null, null);
+	SearchContainer<MicroblogsEntry> searchContainer = new SearchContainer(renderRequest, null, null, SearchContainer.DEFAULT_CUR_PARAM, 10, portletURL, null, null);
 
 	searchContainer.setDeltaConfigurable(false);
 

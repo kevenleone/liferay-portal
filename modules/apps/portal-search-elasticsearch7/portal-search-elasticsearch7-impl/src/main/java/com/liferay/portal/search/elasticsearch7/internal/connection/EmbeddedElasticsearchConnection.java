@@ -25,14 +25,13 @@ import com.liferay.portal.kernel.util.Props;
 import com.liferay.portal.kernel.util.PropsKeys;
 import com.liferay.portal.search.elasticsearch7.configuration.ElasticsearchConfiguration;
 import com.liferay.portal.search.elasticsearch7.internal.cluster.ClusterSettingsContext;
-import com.liferay.portal.search.elasticsearch7.internal.util.LogUtil;
+import com.liferay.portal.search.elasticsearch7.internal.util.SearchLogHelperUtil;
 import com.liferay.portal.search.elasticsearch7.settings.SettingsContributor;
 
 import io.netty.buffer.ByteBufUtil;
 
 import java.io.IOException;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import java.util.Map;
@@ -224,7 +223,7 @@ public class EmbeddedElasticsearchConnection
 
 	@Override
 	protected RestHighLevelClient createRestHighLevelClient() {
-		LogUtil.setRestClientLoggerLevel(
+		SearchLogHelperUtil.setRESTClientLoggerLevel(
 			elasticsearchConfiguration.restClientLoggerLevel());
 
 		startNode();
@@ -252,6 +251,15 @@ public class EmbeddedElasticsearchConnection
 
 	protected String getClusterName() {
 		return elasticsearchConfiguration.clusterName();
+	}
+
+	protected ElasticsearchInstancePaths getElasticsearchInstancePaths() {
+		ElasticsearchInstancePathsBuilder elasticsearchInstancePathsBuilder =
+			new ElasticsearchInstancePathsBuilder();
+
+		return elasticsearchInstancePathsBuilder.workPath(
+			Paths.get(props.get(PropsKeys.LIFERAY_HOME))
+		).build();
 	}
 
 	protected String getHttpPort() {
@@ -339,7 +347,7 @@ public class EmbeddedElasticsearchConnection
 		).elasticsearchConfiguration(
 			elasticsearchConfiguration
 		).elasticsearchInstancePaths(
-			new EmbeddedElasticsearchInstancePaths()
+			getElasticsearchInstancePaths()
 		).httpPort(
 			getHttpPort()
 		).localBindInetAddressSupplier(
@@ -416,20 +424,5 @@ public class EmbeddedElasticsearchConnection
 	private Node _node;
 	private final Set<SettingsContributor> _settingsContributors =
 		new ConcurrentSkipListSet<>();
-
-	private class EmbeddedElasticsearchInstancePaths
-		implements ElasticsearchInstancePaths {
-
-		@Override
-		public Path getHomePath() {
-			return null;
-		}
-
-		@Override
-		public Path getWorkPath() {
-			return Paths.get(props.get(PropsKeys.LIFERAY_HOME));
-		}
-
-	}
 
 }

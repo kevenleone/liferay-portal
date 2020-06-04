@@ -32,9 +32,9 @@ import com.liferay.fragment.service.FragmentEntryLinkLocalServiceUtil;
 import com.liferay.fragment.service.FragmentEntryServiceUtil;
 import com.liferay.fragment.util.comparator.FragmentCollectionContributorNameComparator;
 import com.liferay.fragment.util.configuration.FragmentEntryConfigurationParser;
-import com.liferay.info.display.contributor.InfoDisplayContributor;
 import com.liferay.info.display.contributor.InfoDisplayContributorTracker;
 import com.liferay.info.display.contributor.InfoDisplayObjectProvider;
+import com.liferay.info.item.provider.InfoItemFormProviderTracker;
 import com.liferay.info.list.provider.item.selector.criterion.InfoListProviderItemSelectorCriterion;
 import com.liferay.info.list.provider.item.selector.criterion.InfoListProviderItemSelectorReturnType;
 import com.liferay.item.selector.ItemSelector;
@@ -173,6 +173,7 @@ public class ContentPageEditorDisplayContext {
 		FragmentRendererTracker fragmentRendererTracker,
 		HttpServletRequest httpServletRequest,
 		InfoDisplayContributorTracker infoDisplayContributorTracker,
+		InfoItemFormProviderTracker infoItemFormProviderTracker,
 		ItemSelector itemSelector, PortletRequest portletRequest,
 		RenderResponse renderResponse) {
 
@@ -191,6 +192,7 @@ public class ContentPageEditorDisplayContext {
 
 		this.httpServletRequest = httpServletRequest;
 		this.infoDisplayContributorTracker = infoDisplayContributorTracker;
+		this.infoItemFormProviderTracker = infoItemFormProviderTracker;
 
 		themeDisplay = (ThemeDisplay)httpServletRequest.getAttribute(
 			WebKeys.THEME_DISPLAY);
@@ -265,17 +267,15 @@ public class ContentPageEditorDisplayContext {
 				getFragmentEntryActionURL(
 					"/content_layout/edit_fragment_entry_link")
 			).put(
-				"fragmentPanelEnabled",
-				_ffLayoutContentPageEditorConfiguration.fragmentPanelEnabled()
-			).put(
 				"getAssetFieldValueURL",
 				getResourceURL("/content_layout/get_asset_field_value")
 			).put(
 				"getAssetMappingFieldsURL",
 				getResourceURL("/content_layout/get_asset_mapping_fields")
 			).put(
-				"getAvailableListItemStylesURL",
-				getResourceURL("/content_layout/get_available_list_item_styles")
+				"getAvailableListItemRenderersURL",
+				getResourceURL(
+					"/content_layout/get_available_list_item_renderers")
 			).put(
 				"getAvailableListRenderersURL",
 				getResourceURL("/content_layout/get_available_list_renderers")
@@ -586,6 +586,7 @@ public class ContentPageEditorDisplayContext {
 
 	protected final HttpServletRequest httpServletRequest;
 	protected final InfoDisplayContributorTracker infoDisplayContributorTracker;
+	protected final InfoItemFormProviderTracker infoItemFormProviderTracker;
 	protected final ThemeDisplay themeDisplay;
 
 	private Map<String, Object> _getAvailableLanguages() {
@@ -1327,20 +1328,15 @@ public class ContentPageEditorDisplayContext {
 	}
 
 	private List<String> _getInfoDisplayContributorsClassNames() {
-		List<String> infoDisplayContributorsClassNames = new ArrayList<>();
+		List<String> infoDisplayContributorsClassNames =
+			infoItemFormProviderTracker.getInfoItemClassNames();
 
-		for (InfoDisplayContributor<?> infoDisplayContributor :
-				infoDisplayContributorTracker.getInfoDisplayContributors()) {
+		if (infoDisplayContributorsClassNames.contains(
+				FileEntry.class.getName())) {
 
-			// LPS-111037
-
-			String className = infoDisplayContributor.getClassName();
-
-			if (Objects.equals(FileEntry.class.getName(), className)) {
-				className = DLFileEntryConstants.getClassName();
-			}
-
-			infoDisplayContributorsClassNames.add(className);
+			infoDisplayContributorsClassNames.add(
+				DLFileEntryConstants.getClassName());
+			infoDisplayContributorsClassNames.remove(FileEntry.class.getName());
 		}
 
 		return infoDisplayContributorsClassNames;

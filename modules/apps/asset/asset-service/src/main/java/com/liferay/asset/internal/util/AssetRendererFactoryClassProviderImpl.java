@@ -28,17 +28,19 @@ public class AssetRendererFactoryClassProviderImpl
 	implements AssetRendererFactoryClassProvider {
 
 	@Override
-	public Class<? extends AssetRendererFactory> getClass(
-		AssetRendererFactory assetRendererFactory) {
+	public Class<? extends AssetRendererFactory<?>> getClass(
+		AssetRendererFactory<?> assetRendererFactory) {
 
-		if (assetRendererFactory instanceof AssetRendererFactoryWrapper) {
-			AssetRendererFactoryWrapper assetRendererFactoryWrapper =
-				(AssetRendererFactoryWrapper)assetRendererFactory;
+		if (assetRendererFactory instanceof AssetRendererFactoryWrapper<?>) {
+			AssetRendererFactoryWrapper<?> assetRendererFactoryWrapper =
+				(AssetRendererFactoryWrapper<?>)assetRendererFactory;
 
-			return assetRendererFactoryWrapper.getWrappedClass();
+			return (Class<? extends AssetRendererFactory<?>>)
+				assetRendererFactoryWrapper.getWrappedClass();
 		}
 
-		return assetRendererFactory.getClass();
+		return (Class<? extends AssetRendererFactory<?>>)
+			assetRendererFactory.getClass();
 	}
 
 }

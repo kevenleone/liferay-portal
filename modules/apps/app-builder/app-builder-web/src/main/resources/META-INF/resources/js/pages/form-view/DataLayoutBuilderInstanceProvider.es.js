@@ -32,7 +32,7 @@ export default ({children, dataLayoutBuilder}) => {
 		deleteDefinitionField(event);
 	});
 
-	const saveAsFieldset = useSaveAsFieldset();
+	const saveAsFieldset = useSaveAsFieldset({dataLayoutBuilder});
 
 	useEffect(() => {
 		const provider = dataLayoutBuilder.getLayoutProvider();
@@ -99,7 +99,8 @@ export default ({children, dataLayoutBuilder}) => {
 
 		if (
 			Object.keys(fieldHovered).length &&
-			fieldHovered.type === 'fieldset'
+			fieldHovered.type === 'fieldset' &&
+			!fieldHovered.ddmStructureId
 		) {
 			fieldActions = [
 				duplicateAction,

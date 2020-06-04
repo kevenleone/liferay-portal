@@ -240,13 +240,14 @@ public class RenderFragmentLayoutDisplayContext {
 	}
 
 	public InfoListRendererContext getInfoListRendererContext(
-		String listItemStyle) {
+		String listItemStyle, String templateKey) {
 
 		DefaultInfoListRendererContext defaultInfoListRendererContext =
 			new DefaultInfoListRendererContext(
 				_httpServletRequest, _httpServletResponse);
 
-		defaultInfoListRendererContext.setListItemStyleKey(listItemStyle);
+		defaultInfoListRendererContext.setListItemRendererKey(listItemStyle);
+		defaultInfoListRendererContext.setTemplateKey(templateKey);
 
 		return defaultInfoListRendererContext;
 	}

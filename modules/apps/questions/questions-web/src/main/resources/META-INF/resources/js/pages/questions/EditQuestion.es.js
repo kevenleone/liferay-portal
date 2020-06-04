@@ -12,18 +12,18 @@
  * details.
  */
 
+import {useMutation, useQuery} from '@apollo/client';
 import ClayButton from '@clayui/button';
 import ClayForm, {ClayInput} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
-import {Editor} from 'frontend-editor-ckeditor-web';
 import React, {useContext, useState} from 'react';
 import {withRouter} from 'react-router-dom';
 
 import {AppContext} from '../../AppContext.es';
 import Link from '../../components/Link.es';
+import QuestionsEditor from '../../components/QuestionsEditor';
 import TagSelector from '../../components/TagSelector.es';
-import {getThreadContent, updateThread} from '../../utils/client.es';
-import {getCKEditorConfig, onBeforeLoadCKEditor} from '../../utils/utils.es';
+import {getThreadContentQuery, updateThreadQuery} from '../../utils/client.es';
 
 export default withRouter(
 	({
@@ -40,30 +40,33 @@ export default withRouter(
 		const [tags, setTags] = useState([]);
 		const [tagsLoaded, setTagsLoaded] = useState(true);
 
-		const loadThread = () =>
-			getThreadContent(questionId, context.siteKey).then(
-				({articleBody, headline, id, keywords}) => {
-					setArticleBody(articleBody);
-					setHeadline(headline);
-					setId(id);
-					if (keywords) {
-						setTags(
-							keywords.map((keyword) => ({
+		useQuery(getThreadContentQuery, {
+			onCompleted({messageBoardThreadByFriendlyUrlPath}) {
+				setArticleBody(messageBoardThreadByFriendlyUrlPath.articleBody);
+				setHeadline(messageBoardThreadByFriendlyUrlPath.headline);
+				setId(messageBoardThreadByFriendlyUrlPath.id);
+				if (messageBoardThreadByFriendlyUrlPath.keywords) {
+					setTags(
+						messageBoardThreadByFriendlyUrlPath.keywords.map(
+							(keyword) => ({
 								label: keyword,
 								value: keyword,
-							}))
-						);
-					}
+							})
+						)
+					);
 				}
-			);
+			},
+			variables: {
+				friendlyUrlPath: questionId,
+				siteKey: context.siteKey,
+			},
+		});
 
-		const submit = () =>
-			updateThread(
-				articleBody,
-				headline,
-				id,
-				tags.map((tag) => tag.value)
-			).then(() => history.goBack());
+		const [updateThread] = useMutation(updateThreadQuery, {
+			onCompleted() {
+				history.goBack();
+			},
+		});
 
 		return (
 			<section className="c-mt-5 questions-section questions-section-edit">
@@ -114,22 +117,13 @@ export default withRouter(
 										</span>
 									</label>
 
-									<Editor
-										config={getCKEditorConfig()}
-										data={articleBody}
-										onBeforeLoad={(editor) =>
-											onBeforeLoadCKEditor(
-												editor,
-												context.imageBrowseURL
-											)
-										}
-										onChange={(event) =>
+									<QuestionsEditor
+										contents={articleBody}
+										onChange={(event) => {
 											setArticleBody(
 												event.editor.getData()
-											)
-										}
-										onInstanceReady={loadThread}
-										required
+											);
+										}}
 									/>
 
 									<ClayForm.FeedbackGroup>
@@ -161,7 +155,18 @@ export default withRouter(
 										!articleBody || !headline || !tagsLoaded
 									}
 									displayType="primary"
-									onClick={submit}
+									onClick={() => {
+										updateThread({
+											variables: {
+												articleBody,
+												headline,
+												keywords: tags.map(
+													(tag) => tag.value
+												),
+												messageBoardThreadId: id,
+											},
+										});
+									}}
 								>
 									{Liferay.Language.get(
 										'update-your-question'

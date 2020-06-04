@@ -30,7 +30,7 @@ public class SearchContainerManagementToolbarDisplayContext
 		HttpServletRequest httpServletRequest,
 		LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse,
-		SearchContainer searchContainer) {
+		SearchContainer<?> searchContainer) {
 
 		super(
 			httpServletRequest, liferayPortletRequest, liferayPortletResponse);
@@ -49,7 +49,7 @@ public class SearchContainerManagementToolbarDisplayContext
 		LiferayPortletRequest liferayPortletRequest,
 		LiferayPortletResponse liferayPortletResponse,
 		HttpServletRequest httpServletRequest,
-		SearchContainer searchContainer) {
+		SearchContainer<?> searchContainer) {
 
 		this(
 			httpServletRequest, liferayPortletRequest, liferayPortletResponse,
@@ -95,6 +95,6 @@ public class SearchContainerManagementToolbarDisplayContext
 		return searchContainer.getOrderByTypeParam();
 	}
 
-	protected SearchContainer searchContainer;
+	protected SearchContainer<?> searchContainer;
 
 }

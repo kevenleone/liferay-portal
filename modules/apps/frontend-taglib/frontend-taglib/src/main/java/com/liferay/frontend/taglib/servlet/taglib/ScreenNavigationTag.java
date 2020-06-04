@@ -281,20 +281,20 @@ public class ScreenNavigationTag extends IncludeTag {
 	}
 
 	private String _getDefaultScreenNavigationEntryKey() {
-		List<ScreenNavigationEntry> screenNavigationEntries =
+		List<ScreenNavigationEntry<Object>> screenNavigationEntries =
 			_getScreenNavigationEntries();
 
 		if (ListUtil.isEmpty(screenNavigationEntries)) {
 			return null;
 		}
 
-		ScreenNavigationEntry screenNavigationEntry =
+		ScreenNavigationEntry<Object> screenNavigationEntry =
 			screenNavigationEntries.get(0);
 
 		return screenNavigationEntry.getEntryKey();
 	}
 
-	private List<ScreenNavigationEntry> _getScreenNavigationEntries() {
+	private List<ScreenNavigationEntry<Object>> _getScreenNavigationEntries() {
 		ScreenNavigationCategory selectedScreenNavigationCategory =
 			_getSelectedScreenNavigationCategory();
 
@@ -332,7 +332,7 @@ public class ScreenNavigationTag extends IncludeTag {
 		return null;
 	}
 
-	private ScreenNavigationEntry _getSelectedScreenNavigationEntry() {
+	private ScreenNavigationEntry<?> _getSelectedScreenNavigationEntry() {
 		String screenNavigationEntryKey = ParamUtil.getString(
 			request, "screenNavigationEntryKey");
 
@@ -340,14 +340,14 @@ public class ScreenNavigationTag extends IncludeTag {
 			screenNavigationEntryKey = _getDefaultScreenNavigationEntryKey();
 		}
 
-		List<ScreenNavigationEntry> screenNavigationEntries =
+		List<ScreenNavigationEntry<Object>> screenNavigationEntries =
 			_getScreenNavigationEntries();
 
 		if (ListUtil.isEmpty(screenNavigationEntries)) {
 			return null;
 		}
 
-		for (ScreenNavigationEntry screenNavigationEntry :
+		for (ScreenNavigationEntry<Object> screenNavigationEntry :
 				screenNavigationEntries) {
 
 			if (Objects.equals(

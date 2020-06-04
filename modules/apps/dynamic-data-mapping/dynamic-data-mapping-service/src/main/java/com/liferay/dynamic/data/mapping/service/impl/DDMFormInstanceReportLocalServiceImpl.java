@@ -25,11 +25,15 @@ import com.liferay.dynamic.data.mapping.service.base.DDMFormInstanceReportLocalS
 import com.liferay.dynamic.data.mapping.service.persistence.DDMFormInstancePersistence;
 import com.liferay.dynamic.data.mapping.storage.DDMFormFieldValue;
 import com.liferay.dynamic.data.mapping.storage.DDMFormValues;
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.aop.AopService;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
 import com.liferay.portal.kernel.json.JSONUtil;
+import com.liferay.portal.kernel.log.Log;
+import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.messaging.async.Async;
 
 import java.util.Date;
 
@@ -72,6 +76,30 @@ public class DDMFormInstanceReportLocalServiceImpl
 
 		return ddmFormInstanceReportPersistence.findByFormInstanceId(
 			formInstanceId);
+	}
+
+	@Async
+	@Override
+	public void processFormInstanceReportEvent(
+		long formInstanceReportId, long formInstanceRecordVersionId,
+		String formInstanceReportEvent) {
+
+		try {
+			updateFormInstanceReport(
+				formInstanceReportId, formInstanceRecordVersionId,
+				formInstanceReportEvent);
+		}
+		catch (Exception exception) {
+			if (_log.isWarnEnabled()) {
+				StringBundler sb = new StringBundler(3);
+
+				sb.append("Unable to update dynamic data mapping form ");
+				sb.append("instance report ");
+				sb.append(formInstanceReportId);
+
+				_log.warn(sb.toString(), exception);
+			}
+		}
 	}
 
 	@Override
@@ -137,7 +165,9 @@ public class DDMFormInstanceReportLocalServiceImpl
 
 					JSONObject processedFieldJSONObject =
 						ddmFormFieldTypeReportProcessor.process(
-							ddmFormFieldValue, fieldJSONObject,
+							ddmFormFieldValue,
+							JSONFactoryUtil.createJSONObject(
+								fieldJSONObject.toJSONString()),
 							formInstanceRecordVersion.getFormInstanceRecordId(),
 							formInstanceReportEvent);
 
@@ -172,6 +202,9 @@ public class DDMFormInstanceReportLocalServiceImpl
 				exception);
 		}
 	}
+
+	private static final Log _log = LogFactoryUtil.getLog(
+		DDMFormInstanceReportLocalServiceImpl.class);
 
 	@Reference
 	private DDMFormFieldTypeReportProcessorTracker

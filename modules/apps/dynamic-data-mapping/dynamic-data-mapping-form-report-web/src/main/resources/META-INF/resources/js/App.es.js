@@ -18,15 +18,16 @@ import Card from './components/card/Card.es';
 import BarChart from './components/chart/bar/BarChart.es';
 import PieChart from './components/chart/pie/PieChart.es';
 import EmptyState from './components/empty-state/EmptyState.es';
-import toDataArray, {sumTotalEntries} from './utils/data.es';
+import List from './components/list/List.es';
+import toDataArray, {sumTotalEntries, toArray} from './utils/data.es';
 import fieldTypes from './utils/fieldTypes.es';
 
-const chartFactory = (type, values, totalEntries) => {
+const chartFactory = (options, type, values, totalEntries) => {
 	switch (type) {
 		case 'checkbox_multiple':
 			return (
 				<BarChart
-					data={toDataArray(values)}
+					data={toDataArray(options, values)}
 					totalEntries={totalEntries}
 				/>
 			);
@@ -35,10 +36,13 @@ const chartFactory = (type, values, totalEntries) => {
 		case 'select':
 			return (
 				<PieChart
-					data={toDataArray(values)}
+					data={toDataArray(options, values)}
 					totalEntries={totalEntries}
 				/>
 			);
+
+		case 'text':
+			return <List data={toArray(values)} totalEntries={totalEntries} />;
 
 		default:
 			return null;
@@ -48,10 +52,11 @@ const chartFactory = (type, values, totalEntries) => {
 export default ({data, fields}) => {
 	let hasCards = false;
 
-	const cards = fields.map(({name, type}, index) => {
-		const {values = {}} = data[name] || {};
-		const totalEntries = sumTotalEntries(values);
-		const chart = chartFactory(type, values, totalEntries);
+	const cards = fields.map(({label, name, options, type}, index) => {
+		const {values = {}, totalEntries = sumTotalEntries(values)} =
+			data[name] || {};
+
+		const chart = chartFactory(options, type, values, totalEntries);
 
 		if (chart === null) {
 			return null;
@@ -61,6 +66,7 @@ export default ({data, fields}) => {
 		}
 
 		const field = {
+			label,
 			name,
 			type,
 			...fieldTypes[type],

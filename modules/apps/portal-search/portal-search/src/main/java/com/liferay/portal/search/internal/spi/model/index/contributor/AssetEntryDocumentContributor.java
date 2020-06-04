@@ -36,10 +36,11 @@ import org.osgi.service.component.annotations.Reference;
  * @author Michael C. Han
  */
 @Component(immediate = true, service = DocumentContributor.class)
-public class AssetEntryDocumentContributor implements DocumentContributor {
+public class AssetEntryDocumentContributor
+	implements DocumentContributor<AssetEntry> {
 
 	@Override
-	public void contribute(Document document, BaseModel baseModel) {
+	public void contribute(Document document, BaseModel<AssetEntry> baseModel) {
 		String className = document.get(Field.ENTRY_CLASS_NAME);
 
 		AssetRendererFactory<?> assetRendererFactory =

@@ -12,27 +12,45 @@
  * details.
  */
 
+import {useMutation} from '@apollo/client';
 import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
-import {subscribe, unsubscribe} from '../utils/client.es';
+import {subscribeQuery, unsubscribeQuery} from '../utils/client.es';
 
-export default ({onSubscription, question}) => {
+export default ({
+	onSubscription,
+	question: {id: messageBoardThreadId, subscribed},
+}) => {
+	const [subscription, setSubscription] = useState(false);
+
+	useEffect(() => {
+		setSubscription(subscribed);
+	}, [subscribed]);
+
+	const onCompleted = () => {
+		setSubscription(!subscription);
+		if (onSubscription) {
+			onSubscription(subscription);
+		}
+	};
+
+	const [subscribe] = useMutation(subscribeQuery, {onCompleted});
+	const [unsubscribe] = useMutation(unsubscribeQuery, {onCompleted});
+
 	const changeSubscription = () => {
-		const promise = question.subscribed
-			? unsubscribe(question.id)
-			: subscribe(question.id);
-		promise.then(() => {
-			if (onSubscription) {
-				onSubscription(!question.subscribed);
-			}
-		});
+		if (subscription) {
+			unsubscribe({variables: {messageBoardThreadId}});
+		}
+		else {
+			subscribe({variables: {messageBoardThreadId}});
+		}
 	};
 
 	return (
 		<ClayButton
-			displayType={question.subscribed ? 'primary' : 'secondary'}
+			displayType={subscription ? 'primary' : 'secondary'}
 			monospaced
 			onClick={changeSubscription}
 		>

@@ -16,26 +16,26 @@
 
 <%@ include file="/init.jsp" %>
 
-<%@ page import="com.liferay.info.taglib.list.renderer.BasicListInfoListItemStyle" %><%@
-page import="com.liferay.portal.kernel.util.GetterUtil" %>
+<%@ page import="com.liferay.info.taglib.internal.list.renderer.BasicListInfoListStyle" %><%@
+page import="com.liferay.portal.kernel.util.Validator" %>
 
 <%@ page import="java.util.Objects" %>
 
 <%
-String infoListItemStyleKey = GetterUtil.getString(request.getAttribute("liferay-info:info-list-grid:listItemStyleKey"));
+String infoListStyleKey = GetterUtil.getString(request.getAttribute("liferay-info:info-list-grid:listStyleKey"));
 
 String listCssClass = "";
 String listItemCssClass = "";
 
-if (Objects.equals(infoListItemStyleKey, BasicListInfoListItemStyle.BORDERED.getKey())) {
+if (Objects.equals(infoListStyleKey, BasicListInfoListStyle.BORDERED.getKey())) {
 	listCssClass = "list-group";
 	listItemCssClass = "list-group-item";
 }
-else if (Objects.equals(infoListItemStyleKey, BasicListInfoListItemStyle.INLINE.getKey())) {
+else if (Objects.equals(infoListStyleKey, BasicListInfoListStyle.INLINE.getKey())) {
 	listCssClass = "list-inline";
 	listItemCssClass = "list-inline-item";
 }
-else if (Objects.equals(infoListItemStyleKey, BasicListInfoListItemStyle.UNSTYLED.getKey())) {
+else if (Objects.equals(infoListStyleKey, BasicListInfoListStyle.UNSTYLED.getKey())) {
 	listCssClass = "list-unstyled";
 }
 %>

@@ -38,8 +38,8 @@ public class RenderChildrenTag extends TreeTag {
 
 		if (!(treeObject instanceof Tree.Node)) {
 			throw new IllegalStateException(
-				"Render children has to be used inside the node fragment of " +
-					"a tree tag");
+				"Render children must be used inside the node fragment of a " +
+					"tree tag");
 		}
 
 		Deque<Tree.Node<?>> parentNodes =

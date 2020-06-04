@@ -110,6 +110,8 @@ public class ElasticsearchConnectionFixture
 				_elasticsearchConfigurationProperties =
 					createElasticsearchConfigurationProperties(
 						_elasticsearchConfigurationProperties, _clusterName);
+			elasticsearchConnectionFixture._sidecarReplacesEmbedded =
+				_sidecarReplacesEmbedded;
 			elasticsearchConnectionFixture._workPath = _TMP_PATH.resolve(
 				_clusterName);
 
@@ -146,6 +148,14 @@ public class ElasticsearchConnectionFixture
 			return this;
 		}
 
+		public ElasticsearchConnectionFixture.Builder sidecarReplacesEmbedded(
+			boolean sidecarReplacesEmbedded) {
+
+			_sidecarReplacesEmbedded = sidecarReplacesEmbedded;
+
+			return this;
+		}
+
 		protected static final Map<String, Object>
 			createElasticsearchConfigurationProperties(
 				Map<String, Object> elasticsearchConfigurationProperties,
@@ -170,11 +180,12 @@ public class ElasticsearchConnectionFixture
 		private ClusterSettingsContext _clusterSettingsContext;
 		private Map<String, Object> _elasticsearchConfigurationProperties =
 			Collections.<String, Object>emptyMap();
+		private boolean _sidecarReplacesEmbedded = _SIDECAR_REPLACES_EMBEDDED;
 
 	}
 
 	protected ElasticsearchConnection createElasticsearchConnection() {
-		if (_SIDECAR_REPLACES_EMBEDDED) {
+		if (_sidecarReplacesEmbedded) {
 			return createSidecarElasticsearchConnection();
 		}
 
@@ -256,6 +267,7 @@ public class ElasticsearchConnectionFixture
 				_elasticsearchConfigurationProperties);
 
 		return new SidecarElasticsearchConnection(
+			elasticsearchConfiguration.restClientLoggerLevel(),
 			new Sidecar(
 				getClusterSettingsContext(), elasticsearchConfiguration,
 				createElasticsearchInstancePaths(), "9200-9300",
@@ -346,6 +358,7 @@ public class ElasticsearchConnectionFixture
 	private Map<String, Object> _elasticsearchConfigurationProperties =
 		Collections.<String, Object>emptyMap();
 	private ElasticsearchConnection _elasticsearchConnection;
+	private boolean _sidecarReplacesEmbedded;
 	private Path _workPath;
 
 }

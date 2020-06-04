@@ -250,6 +250,14 @@ public class SegmentsExperienceLocalServiceUtil {
 	}
 
 	public static com.liferay.segments.model.SegmentsExperience
+		fetchSegmentsExperience(
+			long groupId, long classNameId, long classPK, int priority) {
+
+		return getService().fetchSegmentsExperience(
+			groupId, classNameId, classPK, priority);
+	}
+
+	public static com.liferay.segments.model.SegmentsExperience
 		fetchSegmentsExperience(long groupId, String segmentsExperienceKey) {
 
 		return getService().fetchSegmentsExperience(

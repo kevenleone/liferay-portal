@@ -19,12 +19,11 @@ import {addItem} from '../../utils/client.es';
 import {errorToast, successToast} from '../../utils/toast.es';
 import FormViewContext from './FormViewContext.es';
 
-export default () => {
+export default ({dataLayoutBuilder}) => {
 	const [{dataDefinition, fieldSets}, dispatch] = useContext(FormViewContext);
 	const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 
 	return (fieldName) => {
-		const customProperties = {};
 		const {
 			customProperties: {rows},
 			label,
@@ -44,25 +43,24 @@ export default () => {
 		const fieldSetDefinition = {
 			availableLanguageIds: [defaultLanguageId],
 			dataDefinitionFields: nestedDataDefinitionFields,
+			defaultDataLayout: {
+				dataLayoutPages: [
+					{
+						dataLayoutRows,
+						description: {
+							[defaultLanguageId]: '',
+						},
+						title: {
+							[defaultLanguageId]: '',
+						},
+					},
+				],
+				name: {
+					[defaultLanguageId]: `${fieldLabel}Layout`,
+				},
+			},
 			name: {
 				[defaultLanguageId]: fieldLabel,
-			},
-		};
-
-		const fieldSetDataLayout = {
-			dataLayoutPages: [
-				{
-					dataLayoutRows,
-					description: {
-						[defaultLanguageId]: '',
-					},
-					title: {
-						[defaultLanguageId]: '',
-					},
-				},
-			],
-			name: {
-				[defaultLanguageId]: `${fieldLabel}Layout`,
 			},
 		};
 
@@ -71,10 +69,7 @@ export default () => {
 			fieldSetDefinition
 		)
 			.then((dataDefinitionFieldSet) => {
-				const {id: ddmStructureId} = dataDefinitionFieldSet;
-
-				customProperties.ddmStructureId = ddmStructureId;
-
+				const ddmStructureId = dataDefinitionFieldSet.id;
 				dispatch({
 					payload: {
 						fieldSets: [...fieldSets, dataDefinitionFieldSet],
@@ -82,24 +77,18 @@ export default () => {
 					type: DataLayoutBuilderActions.UPDATE_FIELDSETS,
 				});
 
-				return addItem(
-					`/o/data-engine/v2.0/data-definitions/${ddmStructureId}/data-layouts`,
-					fieldSetDataLayout
-				);
-			})
-			.then(({id: ddmStructureLayoutId}) => {
-				customProperties.ddmStructureLayoutId = ddmStructureLayoutId;
-
 				const dataDefinitionFields = dataDefinition.dataDefinitionFields.map(
 					(definitionField) => {
 						if (definitionField.name === fieldName) {
 							return {
 								...definitionField,
 								customProperties: {
-									...customProperties,
+									ddmStructureId,
+									ddmStructureLayoutId:
+										dataDefinitionFieldSet.defaultDataLayout
+											.id,
 									rows: '',
 								},
-								nestedDataDefinitionFields: [],
 							};
 						}
 
@@ -115,6 +104,12 @@ export default () => {
 						},
 					},
 					type: DataLayoutBuilderActions.UPDATE_DATA_DEFINITION,
+				});
+
+				dataLayoutBuilder.dispatch('fieldEdited', {
+					fieldName,
+					propertyName: 'ddmStructureId',
+					propertyValue: ddmStructureId,
 				});
 
 				successToast(Liferay.Language.get('fieldset-saved'));

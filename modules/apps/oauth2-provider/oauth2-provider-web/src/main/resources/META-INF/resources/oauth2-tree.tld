@@ -11,6 +11,16 @@
 	<short-name>oauth2-tree</short-name>
 	<uri>http://liferay.com/tld/oauth2-tree</uri>
 	<tag>
+		<name>leaf</name>
+		<tag-class>com.liferay.oauth2.provider.web.internal.tree.tag.LeafTag</tag-class>
+		<body-content>scriptless</body-content>
+	</tag>
+	<tag>
+		<name>node</name>
+		<tag-class>com.liferay.oauth2.provider.web.internal.tree.tag.NodeTag</tag-class>
+		<body-content>scriptless</body-content>
+	</tag>
+	<tag>
 		<description><![CDATA[Triggers rendering of the trees contained in the tree node currently being rendered. Can only be used inside a nodeJspFragment of an oauth2-tree:render tag.]]></description>
 		<name>render-children</name>
 		<tag-class>com.liferay.oauth2.provider.web.internal.tree.tag.RenderChildrenTag</tag-class>
@@ -52,18 +62,6 @@
 			<name-given>tree</name-given>
 			<variable-class>com.liferay.oauth2.provider.web.internal.tree.Tree</variable-class>
 		</variable>
-		<attribute>
-			<description><![CDATA[A required JSP Fragment describing how a tree leaf is rendered.]]></description>
-			<name>leafJspFragment</name>
-			<required>true</required>
-			<fragment>true</fragment>
-		</attribute>
-		<attribute>
-			<description><![CDATA[A required JSP Fragment describing how a tree node is rendered.]]></description>
-			<name>nodeJspFragment</name>
-			<required>true</required>
-			<fragment>true</fragment>
-		</attribute>
 		<attribute>
 			<description><![CDATA[A collection of trees to be rendered]]></description>
 			<name>trees</name>

@@ -39,10 +39,13 @@ import org.osgi.service.component.annotations.Reference;
  * @author Michael C. Han
  */
 @Component(immediate = true, service = DocumentContributor.class)
-public class AssetCategoryDocumentContributor implements DocumentContributor {
+public class AssetCategoryDocumentContributor
+	implements DocumentContributor<AssetCategory> {
 
 	@Override
-	public void contribute(Document document, BaseModel baseModel) {
+	public void contribute(
+		Document document, BaseModel<AssetCategory> baseModel) {
+
 		String className = document.get(Field.ENTRY_CLASS_NAME);
 		long classPK = GetterUtil.getLong(document.get(Field.ENTRY_CLASS_PK));
 

@@ -17,7 +17,7 @@
 <%@ include file="/info/item/renderer/init.jsp" %>
 
 <%
-AssetRenderer assetRenderer = (AssetRenderer)request.getAttribute(WebKeys.ASSET_RENDERER);
+AssetRenderer<?> assetRenderer = (AssetRenderer<?>)request.getAttribute(WebKeys.ASSET_RENDERER);
 %>
 
 <div class="asset-summary">

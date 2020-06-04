@@ -49,7 +49,7 @@ public class DDMFormInstanceRecordModelListener
 			DDMFormInstanceRecordVersion ddmFormInstanceRecordVersion =
 				ddmFormInstanceRecord.getLatestFormInstanceRecordVersion();
 
-			_ddmFormInstanceReportLocalService.updateFormInstanceReport(
+			_ddmFormInstanceReportLocalService.processFormInstanceReportEvent(
 				ddmFormInstanceReport.getFormInstanceReportId(),
 				ddmFormInstanceRecordVersion.getFormInstanceRecordVersionId(),
 				DDMFormInstanceReportConstants.EVENT_DELETE_RECORD_VERSION);

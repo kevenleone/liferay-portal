@@ -27,12 +27,13 @@ import React, {
 import AppContext from '../../AppContext.es';
 import DataLayoutBuilderContext from '../../data-layout-builder/DataLayoutBuilderContext.es';
 import {getItem} from '../../utils/client.es';
+import ModalWithEventPrevented from '../modal/ModalWithEventPrevented.es';
 
 class RuleEditorWrapper extends RuleEditor {
 	getChildContext() {
 		return {
 			store: {
-				editingLanguageId: 'en_US',
+				editingLanguageId: Liferay.ThemeDisplay.getDefaultLanguageId(),
 			},
 		};
 	}
@@ -202,7 +203,7 @@ const RuleEditorModal = ({isVisible, onClose, rule}) => {
 
 	return (
 		<ClayModal
-			className="data-layout-builder-rule-editor-modal"
+			className="data-layout-builder-editor-modal"
 			observer={observer}
 			size="full-screen"
 		>
@@ -211,4 +212,8 @@ const RuleEditorModal = ({isVisible, onClose, rule}) => {
 	);
 };
 
-export default RuleEditorModal;
+export default (props) => (
+	<ModalWithEventPrevented>
+		<RuleEditorModal {...props} />
+	</ModalWithEventPrevented>
+);

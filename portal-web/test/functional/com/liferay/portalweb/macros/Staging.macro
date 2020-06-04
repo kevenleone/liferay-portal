@@ -223,6 +223,8 @@ definition {
 		Alert.viewSuccessMessage();
 
 		IFrame.closeFrame();
+
+		WaitForLiferayEvent.initializeLiferayEventLog();
 	}
 
 	macro addPublishTemplate {
@@ -497,6 +499,8 @@ definition {
 	}
 
 	macro deletePageVariationPG {
+		WaitForLiferayEvent.initializeLiferayEventLog();
+
 		Click(locator1 = "Icon#STAGING_BAR_VERTICAL_ELLIPSIS");
 
 		Click(locator1 = "Staging#STAGING_MENU_MANAGE_PAGE_VARIATION");
@@ -638,6 +642,8 @@ definition {
 		if ((IsElementPresent(locator1 = "Staging#STAGING_MENU_READY_FOR_PUBLICATION")) && (!(isSet(pleaseDoNotMarkAsReady)))) {
 			Check.toggleSwitch(locator1 = "Staging#STAGING_MENU_READY_FOR_PUBLICATION");
 		}
+
+		WaitForLiferayEvent.initializeLiferayEventLog();
 
 		Click(locator1 = "Staging#STAGING_PUBLISH_TO_LIVE_BUTTON");
 
@@ -784,6 +790,8 @@ definition {
 		if (IsElementPresent(locator1 = "IFrame#MODAL_BODY")) {
 			IFrame.closeFrame();
 		}
+
+		WaitForLiferayEvent.initializeLiferayEventLog();
 	}
 
 	macro publishToLiveNowViaPortletCP {
@@ -953,7 +961,7 @@ definition {
 
 		var siteID = "${siteID}";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");

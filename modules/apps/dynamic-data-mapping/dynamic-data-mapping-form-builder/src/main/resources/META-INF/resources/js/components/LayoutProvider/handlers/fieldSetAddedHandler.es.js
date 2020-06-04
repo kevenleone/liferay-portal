@@ -1,8 +1,8 @@
 import {PagesVisitor} from 'dynamic-data-mapping-form-renderer';
 
+import {createFieldSet} from '../util/fieldset.es';
 import {updateField} from '../util/settingsContext.es';
 import {addField} from './fieldAddedHandler.es';
-import {createFieldSet} from './sectionAddedHandler.es';
 
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
@@ -19,7 +19,7 @@ import {createFieldSet} from './sectionAddedHandler.es';
  */
 
 const handleFieldSetAdded = (props, state, event) => {
-	const {fieldSet, indexes, parentFieldName} = event;
+	const {fieldSet, indexes, parentFieldName, useFieldName} = event;
 	const {pages} = state;
 	const visitor = new PagesVisitor(fieldSet.pages);
 
@@ -31,16 +31,18 @@ const handleFieldSetAdded = (props, state, event) => {
 
 	let fieldSetField = createFieldSet(
 		props,
-		{skipFieldNameGeneration: false},
+		{skipFieldNameGeneration: false, useFieldName},
 		nestedFields
 	);
 
-	fieldSetField = updateField(
-		props,
-		fieldSetField,
-		'ddmStructureId',
-		fieldSet.id
-	);
+	if (fieldSet.id) {
+		fieldSetField = updateField(
+			props,
+			fieldSetField,
+			'ddmStructureId',
+			fieldSet.id
+		);
+	}
 
 	return addField(props, {
 		indexes,

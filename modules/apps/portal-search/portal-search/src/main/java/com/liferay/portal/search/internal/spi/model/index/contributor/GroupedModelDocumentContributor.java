@@ -31,10 +31,13 @@ import org.osgi.service.component.annotations.Reference;
 	immediate = true, property = "service.ranking:Integer=10000",
 	service = DocumentContributor.class
 )
-public class GroupedModelDocumentContributor implements DocumentContributor {
+public class GroupedModelDocumentContributor
+	implements DocumentContributor<GroupedModel> {
 
 	@Override
-	public void contribute(Document document, BaseModel baseModel) {
+	public void contribute(
+		Document document, BaseModel<GroupedModel> baseModel) {
+
 		if (!(baseModel instanceof GroupedModel)) {
 			return;
 		}

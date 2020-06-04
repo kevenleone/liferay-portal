@@ -1,42 +1,5 @@
 definition {
 
-	macro addCollectionDisplay {
-		Pause(locator1 = "10000");
-
-		PageEditor.gotoTab(tabName = "Fragments");
-
-		PageEditor.expandFragmentCollection(collectionName = "Content Display");
-
-		if ("${scope}" == "Master") {
-			if ("${dropTarget}" == "Header") {
-				DragAndDrop.javaScriptDragAndDropToUp(
-					key_fragmentName = "${fragmentName}",
-					locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
-					locator2 = "PageEditor#HEADER_DROP_TARGET",
-					value1 = "");
-			}
-			else if ("${dropTarget}" == "Footer") {
-				DragAndDrop.javaScriptDragAndDropToObject(
-					key_fragmentName = "${fragmentName}",
-					locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
-					locator2 = "PageEditor#FRAGMENT_DROP_TARGET",
-					value1 = "");
-			}
-		}
-		else {
-			DragAndDrop.javaScriptDragAndDropToObject(
-				key_fragmentName = "${fragmentName}",
-				locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
-				locator2 = "PageEditor#FRAGMENT_DROP_TARGET",
-				value1 = "");
-		}
-
-		AssertVisible(
-			key_fragmentName = "${fragmentName}",
-			key_message = "No Collection Selected Yet",
-			locator1 = "Fragment#NOT_COLLECTION_SELECTED_MESSAGE");
-	}
-
 	macro addComment {
 		Pause(locator1 = "10000");
 
@@ -105,62 +68,6 @@ definition {
 			locator1 = "PageEditor#FRAGMENT_SIDEBAR_COMMENT_ENTRY_INPUT");
 	}
 
-	macro addContentDisplay {
-		Pause(locator1 = "10000");
-
-		PageEditor.gotoTab(tabName = "Fragments");
-
-		PageEditor.expandFragmentCollection(collectionName = "Content Display");
-
-		if ("${scope}" == "Master") {
-			if ("${dropTarget}" == "Header") {
-				DragAndDrop.javaScriptDragAndDropToUp(
-					key_fragmentName = "${fragmentName}",
-					locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
-					locator2 = "PageEditor#HEADER_DROP_TARGET",
-					value1 = "");
-			}
-			else if ("${dropTarget}" == "Footer") {
-				DragAndDrop.javaScriptDragAndDropToObject(
-					key_fragmentName = "${fragmentName}",
-					locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
-					locator2 = "PageEditor#FRAGMENT_DROP_TARGET",
-					value1 = "");
-			}
-		}
-		else {
-			DragAndDrop.javaScriptDragAndDropToObject(
-				key_fragmentName = "${fragmentName}",
-				locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
-				locator2 = "PageEditor#FRAGMENT_DROP_TARGET",
-				value1 = "");
-		}
-
-		AssertVisible(
-			key_fragmentName = "${fragmentName}",
-			key_messageIfo = "The selected content will be shown here.",
-			locator1 = "Fragment#MESSAGE_INFO");
-	}
-
-	macro addDisplayPageContent {
-		Pause(locator1 = "10000");
-
-		PageEditor.gotoTab(tabName = "Fragments");
-
-		PageEditor.expandFragmentCollection(collectionName = "Content Display");
-
-		DragAndDrop.javaScriptDragAndDropToObject(
-			key_fragmentName = "${fragmentName}",
-			locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
-			locator2 = "PageEditor#FRAGMENT_DROP_TARGET",
-			value1 = "");
-
-		AssertVisible(
-			key_fragmentName = "${fragmentName}",
-			key_messageIfo = "The display page content will be shown here.",
-			locator1 = "Fragment#MESSAGE_INFO");
-	}
-
 	macro addExperience {
 		var key_experienceName = "${experienceName}";
 
@@ -192,7 +99,9 @@ definition {
 	macro addFragment {
 		Pause(locator1 = "10000");
 
-		PageEditor.gotoTab(tabName = "Fragments");
+		PageEditor.gotoTab(tabName = "Fragments and Widgets");
+
+		Navigator.gotoNavTab(navTab = "Fragments");
 
 		PageEditor.expandFragmentCollection(collectionName = "${collectionName}");
 
@@ -200,14 +109,14 @@ definition {
 			if ("${dropTarget}" == "Header") {
 				DragAndDrop.javaScriptDragAndDropToUp(
 					key_fragmentName = "${fragmentName}",
-					locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+					locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 					locator2 = "PageEditor#HEADER_DROP_TARGET",
 					value1 = "");
 			}
 			else if ("${dropTarget}" == "Footer") {
 				DragAndDrop.javaScriptDragAndDropToObject(
 					key_fragmentName = "${fragmentName}",
-					locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+					locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 					locator2 = "PageEditor#FRAGMENT_DROP_TARGET",
 					value1 = "");
 			}
@@ -215,83 +124,89 @@ definition {
 		else {
 			DragAndDrop.javaScriptDragAndDropToObject(
 				key_fragmentName = "${fragmentName}",
-				locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#FRAGMENT_DROP_TARGET",
 				value1 = "");
 		}
 
 		PageEditor.waitForAutoSave();
 
-		if (!(isSet(withSection))) {
-			AssertElementPresent(
+		if ("${collectionName}" == "Layout Elements") {
+			if ("${fragmentName}" == "Row") {
+				if (isSet(position)) {
+					var key_position = "${position}";
+				}
+				else {
+					var key_position = "1";
+				}
+
+				AssertVisible(
+					key_elementType = "${fragmentName}",
+					locator1 = "PageEditor#LAYOUT_ELEMENTS_HEADER");
+			}
+			else if ("${fragmentName}" == "Section") {
+				if (isSet(position)) {
+					var key_position = "${position}";
+				}
+				else {
+					var key_position = "1";
+				}
+
+				AssertVisible(
+					key_elementType = "${fragmentName}",
+					locator1 = "PageEditor#LAYOUT_ELEMENTS_HEADER");
+			}
+		}
+		else if ("${collectionName}" == "Content Display") {
+			if ("${fragmentName}" == "Collection Display") {
+				AssertVisible(
+					key_fragmentName = "${fragmentName}",
+					key_message = "No Collection Selected Yet",
+					locator1 = "Fragment#NOT_COLLECTION_SELECTED_MESSAGE");
+			}
+			else if ("${fragmentName}" == "Content") {
+				AssertVisible(
+					key_fragmentName = "${fragmentName}",
+					key_messageIfo = "The selected content will be shown here.",
+					locator1 = "Fragment#MESSAGE_INFO");
+			}
+			else if ("${fragmentName}" == "Display Page Content") {
+				AssertVisible(
+					key_fragmentName = "${fragmentName}",
+					key_messageIfo = "The display page content will be shown here.",
+					locator1 = "Fragment#MESSAGE_INFO");
+			}
+			else {
+				AssertVisible(
+					key_fragmentName = "${fragmentName}",
+					locator1 = "Fragment#FRAGMENT_HEADER");
+			}
+		}
+		else if ("${composition}" == "true") {
+			echo("## Adding a composition of fragments");
+		}
+		else {
+			AssertVisible(
 				key_fragmentName = "${fragmentName}",
 				locator1 = "Fragment#FRAGMENT_HEADER");
 		}
 	}
 
-	macro addLayoutRow {
+	macro addFragmentToCollectionDisplay {
 		Pause(locator1 = "10000");
 
-		PageEditor.gotoTab(tabName = "Fragments");
+		PageEditor.gotoTab(tabName = "Fragments and Widgets");
 
-		PageEditor.expandFragmentCollection(collectionName = "Layout Elements");
+		Navigator.gotoNavTab(navTab = "Fragments");
 
-		if ("${scope}" == "Master") {
-			if ("${dropTarget}" == "Header") {
-				DragAndDrop.javaScriptDragAndDropToUp(
-					key_elementType = "Row",
-					locator1 = "PageEditor#SECTION_BUILDER_LAYOUT_ELEMENTS",
-					locator2 = "PageEditor#HEADER_DROP_TARGET",
-					value1 = "");
-			}
-			else if ("${dropTarget}" == "Footer") {
-				DragAndDrop.javaScriptDragAndDropToObject(
-					key_elementType = "Row",
-					locator1 = "PageEditor#SECTION_BUILDER_LAYOUT_ELEMENTS",
-					locator2 = "PageEditor#FRAGMENT_DROP_TARGET",
-					value1 = "");
-			}
-		}
-		else {
-			DragAndDrop.javaScriptDragAndDropToObject(
-				key_elementType = "Row",
-				locator1 = "PageEditor#SECTION_BUILDER_LAYOUT_ELEMENTS",
-				locator2 = "PageEditor#FRAGMENT_DROP_TARGET",
-				value1 = "");
-		}
-
-		AssertVisible(
-			key_elementType = "Row",
-			key_position = "1",
-			locator1 = "PageEditor#LAYOUT_ELEMENTS_HEADER");
-
-		PageEditor.waitForAutoSave();
-	}
-
-	macro addLayoutSection {
-		Pause(locator1 = "10000");
-
-		PageEditor.gotoTab(tabName = "Fragments");
-
-		PageEditor.expandFragmentCollection(collectionName = "Layout Elements");
+		PageEditor.expandFragmentCollection(collectionName = "${collectionName}");
 
 		DragAndDrop.javaScriptDragAndDropToObject(
-			key_elementType = "Section",
-			locator1 = "PageEditor#SECTION_BUILDER_LAYOUT_ELEMENTS",
-			locator2 = "${dropTarget}",
+			key_entryTitle = "${entryTitle}",
+			key_fragmentName = "${fragmentName}",
+			locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
+			locator2 = "PageEditor#COLLECTION_CELL",
 			value1 = "");
-
-		if (isSet(position)) {
-			var key_position = "${position}";
-		}
-		else {
-			var key_position = "1";
-		}
-
-		AssertVisible(
-			key_elementType = "Section",
-			key_position = "${position}",
-			locator1 = "PageEditor#LAYOUT_ELEMENTS_HEADER");
 
 		PageEditor.waitForAutoSave();
 	}
@@ -309,31 +224,33 @@ definition {
 	macro addWidget {
 		Pause(locator1 = "10000");
 
-		PageEditor.gotoTab(tabName = "Widgets");
+		PageEditor.gotoTab(tabName = "Fragments and Widgets");
+
+		Navigator.gotoNavTab(navTab = "Widgets");
 
 		Type.sendKeysApplicationSearch(
 			locator1 = "PageEditor#WIDGETS_APPLICATION_SEARCH_FIELD",
 			value1 = "${portletName}");
 
-		var key_portletName = "${portletName}";
+		var key_fragmentName = "${portletName}";
 
 		if ("${scope}" == "Master") {
 			if ("${dropTarget}" == "Header") {
 				DragAndDrop.javaScriptDragAndDropToUp(
-					locator1 = "PageEditor#WIDGETS_ADD_PORTLET_DRAG_BUTTON",
+					locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 					locator2 = "PageEditor#HEADER_DROP_TARGET",
 					value1 = "");
 			}
 			else if ("${dropTarget}" == "Footer") {
 				DragAndDrop.javaScriptDragAndDropToObject(
-					locator1 = "PageEditor#WIDGETS_ADD_PORTLET_DRAG_BUTTON",
+					locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 					locator2 = "PageEditor#FRAGMENT_DROP_TARGET",
 					value1 = "");
 			}
 		}
 		else {
 			DragAndDrop.javaScriptDragAndDropToObject(
-				locator1 = "PageEditor#WIDGETS_ADD_PORTLET_DRAG_BUTTON",
+				locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 				locator2 = "PageEditor#FRAGMENT_DROP_TARGET",
 				value1 = "${portletName}");
 		}
@@ -344,7 +261,11 @@ definition {
 			key_fragmentName = "${portletName}",
 			locator1 = "Fragment#FRAGMENT_HEADER");
 
-		PageEditor.closeSidebar(tabName = "Widgets");
+		Type(
+			locator1 = "PageEditor#WIDGETS_APPLICATION_SEARCH_FIELD",
+			value1 = "");
+
+		PageEditor.closeSidebar(tabName = "Fragments and Widgets");
 	}
 
 	macro assertFragmentSidebarLoaded {
@@ -500,6 +421,18 @@ definition {
 				value1 = "${marginBottom}");
 
 			Pause(locator1 = "2000");
+		}
+
+		if (isSet(numberOfTabs)) {
+			Type(
+				key_fieldLabel = "Number Of Tabs",
+				locator1 = "FormFields#NUMBER_FIELD",
+				value1 = "${numberOfTabs}");
+
+			AssertTextEquals(
+				key_fieldLabel = "Number Of Tabs",
+				locator1 = "FormFields#NUMBER_FIELD",
+				value1 = "${numberOfTabs}");
 		}
 
 		if (isSet(size)) {
@@ -1232,7 +1165,7 @@ definition {
 
 		DragAndDrop(
 			key_fragmentName = "${fragmentName}",
-			locator1 = "PageEditor#SECTION_BUILDER_FRAGMENTS",
+			locator1 = "PageEditor#FRAGMENTS_AND_WIDGETS_TAB_ITEM",
 			locator2 = "PageEditor#OUTSIDE_OF_DROP_ZONE",
 			value1 = "");
 

@@ -20,9 +20,14 @@ import Index from '../../../src/main/resources/META-INF/resources/js/index.es';
 const props = {
 	data: JSON.stringify('{field1: {values: {option1: 1}, type:"radio"}'),
 	fields: [
-		{name: 'field1', type: 'radio'},
-		{name: 'field2', type: 'radio'},
-		{name: 'field3', type: 'radio'},
+		{
+			label: 'Field 1',
+			name: 'field1',
+			options: {option1: 'Option 1'},
+			type: 'radio',
+		},
+		{label: 'Field 2', name: 'field2', type: 'radio'},
+		{label: 'Field 3', name: 'field3', type: 'radio'},
 	],
 };
 

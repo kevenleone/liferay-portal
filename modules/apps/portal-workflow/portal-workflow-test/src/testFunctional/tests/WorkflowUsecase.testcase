@@ -48,9 +48,9 @@ definition {
 	test AddBlogsEntriesWithPortalScopeWorkflowAndAssertWorkflowScope {
 		property portal.upstream = "quarantine";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Navigator.gotoNavItem(navItem = "Configuration");
@@ -59,7 +59,7 @@ definition {
 			workflowDefinition = "Single Approver",
 			workflowResourceValue = "Blogs Entry");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -209,7 +209,7 @@ definition {
 	test AddBlogsEntriesWithSiteScopeWorkflowAndAssertWorkflowScope {
 		property portal.upstream = "quarantine";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -301,21 +301,22 @@ definition {
 	@priority = "5"
 	test AddDDLRecordWithDoubleApproverDefinition {
 		property portal.acceptance = "true";
+		property portal.upstream = "quarantine";
 		property test.name.skip.portal.instance = "WorkflowUsecase#AddDDLRecordWithDoubleApproverDefinition";
 		property testray.component.names = "Training";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.uploadDefinition(
 			workflowDefinitionFile = "workflow_definition_legal_marketing.xml",
 			workflowDefinitionTitle = "Double Approver Definition");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.viewDefinition(
@@ -469,9 +470,9 @@ definition {
 	test AddWebContentWithCategorySpecificDefinition {
 		property test.name.skip.portal.instance = "WorkflowUsecase#AddWebContentWithCategorySpecificDefinition";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.uploadDefinition(
@@ -657,7 +658,7 @@ definition {
 
 		Portlet.addPG(portletName = "Wiki");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -668,7 +669,7 @@ definition {
 			userLastName = "userln",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -677,7 +678,7 @@ definition {
 			userEmailAddress = "userea@liferay.com",
 			userScreenName = "usersn");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Users and Organizations");
@@ -799,9 +800,9 @@ definition {
 	test UnpublishAndDeleteUploadedDefinition {
 		property test.name.skip.portal.instance = "WorkflowUsecase#UnpublishAndDeleteUploadedDefinition";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.uploadDefinition(
@@ -812,9 +813,9 @@ definition {
 
 		Workflow.unpublishWorkflowDefinition(workflowDefinitionTitle = "New Uploaded Definition");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.viewDefinitionUnpublished(workflowDefinitionTitle = "New Uploaded Definition");
@@ -825,16 +826,16 @@ definition {
 
 		Workflow.viewDefinitionPublished(workflowDefinitionTitle = "New Uploaded Definition");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.unpublishWorkflowDefinition(workflowDefinitionTitle = "New Uploaded Definition");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Workflow.viewDefinitionUnpublished(workflowDefinitionTitle = "New Uploaded Definition");
@@ -920,9 +921,9 @@ definition {
 
 		property test.name.skip.portal.instance = "WorkflowUsecase#ViewInvalidDefinitionAlert";
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Click(locator1 = "Button#PLUS");
@@ -1002,9 +1003,9 @@ definition {
 				entryTitle = "Blogs Entry Title ${number}");
 		}
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		UserBar.gotoDropdownItem(dropdownItem = "My Workflow Tasks");
@@ -1065,7 +1066,7 @@ definition {
 	@description = "This is a use case for LPS-59108."
 	@priority = "4"
 	test ViewWorkflowConfigurationScope {
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");
@@ -1090,9 +1091,9 @@ definition {
 			workflowDefinition = "Single Approver",
 			workflowResourceValue = "Calendar Event");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Navigator.gotoNavItem(navItem = "Configuration");
@@ -1141,9 +1142,9 @@ definition {
 	test ViewWorkflowSubmissionsFromDifferentUsers {
 		var siteName = TestCase.getSiteName(siteName = "${siteName}");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Workflow",
-			panel = "Control Panel",
+			panel = "Applications",
 			portlet = "Process Builder");
 
 		Navigator.gotoNavItem(navItem = "Configuration");
@@ -1152,7 +1153,7 @@ definition {
 			workflowDefinition = "Single Approver",
 			workflowResourceValue = "Blogs Entry");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Roles");
@@ -1163,7 +1164,7 @@ definition {
 			roleTitle = "Site Member",
 			roleType = "Site");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Users",
 			panel = "Control Panel",
 			portlet = "Roles");
@@ -1175,7 +1176,7 @@ definition {
 			roleType = "Site");
 
 		for (var n : list "1,2") {
-			ProductMenu.gotoPortlet(
+			GlobalMenu.gotoPortlet(
 				category = "Users",
 				panel = "Control Panel",
 				portlet = "Users and Organizations");
@@ -1186,7 +1187,7 @@ definition {
 				userLastName = "userln${n}",
 				userScreenName = "usersn${n}");
 
-			ProductMenu.gotoPortlet(
+			GlobalMenu.gotoPortlet(
 				category = "Users",
 				panel = "Control Panel",
 				portlet = "Users and Organizations");
@@ -1195,7 +1196,7 @@ definition {
 				siteName = "${siteName}",
 				userScreenName = "usersn${n}");
 
-			ProductMenu.gotoPortlet(
+			GlobalMenu.gotoPortlet(
 				category = "Users",
 				panel = "Control Panel",
 				portlet = "Users and Organizations");
@@ -1403,7 +1404,7 @@ definition {
 
 		AssertHTMLSourceTextPresent(value1 = "${escapedScript}");
 
-		ProductMenu.gotoPortlet(
+		GlobalMenu.gotoPortlet(
 			category = "Sites",
 			panel = "Control Panel",
 			portlet = "Sites");

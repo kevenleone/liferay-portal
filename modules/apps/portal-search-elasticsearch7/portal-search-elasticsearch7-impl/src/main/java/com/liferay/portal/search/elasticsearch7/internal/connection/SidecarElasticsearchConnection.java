@@ -15,7 +15,9 @@
 package com.liferay.portal.search.elasticsearch7.internal.connection;
 
 import com.liferay.petra.string.CharPool;
+import com.liferay.portal.search.elasticsearch7.configuration.RESTClientLoggerLevel;
 import com.liferay.portal.search.elasticsearch7.internal.sidecar.Sidecar;
+import com.liferay.portal.search.elasticsearch7.internal.util.SearchLogHelperUtil;
 
 import org.elasticsearch.client.RestHighLevelClient;
 
@@ -25,7 +27,10 @@ import org.elasticsearch.client.RestHighLevelClient;
 public class SidecarElasticsearchConnection
 	extends BaseElasticsearchConnection {
 
-	public SidecarElasticsearchConnection(Sidecar sidecar) {
+	public SidecarElasticsearchConnection(
+		RESTClientLoggerLevel restClientLoggerLevel, Sidecar sidecar) {
+
+		_restClientLogLevel = restClientLoggerLevel;
 		_sidecar = sidecar;
 	}
 
@@ -60,6 +65,8 @@ public class SidecarElasticsearchConnection
 
 	@Override
 	protected RestHighLevelClient createRestHighLevelClient() {
+		SearchLogHelperUtil.setRESTClientLoggerLevel(_restClientLogLevel);
+
 		return RestHighLevelClientFactory.builder(
 		).hostName(
 			"localhost"
@@ -76,6 +83,7 @@ public class SidecarElasticsearchConnection
 		return address.substring(address.indexOf(CharPool.COLON) + 1);
 	}
 
+	private final RESTClientLoggerLevel _restClientLogLevel;
 	private final Sidecar _sidecar;
 
 }

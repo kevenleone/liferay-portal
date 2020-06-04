@@ -20,6 +20,7 @@ import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.security.auth.CompanyThreadLocal;
 import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Time;
 import com.liferay.portal.kernel.util.Validator;
@@ -157,6 +158,7 @@ public class OpenIdConnectServiceHandlerImpl
 		OpenIdConnectProvider<OIDCClientMetadata, OIDCProviderMetadata>
 			openIdConnectProvider =
 				_openIdConnectProviderRegistry.findOpenIdConnectProvider(
+					_portal.getCompanyId(httpServletRequest),
 					openIdConnectSessionImpl.getOpenIdProviderName());
 
 		OIDCProviderMetadata oidcProviderMetadata =
@@ -193,6 +195,7 @@ public class OpenIdConnectServiceHandlerImpl
 		OpenIdConnectProvider<OIDCClientMetadata, OIDCProviderMetadata>
 			openIdConnectProvider =
 				_openIdConnectProviderRegistry.findOpenIdConnectProvider(
+					_portal.getCompanyId(httpServletRequest),
 					openIdConnectProviderName);
 
 		HttpSession httpSession = httpServletRequest.getSession();
@@ -442,6 +445,7 @@ public class OpenIdConnectServiceHandlerImpl
 		OpenIdConnectProvider<OIDCClientMetadata, OIDCProviderMetadata>
 			openIdConnectProvider =
 				_openIdConnectProviderRegistry.findOpenIdConnectProvider(
+					CompanyThreadLocal.getCompanyId(),
 					openIdConnectProviderName);
 
 		OIDCProviderMetadata oidcProviderMetadata =

@@ -154,8 +154,17 @@ public class DataDefinitionResourceImpl
 			PermissionThreadLocal.getPermissionChecker(), dataDefinitionId,
 			ActionKeys.DELETE);
 
+		DataLayoutResource dataLayoutResource = _getDataLayoutResource(false);
+
+		dataLayoutResource.deleteDataLayoutsDataDefinition(dataDefinitionId);
+
 		_ddlRecordSetLocalService.deleteDDMStructureRecordSets(
 			dataDefinitionId);
+
+		_ddmStructureLocalService.deleteStructure(dataDefinitionId);
+
+		_deDataDefinitionFieldLinkLocalService.deleteDEDataDefinitionFieldLinks(
+			_portal.getClassNameId(DDMStructure.class), dataDefinitionId);
 
 		for (DEDataDefinitionFieldLink deDataDefinitionFieldLink :
 				_deDataDefinitionFieldLinkLocalService.
@@ -191,13 +200,7 @@ public class DataDefinitionResourceImpl
 					dataDefinition, _ddmFormFieldTypeServicesTracker));
 		}
 
-		DataLayoutResource dataLayoutResource = _getDataLayoutResource(false);
-
-		dataLayoutResource.deleteDataLayoutsDataDefinition(dataDefinitionId);
-
 		_deDataListViewLocalService.deleteDEDataListViews(dataDefinitionId);
-
-		_ddmStructureLocalService.deleteStructure(dataDefinitionId);
 	}
 
 	@Override

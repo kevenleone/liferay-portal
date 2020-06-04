@@ -59,9 +59,11 @@ public class FormNavigatorEntryConfigurationHelperImpl
 	@Activate
 	protected void activate(BundleContext bundleContext) {
 		_formNavigatorEntriesMap = ServiceTrackerMapFactory.openSingleValueMap(
-			bundleContext, FormNavigatorEntry.class, null,
+			bundleContext,
+			(Class<FormNavigatorEntry<?>>)(Class<?>)FormNavigatorEntry.class,
+			null,
 			(serviceReference, emitter) -> {
-				FormNavigatorEntry formNavigatorEntry =
+				FormNavigatorEntry<?> formNavigatorEntry =
 					bundleContext.getService(serviceReference);
 
 				emitter.emit(
@@ -119,8 +121,9 @@ public class FormNavigatorEntryConfigurationHelperImpl
 	private <T> FormNavigatorEntry<T> _getFormNavigatorEntry(
 		String key, String formNavigatorId) {
 
-		FormNavigatorEntry formNavigatorEntry =
-			_formNavigatorEntriesMap.getService(_getKey(key, formNavigatorId));
+		FormNavigatorEntry<T> formNavigatorEntry =
+			(FormNavigatorEntry<T>)_formNavigatorEntriesMap.getService(
+				_getKey(key, formNavigatorId));
 
 		if ((formNavigatorEntry == null) && _log.isWarnEnabled()) {
 			_log.warn(
@@ -142,7 +145,7 @@ public class FormNavigatorEntryConfigurationHelperImpl
 
 	private ServiceTrackerMap<String, FormNavigatorContextProvider>
 		_formNavigatorContextProviderMap;
-	private ServiceTrackerMap<String, FormNavigatorEntry>
+	private ServiceTrackerMap<String, FormNavigatorEntry<?>>
 		_formNavigatorEntriesMap;
 
 	@Reference

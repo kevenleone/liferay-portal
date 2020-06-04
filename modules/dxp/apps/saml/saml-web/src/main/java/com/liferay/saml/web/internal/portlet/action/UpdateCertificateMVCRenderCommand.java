@@ -15,6 +15,8 @@
 package com.liferay.saml.web.internal.portlet.action;
 
 import com.liferay.portal.kernel.portlet.bridges.mvc.MVCRenderCommand;
+import com.liferay.saml.constants.SamlWebKeys;
+import com.liferay.saml.runtime.certificate.CertificateTool;
 import com.liferay.saml.web.internal.constants.SamlAdminPortletKeys;
 
 import javax.portlet.PortletException;
@@ -22,6 +24,7 @@ import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 
 /**
  * @author Stian Sigvartsen
@@ -41,7 +44,13 @@ public class UpdateCertificateMVCRenderCommand implements MVCRenderCommand {
 			RenderRequest renderRequest, RenderResponse renderResponse)
 		throws PortletException {
 
+		renderRequest.setAttribute(
+			SamlWebKeys.SAML_CERTIFICATE_TOOL, _certificateTool);
+
 		return "/admin/update_certificate.jsp";
 	}
+
+	@Reference
+	private CertificateTool _certificateTool;
 
 }

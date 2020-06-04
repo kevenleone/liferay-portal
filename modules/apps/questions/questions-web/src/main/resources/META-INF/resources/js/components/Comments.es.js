@@ -12,16 +12,15 @@
  * details.
  */
 
+import {useMutation} from '@apollo/client';
 import ClayButton from '@clayui/button';
 import ClayForm from '@clayui/form';
-import {Editor} from 'frontend-editor-ckeditor-web';
-import React, {useCallback, useContext, useState} from 'react';
+import React, {useCallback, useState} from 'react';
 
-import {AppContext} from '../AppContext.es';
-import {createComment} from '../utils/client.es';
+import {createCommentQuery} from '../utils/client.es';
 import lang from '../utils/lang.es';
-import {getCKEditorConfig, onBeforeLoadCKEditor} from '../utils/utils.es';
 import Comment from './Comment.es';
+import QuestionsEditor from './QuestionsEditor';
 
 export default ({
 	comments,
@@ -32,15 +31,16 @@ export default ({
 }) => {
 	const [comment, setComment] = useState('');
 
-	const context = useContext(AppContext);
-
-	const postComment = () => {
-		return createComment(comment, entityId).then((data) => {
+	const [createComment] = useMutation(createCommentQuery, {
+		onCompleted(data) {
 			setComment('');
 			showNewCommentChange(false);
-			commentsChange([...comments, data]);
-		});
-	};
+			commentsChange([
+				...comments,
+				data.createMessageBoardMessageMessageBoardMessage,
+			]);
+		},
+	});
 
 	const _commentChange = useCallback(
 		(comment) => {
@@ -68,18 +68,11 @@ export default ({
 			{showNewComment && (
 				<>
 					<ClayForm.Group small>
-						<Editor
-							config={getCKEditorConfig()}
-							data={comment}
-							onBeforeLoad={(editor) =>
-								onBeforeLoadCKEditor(
-									editor,
-									context.imageBrowseURL
-								)
-							}
-							onChange={(event) =>
-								setComment(event.editor.getData())
-							}
+						<QuestionsEditor
+							contents={comment}
+							onChange={(event) => {
+								setComment(event.editor.getData());
+							}}
 						/>
 
 						{comment.length < 15 && (
@@ -95,7 +88,14 @@ export default ({
 							<ClayButton
 								disabled={comment.length < 15}
 								displayType="primary"
-								onClick={postComment}
+								onClick={() => {
+									createComment({
+										variables: {
+											articleBody: comment,
+											parentMessageBoardMessageId: entityId,
+										},
+									});
+								}}
 							>
 								{Liferay.Language.get('reply')}
 							</ClayButton>

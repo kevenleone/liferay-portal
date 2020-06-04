@@ -152,6 +152,7 @@ const Collection = React.forwardRef(({children, item}, ref) => {
 				onNetworkStatus: dispatch,
 				segmentsExperienceId,
 				size: collectionConfig.numberOfItems,
+				templateKey: collectionConfig.templateKey || null,
 			})
 				.then((response) => {
 					setCollection(response);
@@ -167,6 +168,7 @@ const Collection = React.forwardRef(({children, item}, ref) => {
 		collectionConfig.listItemStyle,
 		collectionConfig.listStyle,
 		collectionConfig.numberOfItems,
+		collectionConfig.templateKey,
 		dispatch,
 		segmentsExperienceId,
 	]);

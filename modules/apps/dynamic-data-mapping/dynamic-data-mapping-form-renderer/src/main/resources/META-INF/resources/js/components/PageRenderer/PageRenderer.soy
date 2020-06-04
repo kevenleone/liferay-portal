@@ -16,6 +16,8 @@
 	{@param? _handleFieldClicked: any}
 	{@param? _handleFieldEdited: any}
 	{@param? _handleFieldFocused: any}
+	{@param? _handleMovePageDownClicked: any}
+	{@param? _handleMovePageUpClicked: any}
 	{@param? activePage: number}
 	{@param? editable: bool}
 	{@param? editingLanguageId: string}
@@ -79,6 +81,19 @@
 	{/delcall}
 
 		{if $paginationMode == 'wizard' and not $viewMode and $view != 'fieldSets'}
+			{call .reorderPages}
+				{param _handleMovePageDownClicked: $_handleMovePageDownClicked /}
+				{param _handleMovePageUpClicked: $_handleMovePageUpClicked /}
+				{param pageIndex: $pageIndex ?: 0 /}
+				{param spritemap: $spritemap /}
+				{param strings: $strings /}
+				{param successPageEnabled: $successPageSettings.enabled /}
+				{param total: $total /}
+			{/call}
+
+			{let $pageOptions kind="text"}
+				{isNonnull($strings) ? $strings['page-options'] : ''}
+			{/let}
 			{if $successPageSettings.enabled and $pageIndex == length($pages) - 1}
 				<div class="ddm-paginated-builder-dropdown" data-ddm-success-page-actions="{$pageIndex}">
 					{call ClayActionsDropdown.render}
@@ -89,6 +104,7 @@
 						{param ref: 'successPageActions' + $pageIndex /}
 						{param expanded: $dropdownExpanded /}
 						{param spritemap: $spritemap /}
+						{param title: $pageOptions /}
 					{/call}
 				</div>
 			{else}
@@ -101,6 +117,7 @@
 						{param ref: 'pageActions' + $pageIndex /}
 						{param expanded: $dropdownExpanded /}
 						{param spritemap: $spritemap /}
+						{param title: $pageOptions /}
 					{/call}
 				</div>
 			{/if}
@@ -148,6 +165,65 @@
 					</div>
 				{/if}
 			{/if}
+		{/if}
+	</div>
+{/template}
+
+{template .reorderPages}
+	{@param spritemap: string}
+	{@param successPageEnabled: bool}
+	{@param total: number}
+	{@param? _handleMovePageDownClicked: any}
+	{@param? _handleMovePageUpClicked: any}
+	{@param? pageIndex: number}
+	{@param? strings: map<string, string>}
+
+	<div class="ddm-paginated-builder-reorder" data-ddm-reorder-page-actions="{$pageIndex}">
+		{let $movePageDown kind="text"}
+			{isNonnull($strings) ? $strings['move-page-down'] : ''}
+		{/let}
+
+		{let $movePageUp kind="text"}
+			{isNonnull($strings) ? $strings['move-page-up'] : ''}
+		{/let}
+
+		{call ClayTooltip.render}
+			{param autoAlign: true /}
+		{/call}
+
+		{if not ($pageIndex == 0 and $total == 2 and $successPageEnabled) and (($successPageEnabled and $pageIndex < $total - 1))
+			or not $successPageEnabled
+		}
+			{let $lastPage kind="text"}
+				{$successPageEnabled ? $total - 2 : $total - 1}
+			{/let}
+
+			{call ClayButton.render}
+				{param disabled: $pageIndex == 0 /}
+				{param icon: 'angle-up'/}
+				{param events: [
+					'click': $_handleMovePageUpClicked
+				] /}
+				{param elementClasses: 'reorder-page-button' /}
+				{param ref: 'movePageUp' + $pageIndex /}
+				{param size: 'sm' /}
+				{param spritemap: $spritemap /}
+				{param style: 'secondary' /}
+				{param title: $movePageUp /}
+			{/call}
+			{call ClayButton.render}
+				{param disabled: $pageIndex == $lastPage /}
+				{param icon: 'angle-down'/}
+				{param events: [
+					'click': $_handleMovePageDownClicked
+				] /}
+				{param elementClasses: 'reorder-page-button' /}
+				{param ref: 'movePageDown' + $pageIndex /}
+				{param size: 'sm' /}
+				{param spritemap: $spritemap /}
+				{param style: 'secondary' /}
+				{param title: $movePageDown /}
+			{/call}
 		{/if}
 	</div>
 {/template}
@@ -434,7 +510,7 @@
 	{/let}
 
 	{if $title}
-		<h3 {$pageTitleAttributes}>{$title}</h3>
+		<h2 {$pageTitleAttributes}>{$title}</h2>
 	{/if}
 
 	{let $pageDescriptionAttributes kind="attributes"}
@@ -442,6 +518,6 @@
 	{/let}
 
 	{if $description}
-		<h4 {$pageDescriptionAttributes}>{$description}</h4>
+		<h3 {$pageDescriptionAttributes}>{$description}</h3>
 	{/if}
 {/deltemplate}

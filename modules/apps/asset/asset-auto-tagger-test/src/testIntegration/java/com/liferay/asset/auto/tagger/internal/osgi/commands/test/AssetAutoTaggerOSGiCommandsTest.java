@@ -298,7 +298,7 @@ public class AssetAutoTaggerOSGiCommandsTest
 		}
 
 		@Override
-		public AssetRenderer getAssetRenderer(long classPK, int type) {
+		public AssetRenderer<?> getAssetRenderer(long classPK, int type) {
 			return new BaseAssetRenderer() {
 
 				@Override
