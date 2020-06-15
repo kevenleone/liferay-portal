@@ -22,6 +22,7 @@ import AppContext from '../../AppContext.es';
 import {isDataLayoutEmpty} from '../../utils/dataLayoutVisitor.es';
 import ModalWithEventPrevented from '../modal/ModalWithEventPrevented.es';
 import useCreateFieldSet from './actions/useCreateFieldSet.es';
+import usePropagateFieldSet from './actions/usePropagateFieldSet.es';
 import useSaveFieldSet from './actions/useSaveFieldSet.es';
 
 const ModalContent = ({defaultLanguageId, fieldSet, onClose, otherProps}) => {
@@ -49,18 +50,24 @@ const ModalContent = ({defaultLanguageId, fieldSet, onClose, otherProps}) => {
 	}, [childrenContext]);
 
 	const createFieldSet = useCreateFieldSet({childrenContext});
-	const saveAsFieldSet = useSaveFieldSet({
+	const saveFieldSet = useSaveFieldSet({
 		childrenContext,
 		defaultLanguageId,
 		fieldSet,
 		otherProps,
 	});
-
-	const saveFieldSet = fieldSet ? saveAsFieldSet : createFieldSet;
+	const propagateFieldSet = usePropagateFieldSet();
 
 	const onSave = () => {
-		saveFieldSet(name);
-		onClose();
+		if (fieldSet) {
+			propagateFieldSet({
+				fieldSet,
+				onPropagate: () => saveFieldSet(name),
+			}).finally(onClose);
+		}
+		else {
+			createFieldSet(name).finally(onClose);
+		}
 	};
 
 	return (
@@ -77,6 +84,7 @@ const ModalContent = ({defaultLanguageId, fieldSet, onClose, otherProps}) => {
 							aria-label={Liferay.Language.get(
 								'untitled-fieldset'
 							)}
+							autoFocus
 							className="form-control-inline"
 							onChange={({target: {value}}) => setName(value)}
 							placeholder={Liferay.Language.get(

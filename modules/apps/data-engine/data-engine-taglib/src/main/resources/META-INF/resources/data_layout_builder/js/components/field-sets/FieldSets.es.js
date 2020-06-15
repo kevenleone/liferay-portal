@@ -24,13 +24,12 @@ import {containsFieldSet} from '../../utils/dataDefinition.es';
 import FieldType from '../field-types/FieldType.es';
 import FieldSetModal from './FieldSetModal.es';
 import useDeleteFieldSet from './actions/useDeleteFieldSet.es';
+import usePropagateFieldSet from './actions/usePropagateFieldSet.es';
 
 export default function FieldSets() {
 	const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 
-	const [{appProps, dataDefinition, fieldSets}, dispatch] = useContext(
-		AppContext
-	);
+	const [{appProps, dataDefinition, fieldSets}] = useContext(AppContext);
 	const [state, setState] = useState({
 		fieldSet: null,
 		isVisible: false,
@@ -82,7 +81,8 @@ export default function FieldSets() {
 	};
 
 	const [dataLayoutBuilder] = useContext(DataLayoutBuilderContext);
-	const deleteFieldSet = useDeleteFieldSet({dispatch, fieldSets});
+	const deleteFieldSet = useDeleteFieldSet({dataLayoutBuilder});
+	const propagateFieldSet = usePropagateFieldSet();
 
 	const onDoubleClick = ({fieldSet: {name: fieldName}, fieldSet}) => {
 		const {activePage, pages} = dataLayoutBuilder.getStore();
@@ -124,7 +124,11 @@ export default function FieldSets() {
 							name: Liferay.Language.get('edit'),
 						},
 						{
-							action: () => deleteFieldSet(fieldSet),
+							action: () =>
+								propagateFieldSet({
+									fieldSet,
+									onPropagate: deleteFieldSet,
+								}),
 							name: Liferay.Language.get('delete'),
 						},
 					];
