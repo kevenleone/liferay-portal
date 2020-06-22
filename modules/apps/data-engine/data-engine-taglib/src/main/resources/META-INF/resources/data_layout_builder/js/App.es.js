@@ -19,6 +19,7 @@ import HTML5Backend from 'react-dnd-html5-backend';
 
 import AppContext from './AppContext.es';
 import AppContextProvider from './AppContextProvider.es';
+import {UPDATE_APP_PROPS} from './actions.es';
 import MultiPanelSidebar from './components/sidebar/MultiPanelSidebar.es';
 import initializeSidebarConfig from './components/sidebar/initializeSidebarConfig.es';
 import DataLayoutBuilder from './data-layout-builder/DataLayoutBuilder.es';
@@ -41,19 +42,30 @@ const parseProps = ({
 
 const AppContent = ({
 	dataLayoutBuilder,
+	setChildrenContext,
 	setDataLayoutBuilder,
 	sidebarConfig,
 	...props
 }) => {
 	const [state, dispatch] = useContext(AppContext);
-
 	const {panels, sidebarPanels, sidebarVariant} = sidebarConfig;
+	const appProps = JSON.stringify(props);
 
 	useEffect(() => {
 		if (dataLayoutBuilder) {
 			dataLayoutBuilder.emit('contextUpdated', state);
 		}
-	}, [dataLayoutBuilder, state]);
+		if (setChildrenContext) {
+			setChildrenContext({dispatch, state});
+		}
+	}, [dataLayoutBuilder, dispatch, setChildrenContext, state]);
+
+	useEffect(() => {
+		if (!setChildrenContext) {
+			const payload = JSON.parse(appProps);
+			dispatch({payload, type: UPDATE_APP_PROPS});
+		}
+	}, [appProps, dispatch, setChildrenContext]);
 
 	return (
 		<>
@@ -93,7 +105,6 @@ const App = (props) => {
 	} = parseProps(props);
 
 	const sidebarConfig = initializeSidebarConfig(props);
-
 	const [loaded, setLoaded] = useState(false);
 	const [dataLayoutBuilder, setDataLayoutBuilder] = useState(null);
 

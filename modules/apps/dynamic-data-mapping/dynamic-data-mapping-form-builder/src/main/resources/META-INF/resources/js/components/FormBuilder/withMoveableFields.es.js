@@ -102,7 +102,9 @@ const withMoveableFields = (ChildComponent) => {
 						`.ddm-field-container[data-field-name="${parentFieldSet.fieldName}"]`
 					);
 
-					parentFieldSetNode.classList.add(CSS_DDM_FIELDSET);
+					if (parentFieldSetNode) {
+						parentFieldSetNode.classList.add(CSS_DDM_FIELDSET);
+					}
 				}
 			});
 		}

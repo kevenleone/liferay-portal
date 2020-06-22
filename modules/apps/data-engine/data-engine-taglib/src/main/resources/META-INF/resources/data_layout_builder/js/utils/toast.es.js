@@ -12,10 +12,26 @@
  * details.
  */
 
-import FormBuilderWithLayoutProvider from './components/FormBuilder/FormBuilderWithLayoutProvider.es';
-import RuleEditor from './components/RuleEditor/RuleEditor.es';
-import * as FieldSupport from './util/fieldSupport.es';
+import {openToast} from 'frontend-js-web';
 
-export default FormBuilderWithLayoutProvider;
+export const errorToast = (
+	message = Liferay.Language.get('an-unexpected-error-occurred'),
+	title = Liferay.Language.get('error')
+) => {
+	openToast({
+		message,
+		title: `${title}:`,
+		type: 'danger',
+	});
+};
 
-export {FieldSupport, RuleEditor};
+export const successToast = (
+	message = Liferay.Language.get('your-request-completed-successfully'),
+	title = Liferay.Language.get('success')
+) => {
+	openToast({
+		message,
+		title: `${title}:`,
+		type: 'success',
+	});
+};

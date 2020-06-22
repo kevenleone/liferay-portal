@@ -12,19 +12,77 @@
  * details.
  */
 
-import React, {useContext} from 'react';
+import ClayButton from '@clayui/button';
+import React, {useContext, useState} from 'react';
 
 import AppContext from '../../AppContext.es';
 import {dropFieldSet} from '../../actions.es';
+import DataLayoutBuilder from '../../data-layout-builder/DataLayoutBuilder.es';
 import DataLayoutBuilderContext from '../../data-layout-builder/DataLayoutBuilderContext.es';
 import {DRAG_FIELDSET} from '../../drag-and-drop/dragTypes.es';
 import {containsFieldSet} from '../../utils/dataDefinition.es';
 import FieldType from '../field-types/FieldType.es';
+import FieldSetModal from './FieldSetModal.es';
+import useDeleteFieldSet from './actions/useDeleteFieldSet.es';
+import usePropagateFieldSet from './actions/usePropagateFieldSet.es';
 
 export default function FieldSets() {
-	const [{dataDefinition, fieldSets}] = useContext(AppContext);
+	const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
+
+	const [{appProps, dataDefinition, fieldSets}] = useContext(AppContext);
+	const [state, setState] = useState({
+		fieldSet: null,
+		isVisible: false,
+		otherProps: {},
+	});
+
+	const toggleFieldSet = (fieldSet) => {
+		let otherProps = {
+			context: {},
+			dataDefinitionId: null,
+			dataLayoutId: null,
+		};
+
+		if (fieldSet) {
+			const {context, fieldTypes} = appProps;
+			const {defaultDataLayout, id: dataDefinitionId} = fieldSet;
+			const DataLayout = new DataLayoutBuilder({
+				editingLanguageId: defaultLanguageId,
+				fieldTypes,
+			});
+			const ddmForm = DataLayout.getDDMForm(fieldSet, defaultDataLayout);
+			const [pages] = ddmForm.pages;
+
+			delete ddmForm.pages;
+
+			otherProps = {
+				DataLayout,
+				context: {
+					...context,
+					pages: [
+						{
+							...ddmForm,
+							description: '',
+							rows: pages.rows,
+							title: '',
+						},
+					],
+				},
+				dataDefinitionId,
+				dataLayoutId: defaultDataLayout.id,
+			};
+		}
+
+		setState({
+			fieldSet,
+			isVisible: !state.isVisible,
+			otherProps,
+		});
+	};
 
 	const [dataLayoutBuilder] = useContext(DataLayoutBuilderContext);
+	const deleteFieldSet = useDeleteFieldSet({dataLayoutBuilder});
+	const propagateFieldSet = usePropagateFieldSet();
 
 	const onDoubleClick = ({fieldSet: {name: fieldName}, fieldSet}) => {
 		const {activePage, pages} = dataLayoutBuilder.getStore();
@@ -43,23 +101,68 @@ export default function FieldSets() {
 			})
 		);
 	};
+	fieldSets.sort(({name: a}, {name: b}) =>
+		a[defaultLanguageId].localeCompare(b[defaultLanguageId])
+	);
 
 	return (
 		<>
-			{fieldSets.map((fieldSet) => (
-				<FieldType
-					description={`${
-						fieldSet.dataDefinitionFields.length
-					} ${Liferay.Language.get('fields')}`}
-					disabled={containsFieldSet(dataDefinition, fieldSet.id)}
-					dragType={DRAG_FIELDSET}
-					fieldSet={fieldSet}
-					icon="forms"
-					key={fieldSet.dataDefinitionKey}
-					label={fieldSet.name[themeDisplay.getLanguageId()]}
-					onDoubleClick={onDoubleClick}
-				/>
-			))}
+			<ClayButton
+				block
+				className="add-fieldset"
+				displayType="secondary"
+				onClick={() => toggleFieldSet()}
+			>
+				{Liferay.Language.get('add-fieldset')}
+			</ClayButton>
+
+			<div className="mt-3">
+				{fieldSets.map((fieldSet) => {
+					const dropDownActions = [
+						{
+							action: () => toggleFieldSet(fieldSet),
+							name: Liferay.Language.get('edit'),
+						},
+						{
+							action: () =>
+								propagateFieldSet({
+									fieldSet,
+									onPropagate: deleteFieldSet,
+								}),
+							name: Liferay.Language.get('delete'),
+						},
+					];
+
+					const disabled =
+						dataDefinition.name[defaultLanguageId] ===
+						fieldSet.name[defaultLanguageId];
+
+					return (
+						<FieldType
+							actions={dropDownActions}
+							description={`${
+								fieldSet.dataDefinitionFields.length
+							} ${Liferay.Language.get('fields')}`}
+							disabled={
+								disabled ||
+								containsFieldSet(dataDefinition, fieldSet.id)
+							}
+							dragType={DRAG_FIELDSET}
+							fieldSet={fieldSet}
+							icon="forms"
+							key={fieldSet.dataDefinitionKey}
+							label={fieldSet.name[defaultLanguageId]}
+							onDoubleClick={onDoubleClick}
+						/>
+					);
+				})}
+			</div>
+
+			<FieldSetModal
+				defaultLanguageId={defaultLanguageId}
+				onClose={() => toggleFieldSet()}
+				{...state}
+			/>
 		</>
 	);
 }

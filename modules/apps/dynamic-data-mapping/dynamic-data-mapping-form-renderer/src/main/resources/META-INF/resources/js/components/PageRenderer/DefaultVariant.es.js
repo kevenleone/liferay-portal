@@ -92,6 +92,7 @@ export const Column = ({
 							'target-over targetOver': overTarget,
 						}
 					)}
+					data-field-instanceid={column.fields[0].instanceId}
 					data-field-name={column.fields[0].fieldName}
 				>
 					<div

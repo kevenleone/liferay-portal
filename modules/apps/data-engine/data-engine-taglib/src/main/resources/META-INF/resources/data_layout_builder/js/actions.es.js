@@ -13,6 +13,7 @@
  */
 
 import {getDataDefinitionField} from './utils/dataDefinition.es';
+import {normalizeDataLayoutRows} from './utils/dataLayoutVisitor.es';
 
 export const ADD_CUSTOM_OBJECT_FIELD = 'ADD_CUSTOM_OBJECT_FIELD';
 export const ADD_DATA_LAYOUT_RULE = 'ADD_DATA_LAYOUT_RULE';
@@ -22,6 +23,7 @@ export const DELETE_DATA_LAYOUT_RULE = 'DELETE_DATA_LAYOUT_RULE';
 export const EDIT_CUSTOM_OBJECT_FIELD = 'EDIT_CUSTOM_OBJECT_FIELD';
 export const EVALUATION_ERROR = 'EVALUATION_ERROR';
 export const SWITCH_SIDEBAR_PANEL = 'SWITCH_SIDEBAR_PANEL';
+export const UPDATE_APP_PROPS = 'UPDATE_APP_PROPS';
 export const UPDATE_CONFIG = 'UPDATE_CONFIG';
 export const UPDATE_FIELDSETS = 'UPDATE_FIELDSETS';
 export const UPDATE_FOCUSED_CUSTOM_OBJECT_FIELD =
@@ -106,6 +108,11 @@ export const dropFieldSet = ({
 		fieldSet: dataLayoutBuilder.getDDMForm(fieldSet),
 		indexes,
 		parentFieldName,
+		...(fieldSet.id && {
+			rows: normalizeDataLayoutRows(
+				fieldSet.defaultDataLayout.dataLayoutPages
+			),
+		}),
 		useFieldName,
 	};
 };

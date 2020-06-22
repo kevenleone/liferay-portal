@@ -125,3 +125,16 @@ export function isDataLayoutEmpty(dataLayoutPages) {
 		});
 	});
 }
+
+export function normalizeDataLayoutRows(dataLayoutPages) {
+	return dataLayoutPages[0].dataLayoutRows.map(({dataLayoutColumns}) => {
+		return {
+			columns: dataLayoutColumns.map(
+				({columnSize: size, fieldNames: fields}) => ({
+					fields,
+					size,
+				})
+			),
+		};
+	});
+}
