@@ -31,6 +31,23 @@ export default ({newCustomObject}) => {
 
 	const [state, dispatch] = useContext(FormViewContext);
 	const {dataDefinition, dataDefinitionId, dataLayout} = state;
+	const translatedFields = {};
+
+	const fieldsInLayout = dataDefinition.dataDefinitionFields.filter(
+		({name}) =>
+			DataLayoutVisitor.containsField(dataLayout.dataLayoutPages, name)
+	);
+
+	fieldsInLayout.forEach((ddField) =>
+		Object.keys(ddField.label).forEach((language) => {
+			if (
+				ddField.label[language] &&
+				ddField.label[language] !== ddField.label[defaultLanguageId]
+			) {
+				translatedFields[language] = language;
+			}
+		})
+	);
 
 	useEffect(() => {
 		if (dataDefinition.defaultLanguageId) {
@@ -40,7 +57,7 @@ export default ({newCustomObject}) => {
 		}
 	}, [dataDefinition.defaultLanguageId, onEditingLanguageIdChange]);
 
-	const {basePortletURL} = useContext(AppContext);
+	const {basePortletURL, showTranslationManager} = useContext(AppContext);
 	const listUrl = `${basePortletURL}/#/custom-object/${dataDefinitionId}/form-views`;
 
 	const onDataLayoutNameChange = ({target: {value}}) => {
@@ -117,14 +134,17 @@ export default ({newCustomObject}) => {
 
 	return (
 		<UpperToolbar>
-			<UpperToolbar.Group>
-				<TranslationManager
-					defaultLanguageId={defaultLanguageId}
-					editingLanguageId={editingLanguageId}
-					onEditingLanguageIdChange={onEditingLanguageIdChange}
-					translatedLanguageIds={dataLayout.name}
-				/>
-			</UpperToolbar.Group>
+			{showTranslationManager && (
+				<UpperToolbar.Group>
+					<TranslationManager
+						defaultLanguageId={defaultLanguageId}
+						editingLanguageId={editingLanguageId}
+						onEditingLanguageIdChange={onEditingLanguageIdChange}
+						translatedFields={translatedFields}
+						translatedLanguageIds={dataLayout.name}
+					/>
+				</UpperToolbar.Group>
+			)}
 
 			<UpperToolbar.Input
 				onInput={onDataLayoutNameChange}

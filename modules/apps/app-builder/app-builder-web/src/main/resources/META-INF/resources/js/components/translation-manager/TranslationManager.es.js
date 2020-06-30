@@ -25,6 +25,7 @@ export const formatIcon = (label) => formatLabel(label).toLowerCase();
 export const TranslationManagerLabel = ({
 	defaultLanguageId,
 	languageId,
+	translatedFields,
 	translatedLanguageIds,
 }) => {
 	let className = 'label-warning';
@@ -34,7 +35,10 @@ export const TranslationManagerLabel = ({
 		className = 'label-info';
 		label = Liferay.Language.get('default');
 	}
-	else if (translatedLanguageIds[languageId]) {
+	else if (
+		translatedLanguageIds[languageId] ||
+		translatedFields[languageId]
+	) {
 		className = 'label-success';
 		label = Liferay.Language.get('translated');
 	}
@@ -52,9 +56,17 @@ export default ({
 	defaultLanguageId,
 	editingLanguageId,
 	onEditingLanguageIdChange,
+	translatedFields,
 	translatedLanguageIds,
 }) => {
 	const [active, setActive] = useState(false);
+
+	const availableLanguages = [
+		...new Set([
+			defaultLanguageId,
+			...Object.keys(Liferay.Language.available).sort(),
+		]),
+	];
 
 	return (
 		<ClayDropDown
@@ -78,36 +90,33 @@ export default ({
 			}
 		>
 			<ClayDropDown.ItemList className="localizable-dropdown-ul">
-				{Object.keys(Liferay.Language.available).map(
-					(languageId, index) => (
-						<ClayDropDown.Item
-							className="autofit-row"
-							key={index}
-							onClick={() => {
-								onEditingLanguageIdChange(languageId);
-								setActive(false);
-							}}
-						>
-							<span className="autofit-col autofit-col-expand">
-								<span className="autofit-section">
-									<span className="inline-item inline-item-before">
-										<ClayIcon
-											symbol={formatIcon(languageId)}
-										/>
-									</span>
-
-									{formatLabel(languageId)}
+				{availableLanguages.map((languageId, index) => (
+					<ClayDropDown.Item
+						className="autofit-row"
+						key={index}
+						onClick={() => {
+							onEditingLanguageIdChange(languageId);
+							setActive(false);
+						}}
+					>
+						<span className="autofit-col autofit-col-expand">
+							<span className="autofit-section">
+								<span className="inline-item inline-item-before">
+									<ClayIcon symbol={formatIcon(languageId)} />
 								</span>
-							</span>
 
-							<TranslationManagerLabel
-								defaultLanguageId={defaultLanguageId}
-								languageId={languageId}
-								translatedLanguageIds={translatedLanguageIds}
-							/>
-						</ClayDropDown.Item>
-					)
-				)}
+								{formatLabel(languageId)}
+							</span>
+						</span>
+
+						<TranslationManagerLabel
+							defaultLanguageId={defaultLanguageId}
+							languageId={languageId}
+							translatedFields={translatedFields}
+							translatedLanguageIds={translatedLanguageIds}
+						/>
+					</ClayDropDown.Item>
+				))}
 			</ClayDropDown.ItemList>
 		</ClayDropDown>
 	);
