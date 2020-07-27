@@ -118,10 +118,10 @@ export default ({
 
 				return {
 					...app,
+					appName,
 					dateCreated: fromNow(app.dateCreated),
 					dateModified: fromNow(app.dateModified),
 					name: <Link to={getEditAppUrl(app)}>{appName}</Link>,
-					nameText: appName,
 					status: (
 						<ClayLabel
 							displayType={app.active ? 'success' : 'secondary'}
