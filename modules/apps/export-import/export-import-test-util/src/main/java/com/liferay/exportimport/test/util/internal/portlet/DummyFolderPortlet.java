@@ -29,6 +29,7 @@ import org.osgi.service.component.annotations.Reference;
 @Component(
 	immediate = true,
 	property = {
+		"com.liferay.portlet.preferences-unique-per-layout=false",
 		"javax.portlet.name=" + DummyFolderPortletKeys.DUMMY_FOLDER,
 		"javax.portlet.resource-bundle=content.Language"
 	},

@@ -70,6 +70,7 @@ definition {
 	}
 
 	@description = "This is a use case for LPS-67928."
+	@ignore = "true"
 	@priority = "3"
 	test DeleteEventAndViewFeed {
 		property portal.upstream = "quarantine";
@@ -112,6 +113,7 @@ definition {
 	}
 
 	@description = "This is a use case for LPS-67928."
+	@ignore = "true"
 	@priority = "3"
 	test DisableFeedForSiteCalendar {
 		property portal.upstream = "quarantine";
@@ -153,6 +155,7 @@ definition {
 	}
 
 	@description = "This is a use case for LPS-67928."
+	@ignore = "true"
 	@priority = "5"
 	test ViewSiteCalendarFeed {
 		property portal.upstream = "quarantine";

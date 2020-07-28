@@ -24,6 +24,7 @@ import {withRouter} from 'react-router-dom';
 import {AppContext} from '../../AppContext.es';
 import Answer from '../../components/Answer.es';
 import ArticleBodyRenderer from '../../components/ArticleBodyRenderer.es';
+import Breadcrumb from '../../components/Breadcrumb.es';
 import CreatorRow from '../../components/CreatorRow.es';
 import DeleteThread from '../../components/DeleteThread.es';
 import Link from '../../components/Link.es';
@@ -192,8 +193,10 @@ export default withRouter(
 		);
 
 		return (
-			<section className="c-mt-5 questions-section questions-section-single">
-				<div className="questions-container">
+			<section className="questions-section questions-section-single">
+				<Breadcrumb section={question.messageBoardSection} />
+
+				<div className="c-mt-5 questions-container">
 					{!loading && (
 						<div className="row">
 							<div className="col-md-1 text-md-center">
@@ -384,6 +387,9 @@ export default withRouter(
 											<Answer
 												answer={answer}
 												answerChange={answerChange}
+												canMarkAsAnswer={
+													!!question.actions.replace
+												}
 												deleteAnswer={deleteAnswer}
 												key={answer.id}
 											/>

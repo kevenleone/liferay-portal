@@ -18,6 +18,7 @@ import com.liferay.app.builder.constants.AppBuilderAppConstants;
 import com.liferay.app.builder.model.AppBuilderApp;
 import com.liferay.app.builder.model.AppBuilderAppDeployment;
 import com.liferay.app.builder.service.AppBuilderAppDeploymentLocalService;
+import com.liferay.app.builder.service.AppBuilderAppVersionLocalService;
 import com.liferay.app.builder.service.base.AppBuilderAppLocalServiceBaseImpl;
 import com.liferay.dynamic.data.lists.model.DDLRecordSet;
 import com.liferay.dynamic.data.lists.service.DDLRecordSetLocalService;
@@ -34,6 +35,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -75,7 +77,13 @@ public class AppBuilderAppLocalServiceImpl
 		appBuilderApp.setNameMap(nameMap);
 		appBuilderApp.setScope(scope);
 
-		return appBuilderAppPersistence.update(appBuilderApp);
+		appBuilderApp = appBuilderAppPersistence.update(appBuilderApp);
+
+		_appBuilderAppVersionLocalService.addAppBuilderAppVersion(
+			groupId, companyId, userId, appBuilderApp.getAppBuilderAppId(),
+			ddlRecordSetId, ddmStructureId, ddmStructureLayoutId);
+
+		return appBuilderApp;
 	}
 
 	/**
@@ -121,6 +129,9 @@ public class AppBuilderAppLocalServiceImpl
 	public AppBuilderApp deleteAppBuilderApp(long appBuilderAppId)
 		throws PortalException {
 
+		AppBuilderApp appBuilderApp = appBuilderAppPersistence.remove(
+			appBuilderAppId);
+
 		List<AppBuilderAppDeployment> appBuilderAppDeployments =
 			_appBuilderAppDeploymentLocalService.getAppBuilderAppDeployments(
 				appBuilderAppId);
@@ -132,7 +143,10 @@ public class AppBuilderAppLocalServiceImpl
 				appBuilderAppDeployment.getAppBuilderAppDeploymentId());
 		}
 
-		return appBuilderAppPersistence.remove(appBuilderAppId);
+		_appBuilderAppVersionLocalService.deleteAppBuilderAppVersions(
+			appBuilderAppId);
+
+		return appBuilderApp;
 	}
 
 	@Override
@@ -266,12 +280,28 @@ public class AppBuilderAppLocalServiceImpl
 		appBuilderApp.setDeDataListViewId(deDataListViewId);
 		appBuilderApp.setNameMap(nameMap);
 
-		return appBuilderAppPersistence.update(appBuilderApp);
+		appBuilderApp = appBuilderAppPersistence.update(appBuilderApp);
+
+		if (!Objects.equals(
+				appBuilderApp.getDdmStructureLayoutId(),
+				ddmStructureLayoutId)) {
+
+			_appBuilderAppVersionLocalService.addAppBuilderAppVersion(
+				appBuilderApp.getGroupId(), appBuilderApp.getCompanyId(),
+				userId, appBuilderApp.getAppBuilderAppId(),
+				appBuilderApp.getDdlRecordSetId(), ddmStructureId,
+				ddmStructureLayoutId);
+		}
+
+		return appBuilderApp;
 	}
 
 	@Reference
 	private AppBuilderAppDeploymentLocalService
 		_appBuilderAppDeploymentLocalService;
+
+	@Reference
+	private AppBuilderAppVersionLocalService _appBuilderAppVersionLocalService;
 
 	@Reference
 	private DDLRecordSetLocalService _ddlRecordSetLocalService;

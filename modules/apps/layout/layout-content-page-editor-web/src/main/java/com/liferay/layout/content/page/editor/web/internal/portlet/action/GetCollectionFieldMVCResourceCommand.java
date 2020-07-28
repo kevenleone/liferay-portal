@@ -16,6 +16,7 @@ package com.liferay.layout.content.page.editor.web.internal.portlet.action;
 
 import com.liferay.asset.info.display.contributor.util.ContentAccessor;
 import com.liferay.document.library.kernel.model.DLFileEntryConstants;
+import com.liferay.fragment.entry.processor.helper.FragmentEntryProcessorHelper;
 import com.liferay.info.field.InfoField;
 import com.liferay.info.field.InfoFieldValue;
 import com.liferay.info.item.InfoItemClassPKReference;
@@ -254,10 +255,15 @@ public class GetCollectionFieldMVCResourceCommand
 
 				value = contentAccessor.getContent();
 			}
-			else if (value instanceof WebImage) {
+
+			if (value instanceof WebImage) {
 				WebImage webImage = (WebImage)value;
 
 				value = webImage.toJSONObject();
+			}
+			else {
+				value = _fragmentEntryProcessorHelper.formatMappedValue(
+					value, locale);
 			}
 
 			InfoField infoField = infoFieldValue.getInfoField();
@@ -281,6 +287,9 @@ public class GetCollectionFieldMVCResourceCommand
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		GetCollectionFieldMVCResourceCommand.class);
+
+	@Reference
+	private FragmentEntryProcessorHelper _fragmentEntryProcessorHelper;
 
 	@Reference
 	private InfoItemServiceTracker _infoItemServiceTracker;

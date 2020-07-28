@@ -31,6 +31,7 @@ export const UPDATE_STEP_INDEX = 'UPDATE_STEP_INDEX';
 export const UPDATE_TABLE_VIEW = 'UPDATE_TABLE_VIEW';
 
 export const getInitialConfig = () => {
+	const defaultLanguageId = themeDisplay.getLanguageId();
 	const initialSteps = [
 		{
 			appWorkflowTransitions: [
@@ -48,7 +49,11 @@ export const getInitialConfig = () => {
 
 	return {
 		currentStep: initialSteps[0],
-		dataObject: {},
+		dataObject: {
+			availableLanguageIds: [defaultLanguageId],
+			defaultLanguageId,
+		},
+		draftConfig: {},
 		formView: {},
 		listItems: {
 			assigneeRoles: [],
@@ -215,12 +220,20 @@ export default (state, action) => {
 			return {
 				...state,
 				...action.config,
+				draftConfig: JSON.parse(JSON.stringify(action.config)),
 			};
 		}
 		case UPDATE_DATA_OBJECT: {
 			state.steps.forEach((step) => {
 				if (step.appWorkflowDataLayoutLinks) {
 					step.appWorkflowDataLayoutLinks = [];
+				}
+
+				if (step?.errors?.formViews) {
+					step.errors.formViews = {
+						duplicatedFields: [],
+						errorIndexes: [],
+					};
 				}
 			});
 

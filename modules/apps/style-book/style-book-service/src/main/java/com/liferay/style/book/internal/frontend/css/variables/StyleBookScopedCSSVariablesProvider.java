@@ -25,12 +25,8 @@ import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.Group;
 import com.liferay.portal.kernel.model.Layout;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.Constants;
-import com.liferay.portal.kernel.util.ParamUtil;
-import com.liferay.portal.kernel.util.Portal;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.kernel.util.WebKeys;
-import com.liferay.style.book.constants.StyleBookWebKeys;
 import com.liferay.style.book.model.StyleBookEntry;
 import com.liferay.style.book.service.StyleBookEntryLocalService;
 
@@ -56,9 +52,10 @@ public class StyleBookScopedCSSVariablesProvider
 	public Collection<ScopedCSSVariables> getScopedCSSVariablesCollection(
 		HttpServletRequest httpServletRequest) {
 
-		String tokensValues = _getTokensValues(httpServletRequest);
+		String frontendTokensValues = _getFrontendTokensValues(
+			httpServletRequest);
 
-		if (Validator.isNull(tokensValues)) {
+		if (Validator.isNull(frontendTokensValues)) {
 			return Collections.emptyList();
 		}
 
@@ -69,22 +66,25 @@ public class StyleBookScopedCSSVariablesProvider
 					Map<String, String> cssVariables = new HashMap<>();
 
 					try {
-						JSONObject tokensValuesJSONObject =
-							JSONFactoryUtil.createJSONObject(tokensValues);
+						JSONObject frontendTokensValuesJSONObject =
+							JSONFactoryUtil.createJSONObject(
+								frontendTokensValues);
 
 						Iterator<String> iterator =
-							tokensValuesJSONObject.keys();
+							frontendTokensValuesJSONObject.keys();
 
 						while (iterator.hasNext()) {
 							String key = iterator.next();
 
-							JSONObject tokenValueJSONObject =
-								tokensValuesJSONObject.getJSONObject(key);
+							JSONObject frontendTokenValueJSONObject =
+								frontendTokensValuesJSONObject.getJSONObject(
+									key);
 
 							cssVariables.put(
-								tokenValueJSONObject.getString(
+								frontendTokenValueJSONObject.getString(
 									"cssVariableMapping"),
-								tokenValueJSONObject.getString("value"));
+								frontendTokenValueJSONObject.getString(
+									"value"));
 						}
 					}
 					catch (JSONException jsonException) {
@@ -103,7 +103,9 @@ public class StyleBookScopedCSSVariablesProvider
 			});
 	}
 
-	private String _getTokensValues(HttpServletRequest httpServletRequest) {
+	private String _getFrontendTokensValues(
+		HttpServletRequest httpServletRequest) {
+
 		ThemeDisplay themeDisplay =
 			(ThemeDisplay)httpServletRequest.getAttribute(
 				WebKeys.THEME_DISPLAY);
@@ -118,12 +120,10 @@ public class StyleBookScopedCSSVariablesProvider
 
 		Layout layout = themeDisplay.getLayout();
 
-		String styleBookEntryKey = ParamUtil.getString(
-			httpServletRequest, StyleBookWebKeys.STYLE_BOOK_ENTRY_KEY);
-
-		if (Validator.isNotNull(styleBookEntryKey)) {
-			styleBookEntry = _styleBookEntryLocalService.fetchStyleBookEntry(
-				layout.getGroupId(), styleBookEntryKey);
+		if (layout.getStyleBookEntryId() > 0) {
+			styleBookEntry =
+				_styleBookEntryLocalService.fetchDefaultStyleBookEntry(
+					layout.getGroupId());
 		}
 
 		if (styleBookEntry == null) {
@@ -136,31 +136,11 @@ public class StyleBookScopedCSSVariablesProvider
 			return StringPool.BLANK;
 		}
 
-		HttpServletRequest originalHttpServletRequest =
-			_portal.getOriginalServletRequest(httpServletRequest);
-
-		String layoutMode = ParamUtil.getString(
-			originalHttpServletRequest, "p_l_mode", Constants.VIEW);
-
-		if (!layoutMode.equals(Constants.PREVIEW)) {
-			return styleBookEntry.getTokensValues();
-		}
-
-		StyleBookEntry draftStyleBookEntry =
-			_styleBookEntryLocalService.fetchDraft(styleBookEntry);
-
-		if (draftStyleBookEntry != null) {
-			return draftStyleBookEntry.getTokensValues();
-		}
-
-		return styleBookEntry.getTokensValues();
+		return styleBookEntry.getFrontendTokensValues();
 	}
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		StyleBookScopedCSSVariablesProvider.class);
-
-	@Reference
-	private Portal _portal;
 
 	@Reference
 	private StyleBookEntryLocalService _styleBookEntryLocalService;

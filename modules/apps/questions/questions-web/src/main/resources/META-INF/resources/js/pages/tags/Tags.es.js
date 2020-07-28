@@ -14,6 +14,7 @@
 
 import {useQuery} from '@apollo/client';
 import {ClayButtonWithIcon} from '@clayui/button';
+import ClayEmptyState from '@clayui/empty-state';
 import {ClayInput} from '@clayui/form';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
 import React, {useContext, useEffect, useState} from 'react';
@@ -59,7 +60,7 @@ export default withRouter(
 
 		const changePage = (page, pageSize) => {
 			historyPushParser(
-				`/questions/${context.section}/tags?page=${page}&pagesize=${pageSize}`
+				`/questions/${sectionTitle}/tags?page=${page}&pagesize=${pageSize}`
 			);
 		};
 
@@ -121,6 +122,14 @@ export default withRouter(
 							}
 							changePage={(page) => changePage(page, pageSize)}
 							data={data && data.keywordsRanked}
+							emptyState={
+								<ClayEmptyState
+									className="empty-state-icon"
+									title={Liferay.Language.get(
+										'there-are-no-results'
+									)}
+								/>
+							}
 							loading={loading}
 						>
 							{(tag) => (
@@ -130,7 +139,7 @@ export default withRouter(
 								>
 									<Link
 										title={tag.name}
-										to={`/questions/${sectionTitle}/tag/${tag.name}`}
+										to={`/questions/tag/${tag.name}`}
 									>
 										<div className="card card-interactive card-interactive-primary card-type-template template-card-horizontal">
 											<div className="card-body">

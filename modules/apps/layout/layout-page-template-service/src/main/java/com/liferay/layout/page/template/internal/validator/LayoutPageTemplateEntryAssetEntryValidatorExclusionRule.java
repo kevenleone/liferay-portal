@@ -34,7 +34,7 @@ public class LayoutPageTemplateEntryAssetEntryValidatorExclusionRule
 	@Override
 	public boolean isValidationExcluded(
 		long groupId, String className, long classPK, long classTypePK,
-		long[] categoryIds, String[] tagNames) {
+		long[] assetCategoryIds, String[] assetTagNames) {
 
 		Layout layout = _layoutLocalService.fetchLayout(classPK);
 

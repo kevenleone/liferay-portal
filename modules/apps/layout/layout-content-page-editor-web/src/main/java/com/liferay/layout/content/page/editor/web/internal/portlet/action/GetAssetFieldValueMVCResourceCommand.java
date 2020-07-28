@@ -15,7 +15,9 @@
 package com.liferay.layout.content.page.editor.web.internal.portlet.action;
 
 import com.liferay.asset.info.display.contributor.util.ContentAccessor;
+import com.liferay.fragment.entry.processor.helper.FragmentEntryProcessorHelper;
 import com.liferay.info.field.InfoFieldValue;
+import com.liferay.info.item.InfoItemReference;
 import com.liferay.info.item.InfoItemServiceTracker;
 import com.liferay.info.item.provider.InfoItemFieldValuesProvider;
 import com.liferay.info.item.provider.InfoItemObjectProvider;
@@ -93,7 +95,9 @@ public class GetAssetFieldValueMVCResourceCommand
 
 		long classPK = ParamUtil.getLong(resourceRequest, "classPK");
 
-		Object object = infoItemObjectProvider.getInfoItem(classPK);
+		InfoItemReference infoItemReference = new InfoItemReference(classPK);
+
+		Object object = infoItemObjectProvider.getInfoItem(infoItemReference);
 
 		if (object == null) {
 			JSONPortletResponseUtil.writeJSON(
@@ -134,10 +138,15 @@ public class GetAssetFieldValueMVCResourceCommand
 
 			value = contentAccessor.getContent();
 		}
-		else if (value instanceof WebImage) {
+
+		if (value instanceof WebImage) {
 			WebImage webImage = (WebImage)value;
 
 			value = webImage.toJSONObject();
+		}
+		else {
+			value = _fragmentEntryProcessorHelper.formatMappedValue(
+				value, themeDisplay.getLocale());
 		}
 
 		jsonObject.put("fieldValue", value);
@@ -148,6 +157,9 @@ public class GetAssetFieldValueMVCResourceCommand
 
 	private static final Log _log = LogFactoryUtil.getLog(
 		GetAssetFieldValueMVCResourceCommand.class);
+
+	@Reference
+	private FragmentEntryProcessorHelper _fragmentEntryProcessorHelper;
 
 	@Reference
 	private InfoItemServiceTracker _infoItemServiceTracker;

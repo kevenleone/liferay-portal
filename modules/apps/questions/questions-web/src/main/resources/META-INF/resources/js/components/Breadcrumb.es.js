@@ -12,87 +12,149 @@
  * details.
  */
 
-import ClayButton from '@clayui/button';
-import ClayDropDown from '@clayui/drop-down';
 import ClayIcon from '@clayui/icon';
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
+import {client, getSectionsByIdQuery} from '../utils/client.es';
+import BreadcrumbDropdown from './BreadcrumbDropdown.es';
 import Link from './Link.es';
 
 export default ({section}) => {
-	const [active, setActive] = useState(false);
+	const MAX_SECTIONS_IN_BREADCRUMB = 3;
+	const [breadcrumbNodes, setBreadcrumbNodes] = useState([]);
 
-	const getParentSubSections = () =>
+	const getSubSections = (section) =>
 		(section &&
-			section.parentSection &&
-			section.parentSection.messageBoardSections.items) ||
+			section.messageBoardSections &&
+			section.messageBoardSections.items) ||
 		[];
 
+	const createEllipsisSectionData = () => {
+		const categories = breadcrumbNodes
+			.slice(1, breadcrumbNodes.length - 1)
+			.map((section) => {
+				return {title: section.title};
+			});
+
+		return {subCategories: categories, title: ''};
+	};
+
+	const findParent = (messageBoardSectionId) =>
+		client
+			.query({
+				query: getSectionsByIdQuery,
+				variables: {messageBoardSectionId},
+			})
+			.then(({data}) => data.messageBoardSection);
+
+	const buildBreadcrumbNodesData = useCallback((section, acc = []) => {
+		acc.push({
+			subCategories: getSubSections(section),
+			title: section.title,
+		});
+
+		if (section.parentMessageBoardSectionId) {
+			if (section.parentMessageBoardSection) {
+				return Promise.resolve(
+					buildBreadcrumbNodesData(
+						section.parentMessageBoardSection,
+						acc
+					)
+				);
+			}
+
+			return findParent(
+				section.parentMessageBoardSectionId
+			).then((section) => buildBreadcrumbNodesData(section, acc));
+		}
+
+		return Promise.resolve(acc.reverse());
+	}, []);
+
+	useEffect(() => {
+		if (!section) {
+			return;
+		}
+
+		buildBreadcrumbNodesData(section).then((acc) =>
+			setBreadcrumbNodes(acc)
+		);
+	}, [buildBreadcrumbNodesData, section]);
+
 	return (
-		<>
-			{section && section.parentSection && (
-				<ol className="breadcrumb c-m-0 c-p-0">
-					<li className="breadcrumb-item breadcrumb-text-truncate">
-						<strong className="breadcrumb-text-truncate text-secondary">
-							{section.parentSection.title}
-						</strong>
-					</li>
-					{!!getParentSubSections().length && (
-						<li className="breadcrumb-item breadcrumb-text-truncate">
-							<ClayDropDown
-								active={active}
-								onActiveChange={setActive}
-								trigger={
-									<ClayButton
-										className="c-p-0 questions-breadcrumb-unstyled text-truncate"
-										displayType="unstyled"
-									>
-										{section.id === section.parentSection.id
-											? Liferay.Language.get('all')
-											: section.title}
-										<ClayIcon symbol="caret-bottom-l" />
-									</ClayButton>
-								}
-							>
-								<Link
-									className="text-decoration-none"
-									onClick={() => {
-										setActive(false);
-									}}
-									to={`/questions/${section.parentSection.title}`}
-								>
-									<ClayDropDown.Item>
-										{Liferay.Language.get('all')}
-									</ClayDropDown.Item>
-								</Link>
-								<ClayDropDown.ItemList>
-									<ClayDropDown.Group>
-										{getParentSubSections().map(
-											(item, i) => (
-												<Link
-													className="text-decoration-none"
-													key={i}
-													onClick={() => {
-														setActive(false);
-													}}
-													to={
-														'/questions/' +
-														item.title
-													}
-												>
-													<ClayDropDown.Item>
-														{item.title}
-													</ClayDropDown.Item>
-												</Link>
-											)
-										)}
-									</ClayDropDown.Group>
-								</ClayDropDown.ItemList>
-							</ClayDropDown>
-						</li>
+		<section className="align-items-center d-flex">
+			<div className="questions-breadcrumb">
+				<ol className="breadcrumb mb-0 ml-2">
+					{breadcrumbNodes.length > MAX_SECTIONS_IN_BREADCRUMB ? (
+						<ShortenedBreadcrumb />
+					) : (
+						<AllBreadcrumb />
 					)}
 				</ol>
-			)}
-		</>
+			</div>
+		</section>
 	);
+
+	function AllBreadcrumb() {
+		return (
+			<>
+				<li className="breadcrumb-item breadcrumb-text-truncate mr-0">
+					<Link
+						className="breadcrumb-item questions-breadcrumb-unstyled"
+						to={'/'}
+					>
+						<ClayIcon symbol="home" />
+					</Link>
+				</li>
+				<BreadcrumbNode />
+			</>
+		);
+	}
+
+	function ShortenedBreadcrumb() {
+		return (
+			<>
+				<li className="breadcrumb-item breadcrumb-text-truncate mr-0">
+					<Link
+						className="breadcrumb-item questions-breadcrumb-unstyled"
+						to={'/'}
+					>
+						<ClayIcon symbol="home" />
+					</Link>
+				</li>
+				<BreadcrumbNode end={1} start={0} />
+				<li className="breadcrumb-item breadcrumb-text-truncate mr-0">
+					<BreadcrumbDropdown
+						className="breadcrumb-item breadcrumb-text-truncate"
+						createLink={false}
+						section={createEllipsisSectionData()}
+					/>
+				</li>
+				<BreadcrumbNode start={-1} />
+			</>
+		);
+	}
+
+	function BreadcrumbNode({
+		createLink,
+		end = breadcrumbNodes.length,
+		start = 0,
+	}) {
+		return breadcrumbNodes.slice(start, end).map((section, i) => (
+			<li
+				className="breadcrumb-item breadcrumb-text-truncate mr-0"
+				key={i}
+			>
+				{section.subCategories.length <= 0 ? (
+					section.title
+				) : (
+					<BreadcrumbDropdown
+						className="breadcrumb-item breadcrumb-text-truncate"
+						createLink={createLink}
+						section={section}
+					/>
+				)}
+			</li>
+		));
+	}
 };

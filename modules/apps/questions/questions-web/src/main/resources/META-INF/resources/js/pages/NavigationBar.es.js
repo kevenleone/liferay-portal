@@ -12,14 +12,13 @@
  * details.
  */
 
-import {useLazyQuery} from '@apollo/client';
 import ClayLink from '@clayui/link';
 import ClayNavigationBar from '@clayui/navigation-bar';
-import React, {useContext, useEffect} from 'react';
+import React, {useContext} from 'react';
 import {withRouter} from 'react-router-dom';
 
 import {AppContext} from '../AppContext.es';
-import {getSectionsQuery} from '../utils/client.es';
+import useQueryParams from '../hooks/useQueryParams.es';
 import {historyPushWithSlug} from '../utils/utils.es';
 
 export default withRouter(
@@ -30,6 +29,12 @@ export default withRouter(
 			params: {sectionTitle},
 		},
 	}) => {
+		const context = useContext(AppContext);
+
+		const queryParams = useQueryParams(location);
+
+		sectionTitle = sectionTitle || queryParams.get('sectiontitle');
+
 		const isActive = (value) => location.pathname.includes(value);
 
 		const label = () => {
@@ -45,23 +50,6 @@ export default withRouter(
 
 			return Liferay.Language.get('questions');
 		};
-
-		const context = useContext(AppContext);
-
-		const [getSections] = useLazyQuery(getSectionsQuery, {
-			onCompleted({messageBoardSections}) {
-				context.setSection(messageBoardSections.items[0].title);
-			},
-		});
-
-		useEffect(() => {
-			if (sectionTitle) {
-				context.setSection(sectionTitle);
-			}
-			else if (Object.keys(context.section).length === 0) {
-				getSections({variables: {siteKey: context.siteKey}});
-			}
-		}, [context, getSections, sectionTitle]);
 
 		const historyPushParser = historyPushWithSlug(history.push);
 
@@ -83,7 +71,9 @@ export default withRouter(
 										}
 										onClick={() =>
 											historyPushParser(
-												`/questions/${context.section}`
+												sectionTitle
+													? `/questions/${sectionTitle}`
+													: '/'
 											)
 										}
 									>
@@ -99,7 +89,9 @@ export default withRouter(
 										active={isActive('tags')}
 										onClick={() =>
 											historyPushParser(
-												`/questions/${context.section}/tags`
+												sectionTitle
+													? `/questions/${sectionTitle}/tags`
+													: '/'
 											)
 										}
 									>
@@ -120,7 +112,7 @@ export default withRouter(
 										}
 										onClick={() =>
 											historyPushParser(
-												`/subscriptions/${context.userId}`
+												`/subscriptions/${context.userId}?sectionTitle=${sectionTitle}`
 											)
 										}
 									>
@@ -143,7 +135,7 @@ export default withRouter(
 										}
 										onClick={() =>
 											historyPushParser(
-												`/activity/${context.userId}`
+												`/activity/${context.userId}?sectionTitle=${sectionTitle}`
 											)
 										}
 									>

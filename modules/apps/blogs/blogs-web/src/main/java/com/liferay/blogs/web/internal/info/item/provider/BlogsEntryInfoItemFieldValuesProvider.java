@@ -26,22 +26,15 @@ import com.liferay.info.item.InfoItemFieldValues;
 import com.liferay.info.item.field.reader.InfoItemFieldReaderFieldSetProvider;
 import com.liferay.info.item.provider.InfoItemFieldValuesProvider;
 import com.liferay.info.type.WebImage;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
-import com.liferay.portal.kernel.util.LocaleThreadLocal;
-
-import java.text.Format;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import org.osgi.framework.Constants;
 import org.osgi.service.component.annotations.Component;
@@ -159,7 +152,7 @@ public class BlogsEntryInfoItemFieldValuesProvider
 			blogsEntryFieldValues.add(
 				new InfoFieldValue<>(
 					BlogsEntryInfoItemFields.publishDateInfoField,
-					_getDateValue(blogsEntry.getDisplayDate())));
+					blogsEntry.getDisplayDate()));
 
 			if (themeDisplay != null) {
 				blogsEntryFieldValues.add(
@@ -178,19 +171,6 @@ public class BlogsEntryInfoItemFieldValuesProvider
 		catch (PortalException portalException) {
 			throw new RuntimeException(portalException);
 		}
-	}
-
-	private String _getDateValue(Date date) {
-		if (date == null) {
-			return StringPool.BLANK;
-		}
-
-		Locale locale = LocaleThreadLocal.getThemeDisplayLocale();
-
-		Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(
-			locale);
-
-		return dateFormatDateTime.format(date);
 	}
 
 	private String _getDisplayPageURL(BlogsEntry blogsEntry)

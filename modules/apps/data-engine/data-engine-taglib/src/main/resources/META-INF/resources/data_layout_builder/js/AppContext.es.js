@@ -29,6 +29,7 @@ import {
 	UPDATE_DATA_LAYOUT,
 	UPDATE_DATA_LAYOUT_NAME,
 	UPDATE_DATA_LAYOUT_RULE,
+	UPDATE_EDITING_DATA_DEFINITION_ID,
 	UPDATE_EDITING_LANGUAGE_ID,
 	UPDATE_FIELDSETS,
 	UPDATE_FIELD_TYPES,
@@ -37,6 +38,7 @@ import {
 	UPDATE_IDS,
 	UPDATE_PAGES,
 } from './actions.es';
+import {getAllDataDefinitionFieldsFromAllFieldSets} from './utils/dataDefinition.es';
 import * as DataLayoutVisitor from './utils/dataLayoutVisitor.es';
 import generateDataDefinitionFieldName from './utils/generateDataDefinitionFieldName.es';
 
@@ -67,6 +69,7 @@ const initialState = {
 		paginationMode: 'wizard',
 	},
 	dataLayoutId: 0,
+	editingDataDefinitionId: 0,
 	editingLanguageId: themeDisplay.getLanguageId(),
 	fieldSets: [],
 	fieldTypes: [],
@@ -80,6 +83,7 @@ const initialState = {
 const addCustomObjectField = ({
 	dataDefinition,
 	dataLayoutBuilder,
+	fieldSets,
 	fieldTypeName,
 	fieldTypes,
 }) => {
@@ -93,7 +97,13 @@ const addCustomObjectField = ({
 		label: {
 			[themeDisplay.getLanguageId()]: fieldType.label,
 		},
-		name: generateDataDefinitionFieldName(dataDefinition, fieldType.label),
+		name: generateDataDefinitionFieldName(
+			[
+				...dataDefinition.dataDefinitionFields,
+				...getAllDataDefinitionFieldsFromAllFieldSets(fieldSets),
+			],
+			fieldType.label
+		),
 	};
 };
 
@@ -202,10 +212,11 @@ const createReducer = (dataLayoutBuilder) => {
 		switch (action.type) {
 			case ADD_CUSTOM_OBJECT_FIELD: {
 				const {fieldTypeName} = action.payload;
-				const {dataDefinition, fieldTypes} = state;
+				const {dataDefinition, fieldSets, fieldTypes} = state;
 				const newCustomObjectField = addCustomObjectField({
 					dataDefinition,
 					dataLayoutBuilder,
+					fieldSets,
 					fieldTypeName,
 					fieldTypes,
 				});
@@ -289,7 +300,10 @@ const createReducer = (dataLayoutBuilder) => {
 						focusedCustomObjectField,
 					}
 				);
-				const {settingsContext} = editedFocusedCustomObjectField;
+				const {
+					nestedDataDefinitionFields,
+					settingsContext,
+				} = editedFocusedCustomObjectField;
 
 				return {
 					...state,
@@ -301,9 +315,12 @@ const createReducer = (dataLayoutBuilder) => {
 									dataDefinitionField.name ===
 									focusedCustomObjectField.name
 								) {
-									return dataLayoutBuilder.getDataDefinitionField(
-										editedFocusedCustomObjectField
-									);
+									return {
+										...dataLayoutBuilder.getDataDefinitionField(
+											editedFocusedCustomObjectField
+										),
+										nestedDataDefinitionFields,
+									};
 								}
 
 								return dataDefinitionField;
@@ -389,6 +406,14 @@ const createReducer = (dataLayoutBuilder) => {
 					},
 				};
 			}
+			case UPDATE_EDITING_DATA_DEFINITION_ID: {
+				const {editingDataDefinitionId} = action.payload;
+
+				return {
+					...state,
+					editingDataDefinitionId,
+				};
+			}
 			case UPDATE_EDITING_LANGUAGE_ID: {
 				const {dataDefinition} = state;
 
@@ -415,12 +440,18 @@ const createReducer = (dataLayoutBuilder) => {
 				};
 			}
 			case UPDATE_FIELDSETS: {
-				const {dataDefinitionId} = state;
+				const {dataDefinitionId, editingDataDefinitionId} = state;
 				let {fieldSets} = action.payload;
 
 				if (dataDefinitionId) {
 					fieldSets = fieldSets.filter(
 						(item) => item.id !== dataDefinitionId
+					);
+				}
+
+				if (editingDataDefinitionId) {
+					fieldSets = fieldSets.filter(
+						(item) => item.id !== editingDataDefinitionId
 					);
 				}
 

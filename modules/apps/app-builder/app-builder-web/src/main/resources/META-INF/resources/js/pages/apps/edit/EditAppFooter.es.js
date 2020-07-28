@@ -27,6 +27,8 @@ import EditAppContext from './EditAppContext.es';
 export default withRouter(
 	({
 		currentStep,
+		defaultLanguageId,
+		editingLanguageId,
 		history,
 		match: {
 			params: {dataDefinitionId},
@@ -46,8 +48,10 @@ export default withRouter(
 			dataLayoutId,
 			dataListViewId,
 			id: appId,
-			name: {en_US: appName},
+			name,
 		} = app;
+
+		const appName = name[editingLanguageId];
 
 		const getStandaloneLink = (appId) => {
 			const isStandalone = appDeployments.some(
@@ -79,6 +83,23 @@ export default withRouter(
 			setDeploying(false);
 		};
 
+		const normalizeAppName = (names) => {
+			const name = {};
+
+			if (!names[defaultLanguageId]) {
+				names[defaultLanguageId] = names[editingLanguageId];
+			}
+
+			Object.keys(names).forEach((key) => {
+				const value = names[key];
+				if (value) {
+					name[key] = value;
+				}
+			});
+
+			return name;
+		};
+
 		const onError = (error) => {
 			const {title = ''} = error;
 			errorToast(`${title}.`);
@@ -92,8 +113,13 @@ export default withRouter(
 		const onDeploy = () => {
 			setDeploying(true);
 
+			const data = {
+				...app,
+				name: normalizeAppName(app.name),
+			};
+
 			if (appId) {
-				updateItem(`/o/app-builder/v1.0/apps/${appId}`, app)
+				updateItem(`/o/app-builder/v1.0/apps/${appId}`, data)
 					.then(() => onSuccess(appId))
 					.then(onCancel)
 					.catch(onError);
@@ -101,7 +127,7 @@ export default withRouter(
 			else {
 				addItem(
 					`/o/app-builder/v1.0/data-definitions/${dataDefinitionId}/apps`,
-					app
+					data
 				)
 					.then((app) => onSuccess(app.id))
 					.then(onCancel)

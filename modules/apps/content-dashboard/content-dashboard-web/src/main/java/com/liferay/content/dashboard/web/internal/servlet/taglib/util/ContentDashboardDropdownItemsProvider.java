@@ -99,15 +99,6 @@ public class ContentDashboardDropdownItemsProvider {
 			() -> {
 				DropdownItem dropdownItem = new DropdownItem();
 
-				dropdownItem.setData(
-					HashMapBuilder.<String, Object>put(
-						"action", "showInfo"
-					).put(
-						"className", contentDashboardItem.getClassName()
-					).put(
-						"classPK", contentDashboardItem.getClassPK()
-					).build());
-
 				ResourceURL resourceURL =
 					_liferayPortletResponse.createResourceURL();
 
@@ -119,7 +110,16 @@ public class ContentDashboardDropdownItemsProvider {
 				resourceURL.setResourceID(
 					"/content_dashboard/get_content_dashboard_item_info");
 
-				dropdownItem.setHref(String.valueOf(resourceURL));
+				dropdownItem.setData(
+					HashMapBuilder.<String, Object>put(
+						"action", "showInfo"
+					).put(
+						"className", contentDashboardItem.getClassName()
+					).put(
+						"classPK", contentDashboardItem.getClassPK()
+					).put(
+						"fetchURL", String.valueOf(resourceURL)
+					).build());
 
 				dropdownItem.setLabel(_language.get(locale, "info"));
 

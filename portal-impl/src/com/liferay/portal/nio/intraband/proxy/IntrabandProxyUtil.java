@@ -780,11 +780,8 @@ public class IntrabandProxyUtil {
 				methodName = method.getName();
 			}
 
-			return methodName.concat(
-				StringPool.DASH
-			).concat(
-				Type.getMethodDescriptor(method)
-			);
+			return StringBundler.concat(
+				methodName, StringPool.DASH, Type.getMethodDescriptor(method));
 		}
 
 	}
@@ -806,13 +803,9 @@ public class IntrabandProxyUtil {
 			for (int i = 0; i < proxyMethods.size(); i++) {
 				Method proxyMethod = proxyMethods.get(i);
 
-				String name = proxyMethod.getName();
-
-				proxyMethodSignatures[i] = name.concat(
-					StringPool.DASH
-				).concat(
-					Type.getMethodDescriptor(proxyMethod)
-				);
+				proxyMethodSignatures[i] = StringBundler.concat(
+					proxyMethod.getName(), StringPool.DASH,
+					Type.getMethodDescriptor(proxyMethod));
 			}
 		}
 

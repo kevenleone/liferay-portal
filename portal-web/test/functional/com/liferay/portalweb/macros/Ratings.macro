@@ -123,12 +123,30 @@ definition {
 		}
 	}
 
+	macro revokeStackedStarsRating {
+		Click(locator1 = "Icon#DELETE");
+
+		AssertElementNotPresent(locator1 = "Icon#DELETE");
+	}
+
 	macro revokeStarsRating {
 		Click(locator1 = "Ratings#YOUR_RATING_STAR");
 
 		Click.clickNoMouseOver(locator1 = "Ratings#YOUR_RATING_STAR_DELETE");
 
 		AssertElementPresent(locator1 = "Ratings#YOUR_RATING_STAR_EMPTY");
+	}
+
+	macro viewNoRateStackedStar {
+		for (var ratingStarCount : list "1,2,3,4,5") {
+			AssertElementNotPresent(
+				key_ratingStarCount = "${ratingStarCount}",
+				locator1 = "Ratings#YOUR_RATING_STACKED_STAR_RESULT");
+		}
+
+		AssertElementPresent(
+			key_averageStarCount = "${averageStarCount}",
+			locator1 = "Ratings#AVERAGE_STACKED_STAR_RESULT");
 	}
 
 	macro viewRateLike {

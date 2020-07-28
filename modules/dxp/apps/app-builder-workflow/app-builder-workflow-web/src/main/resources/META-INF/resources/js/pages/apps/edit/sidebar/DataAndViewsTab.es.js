@@ -16,13 +16,14 @@ import ClayIcon from '@clayui/icon';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import SelectObjects from 'app-builder-web/js/pages/apps/SelectObjectsDropDown.es';
 import EditAppContext, {
-	UPDATE_DATA_DEFINITION_ID,
+	UPDATE_APP,
 	UPDATE_DATA_LAYOUT_ID,
 	UPDATE_DATA_LIST_VIEW_ID,
 } from 'app-builder-web/js/pages/apps/edit/EditAppContext.es';
 import {sub} from 'app-builder-web/js/utils/lang.es';
 import {concatValues} from 'app-builder-web/js/utils/utils.es';
 import classNames from 'classnames';
+import {DataDefinitionUtils} from 'data-engine-taglib';
 import React, {useContext} from 'react';
 
 import SelectDropdown from '../../../../components/select-dropdown/SelectDropdown.es';
@@ -142,8 +143,12 @@ export default function DataAndViewsTab() {
 			});
 
 			dispatch({
-				...newDataObject,
-				type: UPDATE_DATA_DEFINITION_ID,
+				app: {
+					dataDefinitionId: newDataObject.id,
+					dataLayoutId: null,
+					dataListViewId: null,
+				},
+				type: UPDATE_APP,
 			});
 		}
 	};
@@ -197,15 +202,17 @@ export default function DataAndViewsTab() {
 					'the-fields-x-are-present-in-multiple-form-views'
 			  );
 
-	const fields = duplicatedFields.map((field) => `"${field}"`);
+	const fieldsLabels = duplicatedFields.map((field) =>
+		DataDefinitionUtils.getFieldLabel(dataObject, field)
+	);
 
-	const someFields = fields.slice(0, 5);
-	someFields.push('others*');
+	const parsedFieldsLabels = fieldsLabels
+		.slice(0, 5)
+		.map((label) => `"${label}"`);
 
-	const duplicatedFieldsValues =
-		duplicatedFields.length <= 5
-			? concatValues(fields)
-			: concatValues(someFields);
+	if (fieldsLabels.length > 5) {
+		parsedFieldsLabels.push(`others*`);
+	}
 
 	return (
 		<>
@@ -218,7 +225,7 @@ export default function DataAndViewsTab() {
 							title={`${Liferay.Language.get('error')}:`}
 						>
 							{`${sub(duplicatedFieldsMessage, [
-								duplicatedFieldsValues,
+								concatValues(parsedFieldsLabels),
 							])} `}
 
 							{duplicatedFields.length > 5 && (
@@ -226,8 +233,8 @@ export default function DataAndViewsTab() {
 									<a
 										className="text-primary"
 										data-tooltip-align="bottom"
-										title={duplicatedFields
-											.slice(5, duplicatedFields.length)
+										title={fieldsLabels
+											.slice(5, fieldsLabels.length)
 											.join('\n')}
 									>
 										{'*'}

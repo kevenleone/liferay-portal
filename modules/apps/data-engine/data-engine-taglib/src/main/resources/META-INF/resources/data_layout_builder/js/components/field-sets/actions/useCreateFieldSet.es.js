@@ -18,7 +18,6 @@ import AppContext from '../../../AppContext.es';
 import {UPDATE_FIELDSETS} from '../../../actions.es';
 import DataLayoutBuilderContext from '../../../data-layout-builder/DataLayoutBuilderContext.es';
 import {addItem} from '../../../utils/client.es';
-import {containsField} from '../../../utils/dataLayoutVisitor.es';
 import {errorToast, successToast} from '../../../utils/toast.es';
 
 export default ({availableLanguageIds, childrenContext}) => {
@@ -29,14 +28,9 @@ export default ({availableLanguageIds, childrenContext}) => {
 
 	return (name) => {
 		const {
-			dataDefinition: {dataDefinitionFields: fields},
+			dataDefinition: {dataDefinitionFields},
 			dataLayout: {dataLayoutPages},
 		} = childrenState;
-
-		const dataDefinitionFields = fields.filter(
-			({fieldType, name}) =>
-				fieldType !== 'fieldset' && containsField(dataLayoutPages, name)
-		);
 
 		const fieldSet = {
 			availableLanguageIds,

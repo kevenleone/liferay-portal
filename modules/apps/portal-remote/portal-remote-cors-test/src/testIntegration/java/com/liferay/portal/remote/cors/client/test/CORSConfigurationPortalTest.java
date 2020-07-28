@@ -41,10 +41,7 @@ public class CORSConfigurationPortalTest extends BaseCORSClientTestCase {
 		new LiferayIntegrationTestRule();
 
 	@Test
-	public void testCORSUsingBasic() throws Exception {
-		assertJsonWSUrl("/user/get-current-user", HttpMethod.OPTIONS, true);
-		assertJsonWSUrl("/user/get-current-user", HttpMethod.GET, false);
-
+	public void testCORSUsingBasicWithCustomConfig() throws Exception {
 		Dictionary<String, Object> properties = new HashMapDictionary<>();
 
 		properties.put("configuration.name", "test-cors");
@@ -54,6 +51,12 @@ public class CORSConfigurationPortalTest extends BaseCORSClientTestCase {
 		createFactoryConfiguration(
 			PortalCORSConfiguration.class.getName(), properties);
 
+		assertJsonWSUrl("/user/get-current-user", HttpMethod.OPTIONS, true);
+		assertJsonWSUrl("/user/get-current-user", HttpMethod.GET, false);
+	}
+
+	@Test
+	public void testCORSUsingBasicWithDefaultConfig() throws Exception {
 		assertJsonWSUrl("/user/get-current-user", HttpMethod.OPTIONS, true);
 		assertJsonWSUrl("/user/get-current-user", HttpMethod.GET, false);
 	}

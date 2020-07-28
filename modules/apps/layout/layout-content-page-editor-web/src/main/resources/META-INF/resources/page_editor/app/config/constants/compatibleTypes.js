@@ -25,6 +25,7 @@ export const COMPATIBLE_TYPES = {
 
 	html: [
 		'boolean',
+		'categories',
 		'date',
 		'ddm-date',
 		'ddm-decimal',
@@ -36,6 +37,7 @@ export const COMPATIBLE_TYPES = {
 		'integer',
 		'number',
 		'rich-text',
+		'tags',
 		'text',
 		'textarea',
 		'url',
@@ -45,6 +47,7 @@ export const COMPATIBLE_TYPES = {
 
 	link: [
 		'boolean',
+		'categories',
 		'date',
 		'ddm-date',
 		'ddm-decimal',
@@ -63,6 +66,7 @@ export const COMPATIBLE_TYPES = {
 
 	'rich-text': [
 		'boolean',
+		'categories',
 		'date',
 		'ddm-date',
 		'ddm-decimal',
@@ -74,6 +78,7 @@ export const COMPATIBLE_TYPES = {
 		'integer',
 		'number',
 		'rich-text',
+		'tags',
 		'text',
 		'textarea',
 		'url',
@@ -81,6 +86,7 @@ export const COMPATIBLE_TYPES = {
 
 	text: [
 		'boolean',
+		'categories',
 		'date',
 		'ddm-date',
 		'ddm-decimal',
@@ -90,6 +96,7 @@ export const COMPATIBLE_TYPES = {
 		'geolocation',
 		'integer',
 		'number',
+		'tags',
 		'text',
 		'textarea',
 		'url',

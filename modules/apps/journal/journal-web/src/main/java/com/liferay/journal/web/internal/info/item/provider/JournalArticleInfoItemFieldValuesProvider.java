@@ -38,23 +38,18 @@ import com.liferay.journal.util.JournalConverter;
 import com.liferay.journal.util.comparator.ArticleVersionComparator;
 import com.liferay.journal.web.internal.asset.JournalArticleDDMFormValuesReader;
 import com.liferay.journal.web.internal.info.item.JournalArticleInfoItemFields;
-import com.liferay.petra.string.StringPool;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.model.User;
 import com.liferay.portal.kernel.service.ServiceContext;
 import com.liferay.portal.kernel.service.ServiceContextThreadLocal;
 import com.liferay.portal.kernel.service.UserLocalService;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
-import com.liferay.portal.kernel.util.FastDateFormatFactoryUtil;
 import com.liferay.portal.kernel.util.LocaleThreadLocal;
 import com.liferay.portal.kernel.util.LocaleUtil;
 import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portlet.display.template.PortletDisplayTemplate;
 
-import java.text.Format;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -105,19 +100,6 @@ public class JournalArticleInfoItemFieldValuesProvider
 			throw new RuntimeException(
 				"Caught unexpected exception", noSuchInfoItemException);
 		}
-	}
-
-	private String _getDateValue(Date date) {
-		if (date == null) {
-			return StringPool.BLANK;
-		}
-
-		Locale locale = LocaleThreadLocal.getThemeDisplayLocale();
-
-		Format dateFormatDateTime = FastDateFormatFactoryUtil.getDateTime(
-			locale);
-
-		return dateFormatDateTime.format(date);
 	}
 
 	private List<InfoFieldValue<Object>> _getDDMStructureInfoFieldValues(
@@ -301,7 +283,7 @@ public class JournalArticleInfoItemFieldValuesProvider
 			journalArticleFieldValues.add(
 				new InfoFieldValue<>(
 					JournalArticleInfoItemFields.publishDateInfoField,
-					_getDateValue(journalArticle.getDisplayDate())));
+					journalArticle.getDisplayDate()));
 
 			if (themeDisplay != null) {
 				journalArticleFieldValues.add(

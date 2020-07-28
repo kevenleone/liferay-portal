@@ -15,7 +15,9 @@
 package com.liferay.app.builder.workflow.rest.internal.resource.v1_0;
 
 import com.liferay.app.builder.model.AppBuilderApp;
+import com.liferay.app.builder.model.AppBuilderAppVersion;
 import com.liferay.app.builder.service.AppBuilderAppLocalService;
+import com.liferay.app.builder.service.AppBuilderAppVersionLocalService;
 import com.liferay.app.builder.workflow.model.AppBuilderWorkflowTaskLink;
 import com.liferay.app.builder.workflow.rest.dto.v1_0.AppWorkflow;
 import com.liferay.app.builder.workflow.rest.dto.v1_0.AppWorkflowDataLayoutLink;
@@ -66,12 +68,19 @@ public class AppWorkflowResourceImpl extends BaseAppWorkflowResourceImpl {
 		AppBuilderApp appBuilderApp =
 			_appBuilderAppLocalService.getAppBuilderApp(appId);
 
+		AppBuilderAppVersion latestAppBuilderAppVersion =
+			_appBuilderAppVersionLocalService.getLatestAppBuilderAppVersion(
+				appBuilderApp.getAppBuilderAppId());
+
 		WorkflowDefinition workflowDefinition =
 			_appWorkflowResourceHelper.getWorkflowDefinition(appBuilderApp);
 
 		return _toAppWorkflow(
+			latestAppBuilderAppVersion,
 			_appBuilderWorkflowTaskLinkLocalService.
-				getAppBuilderWorkflowTaskLinks(appId),
+				getAppBuilderWorkflowTaskLinks(
+					appId,
+					latestAppBuilderAppVersion.getAppBuilderAppVersionId()),
 			appId, _appWorkflowResourceHelper.getDefinition(appBuilderApp),
 			workflowDefinition.getWorkflowDefinitionId());
 	}
@@ -79,6 +88,10 @@ public class AppWorkflowResourceImpl extends BaseAppWorkflowResourceImpl {
 	@Override
 	public AppWorkflow postAppWorkflow(Long appId, AppWorkflow appWorkflow)
 		throws Exception {
+
+		AppBuilderAppVersion latestAppBuilderAppVersion =
+			_appBuilderAppVersionLocalService.getLatestAppBuilderAppVersion(
+				appId);
 
 		List<AppBuilderWorkflowTaskLink> appBuilderWorkflowTaskLinks =
 			new ArrayList<>();
@@ -94,6 +107,8 @@ public class AppWorkflowResourceImpl extends BaseAppWorkflowResourceImpl {
 						_appBuilderWorkflowTaskLinkLocalService.
 							addAppBuilderWorkflowTaskLink(
 								contextCompany.getCompanyId(), appId,
+								latestAppBuilderAppVersion.
+									getAppBuilderAppVersionId(),
 								appWorkflowDataLayoutLink.getDataLayoutId(),
 								GetterUtil.getBoolean(
 									appWorkflowDataLayoutLink.getReadOnly()),
@@ -120,16 +135,21 @@ public class AppWorkflowResourceImpl extends BaseAppWorkflowResourceImpl {
 			workflowDefinition.getVersion());
 
 		return _toAppWorkflow(
-			appBuilderWorkflowTaskLinks, appId, definition,
-			workflowDefinition.getWorkflowDefinitionId());
+			latestAppBuilderAppVersion, appBuilderWorkflowTaskLinks, appId,
+			definition, workflowDefinition.getWorkflowDefinitionId());
 	}
 
 	@Override
 	public AppWorkflow putAppWorkflow(Long appId, AppWorkflow appWorkflow)
 		throws Exception {
 
+		AppBuilderAppVersion latestAppBuilderAppVersion =
+			_appBuilderAppVersionLocalService.getLatestAppBuilderAppVersion(
+				appId);
+
 		_appBuilderWorkflowTaskLinkLocalService.
-			deleteAppBuilderWorkflowTaskLinks(appId);
+			deleteAppBuilderWorkflowTaskLinks(
+				appId, latestAppBuilderAppVersion.getAppBuilderAppVersionId());
 
 		_workflowDefinitionLinkLocalService.deleteWorkflowDefinitionLink(
 			contextCompany.getCompanyId(), 0,
@@ -141,12 +161,14 @@ public class AppWorkflowResourceImpl extends BaseAppWorkflowResourceImpl {
 	}
 
 	private AppWorkflow _toAppWorkflow(
+		AppBuilderAppVersion appBuilderAppVersion,
 		List<AppBuilderWorkflowTaskLink> appBuilderWorkflowTaskLinks,
 		Long appWorkflowId, Definition definition, Long workflowDefinitionId) {
 
 		return new AppWorkflow() {
 			{
 				appId = appWorkflowId;
+				appVersion = appBuilderAppVersion.getVersion();
 				appWorkflowDefinitionId = workflowDefinitionId;
 
 				setAppWorkflowStates(
@@ -289,6 +311,9 @@ public class AppWorkflowResourceImpl extends BaseAppWorkflowResourceImpl {
 
 	@Reference
 	private AppBuilderAppLocalService _appBuilderAppLocalService;
+
+	@Reference
+	private AppBuilderAppVersionLocalService _appBuilderAppVersionLocalService;
 
 	@Reference
 	private AppBuilderWorkflowTaskLinkLocalService

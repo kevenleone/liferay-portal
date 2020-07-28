@@ -9,23 +9,27 @@
  * distribution rights of the Software.
  */
 
+import {AppContext} from 'app-builder-web/js/AppContext.es';
 import ControlMenu from 'app-builder-web/js/components/control-menu/ControlMenu.es';
 import {Loading} from 'app-builder-web/js/components/loading/Loading.es';
-import UpperToolbar from 'app-builder-web/js/components/upper-toolbar/UpperToolbar.es';
+import {getDataObjects} from 'app-builder-web/js/pages/apps/SelectObjectsDropDown.es';
 import EditAppContext, {
 	UPDATE_APP,
-	UPDATE_NAME,
 	reducer,
 } from 'app-builder-web/js/pages/apps/edit/EditAppContext.es';
-import {getItem} from 'app-builder-web/js/utils/client.es';
-import {errorToast} from 'app-builder-web/js/utils/toast.es';
-import React, {useEffect, useReducer, useState} from 'react';
+import {getItem, parseResponse} from 'app-builder-web/js/utils/client.es';
+import {errorToast, successToast} from 'app-builder-web/js/utils/toast.es';
+import {createResourceURL, fetch} from 'frontend-js-web';
+import React, {useContext, useEffect, useReducer, useState} from 'react';
 
 import '../../../../css/EditApp.scss';
+import AppStandaloneLink from './AppStandaloneLink.es';
+import ApplyAppChangesModal from './ApplyAppChangesModal.es';
 import DeployAppModal from './DeployAppModal.es';
+import EditAppToolbar from './EditAppToolbar.es';
 import {
 	getAssigneeRoles,
-	getDataObjects,
+	getDataDefinition,
 	getFormViews,
 	getTableViews,
 	populateConfigData,
@@ -36,7 +40,6 @@ import configReducer, {
 	getInitialConfig,
 } from './configReducer.es';
 import EditAppSidebar from './sidebar/EditAppSidebar.es';
-import {canDeployApp} from './utils.es';
 import WorkflowBuilder from './workflow-builder/WorkflowBuilder.es';
 
 export default ({
@@ -46,46 +49,59 @@ export default ({
 	},
 	scope,
 }) => {
-	const [{app}, dispatch] = useReducer(reducer, {
-		app: {
-			active: true,
-			appDeployments: [],
-			dataLayoutId: null,
-			dataListViewId: null,
-			name: {
-				en_US: '',
-			},
-			scope,
-		},
-	});
+	const {baseResourceURL, getStandaloneURL, namespace} = useContext(
+		AppContext
+	);
+
 	const [config, dispatchConfig] = useReducer(
 		configReducer,
 		getInitialConfig()
 	);
 
-	const [isModalVisible, setModalVisible] = useState(false);
+	const {defaultLanguageId} = config.dataObject;
+
+	const [{app}, dispatch] = useReducer(reducer, {
+		app: {
+			active: false,
+			appDeployments: [],
+			dataLayoutId: null,
+			dataListViewId: null,
+			name: {
+				[defaultLanguageId]: '',
+			},
+			scope,
+		},
+	});
+
+	const [isAppChangesModalVisible, setAppChangesModalVisible] = useState(
+		false
+	);
+	const [isDeployModalVisible, setDeployModalVisible] = useState(false);
 	const [isLoading, setLoading] = useState(false);
+	const [isSaving, setSaving] = useState(false);
 
 	const editState = {
 		appId,
 		config,
 		dispatch,
 		dispatchConfig,
-		isModalVisible,
-		setModalVisible,
+		isAppChangesModalVisible,
+		isDeployModalVisible,
+		setAppChangesModalVisible,
+		setDeployModalVisible,
 		state: {app},
 	};
 
 	useEffect(() => {
-		if (app.dataDefinitionId) {
+		if (app.dataDefinitionId && defaultLanguageId) {
 			dispatchConfig({
 				listItems: {fetching: true},
 				type: UPDATE_LIST_ITEMS,
 			});
 
 			Promise.all([
-				getFormViews(app.dataDefinitionId),
-				getTableViews(app.dataDefinitionId),
+				getFormViews(app.dataDefinitionId, defaultLanguageId),
+				getTableViews(app.dataDefinitionId, defaultLanguageId),
 			])
 				.then(([formViews, tableViews]) => {
 					dispatchConfig({
@@ -104,7 +120,7 @@ export default ({
 					});
 				});
 		}
-	}, [app.dataDefinitionId]);
+	}, [app.dataDefinitionId, defaultLanguageId]);
 
 	useEffect(() => {
 		const promises = [getAssigneeRoles(), getDataObjects()];
@@ -125,9 +141,24 @@ export default ({
 				...promises,
 			])
 				.then(([app, ...previousResults]) => {
+					return getDataDefinition(
+						app.dataDefinitionId
+					).then((dataDefinition) => [
+						app,
+						dataDefinition,
+						...previousResults,
+					]);
+				})
+				.then(([app, dataDefinition, ...previousResults]) => {
 					return Promise.all([
-						getFormViews(app.dataDefinitionId),
-						getTableViews(app.dataDefinitionId),
+						getFormViews(
+							app.dataDefinitionId,
+							dataDefinition.defaultLanguageId
+						),
+						getTableViews(
+							app.dataDefinitionId,
+							dataDefinition.defaultLanguageId
+						),
 					]).then((results) => [app, ...previousResults, ...results]);
 				})
 				.then(populateConfigData)
@@ -182,16 +213,79 @@ export default ({
 	}
 
 	const onCancel = () => {
-		history.goBack();
+		history.push(`/${scope}`);
 	};
 
-	const onAppNameChange = ({target}) => {
-		dispatch({appName: target.value, type: UPDATE_NAME});
+	const onSave = (callback = () => {}, deployed) => {
+		const workflowAppSteps = [...config.steps];
+
+		const workflowApp = {
+			appWorkflowStates: [
+				workflowAppSteps.shift(),
+				workflowAppSteps.pop(),
+			],
+			appWorkflowTasks: workflowAppSteps.map(
+				({appWorkflowDataLayoutLinks, ...restProps}) => ({
+					...restProps,
+					appWorkflowDataLayoutLinks: appWorkflowDataLayoutLinks.map(
+						({dataLayoutId, readOnly}) => ({dataLayoutId, readOnly})
+					),
+					errors: undefined,
+				})
+			),
+		};
+
+		const resource = appId ? 'update' : 'add';
+
+		const params = {
+			app: JSON.stringify({...app, active: deployed ?? app.active}),
+			appWorkflow: JSON.stringify(workflowApp),
+		};
+
+		if (appId) {
+			params.appBuilderAppId = appId;
+		}
+		else {
+			params.dataDefinitionId = app.dataDefinitionId;
+		}
+
+		fetch(
+			createResourceURL(baseResourceURL, {
+				p_p_resource_id: `/app_builder/${resource}_workflow_app`,
+			}),
+			{
+				body: new URLSearchParams(Liferay.Util.ns(namespace, params)),
+				method: 'POST',
+			}
+		)
+			.then(parseResponse)
+			.then((app) => {
+				const message = deployed ? (
+					<>
+						{Liferay.Language.get(
+							'the-app-was-deployed-successfully'
+						)}{' '}
+						<AppStandaloneLink
+							{...app}
+							href={getStandaloneURL(app.id)}
+						/>
+					</>
+				) : (
+					Liferay.Language.get('the-app-was-saved-successfully')
+				);
+
+				callback();
+				successToast(message);
+				setSaving(false);
+
+				onCancel();
+			})
+			.catch(({errorMessage}) => {
+				callback();
+				errorToast(`${errorMessage}`);
+				setSaving(false);
+			});
 	};
-
-	const maxLength = 30;
-
-	const isDeployButtonDisabled = !canDeployApp(app, config);
 
 	return (
 		<div className="app-builder-workflow-app">
@@ -199,35 +293,19 @@ export default ({
 
 			<Loading isLoading={isLoading}>
 				<EditAppContext.Provider value={editState}>
-					<UpperToolbar>
-						<UpperToolbar.Input
-							maxLength={maxLength}
-							onChange={onAppNameChange}
-							placeholder={Liferay.Language.get('untitled-app')}
-							value={app.name.en_US}
-						/>
-						<UpperToolbar.Group>
-							<UpperToolbar.Button
-								displayType="secondary"
-								onClick={onCancel}
-							>
-								{Liferay.Language.get('cancel')}
-							</UpperToolbar.Button>
-
-							<UpperToolbar.Button
-								disabled={isDeployButtonDisabled}
-								onClick={() => setModalVisible(true)}
-							>
-								{Liferay.Language.get('deploy')}
-							</UpperToolbar.Button>
-						</UpperToolbar.Group>
-					</UpperToolbar>
+					<EditAppToolbar
+						isSaving={isSaving}
+						onCancel={onCancel}
+						onSave={onSave}
+					/>
 
 					<WorkflowBuilder />
 
 					<EditAppSidebar />
 
-					<DeployAppModal onCancel={onCancel} />
+					<ApplyAppChangesModal onSave={onSave} />
+
+					<DeployAppModal onSave={onSave} />
 				</EditAppContext.Provider>
 			</Loading>
 		</div>

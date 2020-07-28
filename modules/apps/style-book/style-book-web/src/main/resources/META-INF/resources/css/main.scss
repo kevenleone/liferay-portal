@@ -4,6 +4,8 @@ $controlMenuDesktopHeight: 56px;
 $toolbarDesktopHeight: 56px;
 
 .style-book-editor {
+	--style-book-color-picker-color: none;
+
 	display: flex;
 	height: calc(100vh - #{$controlMenuDesktopHeight});
 	left: 0;
@@ -13,17 +15,14 @@ $toolbarDesktopHeight: 56px;
 
 	// Patch for small color picker until https://github.com/liferay/clay/issues/3514 is resolved
 
-	&__color-token {
-		label {
-			margin-bottom: 0;
-		}
-
+	&__color-frontend-token {
 		.clay-color-picker .clay-color .input-group-item .input-group-text {
 			padding-left: 6px;
 			padding-right: 6px;
 		}
 
 		.clay-color-btn {
+			background-color: var(--style-book-color-picker-color) !important;
 			height: 20px !important;
 			padding: 0;
 			width: 20px !important;
@@ -32,10 +31,33 @@ $toolbarDesktopHeight: 56px;
 
 	&__page-preview {
 		flex-grow: 1;
+		position: relative;
 
 		&-frame {
 			border: none;
 			height: 100%;
+			width: 100%;
+		}
+
+		&-no-page-message {
+			align-items: center;
+			background-color: $gray-100;
+			color: $gray-500;
+			display: flex;
+			font-size: 0.875rem;
+			font-weight: 600;
+			height: 100%;
+			justify-content: center;
+		}
+
+		&::after {
+			content: '';
+			cursor: not-allowed;
+			display: block;
+			height: 100%;
+			left: 0;
+			position: fixed;
+			top: 0;
 			width: 100%;
 		}
 	}

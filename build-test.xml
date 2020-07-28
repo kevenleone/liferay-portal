@@ -1748,10 +1748,7 @@ sendPasswordCaptchaEnabled=&quot;false&quot;</echo>
 			<get-database-property property.name="database.username" />
 
 			<if>
-				<and>
-					<equals arg1="${app.server.type}" arg2="tomcat" />
-					<equals arg1="${database.type}" arg2="mysql" />
-				</and>
+				<equals arg1="${app.server.type}" arg2="tomcat" />
 				<then>
 					<if>
 						<not>
@@ -1783,37 +1780,67 @@ sendPasswordCaptchaEnabled=&quot;false&quot;</echo>
 							/>
 						</not>
 						<then>
-							<replace
-								file="${app.server.dir}/conf/server.xml"
-							>
-								<replacetoken><![CDATA[<GlobalNamingResources>]]></replacetoken>
-								<replacevalue expandproperties="true">
-									<![CDATA[
-										<GlobalNamingResources>
-											<Resource
-												auth="Container"
-												description="Global Address Database"
-												driverClassName="${database.driver}"
-												maxActive="40"
-												maxIdle="20"
-												maxWait="1000"
-												name="jdbc/LiferayPool"
-												password="${database.password}"
-												type="javax.sql.DataSource"
-												url="jdbc:mysql://${database.host}/${database.schema}?useUnicode=true&amp;characterEncoding=UTF-8&amp;useFastDateParsing=false&amp;serverTimezone=GMT&amp;dontTrackOpenResources=true&amp;holdResultsOpenOverStatementClose=true"
-												username="${database.username}"
-											/>
-									]]>
-								</replacevalue>
-							</replace>
+							<if>
+								<equals arg1="${database.type}" arg2="mysql" />
+								<then>
+									<replace
+										file="${app.server.dir}/conf/server.xml"
+									>
+										<replacetoken><![CDATA[<GlobalNamingResources>]]></replacetoken>
+										<replacevalue expandproperties="true">
+											<![CDATA[
+												<GlobalNamingResources>
+													<Resource
+														auth="Container"
+														description="Global Address Database"
+														driverClassName="${database.driver}"
+														maxActive="40"
+														maxIdle="20"
+														maxWait="1000"
+														name="jdbc/LiferayPool"
+														password="${database.password}"
+														type="javax.sql.DataSource"
+														url="jdbc:mysql://${database.host}/${database.schema}?useUnicode=true&amp;characterEncoding=UTF-8&amp;useFastDateParsing=false&amp;serverTimezone=GMT&amp;dontTrackOpenResources=true&amp;holdResultsOpenOverStatementClose=true"
+														username="${database.username}"
+													/>
+											]]>
+										</replacevalue>
+									</replace>
+								</then>
+								<elseif>
+									<equals arg1="${database.type}" arg2="mariadb" />
+									<then>
+										<replace
+											file="${app.server.dir}/conf/server.xml"
+										>
+											<replacetoken><![CDATA[<GlobalNamingResources>]]></replacetoken>
+											<replacevalue expandproperties="true">
+												<![CDATA[
+													<GlobalNamingResources>
+														<Resource
+															auth="Container"
+															description="Global Address Database"
+															driverClassName="${database.driver}"
+															maxActive="40"
+															maxIdle="20"
+															maxWait="1000"
+															name="jdbc/LiferayPool"
+															password="${database.password}"
+															type="javax.sql.DataSource"
+															url="jdbc:mariadb://${database.host}/${database.schema}?useUnicode=true&amp;characterEncoding=UTF-8&amp;useFastDateParsing=false"
+															username="${database.username}"
+														/>
+												]]>
+											</replacevalue>
+										</replace>
+									</then>
+								</elseif>
+							</if>
 						</then>
 					</if>
 				</then>
 				<elseif>
-					<and>
-						<equals arg1="${app.server.type}" arg2="wildfly" />
-						<equals arg1="${database.type}" arg2="mariadb" />
-					</and>
+					<equals arg1="${app.server.type}" arg2="wildfly" />
 					<then>
 						<if>
 							<not>
@@ -1823,24 +1850,53 @@ sendPasswordCaptchaEnabled=&quot;false&quot;</echo>
 								/>
 							</not>
 							<then>
-								<replace
-									file="${app.server.dir}/standalone/configuration/standalone.xml"
-								>
-									<replacetoken><![CDATA[<datasources>]]></replacetoken>
-									<replacevalue expandproperties="true">
-										<![CDATA[
-											<datasources>
-        										<datasource jndi-name="java:/jdbc/LiferayPool" pool-name="LiferayPool" enabled="true" jta="true" use-java-context="true" use-ccm="true">
-            										<connection-url>jdbc:mariadb://${database.host}/${database.schema}?useUnicode=true&amp;characterEncoding=UTF-8&amp;useFastDateParsing=false</connection-url>
-            										<driver>mariadb</driver>
-            										<security>
-                										<user-name>${database.username}</user-name>
-                										<password>${database.password}</password>
-            										</security>
-        										</datasource>
-										]]>
-									</replacevalue>
-								</replace>
+								<if>
+									<equals arg1="${database.type}" arg2="mysql" />
+									<then>
+										<replace
+											file="${app.server.dir}/standalone/configuration/standalone.xml"
+										>
+											<replacetoken><![CDATA[<datasources>]]></replacetoken>
+											<replacevalue expandproperties="true">
+												<![CDATA[
+													<datasources>
+														<datasource jndi-name="java:/jdbc/LiferayPool" pool-name="LiferayPool" enabled="true" jta="true" use-java-context="true" use-ccm="true">
+															<connection-url>jdbc:mysql://${database.host}/${database.schema}?useUnicode=true&amp;characterEncoding=UTF-8&amp;useFastDateParsing=false&amp;serverTimezone=GMT&amp;dontTrackOpenResources=true&amp;holdResultsOpenOverStatementClose=true</connection-url>
+															<driver>${database.type}</driver>
+															<security>
+																<user-name>${database.username}</user-name>
+																<password>${database.password}</password>
+															</security>
+														</datasource>
+												]]>
+											</replacevalue>
+										</replace>
+									</then>
+									<elseif>
+										<equals arg1="${database.type}" arg2="mariadb" />
+										<then>
+											<replace
+												file="${app.server.dir}/standalone/configuration/standalone.xml"
+											>
+												<replacetoken><![CDATA[<datasources>]]></replacetoken>
+												<replacevalue expandproperties="true">
+													<![CDATA[
+														<datasources>
+															<datasource jndi-name="java:/jdbc/LiferayPool" pool-name="LiferayPool" enabled="true" jta="true" use-java-context="true" use-ccm="true">
+																<connection-url>jdbc:mariadb://${database.host}/${database.schema}?useUnicode=true&amp;characterEncoding=UTF-8&amp;useFastDateParsing=false</connection-url>
+																<driver>${database.type}</driver>
+																<security>
+																	<user-name>${database.username}</user-name>
+																	<password>${database.password}</password>
+																</security>
+															</datasource>
+													]]>
+												</replacevalue>
+											</replace>
+										</then>
+									</elseif>
+								</if>
+
 								<replace
 									file="${app.server.dir}/standalone/configuration/standalone.xml"
 								>
@@ -1848,7 +1904,7 @@ sendPasswordCaptchaEnabled=&quot;false&quot;</echo>
 									<replacevalue expandproperties="true">
 										<![CDATA[
 											<drivers>
-            									<driver name="mariadb" module="com.liferay.portal">
+            									<driver name="${database.type}" module="com.liferay.portal">
                 									<driver-class>${database.driver}</driver-class>
             									</driver>
 										]]>
@@ -3855,6 +3911,44 @@ go</echo>
 				app.server.tomcat.zip.name=${app.server.tomcat.zip.name}
 				app.server.tomcat.zip.url=${app.server.tomcat.zip.url}
 			</echo>
+		</sequential>
+	</macrodef>
+
+	<macrodef name="set-up-search-engine">
+		<sequential>
+			<get-testcase-property property.name="remote.elasticsearch.enabled" />
+
+			<if>
+				<equals arg1="${remote.elasticsearch.enabled}" arg2="true" />
+				<then>
+					<ant antfile="build-test-elasticsearch7.xml" target="start-elasticsearch" />
+				</then>
+			</if>
+
+			<get-testcase-property property.name="solr.enabled" />
+			<propertycopy from="search.engine[${env.CI_TEST_SUITE}]" name="suite.search.engine" silent="true" />
+
+			<if>
+				<equals arg1="${solr.enabled}" arg2="true" />
+				<then>
+					<ant antfile="build-test-solr.xml" target="start-solr" />
+				</then>
+				<elseif>
+					<equals arg1="${suite.search.engine}" arg2="solr" />
+					<then>
+						<ant antfile="build-test-solr.xml" target="set-up-solr" />
+					</then>
+				</elseif>
+			</if>
+
+			<get-testcase-property property.name="delete.sidecar.bundle" />
+
+			<if>
+				<equals arg1="${delete.sidecar.bundle}" arg2="true" />
+				<then>
+					<delete dir="${liferay.home}/elasticsearch7" failonerror="false" />
+				</then>
+			</if>
 		</sequential>
 	</macrodef>
 
@@ -6399,6 +6493,26 @@ go</echo>
 		</exec>
 	</target>
 
+	<target name="delete-dependency-file">
+		<if>
+			<isset property="liferay.dependency.wars" />
+			<then>
+				<delete file="${test.app.server.liferay.home}/osgi/war/${liferay.dependency.wars}" />
+
+				<echo> ${test.app.server.liferay.home}/osgi/war/${liferay.dependency.wars} </echo>
+			</then>
+		</if>
+
+		<if>
+			<isset property="liferay.dependency.jars" />
+			<then>
+				<delete file="${test.app.server.liferay.home}/osgi/modules/${liferay.dependency.jars}" />
+
+				<echo> ${test.app.server.liferay.home}/osgi/modules/${liferay.dependency.jars} </echo>
+			</then>
+		</if>
+	</target>
+
 	<target name="delete-liferay-home">
 		<if>
 			<not>
@@ -6417,7 +6531,12 @@ go</echo>
 				<get-testcase-property property.name="portal.version" />
 
 				<if>
-					<isset property="portal.version" />
+					<and>
+						<isset property="portal.version" />
+						<not>
+							<equals arg1="${keep.osgi.state}" arg2="true" />
+						</not>
+					</and>
 					<then>
 						<delete dir="${test.app.server.liferay.home}/osgi/state" />
 					</then>
@@ -6439,8 +6558,16 @@ go</echo>
 							</then>
 						</if>
 
+						<if>
+							<not>
+								<equals arg1="${keep.osgi.state}" arg2="true" />
+							</not>
+							<then>
+								<delete dir="${test.app.server.liferay.home}/osgi/state" />
+							</then>
+						</if>
+
 						<delete dir="${test.app.server.liferay.home}/logs" />
-						<delete dir="${test.app.server.liferay.home}/osgi/state" />
 						<delete dir="${test.app.server.liferay.home}/work" />
 
 						<delete file="${test.app.server.liferay.home}/portal-setup-wizard.properties" />
@@ -12407,24 +12534,6 @@ module.framework.properties.blacklist.portal.profile.names=${blacklist.portal.pr
 			</then>
 		</if>
 
-		<get-testcase-property property.name="remote.elasticsearch.enabled" />
-
-		<if>
-			<equals arg1="${remote.elasticsearch.enabled}" arg2="true" />
-			<then>
-				<ant antfile="build-test-elasticsearch7.xml" target="start-elasticsearch" />
-			</then>
-		</if>
-
-		<get-testcase-property property.name="delete.sidecar.bundle" />
-
-		<if>
-			<equals arg1="${delete.sidecar.bundle}" arg2="true" />
-			<then>
-				<delete dir="${liferay.home}/elasticsearch7" failonerror="false" />
-			</then>
-		</if>
-
 		<get-testcase-property property.name="socks.proxy.enabled" />
 
 		<if>
@@ -12449,28 +12558,6 @@ module.framework.properties.blacklist.portal.profile.names=${blacklist.portal.pr
 
 				<print-file file.name="${liferay.home}/osgi/modules/com.liferay.simple.socks.proxy.SocksProxyConfiguration.cfg" />
 			</then>
-		</if>
-
-		<get-testcase-property property.name="solr.enabled" />
-
-		<if>
-			<equals arg1="${solr.enabled}" arg2="true" />
-			<then>
-				<ant antfile="build-test-solr.xml" target="start-solr" />
-			</then>
-			<elseif>
-				<isset property="env.CI_TEST_SUITE" />
-				<then>
-					<propertycopy from="search.engine[${env.CI_TEST_SUITE}]" name="suite.search.engine" silent="true" />
-
-					<if>
-						<equals arg1="${suite.search.engine}" arg2="solr" />
-						<then>
-							<ant antfile="build-test-solr.xml" target="start-solr" />
-						</then>
-					</if>
-				</then>
-			</elseif>
 		</if>
 
 		<get-testcase-property property.name="test.smtp.server.enabled" />
@@ -12528,6 +12615,8 @@ module.framework.properties.blacklist.portal.profile.names=${blacklist.portal.pr
 		<antcall target="deploy-dependency-jars" />
 
 		<antcall target="deploy-extra-apps" />
+
+		<set-up-search-engine />
 
 		<get-testcase-property property.name="osgi.module.configuration.file.names" />
 		<get-testcase-property property.name="osgi.module.configurations" />

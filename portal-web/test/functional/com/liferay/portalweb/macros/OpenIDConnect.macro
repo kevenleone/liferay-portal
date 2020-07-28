@@ -59,7 +59,7 @@ definition {
 
 		FormFields.editTextMultiline(
 			fieldName = "providerName",
-			fieldValue = "Google");
+			fieldValue = "${providerName}");
 
 		FormFields.editTextMultiline(
 			fieldName = "openIdConnectClientId",
@@ -74,6 +74,24 @@ definition {
 			fieldValue = "https://accounts.google.com/.well-known/openid-configuration");
 
 		PortletEntry.save();
+	}
+
+	macro viewProvider {
+		AssertClick(
+			locator1 = "UserBar#USER_SIGN_IN",
+			value1 = "Sign In");
+
+		AssertElementPresent(locator1 = "Icon#OPENID_CONNECT");
+
+		Click(locator1 = "Icon#OPENID_CONNECT");
+
+		AssertElementPresent(locator1 = "OpenIDConnectLogin#OPENID_CONNECT_PROVIDER_NAME_LABEL");
+
+		Click(locator1 = "OpenIDConnectLogin#OPENID_CONNECT_DROPDOWN_MENU");
+
+		AssertElementPresent(
+			key_providerNname = "Google",
+			locator1 = "OpenIDConnectLogin#OPENID_CONNECT_DROPDOWN_OPTION");
 	}
 
 }

@@ -139,6 +139,10 @@ public class InfoField<T extends InfoFieldType> implements InfoFieldSetEntry {
 		return _builder._localizable;
 	}
 
+	public boolean isMultivalued() {
+		return _builder._multivalued;
+	}
+
 	@Override
 	public String toString() {
 		StringBundler sb = new StringBundler(5);
@@ -171,6 +175,7 @@ public class InfoField<T extends InfoFieldType> implements InfoFieldSetEntry {
 		private InfoFieldType _infoFieldType;
 		private InfoLocalizedValue<String> _labelInfoLocalizedValue;
 		private boolean _localizable;
+		private boolean _multivalued;
 		private String _name;
 
 	}
@@ -204,6 +209,12 @@ public class InfoField<T extends InfoFieldType> implements InfoFieldSetEntry {
 
 		public FinalStep<T> localizable(boolean localizable) {
 			_builder._localizable = localizable;
+
+			return this;
+		}
+
+		public FinalStep<T> multivalued(boolean multivalued) {
+			_builder._multivalued = multivalued;
 
 			return this;
 		}

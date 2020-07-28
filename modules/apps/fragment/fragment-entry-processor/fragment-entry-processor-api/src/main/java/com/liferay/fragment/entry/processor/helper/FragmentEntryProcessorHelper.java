@@ -29,6 +29,10 @@ import java.util.Map;
 @ProviderType
 public interface FragmentEntryProcessorHelper {
 
+	public default String formatMappedValue(Object value, Locale locale) {
+		return value.toString();
+	}
+
 	public String getEditableValue(JSONObject jsonObject, Locale locale);
 
 	/**

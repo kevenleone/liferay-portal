@@ -19,6 +19,7 @@ import React, {useContext} from 'react';
 
 import {withLoading} from '../../../components/loading/Loading.es';
 import {withEmpty} from '../../../components/table/EmptyState.es';
+import {getLocalizedValue} from '../../../utils/lang.es';
 import {fromNow} from '../../../utils/time.es';
 import EditAppContext, {
 	UPDATE_DATA_LAYOUT_ID,
@@ -27,7 +28,7 @@ import EditAppContext, {
 
 const {Body, Cell, Head, Row} = ClayTable;
 
-const ListItems = ({itemType, items}) => {
+const ListItems = ({defaultLanguageId, itemType, items}) => {
 	const {
 		dispatch,
 		state: {
@@ -66,42 +67,30 @@ const ListItems = ({itemType, items}) => {
 				</Row>
 			</Head>
 			<Body>
-				{items.map(
-					(
-						{
-							dateCreated,
-							dateModified,
-							id,
-							name: {en_US: itemName},
-						},
-						index
-					) => {
-						return (
-							<Row
-								className={classNames('selectable-row', {
-									'selectable-active': id === itemId,
-								})}
-								key={index}
-								onClick={() => onItemIdChange(id)}
+				{items.map(({dateCreated, dateModified, id, name}, index) => (
+					<Row
+						className={classNames('selectable-row', {
+							'selectable-active': id === itemId,
+						})}
+						key={index}
+						onClick={() => onItemIdChange(id)}
+					>
+						<Cell align="left">
+							{getLocalizedValue(defaultLanguageId, name)}
+						</Cell>
+						<Cell>{fromNow(dateCreated)}</Cell>
+						<Cell>{fromNow(dateModified)}</Cell>
+						<Cell align={'right'}>
+							<ClayRadioGroup
+								inline
+								onSelectedValueChange={() => onItemIdChange(id)}
+								selectedValue={itemId}
 							>
-								<Cell align="left">{itemName}</Cell>
-								<Cell>{fromNow(dateCreated)}</Cell>
-								<Cell>{fromNow(dateModified)}</Cell>
-								<Cell align={'right'}>
-									<ClayRadioGroup
-										inline
-										onSelectedValueChange={() =>
-											onItemIdChange(id)
-										}
-										selectedValue={itemId}
-									>
-										<ClayRadio value={id} />
-									</ClayRadioGroup>
-								</Cell>
-							</Row>
-						);
-					}
-				)}
+								<ClayRadio value={id} />
+							</ClayRadioGroup>
+						</Cell>
+					</Row>
+				))}
 			</Body>
 		</table>
 	);

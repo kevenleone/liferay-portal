@@ -21,8 +21,10 @@ import {AppContext} from '../../AppContext.es';
 import Button from '../../components/button/Button.es';
 import ListView from '../../components/list-view/ListView.es';
 import useBackUrl from '../../hooks/useBackUrl.es';
+import useDataDefinition from '../../hooks/useDataDefinition.es';
 import useDeployApp from '../../hooks/useDeployApp.es';
 import {confirmDelete} from '../../utils/client.es';
+import {getLocalizedValue} from '../../utils/lang.es';
 import {fromNow} from '../../utils/time.es';
 import {concatValues} from '../../utils/utils.es';
 import {
@@ -43,6 +45,7 @@ export default ({
 	},
 }) => {
 	const {getStandaloneURL} = useContext(AppContext);
+	const {defaultLanguageId} = useDataDefinition(dataDefinitionId);
 	const {deployApp, undeployApp} = useDeployApp();
 	const withBackUrl = useBackUrl();
 
@@ -51,6 +54,7 @@ export default ({
 			action: (app) => (app.active ? undeployApp(app) : deployApp(app)),
 			name: ({active}) =>
 				DEPLOYMENT_ACTION[active ? 'undeploy' : 'deploy'],
+			show: ({appDeployments}) => appDeployments.length > 0,
 		},
 		{
 			action: ({id}) =>
@@ -109,23 +113,29 @@ export default ({
 			endpoint={ENDPOINT}
 			{...listViewProps}
 		>
-			{(app) => ({
-				...app,
-				dateCreated: fromNow(app.dateCreated),
-				dateModified: fromNow(app.dateModified),
-				name: <Link to={getEditAppUrl(app)}>{app.name.en_US}</Link>,
-				nameText: app.name.en_US,
-				status: (
-					<ClayLabel
-						displayType={app.active ? 'success' : 'secondary'}
-					>
-						{STATUSES[app.active ? 'active' : 'inactive']}
-					</ClayLabel>
-				),
-				type: concatValues(
-					app.appDeployments.map(({type}) => DEPLOYMENT_TYPES[type])
-				),
-			})}
+			{(app) => {
+				const appName = getLocalizedValue(defaultLanguageId, app.name);
+
+				return {
+					...app,
+					appName,
+					dateCreated: fromNow(app.dateCreated),
+					dateModified: fromNow(app.dateModified),
+					name: <Link to={getEditAppUrl(app)}>{appName}</Link>,
+					status: (
+						<ClayLabel
+							displayType={app.active ? 'success' : 'secondary'}
+						>
+							{STATUSES[app.active ? 'active' : 'inactive']}
+						</ClayLabel>
+					),
+					type: concatValues(
+						app.appDeployments.map(
+							({type}) => DEPLOYMENT_TYPES[type]
+						)
+					),
+				};
+			}}
 		</ListView>
 	);
 };

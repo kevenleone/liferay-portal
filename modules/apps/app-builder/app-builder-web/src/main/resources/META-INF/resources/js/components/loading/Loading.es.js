@@ -21,7 +21,7 @@ export const withLoading = (Component) => {
 
 		if (isLoading) {
 			return (
-				<div className="align-items-center d-flex loading-wrapper">
+				<div className="align-items-center d-flex loading-wrapper w-100">
 					<ClayLoadingIndicator />
 				</div>
 			);

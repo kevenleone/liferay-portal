@@ -374,6 +374,11 @@
 	<td></td>
 </tr>
 <tr>
+	<td>AUTHENTICATION_OPEN_ID_CONNECT_ENABLED_CHECKBOX_SYSTEM_LEVEL</td>
+	<td>//input[contains(@name,'enabled')]</td>
+	<td></td>
+</tr>
+<tr>
 	<td></td>
 	<td></td>
 	<td></td>

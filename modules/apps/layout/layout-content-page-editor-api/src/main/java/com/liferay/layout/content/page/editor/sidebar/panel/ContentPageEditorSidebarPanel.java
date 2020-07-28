@@ -43,13 +43,29 @@ public interface ContentPageEditorSidebarPanel {
 		return false;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #isVisible(PermissionChecker, long, int)}
+	 */
+	@Deprecated
 	public default boolean isVisible(boolean pageIsDisplayPage) {
 		return true;
 	}
 
+	/**
+	 * @deprecated As of Athanasius (7.3.x), replaced by {@link
+	 *             #isVisible(PermissionChecker, long, int)}
+	 */
+	@Deprecated
 	public default boolean isVisible(
 		PermissionChecker permissionChecker, long plid,
 		boolean pageIsDisplayPage) {
+
+		return true;
+	}
+
+	public default boolean isVisible(
+		PermissionChecker permissionChecker, long plid, int layoutType) {
 
 		return true;
 	}

@@ -14,6 +14,7 @@
 
 import ClayIcon from '@clayui/icon';
 import ClayLabel from '@clayui/label';
+import ClayLayout from '@clayui/layout';
 import ClayLink from '@clayui/link';
 import ClaySticker from '@clayui/sticker';
 import ClayTabs from '@clayui/tabs';
@@ -79,23 +80,30 @@ const SidebarPanelInfoView = ({
 
 	return (
 		<>
-			<Sidebar.Header subtitle={subType} title={title}>
-				{versions.map((version) => (
-					<div key={version}>
-						<ClayLabel displayType="info">
-							{`${Liferay.Language.get('version')} ${
-								version.version
-							}`}
-						</ClayLabel>
-
-						<ClayLabel displayType={version.statusStyle}>
-							{version.statusLabel}
-						</ClayLabel>
-					</div>
-				))}
-			</Sidebar.Header>
+			<Sidebar.Header title={Liferay.Language.get('content-info')} />
 
 			<Sidebar.Body>
+				<div className="c-mb-4 sidebar-dl sidebar-section">
+					<div className="component-title text-truncate-inline">
+						<span className="text-truncate">{title}</span>
+					</div>
+
+					<p className="component-subtitle">{subType}</p>
+
+					{versions.map((version) => (
+						<div key={version}>
+							<ClayLabel displayType="info">
+								{Liferay.Language.get('version')}{' '}
+								{version.version}
+							</ClayLabel>
+
+							<ClayLabel displayType={version.statusStyle}>
+								{version.statusLabel}
+							</ClayLabel>
+						</div>
+					))}
+				</div>
+
 				<ClayTabs modern>
 					<ClayTabs.Item
 						active={activeTabKeyValue === 0}
@@ -109,8 +117,11 @@ const SidebarPanelInfoView = ({
 				</ClayTabs>
 
 				<ClayTabs.Content activeIndex={activeTabKeyValue} fade>
-					<ClayTabs.TabPane aria-labelledby="tab-1" className="mt-3">
-						<div className="mb-4 sidebar-dl sidebar-section">
+					<ClayTabs.TabPane
+						aria-labelledby="tab-1"
+						className="c-mt-3"
+					>
+						<div className="c-mb-4 sidebar-dl sidebar-section">
 							<ClaySticker className="sticker-user-icon">
 								<div className="sticker-overlay">
 									<img
@@ -120,35 +131,41 @@ const SidebarPanelInfoView = ({
 								</div>
 							</ClaySticker>
 
-							<span className="h5 ml-2">{userName}</span>
+							<span className="c-ml-2 h5">{userName}</span>
 						</div>
 
 						{!!sortedViewURLS.length && (
-							<div className="mb-4 sidebar-dl sidebar-section">
-								<p className="h5 mb-3">
+							<div className="c-mb-4 sidebar-dl sidebar-section">
+								<p className="c-mb-3 h5">
 									{Liferay.Language.get(
 										'languages-translated-into'
 									)}
 								</p>
 
 								{sortedViewURLS.map((language) => (
-									<div
-										className="autofit-row autofit-row-center mb-1"
+									<ClayLayout.ContentRow
+										className="c-mb-1"
 										key={language.languageId}
+										verticalAlign="center"
 									>
-										<div className="autofit-col inline-item-before">
+										<ClayLayout.ContentCol className="inline-item-before">
 											<ClayIcon
 												symbol={language.languageId.toLowerCase()}
 											/>
-										</div>
+										</ClayLayout.ContentCol>
 
-										<div className="autofit-col autofit-col-expand">
-											<div className="autofit-row autofit-row-center">
-												<div className="autofit-col inline-item-before small">
+										<ClayLayout.ContentCol
+											expand={!!language.viewURL}
+										>
+											<ClayLayout.ContentRow
+												key={language.languageId}
+												verticalAlign="center"
+											>
+												<ClayLayout.ContentCol className="inline-item-before small">
 													{language.languageId}
-												</div>
+												</ClayLayout.ContentCol>
 
-												<div className="autofit-col">
+												<ClayLayout.ContentCol>
 													{language.default && (
 														<ClayLabel
 															className="d-inline"
@@ -159,28 +176,30 @@ const SidebarPanelInfoView = ({
 															)}
 														</ClayLabel>
 													)}
-												</div>
-											</div>
-										</div>
+												</ClayLayout.ContentCol>
+											</ClayLayout.ContentRow>
+										</ClayLayout.ContentCol>
 
-										<div className="autofit-col">
-											<ClayLink
-												borderless
-												displayType="secondary"
-												href={language.viewURL}
-												monospaced
-												outline
-											>
-												<ClayIcon symbol="view" />
-											</ClayLink>
-										</div>
-									</div>
+										{language.viewURL && (
+											<ClayLayout.ContentCol>
+												<ClayLink
+													borderless
+													displayType="secondary"
+													href={language.viewURL}
+													monospaced
+													outline
+												>
+													<ClayIcon symbol="view" />
+												</ClayLink>
+											</ClayLayout.ContentCol>
+										)}
+									</ClayLayout.ContentRow>
 								))}
 							</div>
 						)}
 
 						{!!tags.length && (
-							<div className="mb-4 sidebar-dl sidebar-section">
+							<div className="c-mb-4 sidebar-dl sidebar-section">
 								<p className="h5">
 									{Liferay.Language.get('tags')}
 								</p>
@@ -199,7 +218,7 @@ const SidebarPanelInfoView = ({
 						)}
 
 						{!!categories.length && (
-							<div className="mb-4 sidebar-dl sidebar-section">
+							<div className="c-mb-4 sidebar-dl sidebar-section">
 								<p className="h5">
 									{Liferay.Language.get('categories')}
 								</p>
@@ -256,7 +275,7 @@ const SidebarPanelInfoView = ({
 								text &&
 								title && (
 									<div
-										className="mb-4 sidebar-dl sidebar-section"
+										className="c-mb-4 sidebar-dl sidebar-section"
 										key={title}
 									>
 										<p className="h5">{title}</p>

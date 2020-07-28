@@ -3463,10 +3463,10 @@ alloy-ui@^3.1.0-deprecated.40:
   resolved "https://registry.yarnpkg.com/alloy-ui/-/alloy-ui-3.1.0.tgz#95842e4c793abbfe84aa8abfc5a637cd36dda823"
   integrity sha1-lYQuTHk6u/6Eqoq/xaY3zTbdqCM=
 
-alloyeditor@2.11.9:
-  version "2.11.9"
-  resolved "https://registry.yarnpkg.com/alloyeditor/-/alloyeditor-2.11.9.tgz#b69ca73387865b7a20d0220311815fb05f3b1015"
-  integrity sha512-lq0P9wNTNainOwWo2AK4xwVTmTV9E1eKjeJ4IHdB8kRO/F5nlbDrH6GxeUnH3nXXYoGc9FlHjqBwgn4RKJXW1Q==
+alloyeditor@2.11.10:
+  version "2.11.10"
+  resolved "https://registry.yarnpkg.com/alloyeditor/-/alloyeditor-2.11.10.tgz#86f8d612c2f7c6b8fe7f8ffacec8d5966e56cc72"
+  integrity sha512-9+7mNwHWgE0vo8de1kKRh3IaL6p5+9MlCknaiSX4OUuNU1I6gY/8FOkB2DLBualFhvBfUVLUEutmArstT3b+WQ==
   dependencies:
     clay-css "^2.11.1"
     prop-types "^15.6.2"
@@ -11780,10 +11780,10 @@ liferay-amd-loader@4.3.0:
   resolved "https://registry.yarnpkg.com/liferay-amd-loader/-/liferay-amd-loader-4.3.0.tgz#5a6e6b94374f3d5298f637aca57220ec0b3c66ce"
   integrity sha512-8y7jgugf3RzcmA7t4eKJaNFMKI/e2K9+UaAAuT2maDd2X047E961nELmomRfEaXA5aWIS7SvKlP/dnvfGEvxPw==
 
-liferay-ckeditor@4.14.1-liferay.4:
-  version "4.14.1-liferay.4"
-  resolved "https://registry.yarnpkg.com/liferay-ckeditor/-/liferay-ckeditor-4.14.1-liferay.4.tgz#3fd6d18749841290e37c721da4773f0f0eb854c6"
-  integrity sha512-La8oWgPH7JnrF9DHmsL3EhPomUswhTfmHRcb42+Njo1v1H1i7kD6W8iWCds7eYE9WpFTse6Ar7N8vT7FX2t2CA==
+liferay-ckeditor@4.14.1-liferay.5:
+  version "4.14.1-liferay.5"
+  resolved "https://registry.yarnpkg.com/liferay-ckeditor/-/liferay-ckeditor-4.14.1-liferay.5.tgz#8f87716a640c39cc351f89d18f212aa9124a7daf"
+  integrity sha512-0nj0Gtg2FhhxWxVMtB7Y441GEsCVjnYFxnJJfUcIG0gErmTijXX2MIivJdBJ8V4rHPBkwX/P4qXZyPj4QcktMg==
 
 liferay-font-awesome@3.4.0:
   version "3.4.0"

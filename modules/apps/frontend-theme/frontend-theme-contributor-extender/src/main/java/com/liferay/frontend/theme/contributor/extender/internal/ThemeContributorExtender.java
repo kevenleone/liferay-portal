@@ -75,20 +75,21 @@ public class ThemeContributorExtender
 			return null;
 		}
 
-		int themeContributorWeight = GetterUtil.getInteger(
-			headers.get("Liferay-Theme-Contributor-Weight"));
-
 		Collection<ServiceRegistration<?>> serviceRegistrations =
 			new ArrayList<>();
 
 		ServletContext servletContext = _bundleContext.getService(
 			serviceReference);
+		Dictionary<String, Integer> properties = MapUtil.singletonDictionary(
+			"service.ranking",
+			GetterUtil.getInteger(
+				headers.get("Liferay-Theme-Contributor-Weight")));
 
 		serviceRegistrations.add(
 			_bundleContext.registerService(
 				PortalWebResources.class.getName(),
 				new ThemeContributorPortalWebResources(bundle, servletContext),
-				null));
+				properties));
 
 		serviceRegistrations.add(
 			_bundleContext.registerService(
@@ -96,8 +97,7 @@ public class ThemeContributorExtender
 				new BundleWebResourcesImpl(
 					servletContext.getContextPath(), entry.getKey(),
 					entry.getValue()),
-				MapUtil.singletonDictionary(
-					"service.ranking", themeContributorWeight)));
+				properties));
 
 		return serviceRegistrations;
 	}

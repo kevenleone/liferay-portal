@@ -253,10 +253,11 @@ public class FragmentEntryFragmentRenderer implements FragmentRenderer {
 
 		String content = StringPool.BLANK;
 
-		if (fragmentRendererContext.isUseCachedContent() &&
-			Objects.equals(
+		if (Objects.equals(
 				fragmentRendererContext.getMode(),
 				FragmentEntryLinkConstants.VIEW) &&
+			(fragmentRendererContext.getPreviewClassPK() <= 0) &&
+			fragmentRendererContext.isUseCachedContent() &&
 			_isCacheable(fragmentEntryLink)) {
 
 			content = _portalCache.get(cacheKeySB.toString());
@@ -291,6 +292,8 @@ public class FragmentEntryFragmentRenderer implements FragmentRenderer {
 			fragmentRendererContext.getPreviewClassPK());
 		defaultFragmentEntryProcessorContext.setPreviewType(
 			fragmentRendererContext.getPreviewType());
+		defaultFragmentEntryProcessorContext.setPreviewVersion(
+			fragmentRendererContext.getPreviewVersion());
 		defaultFragmentEntryProcessorContext.setSegmentsExperienceIds(
 			fragmentRendererContext.getSegmentsExperienceIds());
 

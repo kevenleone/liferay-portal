@@ -136,6 +136,7 @@ export default withRouter(({history}) => {
 	return (
 		<>
 			<NavigationBar />
+
 			<section className="questions-section questions-section-list">
 				<div className="c-p-5 questions-container row">
 					<div className="col-xl-8 offset-xl-2">
@@ -221,10 +222,9 @@ export default withRouter(({history}) => {
 				{threads &&
 					threads.myUserAccountSubscriptions.items &&
 					threads.myUserAccountSubscriptions.items.map((data) => (
-						<>
+						<div key={data.id}>
 							<QuestionRow
 								items={actions(data)}
-								key={data.id}
 								question={data.graphQLNode}
 								showSectionLabel={true}
 							/>
@@ -232,7 +232,7 @@ export default withRouter(({history}) => {
 								question={data.graphQLNode}
 								showDeleteModalPanel={showDeleteModalPanel}
 							/>
-						</>
+						</div>
 					))}
 			</div>
 		);

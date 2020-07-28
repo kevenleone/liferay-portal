@@ -30,160 +30,78 @@ class ChangeTrackingChangesView extends React.Component {
 	constructor(props) {
 		super(props);
 
-		const {changes, contextView, spritemap} = props;
+		const {
+			changes,
+			contextView,
+			models,
+			renderCTEntryURL,
+			renderDiffURL,
+			rootDisplayClasses,
+			spritemap,
+			typeNames,
+			userInfo,
+		} = props;
 
 		this.changes = changes;
 		this.contextView = contextView;
-		this.filterClass = 'everything';
-		this.nodeId = 0;
+		this.models = models;
+		this.renderCTEntryURL = renderCTEntryURL;
+		this.renderDiffURL = renderDiffURL;
+		this.rootDisplayClasses = rootDisplayClasses;
 		this.spritemap = spritemap;
+		this.typeNames = typeNames;
+		this.userInfo = userInfo;
+
+		const keys = Object.keys(this.models);
+
+		for (let i = 0; i < keys.length; i++) {
+			const model = this.models[keys[i]];
+
+			if (!model.typeName) {
+				model.typeName = this.typeNames[
+					model.modelClassNameId.toString()
+				];
+			}
+		}
+
+		const node = this._getNode('everything', 'changes', 0);
 
 		this.state = {
 			ascending: true,
 			breadcrumbItems: this._getBreadcrumbItems(
+				node,
 				'everything',
 				'changes',
-				changes
+				0
 			),
 			column: 'title',
 			delta: 20,
+			filterClass: 'everything',
 			navigation: 'changes',
-			node: changes,
+			node,
 			page: 1,
 			renderInnerHTML: null,
 			sortDirectionClass: 'order-arrow-down-active',
 		};
 	}
 
-	_getBreadcrumbItems(filterClass, navigation, node) {
-		if (navigation === 'changes') {
-			if (node.id === 0) {
-				return [
-					{
-						active: true,
-						label: node.title,
-					},
-				];
-			}
+	_clone(json) {
+		const clone = {};
 
-			return [
-				{
-					label: this.changes.title,
-					onClick: () =>
-						this._handleNavigationUpdate({
-							nodeId: 0,
-						}),
-				},
-				{
-					active: true,
-					label: node.title,
-				},
-			];
+		const keys = Object.keys(json);
+
+		for (let i = 0; i < keys.length; i++) {
+			clone[keys[i]] = json[keys[i]];
 		}
 
-		const breadcrumbItems = [];
-		const homeBreadcrumbItem = {label: this.contextView.everything.title};
-
-		if (filterClass === 'everything' && node.id === 0) {
-			homeBreadcrumbItem.active = true;
-
-			breadcrumbItems.push(homeBreadcrumbItem);
-
-			return breadcrumbItems;
-		}
-
-		homeBreadcrumbItem.onClick = () =>
-			this._handleNavigationUpdate({
-				filterClass: 'everything',
-				nodeId: 0,
-			});
-
-		let showParent = false;
-
-		if (filterClass === 'everything') {
-			showParent = true;
-		}
-		else {
-			breadcrumbItems.push(homeBreadcrumbItem);
-
-			let label = filterClass;
-
-			if (label.includes('.')) {
-				label = label.substring(
-					label.lastIndexOf('.') + 1,
-					label.length
-				);
-			}
-
-			const rootDisplayClassBreadcrumb = {label};
-
-			if (node.id === 0) {
-				rootDisplayClassBreadcrumb.active = true;
-
-				breadcrumbItems.push(rootDisplayClassBreadcrumb);
-
-				return breadcrumbItems;
-			}
-
-			rootDisplayClassBreadcrumb.onClick = () =>
-				this._handleNavigationUpdate({
-					filterClass,
-					nodeId: 0,
-				});
-
-			breadcrumbItems.push(rootDisplayClassBreadcrumb);
-		}
-
-		for (let i = 0; i < node.parents.length; i++) {
-			const parent = node.parents[i];
-
-			if (parent.typeName === filterClass) {
-				showParent = true;
-			}
-
-			if (!showParent) {
-				continue;
-			}
-
-			breadcrumbItems.push({
-				label: parent.title,
-				onClick: () =>
-					this._handleNavigationUpdate({
-						filterClass,
-						nodeId: parent.id,
-					}),
-			});
-		}
-
-		breadcrumbItems.push({
-			active: true,
-			label: node.title,
-		});
-
-		return breadcrumbItems;
+		return clone;
 	}
 
-	_getChangesNode(nodeId) {
-		if (nodeId === 0) {
-			return this.changes;
-		}
+	_filterDisplayNodes(nodes) {
+		const ascending = this.state.ascending;
 
-		for (let i = 0; i < this.changes.children.length; i++) {
-			const child = this.changes.children[i];
-
-			if (child.id === nodeId) {
-				return child;
-			}
-		}
-
-		return null;
-	}
-
-	_getDisplayNodes(ascending, column, delta, nodes, page) {
-		let displayNodes = nodes.slice(0);
-
-		if (column === 'title') {
-			displayNodes.sort((a, b) => {
+		if (this._getColumn() === 'title') {
+			nodes.sort((a, b) => {
 				const titleA = a.title;
 				const titleB = b.title;
 				const typeNameA = a.typeName.toUpperCase();
@@ -217,7 +135,7 @@ class ChangeTrackingChangesView extends React.Component {
 			});
 		}
 		else {
-			displayNodes.sort((a, b) => {
+			nodes.sort((a, b) => {
 				if (a.modifiedTime < b.modifiedTime) {
 					if (ascending) {
 						return -1;
@@ -239,11 +157,14 @@ class ChangeTrackingChangesView extends React.Component {
 		}
 
 		if (nodes.length > 5) {
-			displayNodes = displayNodes.slice(delta * (page - 1), delta * page);
+			nodes = nodes.slice(
+				this.state.delta * (this.state.page - 1),
+				this.state.delta * this.state.page
+			);
 		}
 
-		if (column === 'modifiedDate') {
-			displayNodes.sort((a, b) => {
+		if (this._getColumn() === 'modifiedDate') {
+			nodes.sort((a, b) => {
 				const typeNameA = a.typeName.toUpperCase();
 				const typeNameB = b.typeName.toUpperCase();
 
@@ -275,7 +196,119 @@ class ChangeTrackingChangesView extends React.Component {
 			});
 		}
 
-		return displayNodes;
+		return nodes;
+	}
+
+	_getBreadcrumbItems(node, filterClass, navigation, nodeId) {
+		if (navigation === 'changes') {
+			if (nodeId === 0) {
+				return [
+					{
+						active: true,
+						label: Liferay.Language.get('home'),
+					},
+				];
+			}
+
+			return [
+				{
+					label: Liferay.Language.get('home'),
+					onClick: () =>
+						this._handleNavigationUpdate({
+							nodeId: 0,
+						}),
+				},
+				{
+					active: true,
+					label: node.title,
+				},
+			];
+		}
+
+		const breadcrumbItems = [];
+		const homeBreadcrumbItem = {label: Liferay.Language.get('home')};
+
+		if (filterClass === 'everything' && nodeId === 0) {
+			homeBreadcrumbItem.active = true;
+
+			breadcrumbItems.push(homeBreadcrumbItem);
+
+			return breadcrumbItems;
+		}
+
+		homeBreadcrumbItem.onClick = () =>
+			this._handleNavigationUpdate({
+				filterClass: 'everything',
+				nodeId: 0,
+			});
+
+		breadcrumbItems.push(homeBreadcrumbItem);
+
+		let showParent = false;
+
+		if (filterClass === 'everything') {
+			showParent = true;
+		}
+		else {
+			let label = filterClass;
+
+			if (label.includes('.')) {
+				label = label.substring(
+					label.lastIndexOf('.') + 1,
+					label.length
+				);
+			}
+
+			const rootDisplayClassBreadcrumb = {label};
+
+			if (nodeId === 0) {
+				rootDisplayClassBreadcrumb.active = true;
+
+				breadcrumbItems.push(rootDisplayClassBreadcrumb);
+
+				return breadcrumbItems;
+			}
+
+			rootDisplayClassBreadcrumb.onClick = () =>
+				this._handleNavigationUpdate({
+					filterClass,
+					nodeId: 0,
+				});
+
+			breadcrumbItems.push(rootDisplayClassBreadcrumb);
+		}
+
+		if (!node.parents) {
+			return null;
+		}
+
+		for (let i = 0; i < node.parents.length; i++) {
+			const parent = node.parents[i];
+
+			if (parent.typeName === filterClass) {
+				showParent = true;
+			}
+
+			if (!showParent) {
+				continue;
+			}
+
+			breadcrumbItems.push({
+				label: parent.title,
+				onClick: () =>
+					this._handleNavigationUpdate({
+						filterClass,
+						nodeId: parent.nodeId,
+					}),
+			});
+		}
+
+		breadcrumbItems.push({
+			active: true,
+			label: node.title,
+		});
+
+		return breadcrumbItems;
 	}
 
 	_getColumn() {
@@ -286,22 +319,58 @@ class ChangeTrackingChangesView extends React.Component {
 		return this.state.column;
 	}
 
+	_getModels(nodes) {
+		if (!nodes) {
+			return [];
+		}
+
+		const models = [];
+
+		for (let i = 0; i < nodes.length; i++) {
+			const node = nodes[i];
+
+			let modelKey = node;
+			let nodeId = node;
+
+			if (typeof node === 'object') {
+				modelKey = node.modelKey;
+				nodeId = node.nodeId;
+			}
+
+			const model = this._clone(this.models[modelKey.toString()]);
+
+			model.nodeId = nodeId;
+
+			models.push(model);
+		}
+
+		return models;
+	}
+
 	_getNode(filterClass, navigation, nodeId) {
 		if (navigation === 'changes') {
-			return this._getChangesNode(nodeId);
+			if (nodeId === 0) {
+				return {children: this._getModels(this.changes)};
+			}
+
+			return this._clone(this.models[nodeId.toString()]);
 		}
 		else if (filterClass !== 'everything' && nodeId === 0) {
-			return this._getRootDisplayClassNode(filterClass);
+			return {children: this._getModels(this.contextView[filterClass])};
 		}
 
 		const rootNode = this.contextView.everything;
 
 		if (nodeId === 0) {
-			return rootNode;
+			return {children: this._getModels(rootNode.children)};
 		}
 
 		if (!rootNode.parents) {
 			rootNode.parents = [];
+
+			for (let i = 0; i < rootNode.children.length; i++) {
+				rootNode.children[i].parents = [];
+			}
 		}
 
 		const stack = [rootNode];
@@ -309,8 +378,15 @@ class ChangeTrackingChangesView extends React.Component {
 		while (stack.length > 0) {
 			const element = stack.pop();
 
-			if (element.id === nodeId) {
-				return element;
+			if (element.nodeId === nodeId) {
+				const entry = this._clone(
+					this.models[element.modelKey.toString()]
+				);
+
+				entry.children = this._getModels(element.children);
+				entry.parents = element.parents;
+
+				return entry;
 			}
 			else if (!element.children) {
 				continue;
@@ -322,10 +398,12 @@ class ChangeTrackingChangesView extends React.Component {
 				if (!child.parents) {
 					const parents = element.parents.slice(0);
 
+					const model = this.models[element.modelKey.toString()];
+
 					parents.push({
-						id: element.id,
-						title: element.title,
-						typeName: element.typeName,
+						nodeId: element.nodeId,
+						title: model.title,
+						typeName: model.typeName,
 					});
 
 					child.parents = parents;
@@ -338,34 +416,25 @@ class ChangeTrackingChangesView extends React.Component {
 		return null;
 	}
 
-	_getRootDisplayClassNode(filterClass) {
-		const nodeIds = this.contextView[filterClass];
+	_getPortraitURL(node) {
+		return this.userInfo[node.userId.toString()].portraitURL;
+	}
 
-		const children = [];
+	_getRenderURL(node) {
+		if (node.ctEntryId) {
+			const portletURL = Liferay.PortletURL.createURL(this.renderDiffURL);
 
-		const stack = [this.contextView.everything];
+			portletURL.setParameter('ctEntryId', node.ctEntryId);
 
-		while (stack.length > 0) {
-			const element = stack.pop();
-
-			if (!element.children) {
-				continue;
-			}
-
-			for (let i = 0; i < element.children.length; i++) {
-				const child = element.children[i];
-
-				if (nodeIds.includes(child.id)) {
-					children.push(child);
-
-					continue;
-				}
-
-				stack.push(child);
-			}
+			return portletURL.toString();
 		}
 
-		return {children, id: 0, title: filterClass};
+		const portletURL = Liferay.PortletURL.createURL(this.renderCTEntryURL);
+
+		portletURL.setParameter('modelClassNameId', node.modelClassNameId);
+		portletURL.setParameter('modelClassPK', node.modelClassPK);
+
+		return portletURL.toString();
 	}
 
 	_getRootDisplayOptions() {
@@ -378,8 +447,8 @@ class ChangeTrackingChangesView extends React.Component {
 			/>
 		);
 
-		for (let i = 0; i < this.contextView.rootDisplayClasses.length; i++) {
-			const className = this.contextView.rootDisplayClasses[i];
+		for (let i = 0; i < this.rootDisplayClasses.length; i++) {
+			const className = this.rootDisplayClasses[i];
 
 			let label = className;
 
@@ -396,6 +465,30 @@ class ChangeTrackingChangesView extends React.Component {
 		}
 
 		return rootDisplayOptions;
+	}
+
+	_getTableHead() {
+		if (this.state.navigation === 'contextView') {
+			return '';
+		}
+
+		return (
+			<ClayTable.Head>
+				<ClayTable.Row>
+					<ClayTable.Cell headingCell style={{width: '5%'}}>
+						{Liferay.Language.get('user')}
+					</ClayTable.Cell>
+
+					<ClayTable.Cell headingCell style={{width: '80%'}}>
+						{Liferay.Language.get('change')}
+					</ClayTable.Cell>
+
+					<ClayTable.Cell headingCell style={{width: '15%'}}>
+						{Liferay.Language.get('last-modified')}
+					</ClayTable.Cell>
+				</ClayTable.Row>
+			</ClayTable.Head>
+		);
 	}
 
 	_getTableRows(nodes) {
@@ -429,19 +522,21 @@ class ChangeTrackingChangesView extends React.Component {
 			const cells = [];
 
 			if (this.state.navigation === 'changes') {
-				if (node.portraitURL) {
+				const portraitURL = this._getPortraitURL(node);
+
+				if (portraitURL) {
 					cells.push(
 						<ClayTable.Cell>
 							<span
 								className="lfr-portal-tooltip"
-								title={node.userName}
+								title={this._getUserName(node)}
 							>
 								<span className="rounded-circle sticker sticker-primary">
 									<span className="sticker-overlay">
 										<img
 											alt="thumbnail"
 											className="img-fluid"
-											src={node.portraitURL}
+											src={portraitURL}
 										/>
 									</span>
 								</span>
@@ -459,7 +554,7 @@ class ChangeTrackingChangesView extends React.Component {
 						<ClayTable.Cell>
 							<span
 								className="lfr-portal-tooltip"
-								title={node.userName}
+								title={this._getUserName(node)}
 							>
 								<span className={userPortraitCss}>
 									<span className="inline-item">
@@ -492,7 +587,7 @@ class ChangeTrackingChangesView extends React.Component {
 						className="change-row-button"
 						onClick={() =>
 							this._handleNavigationUpdate({
-								nodeId: node.id,
+								nodeId: node.nodeId,
 							})
 						}
 					>
@@ -515,6 +610,10 @@ class ChangeTrackingChangesView extends React.Component {
 		return rows;
 	}
 
+	_getUserName(node) {
+		return this.userInfo[node.userId.toString()].userName;
+	}
+
 	_handleDeltaChange(delta) {
 		this.setState({
 			delta,
@@ -523,6 +622,12 @@ class ChangeTrackingChangesView extends React.Component {
 	}
 
 	_handleNavigationUpdate(json) {
+		let filterClass = json.filterClass;
+
+		if (!filterClass) {
+			filterClass = this.state.filterClass;
+		}
+
 		let navigation = json.navigation;
 
 		if (!navigation) {
@@ -538,35 +643,34 @@ class ChangeTrackingChangesView extends React.Component {
 			return;
 		}
 
-		if (json.filterClass) {
-			this.filterClass = json.filterClass;
-		}
+		const nodeId = json.nodeId;
 
-		this.nodeId = json.nodeId;
-
-		const node = this._getNode(this.filterClass, navigation, this.nodeId);
+		const node = this._getNode(filterClass, navigation, nodeId);
 
 		this.setState({
 			breadcrumbItems: this._getBreadcrumbItems(
-				this.filterClass,
+				node,
+				filterClass,
 				navigation,
-				node
+				nodeId
 			),
+			filterClass,
 			navigation,
 			node,
 			page: 1,
 			renderInnerHTML: null,
-			title: node.description ? node.description : node.title,
 		});
 
-		if (node.renderURL) {
-			fetch(node.renderURL)
-				.then((response) => response.text())
-				.then((text) => {
-					this.setState({
-						renderInnerHTML: {__html: text},
+		if (nodeId > 0) {
+			AUI().use('liferay-portlet-url', () => {
+				fetch(this._getRenderURL(node))
+					.then((response) => response.text())
+					.then((text) => {
+						this.setState({
+							renderInnerHTML: {__html: text},
+						});
 					});
-				});
+			});
 		}
 	}
 
@@ -598,44 +702,50 @@ class ChangeTrackingChangesView extends React.Component {
 		});
 	}
 
-	_renderEntry() {
-		if (this.state.renderInnerHTML == null) {
+	_renderDropdown() {
+		if (
+			!this.state.node.dropdownItems ||
+			this.state.node.dropdownItems.length === 0
+		) {
 			return '';
 		}
 
-		let dropdown = '';
+		return (
+			<div className="autofit-col">
+				<ClayDropDownWithItems
+					alignmentPosition={Align.BottomLeft}
+					items={this.state.node.dropdownItems}
+					spritemap={this.spritemap}
+					trigger={
+						<ClayButtonWithIcon
+							displayType="unstyled"
+							small
+							spritemap={this.spritemap}
+							symbol="ellipsis-v"
+						/>
+					}
+				/>
+			</div>
+		);
+	}
 
-		if (
-			this.state.node.dropdownItems &&
-			this.state.node.dropdownItems.length > 0
-		) {
-			dropdown = (
-				<div className="autofit-col">
-					<ClayDropDownWithItems
-						alignmentPosition={Align.BottomLeft}
-						items={this.state.node.dropdownItems}
-						spritemap={this.spritemap}
-						trigger={
-							<ClayButtonWithIcon
-								displayType="unstyled"
-								small
-								spritemap={this.spritemap}
-								symbol="ellipsis-v"
-							/>
-						}
-					/>
-				</div>
-			);
+	_renderEntry() {
+		if (this.state.renderInnerHTML === null) {
+			return '';
 		}
 
 		return (
 			<div className="sheet">
 				<h2 className="autofit-row sheet-title">
 					<div className="autofit-col autofit-col-expand">
-						<span className="heading-text">{this.state.title}</span>
+						<span className="heading-text">
+							{this.state.node.description
+								? this.state.node.description
+								: this.state.node.title}
+						</span>
 					</div>
 
-					{dropdown}
+					{this._renderDropdown()}
 				</h2>
 
 				<div
@@ -766,8 +876,8 @@ class ChangeTrackingChangesView extends React.Component {
 		);
 	}
 
-	_renderPagination(nodes) {
-		if (nodes.length <= 5) {
+	_renderPagination() {
+		if (this.state.node.children.length <= 5) {
 			return '';
 		}
 
@@ -781,7 +891,7 @@ class ChangeTrackingChangesView extends React.Component {
 				ellipsisBuffer={3}
 				onDeltaChange={(delta) => this._handleDeltaChange(delta)}
 				onPageChange={(page) => this._handlePageChange(page)}
-				totalItems={nodes.length}
+				totalItems={this.state.node.children.length}
 			/>
 		);
 	}
@@ -802,7 +912,7 @@ class ChangeTrackingChangesView extends React.Component {
 									nodeId: 0,
 								})
 							}
-							selectedValue={this.filterClass}
+							selectedValue={this.state.filterClass}
 						>
 							{this._getRootDisplayOptions()}
 						</ClayRadioGroup>
@@ -813,9 +923,10 @@ class ChangeTrackingChangesView extends React.Component {
 	}
 
 	_renderTable() {
-		const nodes = this.state.node.children;
-
-		if (!nodes || nodes.length === 0) {
+		if (
+			!this.state.node.children ||
+			this.state.node.children.length === 0
+		) {
 			return '';
 		}
 
@@ -826,43 +937,13 @@ class ChangeTrackingChangesView extends React.Component {
 
 					<ClayTable.Body>
 						{this._getTableRows(
-							this._getDisplayNodes(
-								this.state.ascending,
-								this._getColumn(),
-								this.state.delta,
-								nodes,
-								this.state.page
-							)
+							this._filterDisplayNodes(this.state.node.children)
 						)}
 					</ClayTable.Body>
 				</ClayTable>
 
-				{this._renderPagination(nodes)}
+				{this._renderPagination()}
 			</>
-		);
-	}
-
-	_getTableHead() {
-		if (this.state.navigation === 'contextView') {
-			return '';
-		}
-
-		return (
-			<ClayTable.Head>
-				<ClayTable.Row>
-					<ClayTable.Cell headingCell style={{width: '5%'}}>
-						{Liferay.Language.get('user')}
-					</ClayTable.Cell>
-
-					<ClayTable.Cell headingCell style={{width: '80%'}}>
-						{Liferay.Language.get('change')}
-					</ClayTable.Cell>
-
-					<ClayTable.Cell headingCell style={{width: '15%'}}>
-						{Liferay.Language.get('last-modified')}
-					</ClayTable.Cell>
-				</ClayTable.Row>
-			</ClayTable.Head>
 		);
 	}
 

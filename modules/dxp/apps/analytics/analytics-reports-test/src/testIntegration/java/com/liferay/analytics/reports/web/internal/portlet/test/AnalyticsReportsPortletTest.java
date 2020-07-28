@@ -22,7 +22,6 @@ import com.liferay.info.display.contributor.InfoDisplayObjectProvider;
 import com.liferay.layout.test.util.LayoutTestUtil;
 import com.liferay.petra.function.UnsafeSupplier;
 import com.liferay.petra.string.StringPool;
-import com.liferay.portal.configuration.test.util.ConfigurationTemporarySwapper;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -136,10 +135,7 @@ public class AnalyticsReportsPortletTest {
 
 		properties.put("trafficSourcesEnabled", true);
 
-		try (ConfigurationTemporarySwapper configurationTemporarySwapper =
-				new ConfigurationTemporarySwapper(
-					_CONFIGURATION_PID, properties)) {
-
+		try {
 			MockLiferayPortletRenderRequest mockLiferayPortletRenderRequest =
 				_getMockLiferayPortletRenderRequest();
 
@@ -353,10 +349,6 @@ public class AnalyticsReportsPortletTest {
 		ReflectionTestUtil.setFieldValue(
 			_portlet, "_http", MockHttpUtil.geHttp(mockRequest));
 	}
-
-	private static final String _CONFIGURATION_PID =
-		"com.liferay.analytics.reports.web.internal.configuration." +
-			"AnalyticsReportsConfiguration";
 
 	@Inject
 	private CompanyLocalService _companyLocalService;

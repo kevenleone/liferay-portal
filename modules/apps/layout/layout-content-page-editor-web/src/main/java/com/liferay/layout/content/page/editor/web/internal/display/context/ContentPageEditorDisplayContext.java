@@ -61,7 +61,9 @@ import com.liferay.layout.content.page.editor.web.internal.util.layout.structure
 import com.liferay.layout.page.template.constants.LayoutPageTemplateEntryTypeConstants;
 import com.liferay.layout.page.template.model.LayoutPageTemplateEntry;
 import com.liferay.layout.page.template.service.LayoutPageTemplateEntryLocalServiceUtil;
+import com.liferay.layout.page.template.service.LayoutPageTemplateEntryServiceUtil;
 import com.liferay.layout.page.template.util.PaddingConverter;
+import com.liferay.layout.page.template.util.comparator.LayoutPageTemplateEntryNameComparator;
 import com.liferay.layout.responsive.ViewportSize;
 import com.liferay.layout.util.constants.LayoutConverterTypeConstants;
 import com.liferay.layout.util.structure.DropZoneLayoutStructureItem;
@@ -130,6 +132,9 @@ import com.liferay.portal.kernel.workflow.WorkflowConstants;
 import com.liferay.portal.util.PortletCategoryUtil;
 import com.liferay.portal.util.WebAppPool;
 import com.liferay.segments.constants.SegmentsExperienceConstants;
+import com.liferay.style.book.model.StyleBookEntry;
+import com.liferay.style.book.service.StyleBookEntryLocalServiceUtil;
+import com.liferay.style.book.util.comparator.StyleBookEntryNameComparator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -338,12 +343,16 @@ public class ContentPageEditorDisplayContext {
 				MultiSessionMessages.get(
 					_portletRequest, "layoutConversionWarningMessages")
 			).put(
+				"layoutType", String.valueOf(_getLayoutType())
+			).put(
 				"mappingFieldsURL",
 				getResourceURL("/content_layout/get_mapping_fields")
 			).put(
 				"markItemForDeletionURL",
 				getFragmentEntryActionURL(
 					"/content_layout/mark_item_for_deletion")
+			).put(
+				"masterLayouts", _getMasterLayouts()
 			).put(
 				"masterUsed", _isMasterUsed()
 			).put(
@@ -369,8 +378,6 @@ public class ContentPageEditorDisplayContext {
 
 					return list;
 				}
-			).put(
-				"pageType", String.valueOf(_getPageType())
 			).put(
 				"pending",
 				() -> {
@@ -402,6 +409,8 @@ public class ContentPageEditorDisplayContext {
 				getResourceURL("/content_layout/get_fragment_entry_link")
 			).put(
 				"sidebarPanels", getSidebarPanels()
+			).put(
+				"styleBooks", _getStyleBooks()
 			).put(
 				"themeColorsCssClasses", _getThemeColorsCssClasses()
 			).put(
@@ -492,11 +501,11 @@ public class ContentPageEditorDisplayContext {
 	}
 
 	public List<Map<String, Object>> getSidebarPanels() {
-		return getSidebarPanels(false);
+		return getSidebarPanels(_getLayoutType());
 	}
 
 	public boolean isConversionDraft() {
-		if (_getPageType() == LayoutConverterTypeConstants.TYPE_CONVERSION) {
+		if (_getLayoutType() == LayoutConverterTypeConstants.TYPE_CONVERSION) {
 			return true;
 		}
 
@@ -504,7 +513,7 @@ public class ContentPageEditorDisplayContext {
 	}
 
 	public boolean isMasterLayout() {
-		if (_getPageType() ==
+		if (_getLayoutType() ==
 				LayoutPageTemplateEntryTypeConstants.TYPE_MASTER_LAYOUT) {
 
 			return true;
@@ -588,9 +597,7 @@ public class ContentPageEditorDisplayContext {
 		return SegmentsExperienceConstants.ID_DEFAULT;
 	}
 
-	protected List<Map<String, Object>> getSidebarPanels(
-		boolean pageIsDisplayPage) {
-
+	protected List<Map<String, Object>> getSidebarPanels(int layoutType) {
 		if (_sidebarPanels != null) {
 			return _sidebarPanels;
 		}
@@ -600,10 +607,9 @@ public class ContentPageEditorDisplayContext {
 		for (ContentPageEditorSidebarPanel contentPageEditorSidebarPanel :
 				_contentPageEditorSidebarPanels) {
 
-			if (!contentPageEditorSidebarPanel.isVisible(pageIsDisplayPage) ||
-				!contentPageEditorSidebarPanel.isVisible(
+			if (!contentPageEditorSidebarPanel.isVisible(
 					themeDisplay.getPermissionChecker(), themeDisplay.getPlid(),
-					pageIsDisplayPage)) {
+					layoutType)) {
 
 				continue;
 			}
@@ -1485,6 +1491,43 @@ public class ContentPageEditorDisplayContext {
 		return _layoutStructure;
 	}
 
+	private int _getLayoutType() {
+		if (_layoutType != null) {
+			return _layoutType;
+		}
+
+		Layout publishedLayout = _getPublishedLayout();
+
+		if (Objects.equals(
+				publishedLayout.getType(), LayoutConstants.TYPE_PORTLET)) {
+
+			_layoutType = LayoutConverterTypeConstants.TYPE_CONVERSION;
+
+			return _layoutType;
+		}
+
+		Layout layout = themeDisplay.getLayout();
+
+		LayoutPageTemplateEntry layoutPageTemplateEntry =
+			LayoutPageTemplateEntryLocalServiceUtil.
+				fetchLayoutPageTemplateEntryByPlid(layout.getPlid());
+
+		if (layoutPageTemplateEntry == null) {
+			layoutPageTemplateEntry =
+				LayoutPageTemplateEntryLocalServiceUtil.
+					fetchLayoutPageTemplateEntryByPlid(layout.getClassPK());
+		}
+
+		if (layoutPageTemplateEntry == null) {
+			_layoutType = LayoutPageTemplateEntryTypeConstants.TYPE_BASIC;
+		}
+		else {
+			_layoutType = layoutPageTemplateEntry.getType();
+		}
+
+		return _layoutType;
+	}
+
 	private Set<Map<String, Object>> _getMappedInfoItems() throws Exception {
 		Set<Map<String, Object>> mappedInfoItems = new HashSet<>();
 
@@ -1507,6 +1550,43 @@ public class ContentPageEditorDisplayContext {
 		}
 
 		return mappedInfoItems;
+	}
+
+	private List<Map<String, Object>> _getMasterLayouts() {
+		ArrayList<Map<String, Object>> masterLayouts = new ArrayList<>();
+
+		masterLayouts.add(
+			HashMapBuilder.<String, Object>put(
+				"imagePreviewURL", StringPool.BLANK
+			).put(
+				"masterLayoutPlid", 0
+			).put(
+				"name", LanguageUtil.get(httpServletRequest, "blank")
+			).build());
+
+		List<LayoutPageTemplateEntry> layoutPageTemplateEntries =
+			LayoutPageTemplateEntryServiceUtil.getLayoutPageTemplateEntries(
+				themeDisplay.getScopeGroupId(),
+				LayoutPageTemplateEntryTypeConstants.TYPE_MASTER_LAYOUT,
+				WorkflowConstants.STATUS_APPROVED, QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS,
+				new LayoutPageTemplateEntryNameComparator(true));
+
+		for (LayoutPageTemplateEntry layoutPageTemplateEntry :
+				layoutPageTemplateEntries) {
+
+			masterLayouts.add(
+				HashMapBuilder.<String, Object>put(
+					"imagePreviewURL",
+					layoutPageTemplateEntry.getImagePreviewURL(themeDisplay)
+				).put(
+					"masterLayoutPlid", layoutPageTemplateEntry.getPlid()
+				).put(
+					"name", layoutPageTemplateEntry.getName()
+				).build());
+		}
+
+		return masterLayouts;
 	}
 
 	private LayoutStructure _getMasterLayoutStructure() {
@@ -1543,43 +1623,6 @@ public class ContentPageEditorDisplayContext {
 		}
 
 		return _masterLayoutStructure;
-	}
-
-	private int _getPageType() {
-		if (_pageType != null) {
-			return _pageType;
-		}
-
-		Layout publishedLayout = _getPublishedLayout();
-
-		if (Objects.equals(
-				publishedLayout.getType(), LayoutConstants.TYPE_PORTLET)) {
-
-			_pageType = LayoutConverterTypeConstants.TYPE_CONVERSION;
-
-			return _pageType;
-		}
-
-		Layout layout = themeDisplay.getLayout();
-
-		LayoutPageTemplateEntry layoutPageTemplateEntry =
-			LayoutPageTemplateEntryLocalServiceUtil.
-				fetchLayoutPageTemplateEntryByPlid(layout.getPlid());
-
-		if (layoutPageTemplateEntry == null) {
-			layoutPageTemplateEntry =
-				LayoutPageTemplateEntryLocalServiceUtil.
-					fetchLayoutPageTemplateEntryByPlid(layout.getClassPK());
-		}
-
-		if (layoutPageTemplateEntry == null) {
-			_pageType = LayoutPageTemplateEntryTypeConstants.TYPE_BASIC;
-		}
-		else {
-			_pageType = layoutPageTemplateEntry.getType();
-		}
-
-		return _pageType;
 	}
 
 	private String _getPortletCategoryTitle(PortletCategory portletCategory) {
@@ -1755,6 +1798,29 @@ public class ContentPageEditorDisplayContext {
 		return _redirect;
 	}
 
+	private List<Map<String, Object>> _getStyleBooks() {
+		ArrayList<Map<String, Object>> styleBooks = new ArrayList<>();
+
+		List<StyleBookEntry> styleBookEntries =
+			StyleBookEntryLocalServiceUtil.getStyleBookEntries(
+				themeDisplay.getScopeGroupId(), QueryUtil.ALL_POS,
+				QueryUtil.ALL_POS, new StyleBookEntryNameComparator(true));
+
+		for (StyleBookEntry styleBookEntry : styleBookEntries) {
+			styleBooks.add(
+				HashMapBuilder.<String, Object>put(
+					"imagePreviewURL",
+					styleBookEntry.getImagePreviewURL(themeDisplay)
+				).put(
+					"name", styleBookEntry.getName()
+				).put(
+					"styleBookEntryId", styleBookEntry.getStyleBookEntryId()
+				).build());
+		}
+
+		return styleBooks;
+	}
+
 	private String[] _getThemeColorsCssClasses() {
 		Theme theme = themeDisplay.getTheme();
 
@@ -1918,7 +1984,7 @@ public class ContentPageEditorDisplayContext {
 	}
 
 	private boolean _isMasterUsed() {
-		if (_getPageType() !=
+		if (_getLayoutType() !=
 				LayoutPageTemplateEntryTypeConstants.TYPE_MASTER_LAYOUT) {
 
 			return false;
@@ -1979,9 +2045,9 @@ public class ContentPageEditorDisplayContext {
 	private ItemSelectorCriterion _imageItemSelectorCriterion;
 	private final ItemSelector _itemSelector;
 	private LayoutStructure _layoutStructure;
+	private Integer _layoutType;
 	private LayoutStructure _masterLayoutStructure;
 	private final PageEditorConfiguration _pageEditorConfiguration;
-	private Integer _pageType;
 	private final PortletRequest _portletRequest;
 	private Layout _publishedLayout;
 	private String _redirect;

@@ -25,9 +25,17 @@ const Arrow = ({addStep, selected}) => {
 			<ClayIcon className="arrow-point icon" symbol="live" />
 
 			{selected && (
-				<div className="arrow-plus-button" onClick={addStep}>
-					<ClayIcon className="icon" symbol="plus" />
-				</div>
+				<ClayTooltipProvider>
+					<div
+						className="arrow-plus-button"
+						data-tooltip-align="left"
+						data-tooltip-delay="0"
+						onClick={addStep}
+						title={Liferay.Language.get('create-new-step')}
+					>
+						<ClayIcon className="icon" symbol="plus" />
+					</div>
+				</ClayTooltipProvider>
 			)}
 
 			<div className="arrow-body">
@@ -87,30 +95,35 @@ const Card = ({
 
 			<div className="d-flex">
 				{!isInitialOrFinalSteps && (
-					<ClayDropDown
-						active={active}
-						onActiveChange={setActive}
-						trigger={
-							<ClayButtonWithIcon
-								className="border-0"
-								displayType="secondary"
-								symbol="ellipsis-v"
-							/>
-						}
-					>
-						<ClayDropDown.ItemList>
-							{actions.map(({label, onClick}, index) => (
-								<ClayDropDown.Item
-									key={index}
-									onClick={(event) =>
-										handleOnClick(event, onClick)
-									}
-								>
-									{label}
-								</ClayDropDown.Item>
-							))}
-						</ClayDropDown.ItemList>
-					</ClayDropDown>
+					<ClayTooltipProvider>
+						<ClayDropDown
+							active={active}
+							data-tooltip-align="bottom"
+							data-tooltip-delay="0"
+							onActiveChange={setActive}
+							title={Liferay.Language.get('options')}
+							trigger={
+								<ClayButtonWithIcon
+									className="border-0"
+									displayType="secondary"
+									symbol="ellipsis-v"
+								/>
+							}
+						>
+							<ClayDropDown.ItemList>
+								{actions.map(({label, onClick}, index) => (
+									<ClayDropDown.Item
+										key={index}
+										onClick={(event) =>
+											handleOnClick(event, onClick)
+										}
+									>
+										{label}
+									</ClayDropDown.Item>
+								))}
+							</ClayDropDown.ItemList>
+						</ClayDropDown>
+					</ClayTooltipProvider>
 				)}
 			</div>
 		</div>

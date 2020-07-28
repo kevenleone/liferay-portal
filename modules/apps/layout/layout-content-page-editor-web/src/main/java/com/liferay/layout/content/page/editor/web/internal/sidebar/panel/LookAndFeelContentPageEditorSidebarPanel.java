@@ -44,7 +44,7 @@ import org.osgi.service.component.annotations.Reference;
  * @author Eudaldo Alonso
  */
 @Component(
-	immediate = true, property = "service.ranking:Integer=200",
+	immediate = true, property = "service.ranking:Integer=150",
 	service = ContentPageEditorSidebarPanel.class
 )
 public class LookAndFeelContentPageEditorSidebarPanel
@@ -52,7 +52,7 @@ public class LookAndFeelContentPageEditorSidebarPanel
 
 	@Override
 	public String getIcon() {
-		return "format";
+		return "cog";
 	}
 
 	@Override
@@ -108,8 +108,7 @@ public class LookAndFeelContentPageEditorSidebarPanel
 
 	@Override
 	public boolean isVisible(
-		PermissionChecker permissionChecker, long plid,
-		boolean pageIsDisplayPage) {
+		PermissionChecker permissionChecker, long plid, int layoutType) {
 
 		try {
 			if (LayoutPermissionUtil.contains(

@@ -23,6 +23,7 @@ import com.liferay.dynamic.data.mapping.test.util.DDMStructureTestUtil;
 import com.liferay.info.field.InfoField;
 import com.liferay.info.field.InfoFieldValue;
 import com.liferay.info.field.type.BooleanInfoFieldType;
+import com.liferay.info.field.type.CategoriesInfoFieldType;
 import com.liferay.info.field.type.ImageInfoFieldType;
 import com.liferay.info.field.type.NumberInfoFieldType;
 import com.liferay.info.field.type.TextInfoFieldType;
@@ -143,7 +144,7 @@ public class JournalArticleInfoItemFormProviderTest {
 		Assert.assertEquals("categories", infoField.getName());
 		Assert.assertFalse(infoField.isLocalizable());
 		Assert.assertEquals(
-			TextInfoFieldType.INSTANCE, infoField.getInfoFieldType());
+			CategoriesInfoFieldType.INSTANCE, infoField.getInfoFieldType());
 
 		infoField = iterator.next();
 
@@ -274,7 +275,7 @@ public class JournalArticleInfoItemFormProviderTest {
 		Assert.assertEquals(
 			"topic", StringUtil.toLowerCase(infoField.getName()));
 		Assert.assertEquals(
-			TextInfoFieldType.INSTANCE, infoField.getInfoFieldType());
+			CategoriesInfoFieldType.INSTANCE, infoField.getInfoFieldType());
 
 		Assert.assertFalse(iterator.hasNext());
 	}

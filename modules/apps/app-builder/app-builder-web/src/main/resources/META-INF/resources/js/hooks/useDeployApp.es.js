@@ -51,7 +51,7 @@ export default () => {
 											<b>
 												{Liferay.Language.get('name')}:
 											</b>{' '}
-											{app.nameText}
+											{app.appName}
 										</span>
 										<span>
 											<b>
@@ -108,7 +108,7 @@ export default () => {
 						</ClayButton.Group>,
 					],
 					header: DEPLOYMENT_ACTION.undeploy,
-					size: 'lg',
+					size: 'md',
 					status: 'warning',
 				},
 				type: 1,

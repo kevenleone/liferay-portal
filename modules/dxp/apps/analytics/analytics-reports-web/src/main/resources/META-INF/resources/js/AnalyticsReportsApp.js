@@ -16,11 +16,12 @@ import ConnectionContext from './context/ConnectionContext';
 import {StoreContextProvider} from './context/store';
 import APIService from './utils/APIService';
 
+import '../css/analytics-reports-app.scss';
+
 export default function ({context, props}) {
 	const {languageTag, namespace, page} = context;
 	const {defaultTimeRange, defaultTimeSpanKey, timeSpans} = context;
 	const {validAnalyticsConnection} = context;
-	const {readsEnabled} = context;
 
 	const {authorName, publishDate, title} = props;
 	const {trafficSources} = props;
@@ -52,18 +53,20 @@ export default function ({context, props}) {
 				validAnalyticsConnection,
 			}}
 		>
-			<StoreContextProvider value={{publishedToday, readsEnabled}}>
-				<Navigation
-					api={api}
-					authorName={authorName}
-					defaultTimeRange={defaultTimeRange}
-					defaultTimeSpanKey={defaultTimeSpanKey}
-					languageTag={languageTag}
-					pagePublishDate={publishDate}
-					pageTitle={title}
-					timeSpanOptions={timeSpans}
-					trafficSources={trafficSources}
-				/>
+			<StoreContextProvider value={{publishedToday}}>
+				<div className="analytics-reports-app">
+					<Navigation
+						api={api}
+						authorName={authorName}
+						defaultTimeRange={defaultTimeRange}
+						defaultTimeSpanKey={defaultTimeSpanKey}
+						languageTag={languageTag}
+						pagePublishDate={publishDate}
+						pageTitle={title}
+						timeSpanOptions={timeSpans}
+						trafficSources={trafficSources}
+					/>
+				</div>
 			</StoreContextProvider>
 		</ConnectionContext.Provider>
 	);

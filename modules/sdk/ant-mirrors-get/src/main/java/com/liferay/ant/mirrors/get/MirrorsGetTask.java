@@ -124,6 +124,10 @@ public class MirrorsGetTask extends Task {
 		}
 	}
 
+	public void setSSL(boolean ssl) {
+		_ssl = ssl;
+	}
+
 	public void setTryLocalNetwork(boolean tryLocalNetwork) {
 		_tryLocalNetwork = tryLocalNetwork;
 	}
@@ -226,11 +230,13 @@ public class MirrorsGetTask extends Task {
 		if (!localCacheFile.exists()) {
 			URL sourceURL = null;
 
-			if (_tryLocalNetwork) {
+			String mirrorsHostname = getMirrorsHostname();
+
+			if (_tryLocalNetwork && !mirrorsHostname.isEmpty()) {
 				sb = new StringBuilder();
 
-				sb.append("http://");
-				sb.append(getMirrorsHostname());
+				sb.append(getURLScheme());
+				sb.append(mirrorsHostname);
 				sb.append("/");
 				sb.append(_path);
 				sb.append("/");
@@ -307,6 +313,10 @@ public class MirrorsGetTask extends Task {
 
 		_mirrorsHostname = project.getProperty("mirrors.hostname");
 
+		if (_mirrorsHostname == null) {
+			_mirrorsHostname = "";
+		}
+
 		return _mirrorsHostname;
 	}
 
@@ -332,6 +342,24 @@ public class MirrorsGetTask extends Task {
 		}
 
 		return path;
+	}
+
+	protected String getURLScheme() {
+		Project project = getProject();
+
+		boolean ssl = _ssl;
+
+		String mirrorsSSL = project.getProperty("mirrors.ssl");
+
+		if ((mirrorsSSL != null) && !mirrorsSSL.isEmpty()) {
+			ssl = Boolean.parseBoolean(mirrorsSSL);
+		}
+
+		if (ssl) {
+			return "https://";
+		}
+
+		return "http://";
 	}
 
 	protected String getUsername() {
@@ -636,6 +664,7 @@ public class MirrorsGetTask extends Task {
 	private int _retries = 1;
 	private boolean _skipChecksum;
 	private String _src;
+	private boolean _ssl;
 	private boolean _tryLocalNetwork = true;
 	private String _username;
 	private boolean _verbose;

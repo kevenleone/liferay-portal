@@ -14,7 +14,7 @@
 
 import {ClayButtonWithIcon} from '@clayui/button';
 import ClayLayout from '@clayui/layout';
-import classNames from 'classnames';
+import {useTimeout} from 'frontend-js-react-web';
 import React, {useContext, useEffect, useState} from 'react';
 
 const SidebarContext = React.createContext();
@@ -57,28 +57,33 @@ const SidebarHeader = ({children, subtitle, title}) => {
 const Sidebar = ({children, onClose = noop, open = true}) => {
 	const [isOpen, setIsOpen] = useState(false);
 
+	const delay = useTimeout();
+
 	// Wait until the component is rendered to show it so animation happens
 
 	useEffect(() => {
 		if (open !== false) {
-			setTimeout(() => setIsOpen(true), 100);
+			delay(() => setIsOpen(true), 100);
 		}
 		else {
 			setIsOpen(false);
 		}
-	}, [open]);
+	}, [delay, open]);
+
+	useEffect(() => {
+		if (isOpen) {
+			document.body.classList.add('sidebar-open');
+		}
+		else {
+			document.body.classList.remove('sidebar-open');
+		}
+	}, [isOpen]);
 
 	return (
-		<div
-			className={classNames('sidebar-wrapper', {
-				open: isOpen,
-			})}
-		>
-			<div className="sidebar sidebar-light">
-				<SidebarContext.Provider value={{onClose}}>
-					{children}
-				</SidebarContext.Provider>
-			</div>
+		<div className="sidebar sidebar-light sidebar-sm">
+			<SidebarContext.Provider value={{onClose}}>
+				{children}
+			</SidebarContext.Provider>
 		</div>
 	);
 };
@@ -86,4 +91,5 @@ const Sidebar = ({children, onClose = noop, open = true}) => {
 Sidebar.Body = SidebarBody;
 Sidebar.Header = SidebarHeader;
 
+export {SidebarContext, Sidebar};
 export default Sidebar;

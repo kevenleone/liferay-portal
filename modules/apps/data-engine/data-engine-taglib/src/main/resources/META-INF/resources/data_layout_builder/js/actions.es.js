@@ -32,6 +32,8 @@ export const UPDATE_DATA_DEFINITION = 'UPDATE_DATA_DEFINITION';
 export const UPDATE_DATA_LAYOUT = 'UPDATE_DATA_LAYOUT';
 export const UPDATE_DATA_LAYOUT_NAME = 'UPDATE_DATA_LAYOUT_NAME';
 export const UPDATE_DATA_LAYOUT_RULE = 'UPDATE_DATA_LAYOUT_RULE';
+export const UPDATE_EDITING_DATA_DEFINITION_ID =
+	'UPDATE_EDITING_DATA_DEFINITION_ID';
 export const UPDATE_EDITING_LANGUAGE_ID = 'UPDATE_EDITING_LANGUAGE_ID';
 export const UPDATE_FIELD_TYPES = 'UPDATE_FIELD_TYPES';
 export const UPDATE_FOCUSED_FIELD = 'UPDATE_FOCUSED_FIELD';
@@ -105,17 +107,22 @@ export const dropFieldSet = ({
 	indexes,
 	parentFieldName,
 	useFieldName,
+	...otherProps
 }) => {
+	const dataLayoutPages = (
+		fieldSet.defaultDataLayout ||
+		dataLayoutBuilder.getDefaultDataLayout(fieldSet)
+	).dataLayoutPages;
+
 	return {
+		...otherProps,
 		fieldName,
 		fieldSet: dataLayoutBuilder.getDDMForm(fieldSet),
 		indexes,
 		parentFieldName,
 		useFieldName,
 		...(fieldSet.id && {
-			rows: normalizeDataLayoutRows(
-				fieldSet.defaultDataLayout.dataLayoutPages
-			),
+			rows: normalizeDataLayoutRows(dataLayoutPages),
 		}),
 	};
 };

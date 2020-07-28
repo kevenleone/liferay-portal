@@ -166,6 +166,11 @@ export const getParentField = (pages, fieldName) => {
 
 export const isEmptyColumn = (pages, pageIndex, rowIndex, columnIndex) => {
 	return (
+		!pages[pageIndex] ||
+		!pages[pageIndex].rows ||
+		!pages[pageIndex].rows[rowIndex] ||
+		!pages[pageIndex].rows[rowIndex].columns ||
+		!pages[pageIndex].rows[rowIndex].columns[columnIndex] ||
 		pages[pageIndex].rows[rowIndex].columns[columnIndex].fields.length === 0
 	);
 };

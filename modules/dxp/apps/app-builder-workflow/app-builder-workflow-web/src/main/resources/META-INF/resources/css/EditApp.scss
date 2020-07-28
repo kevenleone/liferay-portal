@@ -3,17 +3,13 @@ $navbarHeight: 120px;
 
 .app-builder-workflow-app {
 	display: flex;
-	justify-content: center;
 	margin-top: 64px;
 
 	&__builder {
-		display: flex;
-		flex-flow: column;
-		height: calc(100vh - #{$navbarHeight} + 56px);
-		margin-right: 350px;
+		height: calc(100vh - #{$navbarHeight});
+		max-height: calc(100vh - #{$navbarHeight});
 		overflow: auto;
-		padding-bottom: 55px;
-		padding-top: 56px;
+		position: fixed;
 		width: calc(100vw - #{$sidebarWidth});
 
 		.arrow {
@@ -44,12 +40,12 @@ $navbarHeight: 120px;
 			}
 
 			.arrow-body {
-				align-items: end;
 				display: flex;
 				flex-flow: wrap-reverse;
 				justify-content: center;
 
 				.arrow-head {
+					bottom: 0;
 					margin-bottom: -4px;
 					margin-top: 4px;
 				}
@@ -81,6 +77,14 @@ $navbarHeight: 120px;
 		.step {
 			display: flex;
 			width: 100%;
+
+			&:first-child {
+				margin-top: 3.5rem;
+			}
+
+			&:last-child {
+				margin-bottom: 3.5rem;
+			}
 		}
 
 		.step-badge {
@@ -102,6 +106,7 @@ $navbarHeight: 120px;
 			border-radius: 0.25rem;
 			cursor: pointer;
 			display: flex;
+			font-weight: 600;
 			justify-content: space-between;
 			margin-bottom: unset;
 			margin-left: 16px;
@@ -159,6 +164,18 @@ $navbarHeight: 120px;
 
 .border-error {
 	border-color: #da1414 !important;
+}
+
+.circle-icon {
+	align-self: center;
+	border: 5px solid;
+	border-radius: 50%;
+	font-size: 1.625rem;
+
+	&.info {
+		border-color: #e7e7ed;
+		color: #6b6c7e;
+	}
 }
 
 .data-layout-builder-sidebar {
@@ -223,6 +240,19 @@ $navbarHeight: 120px;
 	position: absolute;
 	z-index: 50;
 }
+.save-app-modal {
+	.modal-dialog {
+		width: 416px;
+
+		.modal-body {
+			font-size: 1rem;
+		}
+
+		.modal-title {
+			font-size: 1.125rem;
+		}
+	}
+}
 
 .step-form-view {
 	border: 1px solid #cdced9;
@@ -247,4 +277,12 @@ $navbarHeight: 120px;
 
 .tooltip-icon:hover {
 	fill: #6b6c7e;
+}
+
+.version-badge {
+	align-self: center;
+	font-size: 12px;
+	height: 24px;
+	margin-right: -0.25rem;
+	padding: 0 8px;
 }

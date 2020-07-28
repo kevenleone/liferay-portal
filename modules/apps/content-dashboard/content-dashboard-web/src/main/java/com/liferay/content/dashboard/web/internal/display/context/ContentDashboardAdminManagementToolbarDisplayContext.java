@@ -15,6 +15,7 @@
 package com.liferay.content.dashboard.web.internal.display.context;
 
 import com.liferay.asset.kernel.model.AssetCategory;
+import com.liferay.asset.kernel.model.AssetTag;
 import com.liferay.asset.kernel.model.AssetVocabulary;
 import com.liferay.asset.kernel.service.AssetCategoryLocalService;
 import com.liferay.asset.kernel.service.AssetVocabularyLocalService;
@@ -93,9 +94,11 @@ public class ContentDashboardAdminManagementToolbarDisplayContext
 	public String getClearResultsURL() {
 		PortletURL clearResultsURL = getPortletURL();
 
+		clearResultsURL.setParameter("assetCategoryId", (String)null);
+		clearResultsURL.setParameter("assetTagId", (String)null);
+		clearResultsURL.setParameter("authorIds", (String)null);
 		clearResultsURL.setParameter(
 			"contentDashboardItemTypePayload", (String)null);
-		clearResultsURL.setParameter("authorIds", (String)null);
 		clearResultsURL.setParameter("keywords", StringPool.BLANK);
 		clearResultsURL.setParameter("scopeId", (String)null);
 		clearResultsURL.setParameter(
@@ -157,7 +160,7 @@ public class ContentDashboardAdminManagementToolbarDisplayContext
 					Stream<Long> stream = assetCategoryIds.stream();
 
 					portletURL.setParameter(
-						"categoryId",
+						"assetCategoryId",
 						stream.filter(
 							id -> id != assetCategoryId
 						).map(
@@ -175,17 +178,14 @@ public class ContentDashboardAdminManagementToolbarDisplayContext
 						StringBundler.concat(
 							LanguageUtil.get(request, "category"),
 							StringPool.COLON,
-							LanguageUtil.get(
-								request,
-								Optional.ofNullable(
-									_assetCategoryLocalService.
-										fetchAssetCategory(assetCategoryId)
-								).map(
-									assetCategory -> assetCategory.getTitle(
-										_locale)
-								).orElse(
-									StringPool.BLANK
-								))));
+							Optional.ofNullable(
+								_assetCategoryLocalService.fetchAssetCategory(
+									assetCategoryId)
+							).map(
+								assetCategory -> assetCategory.getTitle(_locale)
+							).orElse(
+								StringPool.BLANK
+							)));
 				});
 		}
 
@@ -307,6 +307,37 @@ public class ContentDashboardAdminManagementToolbarDisplayContext
 						_getStatusLabel(status));
 			});
 
+		List<String> assetTagIds =
+			_contentDashboardAdminDisplayContext.getAssetTagIds();
+
+		for (String assetTagId : assetTagIds) {
+			labelItemListWrapper.add(
+				labelItem -> {
+					PortletURL portletURL = PortletURLUtil.clone(
+						currentURLObj, liferayPortletResponse);
+
+					Stream<String> stream = assetTagIds.stream();
+
+					portletURL.setParameter(
+						"assetTagId",
+						stream.filter(
+							id -> !Objects.equals(id, assetTagId)
+						).toArray(
+							String[]::new
+						));
+
+					labelItem.putData(
+						"removeLabelURL",
+						String.valueOf(portletURL.toString()));
+
+					labelItem.setCloseable(true);
+					labelItem.setLabel(
+						StringBundler.concat(
+							LanguageUtil.get(request, "tag"), StringPool.COLON,
+							assetTagId));
+				});
+		}
+
 		return labelItemListWrapper.build();
 	}
 
@@ -386,7 +417,21 @@ public class ContentDashboardAdminManagementToolbarDisplayContext
 
 		portletURL.setParameter(
 			"eventName",
-			_liferayPortletResponse.getNamespace() + "selectedCategory");
+			_liferayPortletResponse.getNamespace() + "selectedAssetCategory");
+
+		List<Long> assetCategoryIds =
+			_contentDashboardAdminDisplayContext.getAssetCategoryIds();
+
+		Stream<Long> assetCategoryIdsStream = assetCategoryIds.stream();
+
+		portletURL.setParameter(
+			"selectedCategories",
+			assetCategoryIdsStream.map(
+				String::valueOf
+			).collect(
+				Collectors.joining(StringPool.COMMA)
+			));
+
 		portletURL.setParameter("singleSelect", Boolean.FALSE.toString());
 
 		ThemeDisplay themeDisplay =
@@ -397,17 +442,43 @@ public class ContentDashboardAdminManagementToolbarDisplayContext
 			_assetVocabularyLocalService.getCompanyVocabularies(
 				themeDisplay.getCompanyId());
 
-		Stream<AssetVocabulary> stream = assetVocabularies.stream();
+		Stream<AssetVocabulary> assetVocabularyStream =
+			assetVocabularies.stream();
 
 		portletURL.setParameter(
 			"vocabularyIds",
-			stream.map(
+			assetVocabularyStream.map(
 				AssetVocabulary::getVocabularyId
 			).map(
 				String::valueOf
 			).collect(
 				Collectors.joining(StringPool.COMMA)
 			));
+
+		portletURL.setWindowState(LiferayWindowState.POP_UP);
+
+		return portletURL;
+	}
+
+	private PortletURL _getAssetTagSelectorURL()
+		throws PortalException, WindowStateException {
+
+		PortletURL portletURL = PortletProviderUtil.getPortletURL(
+			_liferayPortletRequest, AssetTag.class.getName(),
+			PortletProvider.Action.BROWSE);
+
+		portletURL.setParameter(
+			"eventName",
+			_liferayPortletResponse.getNamespace() + "selectedAssetTag");
+
+		List<String> assetTagIds =
+			_contentDashboardAdminDisplayContext.getAssetTagIds();
+
+		Stream<String> stream = assetTagIds.stream();
+
+		portletURL.setParameter(
+			"selectedTagNames",
+			stream.collect(Collectors.joining(StringPool.COMMA)));
 
 		portletURL.setWindowState(LiferayWindowState.POP_UP);
 
@@ -490,19 +561,24 @@ public class ContentDashboardAdminManagementToolbarDisplayContext
 			() -> {
 				DropdownItem dropdownItem = new DropdownItem();
 
-				dropdownItem.putData("action", "selectCategory");
+				dropdownItem.setActive(
+					!ListUtil.isEmpty(
+						_contentDashboardAdminDisplayContext.
+							getAssetCategoryIds()));
+
+				dropdownItem.putData("action", "selectAssetCategory");
 				dropdownItem.putData(
 					"dialogTitle",
 					LanguageUtil.get(request, "select-categories"));
 
 				PortletURL portletURL = getPortletURL();
 
-				portletURL.setParameter("assetCategoryIds", (String)null);
+				portletURL.setParameter("assetCategoryId", (String)null);
 
 				dropdownItem.putData("redirectURL", String.valueOf(portletURL));
 
 				dropdownItem.putData(
-					"selectCategoryURL",
+					"selectAssetCategoryURL",
 					String.valueOf(_getAssetCategorySelectorURL()));
 				dropdownItem.setLabel(
 					LanguageUtil.get(request, "categories") +
@@ -572,6 +648,31 @@ public class ContentDashboardAdminManagementToolbarDisplayContext
 
 				dropdownItem.setLabel(
 					LanguageUtil.get(request, "subtype") +
+						StringPool.TRIPLE_PERIOD);
+
+				return dropdownItem;
+			},
+			() -> {
+				DropdownItem dropdownItem = new DropdownItem();
+
+				dropdownItem.putData("action", "selectTag");
+				dropdownItem.putData(
+					"dialogTitle", LanguageUtil.get(request, "select-tags"));
+
+				PortletURL portletURL = getPortletURL();
+
+				portletURL.setParameter("tagId", (String)null);
+
+				dropdownItem.putData("redirectURL", String.valueOf(portletURL));
+
+				dropdownItem.putData(
+					"selectTagURL", String.valueOf(_getAssetTagSelectorURL()));
+				dropdownItem.setActive(
+					!ListUtil.isEmpty(
+						_contentDashboardAdminDisplayContext.
+							getAssetCategoryIds()));
+				dropdownItem.setLabel(
+					LanguageUtil.get(request, "tags") +
 						StringPool.TRIPLE_PERIOD);
 
 				return dropdownItem;

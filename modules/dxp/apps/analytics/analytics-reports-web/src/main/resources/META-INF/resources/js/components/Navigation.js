@@ -15,7 +15,6 @@ import React, {useCallback, useContext, useState} from 'react';
 
 import ConnectionContext from '../context/ConnectionContext';
 import {StoreContext, useHistoricalWarning, useWarning} from '../context/store';
-import {numberFormat} from '../utils/numberFormat';
 import Detail from './Detail';
 import Main from './Main';
 
@@ -47,22 +46,16 @@ export default function Navigation({
 	}, []);
 
 	const handleTotalReads = useCallback(() => {
-		return api.getTotalReads().then((response) => {
-			return numberFormat(
-				languageTag,
-				response.analyticsReportsTotalReads
-			);
-		});
-	}, [api, languageTag]);
+		return api
+			.getTotalReads()
+			.then((response) => response.analyticsReportsTotalReads);
+	}, [api]);
 
 	const handleTotalViews = useCallback(() => {
-		return api.getTotalViews().then((response) => {
-			return numberFormat(
-				languageTag,
-				response.analyticsReportsTotalViews
-			);
-		});
-	}, [api, languageTag]);
+		return api
+			.getTotalViews()
+			.then((response) => response.analyticsReportsTotalViews);
+	}, [api]);
 
 	const handleTrafficShare = useCallback(() => {
 		const trafficSource = trafficSources.find((trafficSource) => {
@@ -97,11 +90,7 @@ export default function Navigation({
 		return Promise.resolve(trafficSource?.value ?? '-');
 	}, [trafficSourceName, trafficSources]);
 
-	const [{publishedToday, readsEnabled}] = useContext(StoreContext);
-
-	const chartDataProviders = readsEnabled
-		? [getHistoricalViews, getHistoricalReads]
-		: [getHistoricalViews];
+	const [{publishedToday}] = useContext(StoreContext);
 
 	return (
 		<>
@@ -135,10 +124,13 @@ export default function Navigation({
 				)}
 
 			{currentPage.view === 'main' && (
-				<div className="p-3">
+				<div>
 					<Main
 						authorName={authorName}
-						chartDataProviders={chartDataProviders}
+						chartDataProviders={[
+							getHistoricalViews,
+							getHistoricalReads,
+						]}
 						defaultTimeRange={defaultTimeRange}
 						defaultTimeSpanOption={defaultTimeSpanKey}
 						languageTag={languageTag}

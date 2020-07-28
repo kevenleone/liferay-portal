@@ -97,9 +97,23 @@ public class ContentDashboardAdminDisplayContext {
 
 		_assetCategoryIds = Arrays.asList(
 			ArrayUtil.toLongArray(
-				ParamUtil.getLongValues(_liferayPortletRequest, "categoryId")));
+				ParamUtil.getLongValues(
+					_liferayPortletRequest, "assetCategoryId")));
 
 		return _assetCategoryIds;
+	}
+
+	public List<String> getAssetTagIds() {
+		if (_assetTagIds != null) {
+			return _assetTagIds;
+		}
+
+		_assetTagIds = Arrays.asList(
+			ArrayUtil.toStringArray(
+				ParamUtil.getStringValues(
+					_liferayPortletRequest, "assetTagId")));
+
+		return _assetTagIds;
 	}
 
 	public List<AssetVocabulary> getAssetVocabularies() {
@@ -332,6 +346,7 @@ public class ContentDashboardAdminDisplayContext {
 	}
 
 	private List<Long> _assetCategoryIds;
+	private List<String> _assetTagIds;
 	private final List<AssetVocabulary> _assetVocabularies;
 	private final AssetVocabularyMetric _assetVocabularyMetric;
 	private List<Long> _authorIds;

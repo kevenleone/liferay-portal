@@ -44,6 +44,7 @@
 }
 
 .questions-user {
+	width: max-content;
 	.questions-user-popover {
 		display: none;
 		min-width: 234px;
@@ -207,32 +208,51 @@
 	}
 }
 
-.cke_dialog_contents_body {
-	width: auto !important;
+.cke_dialog_tabs {
+	left: 5px;
 }
 
 .question-seen {
 	font-weight: 400;
 }
 
-.questions-root .breadcrumb {
-	.breadcrumb-item {
-		font-size: 1.15rem;
+.questions-root {
+	.questions-breadcrumb {
+		background-color: $light;
+		margin-left: -1vw;
+		width: 100vw;
 	}
 
-	.breadcrumb-item + .breadcrumb-item {
-		padding-left: 0.7rem;
-	}
+	.breadcrumb {
+		.breadcrumb-item {
+			color: $secondary;
+			font-size: 1.15rem;
+		}
 
-	.questions-breadcrumb-unstyled {
-		padding: 0 0.3rem;
-	}
+		.breadcrumb-item + .breadcrumb-item {
+			padding-left: 0.7rem;
+		}
 
-	.questions-breadcrumb-unstyled:hover {
-		background-color: rgba($dark, 0.06);
-	}
+		.questions-breadcrumb-unstyled {
+			padding: 0 0.3rem;
+		}
 
-	.questions-breadcrumb-unstyled:focus {
-		box-shadow: none;
+		.questions-breadcrumb-unstyled:hover {
+			background-color: rgba($dark, 0.06);
+		}
+
+		.questions-breadcrumb-unstyled:focus {
+			box-shadow: none;
+		}
 	}
+}
+
+.empty-state-icon {
+	background-image: url(@theme_image_path@/states/empty_state.gif);
+	background-position-x: center;
+	background-repeat: no-repeat;
+	margin: auto;
+	min-width: 300px;
+	padding-top: 250px;
+	text-align: center;
 }

@@ -14,6 +14,7 @@
 
 package com.liferay.dynamic.data.mapping.form.builder.internal.servlet.taglib;
 
+import com.liferay.petra.string.StringBundler;
 import com.liferay.portal.kernel.servlet.taglib.BaseDynamicInclude;
 import com.liferay.portal.kernel.servlet.taglib.DynamicInclude;
 import com.liferay.portal.kernel.theme.ThemeDisplay;
@@ -49,15 +50,10 @@ public class DDMFormBuilderTopHeadDynamicInclude extends BaseDynamicInclude {
 
 		PrintWriter printWriter = httpServletResponse.getWriter();
 
-		String cdnBaseURL = themeDisplay.getCDNBaseURL();
-
 		String staticResourceURL = _portal.getStaticResourceURL(
 			httpServletRequest,
-			cdnBaseURL.concat(
-				_postfix
-			).concat(
-				"/css/main.css"
-			));
+			StringBundler.concat(
+				themeDisplay.getCDNBaseURL(), _postfix, "/css/main.css"));
 
 		String content = "<link href=\"".concat(staticResourceURL);
 

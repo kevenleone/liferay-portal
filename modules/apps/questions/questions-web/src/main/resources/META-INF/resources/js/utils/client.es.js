@@ -23,6 +23,11 @@ const HEADERS = {
 
 export const client = new ApolloClient({
 	cache: new InMemoryCache(),
+	defaultOptions: {
+		query: {
+			errorPolicy: 'all',
+		},
+	},
 	link: new HttpLink({
 		credentials: 'include',
 		fetch,
@@ -85,8 +90,9 @@ export const createQuestionQuery = gql`
 				articleBody: $articleBody
 				encodingFormat: "html"
 				headline: $headline
-				showAsQuestion: true
 				keywords: $keywords
+				showAsQuestion: true
+				subscribed: true
 				viewableBy: ANYONE
 			}
 		) {
@@ -218,6 +224,7 @@ export const getThreadQuery = gql`
 			keywords
 			messageBoardSection {
 				numberOfMessageBoardSections
+				parentMessageBoardSectionId
 				title
 			}
 			myRating {
@@ -238,6 +245,7 @@ export const getMessageBoardThreadByIdQuery = gql`
 				id
 				messageBoardSection {
 					numberOfMessageBoardSections
+					parentMessageBoardSectionId
 					title
 				}
 			}
@@ -364,6 +372,9 @@ export const getQuestionThreads = (
 
 		return getRankedThreads(date, page, pageSize, section);
 	}
+	else if (filter === 'most-voted') {
+		return getRankedThreads(null, page, pageSize, section);
+	}
 
 	return getThreads(
 		creatorId,
@@ -387,16 +398,43 @@ export const getThreads = (
 	siteKey,
 	sort = 'dateCreated:desc'
 ) => {
-	let filter = `(messageBoardSectionId eq ${section.id} `;
-
-	for (let i = 0; i < section.messageBoardSections.items.length; i++) {
-		filter += `or messageBoardSectionId eq ${section.messageBoardSections.items[i].id} `;
+	if (
+		!filter &&
+		!keywords &&
+		!creatorId &&
+		!section.messageBoardSections.items.length
+	) {
+		return client
+			.query({
+				query: getSectionThreadsQuery,
+				variables: {
+					messageBoardSectionId: section.id,
+					page,
+					pageSize,
+				},
+			})
+			.then((result) => ({
+				...result,
+				data: result.data.messageBoardSectionMessageBoardThreads,
+			}));
 	}
 
-	filter += ')';
+	let filter = '';
+
+	if (section && section.id) {
+		filter = `(messageBoardSectionId eq ${section.id} `;
+
+		for (let i = 0; i < section.messageBoardSections.items.length; i++) {
+			filter += `or messageBoardSectionId eq ${section.messageBoardSections.items[i].id} `;
+		}
+
+		filter += ')';
+	}
 
 	if (keywords) {
-		filter += ` and keywords/any(x:x eq '${keywords}')`;
+		filter += `${
+			(section && section.id && ' and ') || ''
+		}keywords/any(x:x eq '${keywords}')`;
 	}
 	else if (creatorId) {
 		filter += ` and creator/id eq ${creatorId}`;
@@ -426,29 +464,7 @@ export const getSections = (sectionTitle, siteKey) =>
 				siteKey,
 			},
 		})
-		.then(({data}) => data.messageBoardSections.items[0])
-		.then((section) => {
-			if (section.parentMessageBoardSectionId) {
-				return Promise.all([
-					section,
-					client.query({
-						query: getSectionQuery,
-						variables: {
-							filter: `title eq '${section.parentMessageBoardSectionId}' or id eq '${section.parentMessageBoardSectionId}'`,
-							siteKey,
-						},
-					}),
-				]).then(([section, {data}]) => [
-					section,
-					data.messageBoardSections.items[0],
-				]);
-			}
-
-			return [section, section];
-		})
-		.then((data) => {
-			return {...data[0], parentSection: data[1]};
-		});
+		.then(({data}) => data.messageBoardSections.items[0]);
 
 export const getThreadsQuery = gql`
 	query messageBoardThreads(
@@ -488,6 +504,7 @@ export const getThreadsQuery = gql`
 				keywords
 				messageBoardSection {
 					numberOfMessageBoardSections
+					parentMessageBoardSectionId
 					title
 				}
 				numberOfMessageBoardMessages
@@ -501,32 +518,47 @@ export const getThreadsQuery = gql`
 	}
 `;
 
-export const getSectionQuery = gql`
-	query messageBoardSections($filter: String!, $siteKey: String!) {
-		messageBoardSections(
-			filter: $filter
-			flatten: true
-			pageSize: 1
-			siteKey: $siteKey
-			sort: "title:desc"
+export const getSectionThreadsQuery = gql`
+	query messageBoardSectionMessageBoardThreads(
+		$messageBoardSectionId: Long!
+		$page: Int!
+		$pageSize: Int!
+	) {
+		messageBoardSectionMessageBoardThreads(
+			messageBoardSectionId: $messageBoardSectionId
+			page: $page
+			pageSize: $pageSize
 		) {
 			items {
-				actions
-				id
-				messageBoardSections(sort: "title:asc") {
-					items {
-						id
-						numberOfMessageBoardSections
-						parentMessageBoardSectionId
-						subscribed
-						title
-					}
+				aggregateRating {
+					ratingAverage
+					ratingCount
+					ratingValue
 				}
-				numberOfMessageBoardSections
-				parentMessageBoardSectionId
-				subscribed
-				title
+				articleBody
+				creator {
+					id
+					image
+					name
+				}
+				dateModified
+				friendlyUrlPath
+				hasValidAnswer
+				headline
+				id
+				keywords
+				messageBoardSection {
+					numberOfMessageBoardSections
+					parentMessageBoardSectionId
+					title
+				}
+				numberOfMessageBoardMessages
+				seen
+				viewCount
 			}
+			page
+			pageSize
+			totalCount
 		}
 	}
 `;
@@ -542,7 +574,7 @@ export const getRankedThreads = (
 		.query({
 			query: getRankedThreadsQuery,
 			variables: {
-				dateModified: dateModified.toISOString(),
+				dateModified: dateModified && dateModified.toISOString(),
 				messageBoardSectionId: section.id,
 				page,
 				pageSize,
@@ -557,8 +589,8 @@ export const getRankedThreads = (
 
 export const getRankedThreadsQuery = gql`
 	query messageBoardThreadsRanked(
-		$dateModified: Date!
-		$messageBoardSectionId: Long!
+		$dateModified: Date
+		$messageBoardSectionId: Long
 		$page: Int!
 		$pageSize: Int!
 		$sort: String!
@@ -590,6 +622,7 @@ export const getRankedThreadsQuery = gql`
 				keywords
 				messageBoardSection {
 					numberOfMessageBoardSections
+					parentMessageBoardSectionId
 					title
 				}
 				numberOfMessageBoardMessages
@@ -629,6 +662,7 @@ export const getRelatedThreadsQuery = gql`
 				id
 				messageBoardSection {
 					numberOfMessageBoardSections
+					parentMessageBoardSectionId
 					title
 				}
 				seen
@@ -636,6 +670,74 @@ export const getRelatedThreadsQuery = gql`
 			page
 			pageSize
 			totalCount
+		}
+	}
+`;
+
+export const getSectionQuery = gql`
+	query messageBoardSections($filter: String!, $siteKey: String!) {
+		messageBoardSections(
+			filter: $filter
+			flatten: true
+			pageSize: 1
+			siteKey: $siteKey
+			sort: "title:desc"
+		) {
+			items {
+				actions
+				id
+				messageBoardSections(sort: "title:asc") {
+					items {
+						id
+						numberOfMessageBoardSections
+						parentMessageBoardSectionId
+						subscribed
+						title
+					}
+				}
+				numberOfMessageBoardSections
+				parentMessageBoardSection {
+					id
+					messageBoardSections {
+						items {
+							id
+							numberOfMessageBoardSections
+							parentMessageBoardSectionId
+							subscribed
+							title
+						}
+					}
+					numberOfMessageBoardSections
+					parentMessageBoardSectionId
+					subscribed
+					title
+				}
+				parentMessageBoardSectionId
+				subscribed
+				title
+			}
+		}
+	}
+`;
+
+export const getSectionsByIdQuery = gql`
+	query messageBoardSection($messageBoardSectionId: Long!) {
+		messageBoardSection(messageBoardSectionId: $messageBoardSectionId) {
+			actions
+			id
+			messageBoardSections(sort: "title:asc") {
+				items {
+					id
+					numberOfMessageBoardSections
+					parentMessageBoardSectionId
+					subscribed
+					title
+				}
+			}
+			numberOfMessageBoardThreads
+			parentMessageBoardSectionId
+			subscribed
+			title
 		}
 	}
 `;
@@ -694,6 +796,7 @@ export const getUserActivityQuery = gql`
 				keywords
 				messageBoardSection {
 					numberOfMessageBoardSections
+					parentMessageBoardSectionId
 					title
 				}
 				numberOfMessageBoardMessages
@@ -838,6 +941,7 @@ export const getSubscriptionsQuery = gql`
 						keywords
 						messageBoardSection {
 							numberOfMessageBoardSections
+							parentMessageBoardSectionId
 							title
 						}
 						myRating {

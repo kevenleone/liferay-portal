@@ -20,10 +20,14 @@ import React, {useContext, useEffect, useState} from 'react';
 import App from '../../App.es';
 import AppContext from '../../AppContext.es';
 import {
+	UPDATE_CONFIG,
+	UPDATE_EDITING_DATA_DEFINITION_ID,
+} from '../../actions.es';
+import {getAllDataDefinitionFieldsFromAllFieldSets} from '../../utils/dataDefinition.es';
+import {
 	containsField,
 	isDataLayoutEmpty,
 } from '../../utils/dataLayoutVisitor.es';
-import generateDataDefinitionFieldName from '../../utils/generateDataDefinitionFieldName.es';
 import ModalWithEventPrevented from '../modal/ModalWithEventPrevented.es';
 import useCreateFieldSet from './actions/useCreateFieldSet.es';
 import usePropagateFieldSet from './actions/usePropagateFieldSet.es';
@@ -32,6 +36,7 @@ import useSaveFieldSet from './actions/useSaveFieldSet.es';
 const ModalContent = ({
 	childrenAppProps,
 	defaultLanguageId,
+	editingDataDefinition,
 	fieldSet,
 	onClose,
 }) => {
@@ -39,6 +44,7 @@ const ModalContent = ({
 		{
 			appProps,
 			dataDefinition: {dataDefinitionFields},
+			fieldSets,
 		},
 	] = useContext(AppContext);
 	const [childrenContext, setChildrenContext] = useState({
@@ -50,7 +56,9 @@ const ModalContent = ({
 	const [name, setName] = useState({});
 	const {
 		dataLayoutBuilder,
+		dispatch,
 		state: {
+			config,
 			dataLayout,
 			dataDefinition: {
 				dataDefinitionFields: childrenDataDefinitionFields = [],
@@ -59,27 +67,27 @@ const ModalContent = ({
 		},
 	} = childrenContext;
 
+	const {contentType} = appProps;
+
 	const availableLanguageIds = [
 		...new Set([...Object.keys(name), editingLanguageId]),
 	];
 
-	const normalizeDataDefinitionFields = (ddFields) => {
+	const normalizeDataDefinitionFields = (dataDefinitionFields) => {
 		const fields = [];
-		ddFields.forEach(({fieldType, name, nestedDataDefinitionFields}) => {
-			if (fieldType === 'fieldset') {
-				return fields.push(...nestedDataDefinitionFields);
-			}
 
-			return fields.push({name});
-		});
+		dataDefinitionFields.forEach(
+			({fieldType, name, nestedDataDefinitionFields}) => {
+				if (fieldType === 'fieldset') {
+					return fields.push(...nestedDataDefinitionFields);
+				}
+
+				return fields.push({name});
+			}
+		);
 
 		return fields;
 	};
-
-	const mergedDataDefinitionFields = normalizeDataDefinitionFields([
-		...dataDefinitionFields,
-		...childrenDataDefinitionFields,
-	]);
 
 	const changeZIndex = (zIndex) => {
 		document
@@ -96,27 +104,38 @@ const ModalContent = ({
 	}, [fieldSet]);
 
 	useEffect(() => {
+		if (contentType === 'app-builder') {
+			dispatch({
+				payload: {
+					config: {
+						...config,
+						allowFieldSets: false,
+					},
+				},
+				type: UPDATE_CONFIG,
+			});
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [contentType, dispatch]);
+
+	useEffect(() => {
 		if (dataLayout) {
 			const {dataLayoutPages} = dataLayout;
 			setDataLayoutIsEmpty(isDataLayoutEmpty(dataLayoutPages));
 		}
 	}, [dataLayout]);
 
+	const mergedAllDataDefinitionFields = normalizeDataDefinitionFields([
+		...dataDefinitionFields,
+		...childrenDataDefinitionFields,
+		...getAllDataDefinitionFieldsFromAllFieldSets(fieldSets),
+	]);
+
 	useEffect(() => {
 		if (dataLayoutBuilder) {
-			const provider = dataLayoutBuilder.getLayoutProvider();
-
-			provider.props = {
-				...provider.props,
-				fieldNameGenerator: (desiredName) =>
-					generateDataDefinitionFieldName(
-						{dataDefinitionFields: mergedDataDefinitionFields},
-						desiredName
-					),
-				shouldAutoGenerateName: () => false,
-			};
+			dataLayoutBuilder.fieldNameGenerator(mergedAllDataDefinitionFields);
 		}
-	}, [dataLayoutBuilder, mergedDataDefinitionFields]);
+	}, [dataLayoutBuilder, mergedAllDataDefinitionFields]);
 
 	useEffect(() => {
 		if (dataLayoutBuilder) {
@@ -134,16 +153,26 @@ const ModalContent = ({
 		};
 	}, [dataLayoutBuilder]);
 
-	const createFieldSet = useCreateFieldSet({
+	useEffect(() => {
+		if (editingDataDefinition && editingDataDefinition.id) {
+			dispatch({
+				payload: {
+					editingDataDefinitionId: editingDataDefinition.id,
+				},
+				type: UPDATE_EDITING_DATA_DEFINITION_ID,
+			});
+		}
+	}, [dispatch, editingDataDefinition]);
+
+	const actionProps = {
 		availableLanguageIds,
 		childrenContext,
-	});
-	const saveFieldSet = useSaveFieldSet({
-		DataLayout: childrenAppProps.DataLayout,
-		availableLanguageIds,
-		childrenContext,
+		editingDataDefinition,
 		fieldSet,
-	});
+	};
+
+	const createFieldSet = useCreateFieldSet(actionProps);
+	const saveFieldSet = useSaveFieldSet(actionProps);
 	const propagateFieldSet = usePropagateFieldSet();
 
 	const onSave = () => {

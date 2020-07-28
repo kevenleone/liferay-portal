@@ -58,8 +58,7 @@ public class CommentsContentPageEditorSidebarPanel
 
 	@Override
 	public boolean isVisible(
-		PermissionChecker permissionChecker, long plid,
-		boolean pageIsDisplayPage) {
+		PermissionChecker permissionChecker, long plid, int layoutType) {
 
 		try {
 			if (LayoutPermissionUtil.contains(

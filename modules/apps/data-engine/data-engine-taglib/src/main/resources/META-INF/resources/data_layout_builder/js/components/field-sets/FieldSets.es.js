@@ -17,7 +17,6 @@ import React, {useContext, useState} from 'react';
 
 import AppContext from '../../AppContext.es';
 import {dropFieldSet} from '../../actions.es';
-import DataLayoutBuilder from '../../data-layout-builder/DataLayoutBuilder.es';
 import DataLayoutBuilderContext from '../../data-layout-builder/DataLayoutBuilderContext.es';
 import {DRAG_FIELDSET} from '../../drag-and-drop/dragTypes.es';
 import {containsFieldSet} from '../../utils/dataDefinition.es';
@@ -28,39 +27,35 @@ import useDeleteFieldSet from './actions/useDeleteFieldSet.es';
 import usePropagateFieldSet from './actions/usePropagateFieldSet.es';
 
 export default function FieldSets({keywords}) {
-	const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
-
+	const [dataLayoutBuilder] = useContext(DataLayoutBuilderContext);
 	const [{appProps, dataDefinition, fieldSets}] = useContext(AppContext);
 	const [state, setState] = useState({
 		childrenAppProps: {},
+		editingDataDefinition: null,
 		fieldSet: null,
 		isVisible: false,
 	});
 
-	const toggleFieldSet = (fieldSet) => {
-		const {context, fieldTypes} = appProps;
-		const DataLayout = new DataLayoutBuilder({
-			editingLanguageId: defaultLanguageId,
-			fieldTypes,
-		});
+	const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 
+	const toggleFieldSet = (fieldSet, editingDataDefinition) => {
 		let childrenAppProps = {
-			DataLayout,
 			context: {},
 			dataDefinitionId: null,
 			dataLayoutId: null,
-			defaultLanguageId,
 		};
 
 		if (fieldSet) {
+			const {context} = appProps;
 			const {defaultDataLayout, id: dataDefinitionId} = fieldSet;
-			const ddmForm = DataLayout.getDDMForm(fieldSet, defaultDataLayout);
+			const ddmForm = dataLayoutBuilder.getDDMForm(
+				fieldSet,
+				defaultDataLayout
+			);
 			const [{rows}] = ddmForm.pages;
-
 			delete ddmForm.pages;
 
 			childrenAppProps = {
-				...childrenAppProps,
 				context: {
 					...context,
 					pages: [
@@ -79,12 +74,12 @@ export default function FieldSets({keywords}) {
 
 		setState({
 			childrenAppProps,
+			editingDataDefinition,
 			fieldSet,
 			isVisible: !state.isVisible,
 		});
 	};
 
-	const [dataLayoutBuilder] = useContext(DataLayoutBuilderContext);
 	const deleteFieldSet = useDeleteFieldSet({dataLayoutBuilder});
 	const propagateFieldSet = usePropagateFieldSet();
 
@@ -111,7 +106,7 @@ export default function FieldSets({keywords}) {
 			block
 			className="add-fieldset"
 			displayType="secondary"
-			onClick={() => toggleFieldSet()}
+			onClick={() => toggleFieldSet(null, dataDefinition)}
 		>
 			{Liferay.Language.get('create-new-fieldset')}
 		</ClayButton>
