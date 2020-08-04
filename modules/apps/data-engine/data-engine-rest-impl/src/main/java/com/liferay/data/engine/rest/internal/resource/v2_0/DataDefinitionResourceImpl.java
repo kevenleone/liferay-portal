@@ -462,6 +462,9 @@ public class DataDefinitionResourceImpl
 			PermissionThreadLocal.getPermissionChecker(), contentType, siteId,
 			DataActionKeys.ADD_DATA_DEFINITION);
 
+		_normalizeFields(
+			dataDefinition, dataDefinition.getDataDefinitionFields());
+
 		DDMForm ddmForm = DataDefinitionUtil.toDDMForm(
 			dataDefinition, _ddmFormFieldTypeServicesTracker);
 
@@ -572,6 +575,10 @@ public class DataDefinitionResourceImpl
 
 		DDMStructure ddmStructure = _ddmStructureLocalService.getDDMStructure(
 			dataDefinitionId);
+
+		_normalizeFields(
+			dataDefinition, dataDefinition.getDataDefinitionFields());
+
 		DDMForm ddmForm = DataDefinitionUtil.toDDMForm(
 			dataDefinition, _ddmFormFieldTypeServicesTracker);
 
@@ -1072,6 +1079,54 @@ public class DataDefinitionResourceImpl
 			ResourceBundleUtil.getBundle(
 				"content.Language", locale, ddmFormFieldType.getClass()),
 			_portal.getResourceBundle(locale));
+	}
+
+	private void _normalizeFields(
+		DataDefinition dataDefinition,
+		DataDefinitionField[] dataDefinitionFields) {
+
+		for (DataDefinitionField dataDefinitionField : dataDefinitionFields) {
+			_normalizeProperty(
+				dataDefinition, dataDefinitionField.getDefaultValue());
+			_normalizeProperty(dataDefinition, dataDefinitionField.getLabel());
+			_normalizeProperty(dataDefinition, dataDefinitionField.getTip());
+
+			Map<String, Object> customProperties =
+				dataDefinitionField.getCustomProperties();
+
+			_normalizeProperty(
+				dataDefinition, (Map)customProperties.get("options"));
+			_normalizeProperty(
+				dataDefinition, (Map)customProperties.get("placeholder"));
+			_normalizeProperty(
+				dataDefinition, (Map)customProperties.get("tooltip"));
+
+			if (ArrayUtil.isNotEmpty(
+					dataDefinitionField.getNestedDataDefinitionFields())) {
+
+				_normalizeFields(
+					dataDefinition,
+					dataDefinitionField.getNestedDataDefinitionFields());
+			}
+		}
+	}
+
+	private void _normalizeProperty(
+		DataDefinition dataDefinition, Map<String, Object> property) {
+
+		if (property == null) {
+			return;
+		}
+
+		for (String languageId : dataDefinition.getAvailableLanguageIds()) {
+			Object value = property.get(languageId);
+
+			if (value == null) {
+				property.put(
+					languageId,
+					property.get(dataDefinition.getDefaultLanguageId()));
+			}
+		}
 	}
 
 	private void _removeFieldsFromDataLayout(
