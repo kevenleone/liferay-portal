@@ -1086,11 +1086,6 @@ public class DataDefinitionResourceImpl
 		DataDefinitionField[] dataDefinitionFields) {
 
 		for (DataDefinitionField dataDefinitionField : dataDefinitionFields) {
-			_normalizeProperty(
-				dataDefinition, dataDefinitionField.getDefaultValue());
-			_normalizeProperty(dataDefinition, dataDefinitionField.getLabel());
-			_normalizeProperty(dataDefinition, dataDefinitionField.getTip());
-
 			Map<String, Object> customProperties =
 				dataDefinitionField.getCustomProperties();
 
@@ -1101,6 +1096,10 @@ public class DataDefinitionResourceImpl
 			_normalizeProperty(
 				dataDefinition, (Map)customProperties.get("tooltip"));
 
+			_normalizeProperty(
+				dataDefinition, dataDefinitionField.getDefaultValue());
+			_normalizeProperty(dataDefinition, dataDefinitionField.getLabel());
+
 			if (ArrayUtil.isNotEmpty(
 					dataDefinitionField.getNestedDataDefinitionFields())) {
 
@@ -1108,6 +1107,8 @@ public class DataDefinitionResourceImpl
 					dataDefinition,
 					dataDefinitionField.getNestedDataDefinitionFields());
 			}
+
+			_normalizeProperty(dataDefinition, dataDefinitionField.getTip());
 		}
 	}
 
