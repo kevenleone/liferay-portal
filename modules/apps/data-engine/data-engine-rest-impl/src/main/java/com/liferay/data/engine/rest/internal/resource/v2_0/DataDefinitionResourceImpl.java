@@ -1115,7 +1115,7 @@ public class DataDefinitionResourceImpl
 	private void _normalizeProperty(
 		DataDefinition dataDefinition, Map<String, Object> property) {
 
-		if (property == null) {
+		if (MapUtil.isEmpty(property)) {
 			return;
 		}
 
