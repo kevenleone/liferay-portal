@@ -1089,12 +1089,14 @@ public class DataDefinitionResourceImpl
 			Map<String, Object> customProperties =
 				dataDefinitionField.getCustomProperties();
 
-			_normalizeProperty(
-				dataDefinition, (Map)customProperties.get("options"));
-			_normalizeProperty(
-				dataDefinition, (Map)customProperties.get("placeholder"));
-			_normalizeProperty(
-				dataDefinition, (Map)customProperties.get("tooltip"));
+			if (MapUtil.isNotEmpty(customProperties)) {
+				_normalizeProperty(
+					dataDefinition, (Map)customProperties.get("options"));
+				_normalizeProperty(
+					dataDefinition, (Map)customProperties.get("placeholder"));
+				_normalizeProperty(
+					dataDefinition, (Map)customProperties.get("tooltip"));
+			}
 
 			_normalizeProperty(
 				dataDefinition, dataDefinitionField.getDefaultValue());
