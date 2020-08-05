@@ -36,10 +36,11 @@ export default function FieldSets({keywords}) {
 		isVisible: false,
 	});
 
-	const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
+	const defaultLanguageId = dataDefinition.defaultLanguageId;
 
 	const toggleFieldSet = (fieldSet, editingDataDefinition) => {
 		let childrenAppProps = {
+			availableLanguageIds: [defaultLanguageId],
 			context: {},
 			dataDefinitionId: null,
 			dataLayoutId: null,
@@ -56,6 +57,7 @@ export default function FieldSets({keywords}) {
 			delete ddmForm.pages;
 
 			childrenAppProps = {
+				availableLanguageIds: fieldSet.availableLanguageIds,
 				context: {
 					...context,
 					pages: [
