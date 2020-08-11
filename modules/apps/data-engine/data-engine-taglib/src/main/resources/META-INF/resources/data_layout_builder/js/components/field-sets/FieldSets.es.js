@@ -20,6 +20,7 @@ import {dropFieldSet} from '../../actions.es';
 import DataLayoutBuilderContext from '../../data-layout-builder/DataLayoutBuilderContext.es';
 import {DRAG_FIELDSET} from '../../drag-and-drop/dragTypes.es';
 import {containsFieldSet} from '../../utils/dataDefinition.es';
+import {getLocalizedValue} from '../../utils/lang.es';
 import EmptyState from '../empty-state/EmptyState.es';
 import FieldType from '../field-types/FieldType.es';
 import FieldSetModal from './FieldSetModal.es';
@@ -36,13 +37,15 @@ export default function FieldSets({keywords}) {
 		isVisible: false,
 	});
 
-	const defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
+	let defaultLanguageId = Liferay.ThemeDisplay.getDefaultLanguageId();
 
 	const toggleFieldSet = (fieldSet, editingDataDefinition) => {
 		let childrenAppProps = {
+			availableLanguageIds: [defaultLanguageId],
 			context: {},
 			dataDefinitionId: null,
 			dataLayoutId: null,
+			editingLanguageId: defaultLanguageId,
 		};
 
 		if (fieldSet) {
@@ -55,7 +58,10 @@ export default function FieldSets({keywords}) {
 			const [{rows}] = ddmForm.pages;
 			delete ddmForm.pages;
 
+			defaultLanguageId = fieldSet.defaultLanguageId;
+
 			childrenAppProps = {
+				availableLanguageIds: fieldSet.availableLanguageIds,
 				context: {
 					...context,
 					pages: [
@@ -69,11 +75,13 @@ export default function FieldSets({keywords}) {
 				},
 				dataDefinitionId,
 				dataLayoutId: defaultDataLayout.id,
+				editingLanguageId: fieldSet.defaultLanguageId,
 			};
 		}
 
 		setState({
 			childrenAppProps,
+			defaultLanguageId,
 			editingDataDefinition,
 			fieldSet,
 			isVisible: !state.isVisible,
@@ -113,11 +121,28 @@ export default function FieldSets({keywords}) {
 	);
 
 	const filteredFieldSets = fieldSets
-		.filter(({name}) =>
-			new RegExp(keywords, 'ig').test(name[defaultLanguageId])
+		.filter(({defaultLanguageId: fieldSetDefaultLanguageId, name}) =>
+			new RegExp(keywords, 'ig').test(
+				getLocalizedValue(fieldSetDefaultLanguageId, name)
+			)
 		)
-		.sort(({name: a}, {name: b}) =>
-			a[defaultLanguageId].localeCompare(b[defaultLanguageId])
+		.sort(
+			(
+				{
+					defaultLanguageId: fieldSetDefaultLanguageId1,
+					name: fieldsetName1,
+				},
+				{
+					defaultLanguageId: fieldSetDefaultLanguageId2,
+					name: fieldsetName2,
+				}
+			) =>
+				getLocalizedValue(
+					fieldSetDefaultLanguageId1,
+					fieldsetName1
+				).localeCompare(
+					getLocalizedValue(fieldSetDefaultLanguageId2, fieldsetName2)
+				)
 		);
 
 	return (
@@ -127,8 +152,10 @@ export default function FieldSets({keywords}) {
 					<AddButton />
 					<div className="mt-3">
 						{filteredFieldSets.map((fieldSet) => {
-							const fieldSetName =
-								fieldSet.name[defaultLanguageId];
+							const fieldSetName = getLocalizedValue(
+								fieldSet.defaultLanguageId,
+								fieldSet.name
+							);
 							const dropDownActions = [
 								{
 									action: () => toggleFieldSet(fieldSet),

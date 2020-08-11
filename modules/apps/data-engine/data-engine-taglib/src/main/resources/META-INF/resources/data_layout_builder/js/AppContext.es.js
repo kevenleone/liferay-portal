@@ -12,6 +12,7 @@
  * details.
  */
 
+import {FieldSupport} from 'dynamic-data-mapping-form-builder';
 import {PagesVisitor} from 'dynamic-data-mapping-form-renderer';
 import {createContext} from 'react';
 
@@ -38,9 +39,7 @@ import {
 	UPDATE_IDS,
 	UPDATE_PAGES,
 } from './actions.es';
-import {getAllDataDefinitionFieldsFromAllFieldSets} from './utils/dataDefinition.es';
 import * as DataLayoutVisitor from './utils/dataLayoutVisitor.es';
-import generateDataDefinitionFieldName from './utils/generateDataDefinitionFieldName.es';
 
 const AppContext = createContext();
 
@@ -81,9 +80,7 @@ const initialState = {
 };
 
 const addCustomObjectField = ({
-	dataDefinition,
 	dataLayoutBuilder,
-	fieldSets,
 	fieldTypeName,
 	fieldTypes,
 }) => {
@@ -97,13 +94,7 @@ const addCustomObjectField = ({
 		label: {
 			[themeDisplay.getLanguageId()]: fieldType.label,
 		},
-		name: generateDataDefinitionFieldName(
-			[
-				...dataDefinition.dataDefinitionFields,
-				...getAllDataDefinitionFieldsFromAllFieldSets(fieldSets),
-			],
-			fieldType.label
-		),
+		name: FieldSupport.getDefaultFieldName(),
 	};
 };
 

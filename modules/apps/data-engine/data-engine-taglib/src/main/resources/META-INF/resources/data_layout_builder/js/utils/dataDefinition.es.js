@@ -12,6 +12,8 @@
  * details.
  */
 
+import {getLocalizedValue} from './lang.es';
+
 export const containsFieldSet = (dataDefinition, dataDefinitionId) => {
 	let hasFieldSet = false;
 
@@ -61,22 +63,6 @@ export const forEachDataDefinitionField = (
 	return false;
 };
 
-/**
- * @param {Array} fieldSets
- * @returns {Array} fields
- */
-export const getAllDataDefinitionFieldsFromAllFieldSets = (fieldSets = []) => {
-	const fields = [];
-
-	fieldSets.forEach(({dataDefinitionFields = []}) => {
-		dataDefinitionFields.forEach((field) => {
-			fields.push(field);
-		});
-	});
-
-	return fields;
-};
-
 export const getDataDefinitionField = (
 	dataDefinition = {dataDefinitionFields: []},
 	fieldName
@@ -105,10 +91,7 @@ export const getFieldLabel = (dataDefinition, fieldName) => {
 	const field = getDataDefinitionField(dataDefinition, fieldName);
 
 	if (field) {
-		return (
-			field.label[Liferay.ThemeDisplay.getLanguageId()] ||
-			field.label[dataDefinition.defaultLanguageId]
-		);
+		return getLocalizedValue(dataDefinition.defaultLanguageId, field.label);
 	}
 
 	return fieldName;
