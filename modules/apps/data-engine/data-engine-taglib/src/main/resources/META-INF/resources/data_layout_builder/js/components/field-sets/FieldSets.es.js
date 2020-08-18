@@ -20,7 +20,7 @@ import {dropFieldSet} from '../../actions.es';
 import DataLayoutBuilderContext from '../../data-layout-builder/DataLayoutBuilderContext.es';
 import {DRAG_FIELDSET} from '../../drag-and-drop/dragTypes.es';
 import {containsFieldSet} from '../../utils/dataDefinition.es';
-import {getLocalizedValue} from '../../utils/lang.es';
+import {getLocalizedValue, sub} from '../../utils/lang.es';
 import EmptyState from '../empty-state/EmptyState.es';
 import FieldType from '../field-types/FieldType.es';
 import FieldSetModal from './FieldSetModal.es';
@@ -30,6 +30,7 @@ import usePropagateFieldSet from './actions/usePropagateFieldSet.es';
 export default function FieldSets({keywords}) {
 	const [dataLayoutBuilder] = useContext(DataLayoutBuilderContext);
 	const [{appProps, dataDefinition, fieldSets}] = useContext(AppContext);
+
 	const [state, setState] = useState({
 		childrenAppProps: {},
 		editingDataDefinition: null,
@@ -110,17 +111,6 @@ export default function FieldSets({keywords}) {
 		);
 	};
 
-	const AddButton = () => (
-		<ClayButton
-			block
-			className="add-fieldset"
-			displayType="secondary"
-			onClick={() => toggleFieldSet(null, dataDefinition)}
-		>
-			{Liferay.Language.get('create-new-fieldset')}
-		</ClayButton>
-	);
-
 	const filteredFieldSets = fieldSets
 		.filter(({defaultLanguageId}) =>
 			new RegExp(keywords, 'ig').test(
@@ -140,6 +130,24 @@ export default function FieldSets({keywords}) {
 			return localizedValueA.localeCompare(localizedValueB);
 		});
 
+	const getLanguage = (lang) => {
+		const available = Liferay.Language.available;
+		const [language] = available[lang].split(' ');
+
+		return language;
+	};
+
+	const AddButton = () => (
+		<ClayButton
+			block
+			className="add-fieldset"
+			displayType="secondary"
+			onClick={() => toggleFieldSet(null, dataDefinition)}
+		>
+			{Liferay.Language.get('create-new-fieldset')}
+		</ClayButton>
+	);
+
 	return (
 		<>
 			{filteredFieldSets.length ? (
@@ -148,16 +156,40 @@ export default function FieldSets({keywords}) {
 
 					<div className="mt-3">
 						{filteredFieldSets.map((fieldSet) => {
+							const fieldSetLanguageId =
+								fieldSet.defaultLanguageId;
+
 							const fieldSetName = getLocalizedValue(
-								fieldSet.defaultLanguageId,
+								fieldSetLanguageId,
 								fieldSet.name
 							);
 
+							let editAction = {
+								action: () => toggleFieldSet(fieldSet),
+								name: Liferay.Language.get('edit'),
+							};
+
+							if (defaultLanguageId !== fieldSetLanguageId) {
+								editAction = {
+									...editAction,
+									className: 'disabled',
+									popover: {
+										alignPosition: 'top',
+										body: sub(
+											Liferay.Language.get(
+												'you-cannot-edit-this-fieldset-that-was-created-in-x-default-language-different-from-the-actual-object-instead-you-can-create-another-fieldset-using-the-same-default-language-of-this-object'
+											),
+											[getLanguage(fieldSetLanguageId)]
+										),
+										header: Liferay.Language.get(
+											'edit-not-allowed'
+										),
+									},
+								};
+							}
+
 							const dropDownActions = [
-								{
-									action: () => toggleFieldSet(fieldSet),
-									name: Liferay.Language.get('edit'),
-								},
+								editAction,
 								{
 									action: () =>
 										propagateFieldSet({
