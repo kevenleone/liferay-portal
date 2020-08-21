@@ -6,18 +6,16 @@
 		width: 100%;
 	}
 
-	.collapsable-panel {
-		.collapse-icon-options {
-			position: absolute;
-			right: 16px;
-			top: 16px;
-			z-index: 1;
-		}
+	.collapse-icon-options {
+		position: absolute;
+		right: 28px;
+		top: 16px;
+		z-index: 3000 !important;
+	}
 
-		.collapse-icon-closed.actions,
-		.collapse-icon-open.actions {
-			right: 56px !important;
-		}
+	.collapse-icon-closed.actions,
+	.collapse-icon-open.actions {
+		right: 56px !important;
 	}
 
 	.panel-unstyled {
@@ -29,6 +27,11 @@
 			border: none !important;
 			margin-bottom: 0;
 			padding: 23.6px;
+		}
+
+		.panel-body {
+			margin-bottom: 0;
+			padding-bottom: 10px;
 		}
 
 		button:focus {

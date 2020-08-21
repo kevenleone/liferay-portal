@@ -14,6 +14,7 @@
 
 import ClayButton from '@clayui/button';
 import ClayLabel from '@clayui/label';
+import ClayPanel from '@clayui/panel';
 import classNames from 'classnames';
 import React, {useContext} from 'react';
 
@@ -26,7 +27,7 @@ import {
 	getOptionLabel,
 } from '../../utils/dataDefinition.es';
 import {getLocalizedValue} from '../../utils/lang.es';
-import CollapsablePanel from '../collapsable-panel/CollapsablePanel.es';
+import DropDown from '../drop-down/DropDown.es';
 
 const ACTION_LABELS = {
 	autofill: Liferay.Language.get('autofill'),
@@ -62,6 +63,17 @@ export default function RuleItem({rule, toggleRulesEditorVisibility}) {
 	const [{dataDefinition}, dispatch] = useContext(AppContext);
 	const name = getLocalizedValue(dataDefinition.defaultLanguageId, ruleName);
 
+	const replaceExpressionLabels = (expression) => {
+		forEachDataDefinitionField(dataDefinition, ({name}) => {
+			expression = expression.replace(
+				new RegExp(`\\[${name}\\]`, 'g'),
+				getFieldLabel(dataDefinition, name)
+			);
+		});
+
+		return expression;
+	};
+
 	const dropDownActions = [
 		{
 			action: () => toggleRulesEditorVisibility(rule),
@@ -84,111 +96,116 @@ export default function RuleItem({rule, toggleRulesEditorVisibility}) {
 		},
 	];
 
-	const replaceExpressionLabels = (expression) => {
-		forEachDataDefinitionField(dataDefinition, ({name}) => {
-			expression = expression.replace(
-				new RegExp(`\\[${name}\\]`, 'g'),
-				getFieldLabel(dataDefinition, name)
-			);
-		});
-
-		return expression;
-	};
-
 	return (
-		<CollapsablePanel actions={dropDownActions} title={name}>
-			<ClayButton
-				displayType="unstyled"
-				onClick={() => toggleRulesEditorVisibility(rule)}
-			>
-				<Text capitalize>{Liferay.Language.get('if')}</Text>
+		<ClayPanel
+			collapsable
+			displayTitle={
+				<>
+					<span className="panel-title">{name}</span>
+					<div className="collapse-icon-options">
+						<DropDown actions={dropDownActions} />
+					</div>
+				</>
+			}
+			displayType="unstyled"
+			showCollapseIcon
+		>
+			<ClayPanel.Body>
+				<ClayButton
+					displayType="unstyled"
+					onClick={() => toggleRulesEditorVisibility(rule)}
+				>
+					<Text capitalize>{Liferay.Language.get('if')}</Text>
 
-				{conditions.map(({operands, operator}, index) => {
-					const [first, last] = operands;
-					const lastValue = last?.value;
+					{conditions.map(({operands, operator}, index) => {
+						const [first, last] = operands;
+						const lastValue = last?.value;
 
-					const _getFieldLabel = () => {
-						const field = getDataDefinitionField(
-							dataDefinition,
-							lastValue
-						);
-
-						if (field) {
-							return getFieldLabel(dataDefinition, lastValue);
-						}
-
-						const parent = getDataDefinitionField(
-							dataDefinition,
-							first.value
-						);
-
-						if (parent) {
-							return getOptionLabel(
-								parent.customProperties?.options,
+						const _getFieldLabel = () => {
+							const field = getDataDefinitionField(
+								dataDefinition,
 								lastValue
 							);
-						}
 
-						return lastValue;
-					};
+							if (field) {
+								return getFieldLabel(dataDefinition, lastValue);
+							}
 
-					return (
+							const parent = getDataDefinitionField(
+								dataDefinition,
+								first.value
+							);
+
+							if (parent) {
+								return getOptionLabel(
+									parent.customProperties?.options,
+									lastValue
+								);
+							}
+
+							return lastValue;
+						};
+
+						return (
+							<>
+								<Text lowercase>
+									{Liferay.Language.get('field')}
+								</Text>
+
+								<ClayLabel displayType="success">
+									{getFieldLabel(dataDefinition, first.value)}
+								</ClayLabel>
+
+								<ClayLabel displayType="secondary">
+									{OPERATOR_LABELS[operator] || operator}
+								</ClayLabel>
+
+								{lastValue && (
+									<ClayLabel displayType="info">
+										{_getFieldLabel()}
+									</ClayLabel>
+								)}
+
+								{index + 1 !== conditions.length && (
+									<ClayLabel displayType="warning">
+										{logicalOperator}
+									</ClayLabel>
+								)}
+							</>
+						);
+					})}
+
+					{actions.map(({action, expression, target}, index) => (
 						<>
 							<Text lowercase>
-								{Liferay.Language.get('field')}
+								{ACTION_LABELS[action] || action}
 							</Text>
 
-							<ClayLabel displayType="success">
-								{getFieldLabel(dataDefinition, first.value)}
-							</ClayLabel>
+							{expression && (
+								<>
+									<ClayLabel displayType="secondary">
+										{replaceExpressionLabels(expression)}
+									</ClayLabel>
 
-							<ClayLabel displayType="secondary">
-								{OPERATOR_LABELS[operator] || operator}
-							</ClayLabel>
-
-							{lastValue && (
-								<ClayLabel displayType="info">
-									{_getFieldLabel()}
-								</ClayLabel>
+									<Text lowercase>
+										{Liferay.Language.get('into')}
+									</Text>
+								</>
 							)}
 
-							{index + 1 !== conditions.length && (
+							<ClayLabel displayType="success">
+								{getFieldLabel(dataDefinition, target)}
+							</ClayLabel>
+
+							{index + 1 !== actions.length && (
 								<ClayLabel displayType="warning">
-									{logicalOperator}
+									{Liferay.Language.get('and')}
 								</ClayLabel>
 							)}
 						</>
-					);
-				})}
-
-				{actions.map(({action, expression, target}, index) => (
-					<>
-						<Text lowercase>{ACTION_LABELS[action] || action}</Text>
-
-						{expression && (
-							<>
-								<ClayLabel displayType="secondary">
-									{replaceExpressionLabels(expression)}
-								</ClayLabel>
-
-								<Text lowercase>
-									{Liferay.Language.get('into')}
-								</Text>
-							</>
-						)}
-
-						<ClayLabel displayType="success">
-							{getFieldLabel(dataDefinition, target)}
-						</ClayLabel>
-
-						{index + 1 !== actions.length && (
-							<ClayLabel displayType="warning">
-								{Liferay.Language.get('and')}
-							</ClayLabel>
-						)}
-					</>
-				))}
-			</ClayButton>
-		</CollapsablePanel>
+					))}
+				</ClayButton>
+			</ClayPanel.Body>
+		</ClayPanel>
 	);
 }
