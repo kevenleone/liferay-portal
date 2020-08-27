@@ -47,7 +47,27 @@ const formatDataRecord = (languageId, pages) => {
 			}
 
 			if (repeatable) {
-				dataRecordValues[fieldName][languageId].push(_value);
+				const value = _value || localizedValue[languageId];
+				const isSameArray = (a, b) =>
+					JSON.stringify(a) === JSON.stringify(b);
+				if (Array.isArray(dataRecordValues[fieldName][languageId])) {
+					if (
+						Array.isArray(value) &&
+						isSameArray(
+							dataRecordValues[fieldName][languageId],
+							value
+						)
+					) {
+						return;
+					}
+					dataRecordValues[fieldName][languageId].push(value);
+				}
+				else {
+					dataRecordValues[fieldName] = {
+						...dataRecordValues[fieldName],
+						[languageId]: [value],
+					};
+				}
 			}
 			else {
 				dataRecordValues[fieldName] = {
