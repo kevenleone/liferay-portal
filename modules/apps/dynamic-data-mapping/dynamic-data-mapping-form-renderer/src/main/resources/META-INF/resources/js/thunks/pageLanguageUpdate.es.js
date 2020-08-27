@@ -39,35 +39,13 @@ const formatDataRecord = (languageId, pages) => {
 		if (localizable) {
 			if (!dataRecordValues[fieldName]) {
 				dataRecordValues[fieldName] = {
-					...{
-						[languageId]: [],
-					},
 					...localizedValue,
+					[languageId]: [],
 				};
 			}
 
 			if (repeatable) {
-				const value = _value || localizedValue[languageId];
-				const isSameArray = (a, b) =>
-					JSON.stringify(a) === JSON.stringify(b);
-				if (Array.isArray(dataRecordValues[fieldName][languageId])) {
-					if (
-						Array.isArray(value) &&
-						isSameArray(
-							dataRecordValues[fieldName][languageId],
-							value
-						)
-					) {
-						return;
-					}
-					dataRecordValues[fieldName][languageId].push(value);
-				}
-				else {
-					dataRecordValues[fieldName] = {
-						...dataRecordValues[fieldName],
-						[languageId]: [value],
-					};
-				}
+				dataRecordValues[fieldName][languageId].push(_value);
 			}
 			else {
 				dataRecordValues[fieldName] = {
@@ -155,36 +133,38 @@ export default function pageLanguageUpdate({
 		)
 			.then((response) => response.json())
 			.then(({pages}) => {
-				const visitor = new PagesVisitor(pages);
-				const newPages = visitor.mapFields(
-					(field) => {
-						if (!field.localizedValue) {
-							field.localizedValue = {};
-						}
-						if (newDataRecordValues[field.fieldName]) {
-							field.localizedValue = {
-								...newDataRecordValues[field.fieldName],
-							};
-						}
+				if (pages) {
+					const visitor = new PagesVisitor(pages);
+					const newPages = visitor.mapFields(
+						(field) => {
+							if (!field.localizedValue) {
+								field.localizedValue = {};
+							}
+							if (newDataRecordValues[field.fieldName]) {
+								field.localizedValue = {
+									...newDataRecordValues[field.fieldName],
+								};
+							}
 
-						return field;
-					},
-					true,
-					true
-				);
+							return field;
+						},
+						true,
+						true
+					);
 
-				dispatch({
-					payload: {
-						editingLanguageId: nextEditingLanguageId,
-						pages: newPages,
-					},
-					type: EVENT_TYPES.ALL,
-				});
+					dispatch({
+						payload: {
+							editingLanguageId: nextEditingLanguageId,
+							pages: newPages,
+						},
+						type: EVENT_TYPES.ALL,
+					});
 
-				dispatch({
-					payload: newDataRecordValues,
-					type: EVENT_TYPES.UPDATE_DATA_RECORD_VALUES,
-				});
+					dispatch({
+						payload: newDataRecordValues,
+						type: EVENT_TYPES.UPDATE_DATA_RECORD_VALUES,
+					});
+				}
 			});
 	};
 }
