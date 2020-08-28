@@ -27,9 +27,13 @@ const formatDataRecord = (languageId, pages) => {
 		localizable,
 		localizedValue,
 		repeatable,
+		type,
 		value,
 		visible,
 	}) => {
+		if (type === 'fieldset') {
+			return;
+		}
 		let _value = value;
 
 		if (!visible) {
@@ -39,10 +43,8 @@ const formatDataRecord = (languageId, pages) => {
 		if (localizable) {
 			if (!dataRecordValues[fieldName]) {
 				dataRecordValues[fieldName] = {
-					...{
-						[languageId]: [],
-					},
 					...localizedValue,
+					[languageId]: [],
 				};
 			}
 
