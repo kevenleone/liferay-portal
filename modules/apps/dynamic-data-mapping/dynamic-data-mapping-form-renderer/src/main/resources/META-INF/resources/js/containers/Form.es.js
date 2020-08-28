@@ -25,6 +25,7 @@ import React, {
 
 import Pages from '../components/Pages.es';
 import {FormProvider, useForm} from '../hooks/useForm.es';
+import appBuilderLanguageUpdate from '../thunks/appBuilderLanguageUpdate.es';
 import formValidate from '../thunks/formValidate.es';
 import pageLanguageUpdate from '../thunks/pageLanguageUpdate.es';
 import {getConnectedReactComponentAdapter} from '../util/ReactComponentAdapter.es';
@@ -142,18 +143,26 @@ const Form = React.forwardRef(
 			updateEditingLanguageId: ({
 				editingLanguageId: nextEditingLanguageId = '',
 				preserveValue,
-			}) =>
-				dispatch(
+			}) => {
+				const props = {
+					ddmStructureLayoutId,
+					nextEditingLanguageId,
+					pages,
+					portletNamespace,
+				};
+
+				if (preserveValue) {
+					return dispatch(appBuilderLanguageUpdate(props));
+				}
+
+				return dispatch(
 					pageLanguageUpdate({
-						ddmStructureLayoutId,
-						nextEditingLanguageId,
-						pages,
-						portletNamespace,
-						preserveValue,
+						...props,
 						prevDataRecordValues: dataRecordValues,
 						prevEditingLanguageId: editingLanguageId,
 					})
-				),
+				);
+			},
 			validate,
 		}));
 
