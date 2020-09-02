@@ -46,6 +46,8 @@ public class MapToDDMFormValuesConverterUtil {
 			stream.forEach(ddmFormValues::addAvailableLocale);
 
 			ddmFormValues.setDefaultLocale(ddmForm.getDefaultLocale());
+
+			locale = ddmForm.getDefaultLocale();
 		}
 		else {
 			ddmFormValues.addAvailableLocale(locale);
