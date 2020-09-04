@@ -21,7 +21,7 @@ import SearchContext, {
 import TableWithPagination from 'app-builder-web/js/components/table/TableWithPagination.es';
 import useDataListView from 'app-builder-web/js/hooks/useDataListView.es';
 import useEntriesActions from 'app-builder-web/js/hooks/useEntriesActions.es';
-import usePermissions from 'app-builder-web/js/hooks/usePermissions.es';
+import {withPermissions} from 'app-builder-web/js/hooks/usePermissions.es';
 import useQuery from 'app-builder-web/js/hooks/useQuery.es';
 import {
 	buildEntries,
@@ -43,7 +43,7 @@ const WORKFLOW_COLUMNS = [
 	{key: 'assignees', value: Liferay.Language.get('assignee')},
 ];
 
-export default function ListEntries({history}) {
+export function ListEntries({history, permissions}) {
 	const {
 		appId,
 		basePortletURL,
@@ -66,7 +66,6 @@ export default function ListEntries({history}) {
 		dataListView: {fieldNames},
 		isLoading,
 	} = useDataListView(dataListViewId, dataDefinitionId);
-	const permissions = usePermissions();
 
 	const [{isFetching, items, totalCount}, setFetchState] = useState({
 		isFetching: true,
@@ -367,3 +366,5 @@ export default function ListEntries({history}) {
 		</Loading>
 	);
 }
+
+export default withPermissions(ListEntries, ['view']);

@@ -20,11 +20,11 @@ import ListView from '../../components/list-view/ListView.es';
 import {Loading} from '../../components/loading/Loading.es';
 import useDataListView from '../../hooks/useDataListView.es';
 import useEntriesActions from '../../hooks/useEntriesActions.es';
-import usePermissions from '../../hooks/usePermissions.es';
+import {withPermissions} from '../../hooks/usePermissions.es';
 import {getLocalizedUserPreferenceValue} from '../../utils/lang.es';
 import {buildEntries, navigateToEditPage} from './utils.es';
 
-export default function ListEntries() {
+export function ListEntries({permissions}) {
 	const {
 		appId,
 		basePortletURL,
@@ -40,8 +40,6 @@ export default function ListEntries() {
 		dataListView: {fieldNames},
 		isLoading,
 	} = useDataListView(dataListViewId, dataDefinitionId);
-
-	const permissions = usePermissions();
 
 	const formColumns = columns.map(({value, ...column}) => ({
 		...column,
@@ -112,3 +110,5 @@ export default function ListEntries() {
 		</Loading>
 	);
 }
+
+export default withPermissions(ListEntries, ['view']);

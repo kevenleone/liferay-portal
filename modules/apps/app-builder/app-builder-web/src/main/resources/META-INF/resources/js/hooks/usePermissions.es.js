@@ -12,7 +12,7 @@
  * details.
  */
 
-import {useContext} from 'react';
+import React, {useContext} from 'react';
 
 import {
 	ACTIONS,
@@ -27,5 +27,21 @@ export default function usePermissions() {
 		delete: actionIds.includes(ACTIONS.DELETE_DATA_RECORD),
 		update: actionIds.includes(ACTIONS.UPDATE_DATA_RECORD),
 		view: actionIds.includes(ACTIONS.VIEW_DATA_RECORD),
+	};
+}
+
+export function withPermissions(Component, permissions) {
+	return (props) => {
+		const userPermissions = usePermissions();
+
+		const hasPermissions = permissions.every(
+			(permission) => userPermissions?.[permission]
+		);
+
+		return hasPermissions ? (
+			<Component {...props} permissions={userPermissions} />
+		) : (
+			<span>User have not permissions to view entries</span>
+		);
 	};
 }
