@@ -46,11 +46,13 @@ export default ({Cell, columns, editMode, item: {originalItem}}) => {
 	return columns.map(({editable, key}, index) => {
 		if (editable) {
 			return (
-				<Cell index={index}>
+				<Cell index={index} key={index}>
 					<ClayForm onSubmit={onSubmit}>
 						<ClayInput
 							autoFocus
+
 							defaultValue={getValue(originalItem, key)}
+
 							onChange={({target: {value}}) => {
 								setState({[key]: value});
 							}}
@@ -63,7 +65,7 @@ export default ({Cell, columns, editMode, item: {originalItem}}) => {
 
 		if (lastColumn === key) {
 			return (
-				<Cell colSpan={columns.length} fieldAlign="right">
+				<Cell colSpan={columns.length} fieldAlign="right" key={index}>
 					<ClayButton
 						disabled={!value}
 						displayType="primary"
@@ -84,6 +86,6 @@ export default ({Cell, columns, editMode, item: {originalItem}}) => {
 			);
 		}
 
-		return <></>;
+		return <td key={index} />
 	});
 };
