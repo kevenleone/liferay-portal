@@ -36,6 +36,8 @@ Map<String, Object> props = HashMapBuilder.<String, Object>put(
 ).put(
 	"dataLayoutId", dataLayoutId
 ).put(
+	"defaultLanguageId", defaultLanguageId
+).put(
 	"fieldSetContentType", fieldSetContentType
 ).put(
 	"fieldTypes", fieldTypesJSONArray

@@ -14,6 +14,7 @@
 
 package com.liferay.data.engine.taglib.servlet.taglib;
 
+import com.liferay.data.engine.rest.dto.v2_0.DataDefinition;
 import com.liferay.data.engine.taglib.servlet.taglib.base.BaseDataLayoutBuilderTag;
 import com.liferay.data.engine.taglib.servlet.taglib.util.DataLayoutTaglibUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -56,12 +57,20 @@ public class DataLayoutBuilderTag extends BaseDataLayoutBuilderTag {
 					"data-engine-taglib/data_layout_builder/js" +
 						"/DataLayoutBuilder.es"));
 
-			if (Validator.isNotNull(getDataDefinitionId()) &&
-				Validator.isNull(getDataLayoutId())) {
+			if (Validator.isNotNull(getDataDefinitionId())) {
+				if (Validator.isNull(getDataLayoutId())) {
+					setDataLayoutId(
+						DataLayoutTaglibUtil.getDefaultDataLayoutId(
+							getDataDefinitionId(), httpServletRequest));
+				}
 
-				setDataLayoutId(
-					DataLayoutTaglibUtil.getDefaultDataLayoutId(
-						getDataDefinitionId(), httpServletRequest));
+				DataDefinition dataDefinition =
+					DataLayoutTaglibUtil.getDataDefinition(
+						getDataDefinitionId(), httpServletRequest);
+
+				setNamespacedAttribute(
+					httpServletRequest, "defaultLanguageId",
+					dataDefinition.getDefaultLanguageId());
 			}
 
 			setNamespacedAttribute(
