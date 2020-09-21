@@ -40,8 +40,8 @@ describe('ListFormViews', () => {
 			...window.Liferay,
 			Util: {
 				...window.Liferay.Util,
-				navigate,
 				PortletURL,
+				navigate,
 			},
 		};
 		spyFromNow = jest

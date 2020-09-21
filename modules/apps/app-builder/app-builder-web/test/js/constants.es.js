@@ -137,7 +137,6 @@ const dataDefinitionField = {
 		ddmDataProviderInstanceOutput: '[]',
 		displayStyle: 'singleline',
 		fieldNamespace: '',
-		rows: '[]',
 		options: {
 			en_US: [
 				{
@@ -149,6 +148,7 @@ const dataDefinitionField = {
 		placeholder: {
 			en_US: '',
 		},
+		rows: '[]',
 		tooltip: {
 			en_US: '',
 		},
@@ -213,13 +213,50 @@ export const DATA_DEFINITION_RESPONSES = {
 	},
 };
 
+const fieldTypes = [
+	{
+		label: 'Date',
+		name: 'date',
+		scope: 'app-builder,forms',
+	},
+	{
+		label: 'Select from List',
+		name: 'select',
+		scope: 'app-builder,forms',
+	},
+	{
+		label: 'Fields Group',
+		name: 'fieldset',
+		scope: 'app-builder,forms',
+	},
+	{
+		label: 'Numeric',
+		name: 'numeric',
+		scope: 'app-builder,forms',
+	},
+	{
+		label: 'Multiple Selection',
+		name: 'checkbox_multiple',
+		scope: 'app-builder,forms',
+	},
+	{
+		label: 'Single Selection',
+		name: 'radio',
+		scope: 'app-builder,forms',
+	},
+	{
+		label: 'Text',
+		name: 'text',
+		scope: 'app-builder,forms',
+	},
+	{
+		label: 'Upload',
+		name: 'document_library',
+		scope: 'app-builder,forms',
+	},
+];
+
 export const dataLayoutBuilderConfig = {
-	appContext: [
-		{},
-		(action) => {
-			props.appContext[0].action = action;
-		},
-	],
 	config: {
 		allowFieldSets: true,
 		allowMultiplePages: false,
@@ -269,52 +306,11 @@ export const formViewContext = {
 	editingDataDefinitionId: 0,
 	editingLanguageId: themeDisplay.getLanguageId(),
 	fieldSets: [],
-	fieldTypes: [
-		{
-			name: 'date',
-			label: 'Date',
-			scope: 'app-builder,forms',
-		},
-		{
-			name: 'select',
-			label: 'Select from List',
-			scope: 'app-builder,forms',
-		},
-		{
-			name: 'fieldset',
-			label: 'Fields Group',
-			scope: 'app-builder,forms',
-		},
-		{
-			name: 'numeric',
-			label: 'Numeric',
-			scope: 'app-builder,forms',
-		},
-		{
-			name: 'checkbox_multiple',
-			label: 'Multiple Selection',
-			scope: 'app-builder,forms',
-		},
-		{
-			name: 'radio',
-			label: 'Single Selection',
-			scope: 'app-builder,forms',
-		},
-		{
-			name: 'text',
-			label: 'Text',
-			scope: 'app-builder,forms',
-		},
-		{
-			name: 'document_library',
-			label: 'Upload',
-			scope: 'app-builder,forms',
-		},
-	],
+	fieldTypes,
 	focusedCustomObjectField: {},
 	focusedField: {},
 	hoveredField: {},
 	sidebarOpen: true,
 	sidebarPanelId: 'fields',
-	spritemap: `${Liferay.ThemeDisplay.getPathThemeImages()}/clay/icons.svg`,
+	spritemap: 'icons.svg',
 };

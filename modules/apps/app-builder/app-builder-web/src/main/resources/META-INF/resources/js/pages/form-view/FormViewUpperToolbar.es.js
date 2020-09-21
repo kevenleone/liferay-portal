@@ -19,12 +19,12 @@ import {
 } from 'data-engine-taglib';
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 
-import saveDataDefinition from './saveDataDefinition.es';
 import {AppContext} from '../../AppContext.es';
 import UpperToolbar from '../../components/upper-toolbar/UpperToolbar.es';
 import {errorToast, successToast} from '../../utils/toast.es';
 import {getValidName} from '../../utils/utils.es';
 import FormViewContext from './FormViewContext.es';
+import saveDataDefinition from './saveDataDefinition.es';
 
 export default ({newCustomObject, showTranslationManager}) => {
 	const [defaultLanguageId, setDefaultLanguageId] = useState('');
@@ -80,7 +80,8 @@ export default ({newCustomObject, showTranslationManager}) => {
 	const onCancel = () => {
 		if (newCustomObject) {
 			Liferay.Util.navigate(basePortletURL);
-		} else {
+		}
+		else {
 			Liferay.Util.navigate(listUrl);
 		}
 	};

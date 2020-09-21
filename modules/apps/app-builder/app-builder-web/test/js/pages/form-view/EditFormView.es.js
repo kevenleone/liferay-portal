@@ -12,12 +12,12 @@
  * details.
  */
 
+import {ClayModalProvider} from '@clayui/modal';
 import {act, cleanup, fireEvent, render} from '@testing-library/react';
 import {DataLayoutBuilder, DataLayoutVisitor} from 'data-engine-taglib';
 import React from 'react';
 import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
-import {ClayModalProvider} from '@clayui/modal';
 
 import {AppContextProvider} from '../../../../src/main/resources/META-INF/resources/js/AppContext.es';
 import EditFormView from '../../../../src/main/resources/META-INF/resources/js/pages/form-view/EditFormView.es';
@@ -44,19 +44,13 @@ describe('EditFormView', () => {
 	let dataLayoutBuilderProps;
 	let dataLayoutVisitorSpy;
 	let successToastSpy;
-	let errorToastSpy;
 
 	beforeEach(() => {
 		dataLayoutBuilderProps = {
 			...dataLayoutBuilder,
-			dispatchAction: jest.fn(),
 			dispatch: jest.fn(),
+			dispatchAction: jest.fn(),
 			getDDMFormFieldSettingsContext: jest.fn(),
-			getLayoutProvider: () => ({
-				getEvents: () => ({
-					fieldHovered: jest.fn(),
-				}),
-			}),
 			getFieldTypes: () => {
 				return [
 					{
@@ -64,6 +58,11 @@ describe('EditFormView', () => {
 					},
 				];
 			},
+			getLayoutProvider: () => ({
+				getEvents: () => ({
+					fieldHovered: jest.fn(),
+				}),
+			}),
 			getState: () => {
 				return formViewContext;
 			},
@@ -94,9 +93,6 @@ describe('EditFormView', () => {
 
 		successToastSpy = jest
 			.spyOn(toast, 'successToast')
-			.mockImplementation(() => {});
-		errorToastSpy = jest
-			.spyOn(toast, 'errorToast')
 			.mockImplementation(() => {});
 
 		jest.useFakeTimers();
@@ -136,7 +132,7 @@ describe('EditFormView', () => {
 	});
 
 	it('renders as edit-form-view and make actions', async () => {
-		const {queryByPlaceholderText, container, debug, queryByText} = render(
+		const {queryByPlaceholderText, queryByText} = render(
 			<AppContextProviderWrapper>
 				<ClayModalProvider>
 					<div className="tools-control-group">
@@ -178,15 +174,16 @@ describe('EditFormView', () => {
 		expect(
 			dataLayoutBuilderProps.dispatchAction.mock.calls[2][0]
 		).toStrictEqual({
-			type: 'UPDATE_DATA_LAYOUT_NAME',
 			payload: {
 				name: {
 					en_US: 'My Form View',
 				},
 			},
+			type: 'UPDATE_DATA_LAYOUT_NAME',
 		});
 
 		expect(dataLayoutBuilderProps.dispatchAction.mock.calls.length).toBe(3);
+		expect(dataLayoutVisitorSpy.mock.calls.length).toBe(1);
 	});
 
 	it('renders as edit-form-view and simulate field add on layout and save it', async () => {
@@ -196,7 +193,7 @@ describe('EditFormView', () => {
 			.mockResponseOnce(response)
 			.mockResponseOnce(JSON.stringify({items: []}));
 
-		const {queryByPlaceholderText, container, debug, queryByText} = render(
+		const {container, queryByText} = render(
 			<AppContextProviderWrapper>
 				<ClayModalProvider>
 					<div className="tools-control-group">
@@ -252,12 +249,12 @@ describe('EditFormView', () => {
 		});
 
 		expect(document.querySelector('.modal')).toBeTruthy();
+		expect(successToastSpy.mock.calls.length).toBe(1);
 	});
 
 	it('renders as new-form-view and make actions', async () => {
 		const {
 			container,
-			debug,
 			queryAllByPlaceholderText,
 			queryAllByText,
 			queryByText,

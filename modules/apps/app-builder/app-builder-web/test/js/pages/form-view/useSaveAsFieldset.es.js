@@ -13,14 +13,9 @@
  */
 
 import {act, cleanup, fireEvent, render} from '@testing-library/react';
-import {DataLayoutBuilder, DataLayoutVisitor} from 'data-engine-taglib';
-import React, {useState, useCallback} from 'react';
-import {ClayModalProvider} from '@clayui/modal';
-import {DataLayoutBuilderActions} from 'data-engine-taglib';
+import {DataLayoutBuilder, DataLayoutBuilderActions} from 'data-engine-taglib';
+import React from 'react';
 
-import {AppContextProvider} from '../../../../src/main/resources/META-INF/resources/js/AppContext.es';
-import EditFormView from '../../../../src/main/resources/META-INF/resources/js/pages/form-view/EditFormView.es';
-import FormViewContextProvider from '../../../../src/main/resources/META-INF/resources/js/pages/form-view/FormViewContextProvider.es';
 import FormViewContext from '../../../../src/main/resources/META-INF/resources/js/pages/form-view/FormViewContext.es';
 import useSaveAsFieldset from '../../../../src/main/resources/META-INF/resources/js/pages/form-view/useSaveAsFieldset.es';
 import * as toast from '../../../../src/main/resources/META-INF/resources/js/utils/toast.es';
@@ -88,10 +83,10 @@ describe('useSaveAsFieldSet', () => {
 		const onClick = jest.fn();
 		const fieldName = 'Text';
 
-		const {debug, queryByText} = render(
+		const {queryByText} = render(
 			<FormViewContextWrapper
-				dispatch={contextDispatch}
 				defaultQuery={formViewContext}
+				dispatch={contextDispatch}
 			>
 				<RenderSaveAsFieldSet
 					dispatch={dispatchFn}

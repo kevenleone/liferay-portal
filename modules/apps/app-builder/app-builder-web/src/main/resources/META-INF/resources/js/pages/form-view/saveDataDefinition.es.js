@@ -36,7 +36,8 @@ const normalizeField = (availableLanguageIds, field) => {
 		availableLanguageIds.reduce((accumulator, currentValue) => {
 			if (value[currentValue] && value[currentValue].length) {
 				accumulator[currentValue] = value[currentValue];
-			} else {
+			}
+			else {
 				accumulator[currentValue] = value[defaultLanguageId];
 			}
 
