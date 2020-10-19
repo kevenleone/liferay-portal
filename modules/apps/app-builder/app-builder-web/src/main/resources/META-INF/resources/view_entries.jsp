@@ -32,7 +32,7 @@
 			).put(
 				"appTab", request.getAttribute(AppBuilderWebKeys.APP_TAB)
 			).put(
-				"appUserPortraitURL", request.getAttribute(AppBuilderWebKeys.APP_USER_PORTRAIT_URL)
+				"portraitURL", request.getAttribute(AppBuilderWebKeys.APP_PORTRAIT_URL)
 			).put(
 				"basePortletURL", String.valueOf(renderResponse.createRenderURL())
 			).put(
