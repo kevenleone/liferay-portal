@@ -58,7 +58,7 @@ const initialState = {
 		unimplementedProperties: [],
 	},
 	dataDefinition: {
-		availableLanguageIds: [],
+		availableLanguageIds: [themeDisplay.getLanguageId()],
 		dataDefinitionFields: [],
 		name: {},
 	},
