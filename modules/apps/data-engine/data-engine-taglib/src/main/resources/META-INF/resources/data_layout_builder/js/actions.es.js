@@ -14,6 +14,7 @@
 
 import {getDataDefinitionField} from './utils/dataDefinition.es';
 import {normalizeDataLayoutRows} from './utils/dataLayoutVisitor.es';
+import {normalizeState} from './utils/saveDataDefinition.es';
 
 export const ADD_CUSTOM_OBJECT_FIELD = 'ADD_CUSTOM_OBJECT_FIELD';
 export const ADD_DATA_LAYOUT_RULE = 'ADD_DATA_LAYOUT_RULE';
@@ -102,18 +103,42 @@ export const dropLayoutBuilderField = ({
 };
 
 export const dropFieldSet = ({
+	availableLanguageIds = [],
 	dataLayoutBuilder,
 	fieldName,
-	fieldSet,
+	fieldSet: _fieldSet,
 	indexes,
 	parentFieldName,
 	useFieldName,
 	...otherProps
 }) => {
+	let fieldSet = _fieldSet;
+
 	const dataLayoutPages = (
 		fieldSet.defaultDataLayout ||
 		dataLayoutBuilder.getDefaultDataLayout(fieldSet)
 	).dataLayoutPages;
+
+	// Only normalize FieldSet if contains ID
+	// This normalize is important to handle with multiple languages
+
+	if (fieldSet.id) {
+		const {normalizedDataDefinition} = normalizeState(
+			{
+				...fieldSet,
+				availableLanguageIds: [
+					...new Set([
+						...availableLanguageIds,
+						...fieldSet.availableLanguageIds,
+					]),
+				],
+			},
+			null,
+			fieldSet.defaultLanguageId
+		);
+
+		fieldSet = normalizedDataDefinition;
+	}
 
 	return {
 		...otherProps,
