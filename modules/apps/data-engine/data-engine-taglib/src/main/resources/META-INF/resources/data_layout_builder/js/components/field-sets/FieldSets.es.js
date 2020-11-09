@@ -100,6 +100,7 @@ export default function FieldSets({keywords}) {
 		dataLayoutBuilder.dispatch(
 			'fieldSetAdded',
 			dropFieldSet({
+				availableLanguageIds: dataDefinition.availableLanguageIds,
 				dataLayoutBuilder,
 				fieldName,
 				fieldSet,
