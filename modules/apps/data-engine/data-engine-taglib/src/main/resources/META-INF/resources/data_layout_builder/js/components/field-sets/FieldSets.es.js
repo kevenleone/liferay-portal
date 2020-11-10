@@ -52,10 +52,11 @@ export default function FieldSets({keywords}) {
 		if (fieldSet) {
 			const {context} = appProps;
 			const {defaultDataLayout, id: dataDefinitionId} = fieldSet;
-			const ddmForm = dataLayoutBuilder.getDDMForm(
+			const ddmForm = dataLayoutBuilder.getFieldSetDDMForm(
 				fieldSet,
-				defaultDataLayout
+				dataDefinition
 			);
+
 			const [{rows}] = ddmForm.pages;
 
 			delete ddmForm.pages;
@@ -166,7 +167,7 @@ export default function FieldSets({keywords}) {
 							if (defaultLanguageId !== fieldSetLanguageId) {
 								editAction = {
 									...editAction,
-									className: 'disabled',
+									className: 'disablexd',
 									popover: {
 										alignPosition: 'left',
 										body: Liferay.Language.get(
