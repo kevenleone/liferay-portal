@@ -139,6 +139,10 @@ const ModalContent = ({
 	);
 
 	useEffect(() => {
+		onEditingLanguageIdChange(defaultLanguageId);
+	}, [defaultLanguageId, onEditingLanguageIdChange]);
+
+	useEffect(() => {
 		if (dataLayoutBuilder) {
 			dataLayoutBuilder.onEditingLanguageIdChange({
 				defaultLanguageId,
