@@ -28,6 +28,7 @@ const ACTIONS = {
 
 const PermissionsContextProvider = ({children, dataDefinitionId}) => {
 	const [actionIds, setActionIds] = useState([]);
+	const [isLoading, setLoading] = useState(true);
 
 	useEffect(() => {
 		getItem(
@@ -38,12 +39,18 @@ const PermissionsContextProvider = ({children, dataDefinitionId}) => {
 					`/o/data-engine/v2.0/data-record-collections/${dataRecordCollectionId}/permissions/by-current-user`
 				)
 			)
-			.then((actionIds) => setActionIds(actionIds))
-			.catch((_) => setActionIds([]));
+			.then((actionIds) => {
+				setLoading(false);
+				setActionIds(actionIds);
+			})
+			.catch(() => {
+				setLoading(false);
+				setActionIds([]);
+			});
 	}, [dataDefinitionId]);
 
 	return (
-		<PermissionsContext.Provider value={actionIds}>
+		<PermissionsContext.Provider value={{actionIds, isLoading}}>
 			{children}
 		</PermissionsContext.Provider>
 	);

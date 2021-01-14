@@ -163,6 +163,13 @@ export const EditEntry = ({
 		});
 	}, [ddmForm, userLanguageId]);
 
+	useEffect(() => {
+		const formTaglib = document.getElementById('form-taglib');
+		if (formTaglib) {
+			formTaglib.classList.remove('hide');
+		}
+	}, []);
+
 	return (
 		<>
 			<ControlMenuBase

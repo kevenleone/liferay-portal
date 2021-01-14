@@ -70,7 +70,7 @@ export default function ListEntries({history}) {
 		dataDefinition,
 		dataListView: {fieldNames},
 		isLoading,
-	} = useDataListView(dataListViewId, dataDefinitionId, permissions.view);
+	} = useDataListView(dataListViewId, dataDefinitionId);
 
 	const [{isFetching, items, totalCount}, setFetchState] = useState({
 		isFetching: true,

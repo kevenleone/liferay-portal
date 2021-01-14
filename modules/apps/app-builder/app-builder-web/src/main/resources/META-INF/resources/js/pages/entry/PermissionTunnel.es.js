@@ -14,26 +14,24 @@
 
 import React from 'react';
 
-import {
-	ACTIONS,
-	PermissionsContext,
-} from '../../src/main/resources/META-INF/resources/js/pages/entry/PermissionsContext.es';
+import {LoadingComponent} from '../../components/loading/Loading.es';
+import usePermissions from '../../hooks/usePermissions.es';
+import NoPermissionEntry from './NoPermissionEntry.es';
 
-const defaultActionIds = [
-	ACTIONS.ADD_DATA_RECORD,
-	ACTIONS.DELETE_DATA_RECORD,
-	ACTIONS.UPDATE_DATA_RECORD,
-	ACTIONS.VIEW,
-	ACTIONS.VIEW_DATA_RECORD,
-];
+export default function PermissionTunnel({children, permissionType}) {
+	const {isLoading, ...permissions} = usePermissions();
+	const withPermission = Array.isArray(permissionType)
+		? permissionType.some((key) => permissions[key])
+		: permissions[permissionType];
 
-export default function PermissionsContextProviderWrapper({
-	children,
-	actionIds = defaultActionIds,
-}) {
-	return (
-		<PermissionsContext.Provider value={{actionIds, isLoading: false}}>
-			{children}
-		</PermissionsContext.Provider>
-	);
+	if (isLoading) {
+		return <LoadingComponent />;
+	}
+	else {
+		if (withPermission) {
+			return children;
+		}
+
+		return <NoPermissionEntry />;
+	}
 }

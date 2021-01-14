@@ -17,6 +17,7 @@ import {HashRouter as Router, Route, Switch} from 'react-router-dom';
 
 import {AppContextProvider} from '../../AppContext.es';
 import useLazy from '../../hooks/useLazy.es';
+import PermissionTunnel from './PermissionTunnel.es';
 import {PermissionsContextProvider} from './PermissionsContext.es';
 import PortalEntry, {getStorageLanguageId} from './PortalEntry.es';
 
@@ -27,7 +28,10 @@ export default function ({appTab, ...props}) {
 	const [userLanguageId, setUserLanguageId] = useState(defaultLanguageId);
 	const [showAppName, setShowAppName] = useState(false);
 
-	props.userLanguageId = userLanguageId;
+	const newProps = {
+		...props,
+		userLanguageId,
+	};
 
 	const ListPage = (props) => {
 		useEffect(() => {
@@ -47,7 +51,7 @@ export default function ({appTab, ...props}) {
 
 	return (
 		<div className="app-builder-root">
-			<AppContextProvider {...props}>
+			<AppContextProvider {...newProps}>
 				<PermissionsContextProvider dataDefinitionId={dataDefinitionId}>
 					<PortalEntry
 						dataDefinitionId={dataDefinitionId}
@@ -55,15 +59,17 @@ export default function ({appTab, ...props}) {
 						showAppName={showAppName}
 						userLanguageId={userLanguageId}
 					/>
-					<Router>
-						<Switch>
-							<Route component={ListPage} exact path="/" />
-							<Route
-								component={ViewPage}
-								path="/entries/:entryIndex(\d+)"
-							/>
-						</Switch>
-					</Router>
+					<PermissionTunnel permissionType="view">
+						<Router>
+							<Switch>
+								<Route component={ListPage} exact path="/" />
+								<Route
+									component={ViewPage}
+									path="/entries/:entryIndex(\d+)"
+								/>
+							</Switch>
+						</Router>
+					</PermissionTunnel>
 				</PermissionsContextProvider>
 			</AppContextProvider>
 		</div>

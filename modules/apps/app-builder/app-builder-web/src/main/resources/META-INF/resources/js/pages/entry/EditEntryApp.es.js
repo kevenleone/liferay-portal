@@ -16,6 +16,7 @@ import React, {useState} from 'react';
 
 import {AppContextProvider} from '../../AppContext.es';
 import useLazy from '../../hooks/useLazy.es';
+import PermissionTunnel from './PermissionTunnel.es';
 import {PermissionsContextProvider} from './PermissionsContext.es';
 import PortalEntry, {getStorageLanguageId} from './PortalEntry.es';
 
@@ -25,10 +26,13 @@ export default ({appTab, ...props}) => {
 	const defaultLanguageId = getStorageLanguageId(appId);
 	const [userLanguageId, setUserLanguageId] = useState(defaultLanguageId);
 
-	props.userLanguageId = userLanguageId;
+	const newProps = {
+		...props,
+		userLanguageId,
+	};
 
 	return (
-		<AppContextProvider {...props}>
+		<AppContextProvider {...newProps}>
 			<PermissionsContextProvider dataDefinitionId={dataDefinitionId}>
 				<PortalEntry
 					dataDefinitionId={props.dataDefinitionId}
@@ -36,7 +40,9 @@ export default ({appTab, ...props}) => {
 					userLanguageId={userLanguageId}
 				/>
 
-				<EditPage module={appTab.editEntryPoint} props={props} />
+				<PermissionTunnel permissionType={['update', 'add']}>
+					<EditPage module={appTab.editEntryPoint} props={newProps} />
+				</PermissionTunnel>
 			</PermissionsContextProvider>
 		</AppContextProvider>
 	);
