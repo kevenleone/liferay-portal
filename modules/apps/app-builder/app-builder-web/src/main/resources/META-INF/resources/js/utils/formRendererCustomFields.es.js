@@ -12,8 +12,10 @@
  * details.
  */
 
+import LabelField from '../components/form-renderer-custom-fields/LabelField.es';
 import RequiredField from '../components/form-renderer-custom-fields/RequiredField.es';
 
 export default {
+	label: LabelField,
 	required: RequiredField,
 };
