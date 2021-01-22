@@ -1,0 +1,65 @@
+@component-name = "app-builder"
+definition {
+    property testray.main.component.name = "App Builder";
+
+    setUp {
+        TestCase.setUpPortalInstance();
+
+        User.firstLoginPG();
+
+        Navigator.openURL();
+    }
+/*
+    tearDown {
+        User.logoutAndLoginPG(
+            userLoginEmailAddress = "test@liferay.com",
+            userLoginFullName = "Test Test");
+    }
+*/
+    @description = "Access Portal Global Menu and validate CONFIGURATION string at Control Panel"
+    @priority = "5"
+    test ValidateConfigurationStringAtControlPanel {
+
+        Click(locator1 = "//button[@data-qa-id='applicationsMenu']");
+
+        Click(locator1 = "//span[text()='Control Panel']");
+
+        var label = "Configuration";
+
+        AssertTextEquals(
+			locator1 = "MyPath#MY_STRING",
+			value1 = "${label}");
+        
+    }
+
+    @description = "Set Screen size to custom and validate values"
+    @priority = "5"
+    test SetScreenSizeAndValidateValues {
+
+        Click(locator1 = "//a[@data-qa-id='simulation']");
+        
+        Click(locator1 = "//button[@data-device='custom']");
+
+        Click(locator1 = "//input[contains(@id,'height')]");
+
+        Type(
+			locator1 = "MyPath#HEIGHT",
+			value1 = "1920");
+
+        Type(
+			locator1 = "MyPath#WIDTH",
+			value1 = "1080");
+
+        Click(locator1 = "//div[contains(@class,'sidebar-header')]//a[contains(@class,'sidenav-close')]");
+
+        Click(locator1 = "//a[@data-qa-id='simulation']");
+
+		AssertTextEquals(
+			locator1 = "MyPath#HEIGHT",
+			value1 = "1920");
+
+        AssertTextEquals(
+			locator1 = "MyPath#WIDTH",
+			value1 = "1080");
+    }
+}

@@ -1,0 +1,35 @@
+<html>
+<head>
+<title>MyPath</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">MyPath</td></tr>
+</thead>
+<tbody>
+
+<tr>
+	<td>MY_STRING</td>
+	<td>//h2[text()='${label}']</td>
+	<td></td>
+</tr>
+
+<tr>
+	<td>HEIGHT</td>
+	<td>//input[contains(@id,'height')]</td>
+	<td></td>
+</tr>
+
+<tr>
+	<td>WIDTH</td>
+	<td>//input[contains(@id,'width')]</td>
+	<td></td>
+</tr>
+
+
+
+</tbody>
+</table>
+</body>
+</html>
