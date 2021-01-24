@@ -33,7 +33,7 @@ definition {
     }
 
     @description = "Set Screen size to custom and validate values"
-    @priority = "5"
+    @priority = "4"
     test SetScreenSizeAndValidateValues {
 
         Click(locator1 = "//a[@data-qa-id='simulation']");
