@@ -12,10 +12,24 @@
  * details.
  */
 
-import LabelField from '../components/form-renderer-custom-fields/LabelField.es';
-import RequiredField from '../components/form-renderer-custom-fields/RequiredField.es';
+import {useEffect} from 'react';
+import isClickOutside from '../../utils/clickOutside.es';
 
-export default {
-	label: LabelField,
-	required: RequiredField,
-};
+export default function useClickOutside(refs = [], setValue) {
+	useEffect(() => {
+		const handler = ({target}) => {
+			const outside = isClickOutside(
+				target,
+				...refs.map(ref => ref?.current)
+			);
+
+			if (outside) {
+				setValue(false);
+			}
+		};
+
+		window.addEventListener('click', handler);
+
+		return () => window.removeEventListener('click', handler);
+	}, [...refs]);
+}
