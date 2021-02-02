@@ -12,12 +12,12 @@
  * details.
  */
 
+import Loading from 'data-engine-js-api/js/components/loading/Loading.es';
 import {usePrevious} from 'frontend-js-react-web';
 import React, {useContext, useEffect, useState} from 'react';
 
 import {AppContext} from '../../AppContext.es';
 import ControlMenu from '../../components/control-menu/ControlMenu.es';
-import {Loading} from '../../components/loading/Loading.es';
 import useDataLayout from '../../hooks/useDataLayout.es';
 import useQuery from '../../hooks/useQuery.es';
 import {getItem} from '../../utils/client.es';
@@ -215,7 +215,10 @@ export default function ViewEntry({
 				{dataRecord && <ViewEntryInfoBar {...dataRecord} />}
 			</ViewEntryUpperToolbar>
 
-			<Loading isLoading={isLoading || isFetching}>
+			<Loading
+				className="loading-wrapper"
+				isLoading={isLoading || isFetching}
+			>
 				<div className="container">
 					<div className="justify-content-center row">
 						<div className="col-lg-8">
