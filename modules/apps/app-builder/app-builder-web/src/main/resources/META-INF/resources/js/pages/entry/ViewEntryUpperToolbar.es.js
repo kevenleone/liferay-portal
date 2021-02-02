@@ -15,13 +15,13 @@
 import {ClayButtonWithIcon} from '@clayui/button';
 import ClayButtonGroup from '@clayui/button/lib/Group';
 import {ClayTooltipProvider} from '@clayui/tooltip';
+import {confirmDelete} from 'data-engine-js-components-web/js/utils/client.es';
 import React, {useContext} from 'react';
 import {withRouter} from 'react-router-dom';
 
 import {AppContext} from '../../AppContext.es';
 import UpperToolbar from '../../components/upper-toolbar/UpperToolbar.es';
 import usePermissions from '../../hooks/usePermissions.es';
-import {confirmDelete} from '../../utils/client.es';
 import {sub} from '../../utils/lang.es';
 import {navigateToEditPage} from './utils.es';
 

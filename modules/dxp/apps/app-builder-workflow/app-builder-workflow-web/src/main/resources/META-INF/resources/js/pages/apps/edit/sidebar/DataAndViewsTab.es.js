@@ -23,9 +23,9 @@ import {
 	UPDATE_DATA_LIST_VIEW_ID,
 } from 'app-builder-web/js/pages/apps/edit/EditAppContext.es';
 import {getLocalizedValue, sub} from 'app-builder-web/js/utils/lang.es';
-import {successToast} from 'app-builder-web/js/utils/toast.es';
 import {concatValues} from 'app-builder-web/js/utils/utils.es';
 import classNames from 'classnames';
+import {successToast} from 'data-engine-js-components-web/js/utils/toast.es';
 import {DataDefinitionUtils} from 'data-engine-taglib';
 import {openModal} from 'frontend-js-web';
 import React, {createContext, useContext} from 'react';

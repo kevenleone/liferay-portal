@@ -12,10 +12,10 @@
  * details.
  */
 
+import {request} from 'data-engine-js-components-web/js/utils/client.es';
 import {usePrevious} from 'frontend-js-react-web';
 import {useEffect, useState} from 'react';
 
-import {request} from '../utils/client.es';
 import {isEqualObjects} from '../utils/utils.es';
 
 export default ({endpoint, method, params}) => {

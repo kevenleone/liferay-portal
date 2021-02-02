@@ -9,8 +9,8 @@
  * distribution rights of the Software.
  */
 
-import {getItem} from 'app-builder-web/js/utils/client.es';
 import {getLocalizedValue} from 'app-builder-web/js/utils/lang.es';
+import {getItem} from 'data-engine-js-components-web/js/utils/client.es';
 
 import {getFormViewFields, validateSelectedFormViews} from './utils.es';
 

@@ -14,7 +14,7 @@
 
 import {fetch} from 'frontend-js-web';
 
-import {errorToast, successToast} from '../utils/toast.es';
+import {errorToast, successToast} from './toast.es';
 
 const HEADERS = {
 	Accept: 'application/json',
