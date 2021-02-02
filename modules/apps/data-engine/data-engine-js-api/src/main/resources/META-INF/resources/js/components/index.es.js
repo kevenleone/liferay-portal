@@ -12,10 +12,6 @@
  * details.
  */
 
-import {helloWorld} from '../../src/main/resources/META-INF/resources/js/index.es';
+import * as Loading from './loading/Loading.es';
 
-describe('Hello World', () => {
-	it('function should return hello world', () => {
-		expect(helloWorld()).toBe('Hello World Liferay Module');
-	});
-});
+export {Loading};
