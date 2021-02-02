@@ -12,12 +12,12 @@
  * details.
  */
 
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
+import useQuery from 'data-engine-js-components-web/js/hooks/useQuery.es';
 import {errorToast} from 'data-engine-js-components-web/js/utils/toast.es';
 import React, {useCallback, useContext, useEffect} from 'react';
 import {withRouter} from 'react-router-dom';
 
-import {AppContext} from '../../AppContext.es';
-import useQuery from '../../hooks/useQuery.es';
 import useResource from '../../hooks/useResource.es';
 import ManagementToolbar from '../management-toolbar/ManagementToolbar.es';
 import ManagementToolbarResultsBar, {

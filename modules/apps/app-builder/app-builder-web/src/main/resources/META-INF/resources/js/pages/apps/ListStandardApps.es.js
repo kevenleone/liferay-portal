@@ -13,9 +13,9 @@
  */
 
 import ClayPopover from '@clayui/popover';
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 
-import {AppContext} from '../../AppContext.es';
 import Button from '../../components/button/Button.es';
 import isClickOutside from '../../utils/clickOutside.es';
 import ListApps from './ListApps.es';

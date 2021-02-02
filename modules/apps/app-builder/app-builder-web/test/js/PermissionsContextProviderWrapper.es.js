@@ -12,12 +12,11 @@
  * details.
  */
 
-import React from 'react';
-
 import {
 	ACTIONS,
 	PermissionsContext,
-} from '../../src/main/resources/META-INF/resources/js/pages/entry/PermissionsContext.es';
+} from 'data-engine-js-components-web/js/components/entry/PermissionContext.es';
+import React from 'react';
 
 const defaultActionIds = [
 	ACTIONS.ADD_DATA_RECORD,

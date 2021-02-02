@@ -12,6 +12,8 @@
  * details.
  */
 
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
+import useQuery from 'data-engine-js-components-web/js/hooks/useQuery.es';
 import {
 	addItem,
 	parseResponse,
@@ -24,10 +26,8 @@ import {
 import {createResourceURL, fetch} from 'frontend-js-web';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 
-import {AppContext} from '../../AppContext.es';
 import Button from '../../components/button/Button.es';
 import {useKeyDown} from '../../hooks/index.es';
-import useQuery from '../../hooks/useQuery.es';
 import isClickOutside from '../../utils/clickOutside.es';
 import {getValidName} from '../../utils/utils.es';
 import ListObjects from '../object/ListObjects.es';

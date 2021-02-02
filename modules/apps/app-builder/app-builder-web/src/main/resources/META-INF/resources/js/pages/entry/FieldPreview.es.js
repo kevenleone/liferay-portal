@@ -17,10 +17,10 @@ import ClayIcon from '@clayui/icon';
 import {SheetSection} from '@clayui/layout';
 import ClayPanel from '@clayui/panel';
 import {ClayTooltipProvider} from '@clayui/tooltip';
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import {DataDefinitionUtils} from 'data-engine-taglib';
 import React, {useContext, useEffect, useState} from 'react';
 
-import {AppContext} from '../../AppContext.es';
 import {getLocalizedUserPreferenceValue} from '../../utils/lang.es';
 
 const createFileEntryPreviewURL = (groupId, fileEntryId) => {

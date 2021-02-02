@@ -11,15 +11,15 @@
 
 import {ClayButtonWithIcon} from '@clayui/button';
 import {ClayTooltipProvider} from '@clayui/tooltip';
-import {AppContext} from 'app-builder-web/js/AppContext.es';
 import ControlMenu from 'app-builder-web/js/components/control-menu/ControlMenu.es';
 import useDataDefinition from 'app-builder-web/js/hooks/useDataDefinition.es';
-import useQuery from 'app-builder-web/js/hooks/useQuery.es';
 import {ViewDataLayoutPageValues} from 'app-builder-web/js/pages/entry/ViewEntry.es';
 import ViewEntryUpperToolbar from 'app-builder-web/js/pages/entry/ViewEntryUpperToolbar.es';
 import {getLocalizedUserPreferenceValue} from 'app-builder-web/js/utils/lang.es';
 import {isEqualObjects} from 'app-builder-web/js/utils/utils.es';
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import Loading from 'data-engine-js-components-web/js/components/loading/Loading.es';
+import useQuery from 'data-engine-js-components-web/js/hooks/useQuery.es';
 import {
 	addItem,
 	getItem,

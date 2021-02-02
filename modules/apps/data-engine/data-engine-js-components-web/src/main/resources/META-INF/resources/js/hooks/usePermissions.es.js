@@ -17,7 +17,7 @@ import {useContext} from 'react';
 import {
 	ACTIONS,
 	PermissionsContext,
-} from '../pages/entry/PermissionsContext.es';
+} from '../components/entry/PermissionContext.es';
 
 export default function usePermissions() {
 	const {actionIds, isLoading} = useContext(PermissionsContext);

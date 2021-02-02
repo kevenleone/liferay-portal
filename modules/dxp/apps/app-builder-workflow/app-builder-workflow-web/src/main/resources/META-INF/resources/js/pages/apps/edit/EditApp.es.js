@@ -9,7 +9,7 @@
  * distribution rights of the Software.
  */
 
-import {AppContext} from 'app-builder-web/js/AppContext.es';
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import ControlMenu from 'app-builder-web/js/components/control-menu/ControlMenu.es';
 import {getDataObjects} from 'app-builder-web/js/components/select-objects/SelectObjects.es';
 import EditAppContext, {

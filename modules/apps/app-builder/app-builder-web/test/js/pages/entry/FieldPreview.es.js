@@ -13,9 +13,9 @@
  */
 
 import {cleanup, render} from '@testing-library/react';
+import {AppContextProvider} from 'data-engine-js-components-web/js/AppContext.es';
 import React from 'react';
 
-import {AppContextProvider} from '../../../../src/main/resources/META-INF/resources/js/AppContext.es';
 import FieldPreview, {
 	SectionRenderer,
 } from '../../../../src/main/resources/META-INF/resources/js/pages/entry/FieldPreview.es';

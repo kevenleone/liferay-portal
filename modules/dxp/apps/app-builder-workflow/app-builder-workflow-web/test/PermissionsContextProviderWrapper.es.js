@@ -12,7 +12,7 @@
 import {
 	ACTIONS,
 	PermissionsContext,
-} from 'app-builder-web/js/pages/entry/PermissionsContext.es';
+} from 'data-engine-js-components-web/js/components/entry/PermissionContext.es';
 import React from 'react';
 
 const defaultActionIds = [

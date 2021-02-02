@@ -14,9 +14,9 @@
 
 import ClayLayout from '@clayui/layout';
 import ClayLink from '@clayui/link';
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import React, {useContext} from 'react';
 
-import {AppContext} from '../../../AppContext.es';
 import MultiStepNav from '../../../components/multi-step-nav/MultiStepNav.es';
 import DeployApp from './DeployApp.es';
 import EditAppContext, {

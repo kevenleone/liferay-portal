@@ -13,6 +13,7 @@
  */
 
 import ClayLayout from '@clayui/layout';
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import {
 	addItem,
 	updateItem,
@@ -24,7 +25,6 @@ import {
 import React, {useContext, useState} from 'react';
 import {withRouter} from 'react-router-dom';
 
-import {AppContext} from '../../../AppContext.es';
 import Button from '../../../components/button/Button.es';
 import {normalizeNames} from '../../../utils/utils.es';
 import EditAppContext from './EditAppContext.es';

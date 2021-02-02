@@ -12,12 +12,12 @@
  * details.
  */
 
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import React, {useContext, useState} from 'react';
 import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 import {createPortal} from 'react-dom';
 
-import {AppContext} from '../../AppContext.es';
 import {ControlMenuBase} from '../../components/control-menu/ControlMenu.es';
 import CustomObjectSidebar from './CustomObjectSidebar.es';
 import FormViewContextProvider from './FormViewContextProvider.es';

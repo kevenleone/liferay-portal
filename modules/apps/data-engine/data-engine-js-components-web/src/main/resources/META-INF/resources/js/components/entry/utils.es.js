@@ -12,20 +12,12 @@
  * details.
  */
 
-import {ClayModalProvider} from '@clayui/modal';
-import {AppContextProvider} from 'data-engine-js-components-web/js/AppContext.es';
-import React from 'react';
-
-import EditFormView from './EditFormView.es';
-
-const EditFormViewApp = ({basePortletURL, ...otherProps}) => {
-	return (
-		<AppContextProvider basePortletURL={basePortletURL}>
-			<ClayModalProvider>
-				<EditFormView {...otherProps} />
-			</ClayModalProvider>
-		</AppContextProvider>
+export function navigateToEditPage(basePortletURL, params = {}) {
+	Liferay.Util.navigate(
+		Liferay.Util.PortletURL.createRenderURL(basePortletURL, {
+			dataRecordId: 0,
+			mvcPath: '/edit_app_entry.jsp',
+			...params,
+		})
 	);
-};
-
-export default EditFormViewApp;
+}

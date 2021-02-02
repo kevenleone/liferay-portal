@@ -12,12 +12,12 @@
  * details.
  */
 
+import {AppContextProvider} from 'data-engine-js-components-web/js/AppContext.es';
+import {PermissionsContextProvider} from 'data-engine-js-components-web/js/components/entry/PermissionContext.es';
 import React, {useState} from 'react';
 
-import {AppContextProvider} from '../../AppContext.es';
 import useLazy from '../../hooks/useLazy.es';
 import PermissionTunnel from './PermissionTunnel.es';
-import {PermissionsContextProvider} from './PermissionsContext.es';
 import PortalEntry, {getStorageLanguageId} from './PortalEntry.es';
 
 export default ({appTab, ...props}) => {

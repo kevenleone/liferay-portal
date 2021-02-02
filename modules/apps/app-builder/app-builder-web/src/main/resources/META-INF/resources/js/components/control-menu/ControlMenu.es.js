@@ -14,11 +14,10 @@
 
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import React, {useContext, useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
 import {Link as InternalLink, withRouter} from 'react-router-dom';
-
-import {AppContext} from '../../AppContext.es';
 
 const ExternalLink = ({children, to, ...props}) => {
 	return (

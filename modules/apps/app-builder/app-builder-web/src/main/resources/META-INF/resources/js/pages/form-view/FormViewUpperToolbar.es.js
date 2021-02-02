@@ -13,6 +13,7 @@
  */
 
 import ClayButton from '@clayui/button';
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import {
 	errorToast,
 	successToast,
@@ -25,7 +26,6 @@ import {
 } from 'data-engine-taglib';
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 
-import {AppContext} from '../../AppContext.es';
 import UpperToolbar from '../../components/upper-toolbar/UpperToolbar.es';
 import {normalizeNames} from '../../utils/utils.es';
 import FormViewContext from './FormViewContext.es';

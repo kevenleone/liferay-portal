@@ -12,9 +12,9 @@
  * details.
  */
 
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import React, {useContext, useEffect} from 'react';
 
-import {AppContext} from '../../AppContext.es';
 import ControlMenu from '../../components/control-menu/ControlMenu.es';
 import NavigationBar from '../../components/navigation-bar/NavigationBar.es';
 import useLazy from '../../hooks/useLazy.es';

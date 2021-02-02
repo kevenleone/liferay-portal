@@ -13,10 +13,10 @@
  */
 
 import {cleanup, render} from '@testing-library/react';
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import React from 'react';
 import {HashRouter} from 'react-router-dom';
 
-import {AppContext} from '../../../../src/main/resources/META-INF/resources/js/AppContext.es';
 import ControlMenu from '../../../../src/main/resources/META-INF/resources/js/components/control-menu/ControlMenu.es';
 
 describe('ControlMenu', () => {

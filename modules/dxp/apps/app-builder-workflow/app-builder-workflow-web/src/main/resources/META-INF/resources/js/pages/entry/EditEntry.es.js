@@ -11,10 +11,10 @@
 
 import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
 import {ClayTooltipProvider} from '@clayui/tooltip';
-import {AppContext} from 'app-builder-web/js/AppContext.es';
 import {ControlMenuBase} from 'app-builder-web/js/components/control-menu/ControlMenu.es';
 import useDataDefinition from 'app-builder-web/js/hooks/useDataDefinition.es';
 import {getLocalizedUserPreferenceValue} from 'app-builder-web/js/utils/lang.es';
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import Loading from 'data-engine-js-components-web/js/components/loading/Loading.es';
 import {getItem} from 'data-engine-js-components-web/js/utils/client.es';
 import {

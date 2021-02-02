@@ -13,10 +13,10 @@
  */
 
 import ClayButton from '@clayui/button';
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import {compile} from 'path-to-regexp';
 import React, {useContext, useState} from 'react';
 
-import {AppContext} from '../../AppContext.es';
 import Popover from '../../components/popover/Popover.es';
 import SelectObjects from '../../components/select-objects/SelectObjects.es';
 import useBackUrl from '../../hooks/useBackUrl.es';

@@ -10,7 +10,6 @@
  */
 
 import ClayLabel from '@clayui/label';
-import {AppContext} from 'app-builder-web/js/AppContext.es';
 import Button from 'app-builder-web/js/components/button/Button.es';
 import NoPermissionState from 'app-builder-web/js/components/empty-state/NoPermissionState.es';
 import ManagementToolbar from 'app-builder-web/js/components/management-toolbar/ManagementToolbar.es';
@@ -19,17 +18,18 @@ import SearchContext, {
 	reducer,
 } from 'app-builder-web/js/components/management-toolbar/SearchContext.es';
 import TableWithPagination from 'app-builder-web/js/components/table/TableWithPagination.es';
-import useDataListView from 'app-builder-web/js/hooks/useDataListView.es';
-import useEntriesActions from 'app-builder-web/js/hooks/useEntriesActions.es';
-import usePermissions from 'app-builder-web/js/hooks/usePermissions.es';
-import useQuery from 'app-builder-web/js/hooks/useQuery.es';
 import {
 	buildEntries,
 	navigateToEditPage,
 } from 'app-builder-web/js/pages/entry/utils.es';
 import {getLocalizedUserPreferenceValue} from 'app-builder-web/js/utils/lang.es';
 import {concatValues, isEqualObjects} from 'app-builder-web/js/utils/utils.es';
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import Loading from 'data-engine-js-components-web/js/components/loading/Loading.es';
+import useDataListView from 'data-engine-js-components-web/js/hooks/useDataListView.es';
+import useEntriesActions from 'data-engine-js-components-web/js/hooks/useEntriesActions.es';
+import usePermissions from 'data-engine-js-components-web/js/hooks/usePermissions.es';
+import useQuery from 'data-engine-js-components-web/js/hooks/useQuery.es';
 import {getItem} from 'data-engine-js-components-web/js/utils/client.es';
 import {errorToast} from 'data-engine-js-components-web/js/utils/toast.es';
 import {usePrevious} from 'frontend-js-react-web';

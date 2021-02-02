@@ -9,7 +9,7 @@
  * distribution rights of the Software.
  */
 
-import {AppContextProvider} from 'app-builder-web/js/AppContext.es';
+import {AppContextProvider} from 'data-engine-js-components-web/js/AppContext.es';
 import {createMemoryHistory} from 'history';
 import React from 'react';
 import {HashRouter} from 'react-router-dom';

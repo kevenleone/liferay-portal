@@ -14,12 +14,15 @@
 
 import {ClayModalProvider} from '@clayui/modal';
 import classNames from 'classnames';
+import {
+	AppContext,
+	AppContextProvider,
+} from 'data-engine-js-components-web/js/AppContext.es';
 import React, {useContext} from 'react';
 import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 import {HashRouter as Router, Route, Switch} from 'react-router-dom';
 
-import {AppContext, AppContextProvider} from './AppContext.es';
 import NavigationBar from './components/navigation-bar/NavigationBar.es';
 import ListCustomObjects from './pages/custom-object/ListCustomObjects.es';
 import ListNativeObjects from './pages/native-object/ListNativeObjects.es';

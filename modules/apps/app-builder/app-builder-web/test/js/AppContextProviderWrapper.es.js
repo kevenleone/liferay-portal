@@ -12,11 +12,10 @@
  * details.
  */
 
+import {AppContextProvider} from 'data-engine-js-components-web/js/AppContext.es';
 import {createMemoryHistory} from 'history';
 import React from 'react';
 import {HashRouter} from 'react-router-dom';
-
-import {AppContextProvider} from '../../src/main/resources/META-INF/resources/js/AppContext.es';
 
 export default ({
 	children,

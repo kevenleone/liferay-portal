@@ -10,10 +10,10 @@
  */
 
 import ClayPopover from '@clayui/popover';
-import {AppContext} from 'app-builder-web/js/AppContext.es';
 import Button from 'app-builder-web/js/components/button/Button.es';
 import ListApps, {Actions} from 'app-builder-web/js/pages/apps/ListApps.es';
 import {COLUMNS, FILTERS} from 'app-builder-web/js/pages/apps/constants.es';
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import {parseResponse} from 'data-engine-js-components-web/js/utils/client.es';
 import {
 	errorToast,

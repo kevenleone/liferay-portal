@@ -13,10 +13,10 @@
  */
 
 import {ClayModalProvider} from '@clayui/modal';
+import {AppContextProvider} from 'data-engine-js-components-web/js/AppContext.es';
 import React from 'react';
 import {HashRouter as Router, Route, Switch} from 'react-router-dom';
 
-import {AppContextProvider} from '../../AppContext.es';
 import useLazy from '../../hooks/useLazy.es';
 import ListAppsTabs from './ListAppsTabs.es';
 

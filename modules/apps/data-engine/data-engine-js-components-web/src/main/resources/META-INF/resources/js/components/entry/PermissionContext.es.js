@@ -12,8 +12,9 @@
  * details.
  */
 
-import {getItem} from 'data-engine-js-components-web/js/utils/client.es';
 import React, {createContext, useEffect, useState} from 'react';
+
+import {getItem} from '../../utils/client.es';
 
 const PermissionsContext = createContext();
 

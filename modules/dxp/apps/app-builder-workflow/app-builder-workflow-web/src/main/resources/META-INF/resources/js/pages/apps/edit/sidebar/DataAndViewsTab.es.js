@@ -14,7 +14,7 @@ import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
 import {ClayRadio, ClayRadioGroup} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import {ClayTooltipProvider} from '@clayui/tooltip';
-import {AppContext} from 'app-builder-web/js/AppContext.es';
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import Button from 'app-builder-web/js/components/button/Button.es';
 import SelectObjects from 'app-builder-web/js/components/select-objects/SelectObjects.es';
 import {

@@ -12,20 +12,30 @@
  * details.
  */
 
-import {ClayModalProvider} from '@clayui/modal';
-import {AppContextProvider} from 'data-engine-js-components-web/js/AppContext.es';
-import React from 'react';
+import React, {createContext} from 'react';
 
-import EditFormView from './EditFormView.es';
+const AppContext = createContext();
 
-const EditFormViewApp = ({basePortletURL, ...otherProps}) => {
+const AppContextProvider = ({
+	children,
+	pathFriendlyURLPublic,
+	portletNamespace,
+	...restProps
+}) => {
+	const getStandaloneURL = (appId) =>
+		`${Liferay.ThemeDisplay.getPortalURL()}${pathFriendlyURLPublic}/App${appId}`;
+
 	return (
-		<AppContextProvider basePortletURL={basePortletURL}>
-			<ClayModalProvider>
-				<EditFormView {...otherProps} />
-			</ClayModalProvider>
-		</AppContextProvider>
+		<AppContext.Provider
+			value={{
+				getStandaloneURL,
+				namespace: portletNamespace,
+				...restProps,
+			}}
+		>
+			{children}
+		</AppContext.Provider>
 	);
 };
 
-export default EditFormViewApp;
+export {AppContext, AppContextProvider};

@@ -13,12 +13,12 @@
  */
 
 import ClayLabel from '@clayui/label';
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import {confirmDelete} from 'data-engine-js-components-web/js/utils/client.es';
 import {compile} from 'path-to-regexp';
 import React, {useContext} from 'react';
 import {Link} from 'react-router-dom';
 
-import {AppContext} from '../../AppContext.es';
 import Button from '../../components/button/Button.es';
 import ListView from '../../components/list-view/ListView.es';
 import useBackUrl from '../../hooks/useBackUrl.es';

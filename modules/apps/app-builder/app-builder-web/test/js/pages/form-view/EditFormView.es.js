@@ -14,13 +14,13 @@
 
 import {ClayModalProvider} from '@clayui/modal';
 import {act, cleanup, fireEvent, render} from '@testing-library/react';
+import {AppContextProvider} from 'data-engine-js-components-web/js/AppContext.es';
 import * as toast from 'data-engine-js-components-web/js/utils/toast.es';
 import {DataLayoutVisitor} from 'data-engine-taglib';
 import React from 'react';
 import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 
-import {AppContextProvider} from '../../../../src/main/resources/META-INF/resources/js/AppContext.es';
 import EditFormView from '../../../../src/main/resources/META-INF/resources/js/pages/form-view/EditFormView.es';
 import {ENTRY, FORM_VIEW} from '../../constants.es';
 

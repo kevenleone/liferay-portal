@@ -13,9 +13,9 @@
  */
 
 import {act, cleanup, fireEvent, render} from '@testing-library/react';
+import {AppContextProvider} from 'data-engine-js-components-web/js/AppContext.es';
 import React from 'react';
 
-import {AppContextProvider} from '../../../../src/main/resources/META-INF/resources/js/AppContext.es';
 import EditEntry from '../../../../src/main/resources/META-INF/resources/js/pages/entry/EditEntry.es';
 import {DATA_DEFINITION_RESPONSES, FORM_VIEW} from '../../constants.es';
 const {getDataLayoutBuilderProps} = FORM_VIEW;
