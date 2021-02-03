@@ -23,13 +23,13 @@ import {
 	errorToast,
 	successToast,
 } from 'data-engine-js-components-web/js/utils/toast.es';
+import {getValidName} from 'data-engine-js-components-web/js/utils/utils.es';
 import {createResourceURL, fetch} from 'frontend-js-web';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 
 import Button from '../../components/button/Button.es';
 import {useKeyDown} from '../../hooks/index.es';
 import isClickOutside from '../../utils/clickOutside.es';
-import {getValidName} from '../../utils/utils.es';
 import ListObjects from '../object/ListObjects.es';
 import CustomObjectPopover from './CustomObjectPopover.es';
 

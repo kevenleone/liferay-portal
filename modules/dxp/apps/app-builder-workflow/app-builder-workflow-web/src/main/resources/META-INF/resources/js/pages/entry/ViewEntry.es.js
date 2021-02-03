@@ -15,7 +15,6 @@ import ControlMenu from 'app-builder-web/js/components/control-menu/ControlMenu.
 import useDataDefinition from 'app-builder-web/js/hooks/useDataDefinition.es';
 import {ViewDataLayoutPageValues} from 'app-builder-web/js/pages/entry/ViewEntry.es';
 import ViewEntryUpperToolbar from 'app-builder-web/js/pages/entry/ViewEntryUpperToolbar.es';
-import {isEqualObjects} from 'app-builder-web/js/utils/utils.es';
 import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import Loading from 'data-engine-js-components-web/js/components/loading/Loading.es';
 import useQuery from 'data-engine-js-components-web/js/hooks/useQuery.es';
@@ -25,6 +24,7 @@ import {
 } from 'data-engine-js-components-web/js/utils/client.es';
 import {getLocalizedUserPreferenceValue} from 'data-engine-js-components-web/js/utils/lang.es';
 import {errorToast} from 'data-engine-js-components-web/js/utils/toast.es';
+import {isEqualObjects} from 'data-engine-js-components-web/js/utils/utils.es';
 import {usePrevious} from 'frontend-js-react-web';
 import React, {useContext, useEffect, useState} from 'react';
 

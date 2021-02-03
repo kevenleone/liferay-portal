@@ -20,6 +20,7 @@ import {
 	errorToast,
 	successToast,
 } from 'data-engine-js-components-web/js/utils/toast.es';
+import {normalizeNames} from 'data-engine-js-components-web/js/utils/utils.es';
 import {TranslationManager} from 'data-engine-taglib';
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 import {withRouter} from 'react-router-dom';
@@ -27,7 +28,6 @@ import {withRouter} from 'react-router-dom';
 import ControlMenu from '../../components/control-menu/ControlMenu.es';
 import DragLayer from '../../components/drag-and-drop/DragLayer.es';
 import UpperToolbar from '../../components/upper-toolbar/UpperToolbar.es';
-import {normalizeNames} from '../../utils/utils.es';
 import DropZone from './DropZone.es';
 import EditTableViewContext, {
 	ADD_DATA_LIST_VIEW_FIELD,

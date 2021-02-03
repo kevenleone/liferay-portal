@@ -18,7 +18,6 @@ import SearchContext, {
 	reducer,
 } from 'app-builder-web/js/components/management-toolbar/SearchContext.es';
 import TableWithPagination from 'app-builder-web/js/components/table/TableWithPagination.es';
-import {concatValues, isEqualObjects} from 'app-builder-web/js/utils/utils.es';
 import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import {
 	buildEntries,
@@ -32,6 +31,10 @@ import useQuery from 'data-engine-js-components-web/js/hooks/useQuery.es';
 import {getItem} from 'data-engine-js-components-web/js/utils/client.es';
 import {getLocalizedUserPreferenceValue} from 'data-engine-js-components-web/js/utils/lang.es';
 import {errorToast} from 'data-engine-js-components-web/js/utils/toast.es';
+import {
+	concatValues,
+	isEqualObjects,
+} from 'data-engine-js-components-web/js/utils/utils.es';
 import {usePrevious} from 'frontend-js-react-web';
 import React, {useCallback, useContext, useEffect, useState} from 'react';
 

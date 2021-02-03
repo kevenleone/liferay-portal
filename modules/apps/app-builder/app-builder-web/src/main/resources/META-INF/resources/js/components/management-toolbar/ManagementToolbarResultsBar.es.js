@@ -15,10 +15,10 @@
 import ClayLabel from '@clayui/label';
 import {ClayResultsBar} from '@clayui/management-toolbar';
 import {sub} from 'data-engine-js-components-web/js/utils/lang.es';
+import {concatValues} from 'data-engine-js-components-web/js/utils/utils.es';
 import React, {useContext} from 'react';
 
 import {FILTER_NAMES} from '../../pages/apps/constants.es';
-import {concatValues} from '../../utils/utils.es';
 import Button from '../button/Button.es';
 import SearchContext from './SearchContext.es';
 

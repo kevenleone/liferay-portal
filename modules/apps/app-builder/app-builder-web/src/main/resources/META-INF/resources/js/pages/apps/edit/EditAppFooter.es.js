@@ -22,11 +22,11 @@ import {
 	errorToast,
 	successToast,
 } from 'data-engine-js-components-web/js/utils/toast.es';
+import {normalizeNames} from 'data-engine-js-components-web/js/utils/utils.es';
 import React, {useContext, useState} from 'react';
 import {withRouter} from 'react-router-dom';
 
 import Button from '../../../components/button/Button.es';
-import {normalizeNames} from '../../../utils/utils.es';
 import EditAppContext from './EditAppContext.es';
 
 export default withRouter(

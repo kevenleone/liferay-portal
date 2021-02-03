@@ -13,6 +13,5 @@
  */
 
 import useKeyDown from './useKeyDown.es';
-import useRequest from './useRequest.es';
 
-export {useKeyDown, useRequest};
+export {useKeyDown};
