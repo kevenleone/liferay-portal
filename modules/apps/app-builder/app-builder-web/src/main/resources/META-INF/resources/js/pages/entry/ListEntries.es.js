@@ -13,17 +13,21 @@
  */
 
 import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
+import {
+	buildEntries,
+	getStatusLabel,
+	navigateToEditPage,
+} from 'data-engine-js-components-web/js/components/entry/utils.es';
 import Loading from 'data-engine-js-components-web/js/components/loading/Loading.es';
 import useDataListView from 'data-engine-js-components-web/js/hooks/useDataListView.es';
 import useEntriesActions from 'data-engine-js-components-web/js/hooks/useEntriesActions.es';
 import usePermissions from 'data-engine-js-components-web/js/hooks/usePermissions.es';
 import useQuery from 'data-engine-js-components-web/js/hooks/useQuery.es';
+import {getLocalizedUserPreferenceValue} from 'data-engine-js-components-web/js/utils/lang.es';
 import React, {useContext} from 'react';
 
 import Button from '../../components/button/Button.es';
 import ListView from '../../components/list-view/ListView.es';
-import {getLocalizedUserPreferenceValue} from '../../utils/lang.es';
-import {buildEntries, getStatusLabel, navigateToEditPage} from './utils.es';
 
 export default function ListEntries({history}) {
 	const actions = useEntriesActions();

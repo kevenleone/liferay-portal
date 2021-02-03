@@ -14,7 +14,6 @@ import ClayButton, {ClayButtonWithIcon} from '@clayui/button';
 import {ClayRadio, ClayRadioGroup} from '@clayui/form';
 import ClayIcon from '@clayui/icon';
 import {ClayTooltipProvider} from '@clayui/tooltip';
-import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import Button from 'app-builder-web/js/components/button/Button.es';
 import SelectObjects from 'app-builder-web/js/components/select-objects/SelectObjects.es';
 import {
@@ -22,9 +21,13 @@ import {
 	UPDATE_DATA_LAYOUT_ID,
 	UPDATE_DATA_LIST_VIEW_ID,
 } from 'app-builder-web/js/pages/apps/edit/EditAppContext.es';
-import {getLocalizedValue, sub} from 'app-builder-web/js/utils/lang.es';
 import {concatValues} from 'app-builder-web/js/utils/utils.es';
 import classNames from 'classnames';
+import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
+import {
+	getLocalizedValue,
+	sub,
+} from 'data-engine-js-components-web/js/utils/lang.es';
 import {successToast} from 'data-engine-js-components-web/js/utils/toast.es';
 import {DataDefinitionUtils} from 'data-engine-taglib';
 import {openModal} from 'frontend-js-web';

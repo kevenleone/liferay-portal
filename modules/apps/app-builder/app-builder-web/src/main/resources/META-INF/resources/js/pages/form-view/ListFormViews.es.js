@@ -14,12 +14,12 @@
 
 import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import {confirmDelete} from 'data-engine-js-components-web/js/utils/client.es';
+import {getLocalizedValue} from 'data-engine-js-components-web/js/utils/lang.es';
 import React, {useContext} from 'react';
 
 import Button from '../../components/button/Button.es';
 import ListView from '../../components/list-view/ListView.es';
 import useDataDefinition from '../../hooks/useDataDefinition.es';
-import {getLocalizedValue} from '../../utils/lang.es';
 import {fromNow} from '../../utils/time.es';
 
 export default ({

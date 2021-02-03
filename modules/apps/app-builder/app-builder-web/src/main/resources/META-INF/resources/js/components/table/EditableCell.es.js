@@ -14,9 +14,8 @@
 
 import ClayButton from '@clayui/button';
 import ClayForm, {ClayInput} from '@clayui/form';
+import {getLocalizedValue} from 'data-engine-js-components-web/js/utils/lang.es';
 import React, {useState} from 'react';
-
-import {getLocalizedValue} from '../../utils/lang.es';
 
 const getValue = (item, key) => {
 	const value = item[key];

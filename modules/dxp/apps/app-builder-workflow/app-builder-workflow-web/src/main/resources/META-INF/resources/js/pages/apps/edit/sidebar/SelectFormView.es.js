@@ -12,7 +12,7 @@
 import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import EditAppContext from 'app-builder-web/js/pages/apps/edit/EditAppContext.es';
-import {sub} from 'app-builder-web/js/utils/lang.es';
+import {sub} from 'data-engine-js-components-web/js/utils/lang.es';
 import React, {useContext, useState} from 'react';
 
 import IconWithPopover from '../../../../components/icon-with-popover/IconWithPopover.es';

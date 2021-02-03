@@ -15,11 +15,11 @@
 import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
 import usePermissions from 'data-engine-js-components-web/js/hooks/usePermissions.es';
 import {getItem} from 'data-engine-js-components-web/js/utils/client.es';
+import {getLocalizedUserPreferenceValue} from 'data-engine-js-components-web/js/utils/lang.es';
 import {TranslationManager} from 'data-engine-taglib';
 import React, {useContext, useEffect, useState} from 'react';
 import {createPortal} from 'react-dom';
 
-import {getLocalizedUserPreferenceValue} from '../../utils/lang.es';
 import PersonalMenu from './PersonalMenuEntry.es';
 
 const STORAGE_KEY = '@app-builder/standalone/language';

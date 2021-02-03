@@ -12,9 +12,8 @@
  * details.
  */
 
+import {getStatusLabel} from 'data-engine-js-components-web/js/components/entry/utils.es';
 import React from 'react';
-
-import {getStatusLabel} from './utils.es';
 
 export default function ViewEntryInfoBar({status, stepName}) {
 	const statusLabel = getStatusLabel(status);

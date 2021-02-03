@@ -12,9 +12,8 @@
  * details.
  */
 
+import {sub} from 'data-engine-js-components-web/js/utils/lang.es';
 import React from 'react';
-
-import {sub} from '../../utils/lang.es';
 
 const DEFAULT_EMPTY = {
 	empty: {

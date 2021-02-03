@@ -12,6 +12,73 @@
  * details.
  */
 
+import ClayLabel from '@clayui/label';
+import React from 'react';
+import {Link} from 'react-router-dom';
+
+import {toQueryString} from '../../hooks/useQuery.es';
+import {FieldValuePreview} from './FieldPreview.es';
+import {ENTRY_STATUS_LABEL} from './constants.es';
+
+export function buildEntries({
+	dataDefinition,
+	fieldNames = [],
+	permissions,
+	query,
+}) {
+	return ({dataRecordValues = {}, ...entry}, index) => {
+		const entryIndex = query.pageSize * (query.page - 1) + index + 1;
+
+		const viewURL = `/entries/${entryIndex}?${toQueryString({
+			...query,
+			backURL: window.location.href,
+		})}`;
+
+		const displayedDataRecordValues = {};
+
+		fieldNames.forEach((fieldName, columnIndex) => {
+			let fieldValuePreview = (
+				<FieldValuePreview
+					dataDefinition={dataDefinition}
+					dataRecordValues={dataRecordValues}
+					displayType="list"
+					fieldName={fieldName}
+				/>
+			);
+
+			if (columnIndex === 0 && permissions.view) {
+				fieldValuePreview = (
+					<Link to={viewURL}>{fieldValuePreview}</Link>
+				);
+			}
+
+			displayedDataRecordValues[
+				'dataRecordValues/' + fieldName
+			] = fieldValuePreview;
+		});
+
+		return {
+			...displayedDataRecordValues,
+			...entry,
+			viewURL,
+		};
+	};
+}
+
+export function getStatusLabel(status) {
+	const statusLabel = ENTRY_STATUS_LABEL[status];
+
+	return (
+		<>
+			{statusLabel && (
+				<ClayLabel displayType={statusLabel?.displayType}>
+					{statusLabel?.label}
+				</ClayLabel>
+			)}
+		</>
+	);
+}
+
 export function navigateToEditPage(basePortletURL, params = {}) {
 	Liferay.Util.navigate(
 		Liferay.Util.PortletURL.createRenderURL(basePortletURL, {

@@ -17,6 +17,7 @@ import {
 	getItem,
 	updateItem,
 } from 'data-engine-js-components-web/js/utils/client.es';
+import {getLocalizedValue} from 'data-engine-js-components-web/js/utils/lang.es';
 import React, {useEffect, useState} from 'react';
 import {Link} from 'react-router-dom';
 
@@ -24,7 +25,6 @@ import {AppNavigationBar} from '../../App.es';
 import ControlMenu from '../../components/control-menu/ControlMenu.es';
 import ListView from '../../components/list-view/ListView.es';
 import PermissionsModal from '../../components/permissions/PermissionsModal.es';
-import {getLocalizedValue} from '../../utils/lang.es';
 import {fromNow} from '../../utils/time.es';
 
 const columns = [

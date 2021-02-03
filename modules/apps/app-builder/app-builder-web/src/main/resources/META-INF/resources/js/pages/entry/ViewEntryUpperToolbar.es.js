@@ -16,14 +16,14 @@ import {ClayButtonWithIcon} from '@clayui/button';
 import ClayButtonGroup from '@clayui/button/lib/Group';
 import {ClayTooltipProvider} from '@clayui/tooltip';
 import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
+import {navigateToEditPage} from 'data-engine-js-components-web/js/components/entry/utils.es';
 import usePermissions from 'data-engine-js-components-web/js/hooks/usePermissions.es';
 import {confirmDelete} from 'data-engine-js-components-web/js/utils/client.es';
+import {sub} from 'data-engine-js-components-web/js/utils/lang.es';
 import React, {useContext} from 'react';
 import {withRouter} from 'react-router-dom';
 
 import UpperToolbar from '../../components/upper-toolbar/UpperToolbar.es';
-import {sub} from '../../utils/lang.es';
-import {navigateToEditPage} from './utils.es';
 
 function ViewEntryUpperToolbar({
 	additionalButtons,

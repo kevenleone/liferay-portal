@@ -13,6 +13,10 @@
  */
 
 import {AppContext} from 'data-engine-js-components-web/js/AppContext.es';
+import FieldPreview, {
+	SectionRenderer,
+} from 'data-engine-js-components-web/js/components/entry/FieldPreview.es';
+import {ENTRY_STATUS} from 'data-engine-js-components-web/js/components/entry/constants.es';
 import Loading from 'data-engine-js-components-web/js/components/loading/Loading.es';
 import useQuery from 'data-engine-js-components-web/js/hooks/useQuery.es';
 import {getItem} from 'data-engine-js-components-web/js/utils/client.es';
@@ -23,10 +27,8 @@ import React, {useContext, useEffect, useState} from 'react';
 import ControlMenu from '../../components/control-menu/ControlMenu.es';
 import useDataLayout from '../../hooks/useDataLayout.es';
 import {isEqualObjects} from '../../utils/utils.es';
-import FieldPreview, {SectionRenderer} from './FieldPreview.es';
 import ViewEntryInfoBar from './ViewEntryInfoBar.es';
 import ViewEntryUpperToolbar from './ViewEntryUpperToolbar.es';
-import {ENTRY_STATUS} from './constants.es';
 
 const getSections = ({dataDefinitionFields = []}) => {
 	const sections = {};
