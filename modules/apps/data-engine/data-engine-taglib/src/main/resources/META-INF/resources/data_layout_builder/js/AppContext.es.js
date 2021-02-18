@@ -183,7 +183,7 @@ const editFocusedCustomObjectField = (
  * @param {object} dataDefinition
  * @param {object} field
  */
-const getUnformattedDefinitionField = (dataDefinition, {fieldName}) => {
+const getDefinitionField = (dataDefinition, {fieldName}) => {
 	return getDataDefinitionField(dataDefinition, fieldName);
 };
 
@@ -192,7 +192,7 @@ const getUnformattedDefinitionField = (dataDefinition, {fieldName}) => {
  * @param {object} dataLayoutBuilder
  * @param {object} ddmfield
  */
-const getFormattedDefinitionField = (dataLayoutBuilder, field) => {
+const getDDMFormField = (dataLayoutBuilder, field) => {
 	return dataLayoutBuilder.getDataDefinitionField(field);
 };
 
@@ -210,26 +210,19 @@ const setDataDefinitionFields = (
 	const newFields = [];
 
 	visitor.mapFields((field) => {
-		const formattedDefinitionField = getFormattedDefinitionField(
-			dataLayoutBuilder,
-			field
-		);
-		const unformattedDefinitionField = getUnformattedDefinitionField(
-			dataDefinition,
-			field
-		);
+		const ddmFormField = getDDMFormField(dataLayoutBuilder, field);
 
 		if (dataLayoutBuilder.props.contentType === 'app-builder') {
+			const definitionField = getDefinitionField(dataDefinition, field);
+
 			newFields.push({
-				...formattedDefinitionField,
-				label:
-					unformattedDefinitionField?.label ||
-					formattedDefinitionField?.label,
-				required: !!unformattedDefinitionField?.required,
+				...ddmFormField,
+				label: definitionField?.label ?? ddmFormField?.label,
+				required: !!definitionField?.required,
 			});
 		}
 		else {
-			newFields.push(formattedDefinitionField);
+			newFields.push(ddmFormField);
 		}
 	});
 
@@ -255,7 +248,7 @@ const setDataLayout = (dataLayout, dataLayoutBuilder) => {
 		const fields = [];
 
 		visitor.mapFields((field) => {
-			const formattedDefinitionField = getFormattedDefinitionField(
+			const formattedDefinitionField = getDDMFormField(
 				dataLayoutBuilder,
 				field
 			);
