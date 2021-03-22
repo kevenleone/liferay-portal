@@ -99,7 +99,6 @@ export default ({history}) => {
 		updateItem({
 			endpoint: `/o/data-engine/v2.0/data-definitions/${originalItem.id}`,
 			item: {
-				...originalItem,
 				name: {
 					[originalItem.defaultLanguageId]: getValidName(
 						Liferay.Language.get('untitled-custom-object'),
@@ -107,6 +106,7 @@ export default ({history}) => {
 					),
 				},
 			},
+			method: 'PATCH',
 		})
 			.then(refetch)
 			.then(onCancelRenameAction)
