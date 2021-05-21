@@ -254,6 +254,19 @@ public class UIItemsBuilder {
 			getSubmitFormJavaScript(Constants.CHECKOUT, null));
 	}
 
+	public void addCollectDigitalSignatureMenuItem(List<MenuItem> menuItems) {
+		PortletURL portletURL = _getControlPanelRenderURL(
+			"/document_library/collect_digital_signature");
+
+		portletURL.setParameter("backURL", _getCurrentURL());
+
+		_addURLUIItem(
+			new URLMenuItem(), menuItems,
+			DLUIItemKeys.COLLECT_DIGITAL_SIGNATURE,
+			LanguageUtil.get(_resourceBundle, "collect-digital-signature"),
+			portletURL.toString());
+	}
+
 	public void addCompareToMenuItem(List<MenuItem> menuItems)
 		throws PortalException {
 
