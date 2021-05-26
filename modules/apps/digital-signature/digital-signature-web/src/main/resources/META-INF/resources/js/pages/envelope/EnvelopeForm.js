@@ -14,8 +14,10 @@
 
 import React from 'react';
 
-import DigitalSignatureForm from '../components/digital-signature-form/DigitalSignatureForm';
+import DigitalSignatureForm from '../../components/digital-signature-form/DigitalSignatureForm';
 
-const CollectDigitalSignature = (props) => <DigitalSignatureForm {...props} />;
+const EnvelopeForm = (props) => (
+	<DigitalSignatureForm {...props} showDocumentLibraryInput />
+);
 
-export default CollectDigitalSignature;
+export default EnvelopeForm;

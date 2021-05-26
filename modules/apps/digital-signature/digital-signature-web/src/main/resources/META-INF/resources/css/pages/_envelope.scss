@@ -1,0 +1,37 @@
+.envelope-view {
+	$background-default: #fff;
+
+	&__details {
+		background-color: $background-default;
+		border: 1px solid #e7e7ed;
+		border-radius: 4px;
+		margin: 20px;
+		padding: 20px;
+	}
+
+	&__header {
+		align-items: center;
+		background-color: $background-default;
+		display: flex;
+		height: 56px;
+		justify-content: space-between;
+		padding: 0 24px;
+
+		&__header > div::first {
+			max-width: 500px;
+		}
+
+		&__title {
+			font-size: 16px;
+			font-weight: 600;
+		}
+	}
+}
+
+.envelope-list {
+	.list-view {
+		&__table-with-pagination {
+			margin-top: 20px;
+		}
+	}
+}

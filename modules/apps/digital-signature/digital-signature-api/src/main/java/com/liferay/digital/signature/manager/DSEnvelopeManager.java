@@ -18,6 +18,8 @@ import com.liferay.digital.signature.model.DSEnvelope;
 import com.liferay.portal.kernel.json.JSONObject;
 
 import java.util.List;
+import com.liferay.portal.kernel.json.JSONObject;
+
 
 import org.osgi.annotation.versioning.ProviderType;
 
@@ -45,5 +47,7 @@ public interface DSEnvelopeManager {
 	public JSONObject getDSEnvelopesJSONObject(
 		long companyId, long groupId, String fromDateString, String order,
 		int page, int pageSize);
+
+	public JSONObject toJSONObject(DSEnvelope dsEnvelope);
 
 }

@@ -1,0 +1,51 @@
+$color-default: #cdced9;
+$color-disabled: #a7a9bc;
+$color-hover: #fff;
+$dark: #393a4a;
+
+.floating-bar {
+	background: $dark;
+	border-radius: 0.25rem;
+	padding: 0 0.25rem;
+
+	.floating-bar-input {
+		background-color: $dark;
+		color: $color-default;
+	}
+
+	.floating-bar-input-wrapper {
+		margin: 0.25rem 0;
+		position: absolute;
+		width: 100%;
+		z-index: 4;
+	}
+}
+
+.btn-floating-bar {
+	background-color: rgba(0, 0, 0, 0.001);
+	border-radius: 0;
+	border-width: 0;
+	color: #cdced9;
+
+	&.active,
+	&:hover {
+		color: $color-hover;
+	}
+
+	&:disabled,
+	&.disabled {
+		color: $color-disabled;
+	}
+}
+
+.btn-floating-bar-text {
+	font-size: 0.875rem;
+	padding: 0.5rem;
+}
+
+.separator-floating-bar {
+	background: #272833;
+	margin: 0 0.5rem;
+	min-height: 100%;
+	width: 1px;
+}

@@ -18,7 +18,6 @@ import ClayLoadingIndicator from '@clayui/loading-indicator';
 import {useIsMounted} from '@liferay/frontend-js-react-web';
 import {debounce} from 'frontend-js-web';
 import imagePromise from 'image-promise';
-import PropTypes from 'prop-types';
 import React, {useEffect, useRef, useState} from 'react';
 
 const KEY_CODE_ENTER = 13;
@@ -184,9 +183,11 @@ const DocumentPreviewer = ({baseImageURL, initialPage, totalPages}) => {
 			processPageInput(event.currentTarget.value);
 
 			hidePageInput();
-		} else if (code === KEY_CODE_ESC) {
+		}
+		else if (code === KEY_CODE_ESC) {
 			hidePageInput();
-		} else if (VALID_KEY_CODES.indexOf(code) === -1) {
+		}
+		else if (VALID_KEY_CODES.indexOf(code) === -1) {
 			event.preventDefault();
 		}
 	};
@@ -294,7 +295,7 @@ const DocumentPreviewer = ({baseImageURL, initialPage, totalPages}) => {
 						onClick={() => {
 							alert('Crop!');
 						}}
-						title={'Test Compress'}
+						title="Test Compress"
 					>
 						<ClayIcon symbol="compress" />
 					</ClayButton>
@@ -302,12 +303,6 @@ const DocumentPreviewer = ({baseImageURL, initialPage, totalPages}) => {
 			</div>
 		</div>
 	);
-};
-
-DocumentPreviewer.propTypes = {
-	baseImageURL: PropTypes.string,
-	initialPage: PropTypes.number,
-	totalPages: PropTypes.number,
 };
 
 export default DocumentPreviewer;

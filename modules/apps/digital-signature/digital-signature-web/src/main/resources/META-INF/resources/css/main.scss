@@ -1,22 +1,45 @@
 .digital-signature {
-	.collect-digital-signature {
-		margin-top: 48px;
-		max-width: 930px;
+	@import './components/digital_signature_form';
 
-		.form-group.recipient > .input-group::before {
-			background: #e7e7ed;
-			border-radius: 4px 0 0 4px;
-			content: '';
-			margin-right: 12px;
-			width: 6px;
+	@import './pages/envelope';
+
+	.preview-file {
+		@import './components/floating_bar';
+
+		margin: 1.5rem auto;
+		position: relative;
+
+		.preview-file-container {
+			overflow: auto;
+			position: relative;
+			text-align: center;
+
+			&.preview-file-max-height {
+				height: 624px;
+			}
 		}
 
-		.header {
-			padding: 16px 24px 0;
+		.preview-file-loader {
+			left: 50%;
+			position: absolute;
+			top: 50%;
+			transform: translate(-50%, -50);
 		}
 
-		.recipient-icon-button {
-			margin-top: 27px;
+		.preview-toolbar-container {
+			bottom: 0;
+			margin-bottom: 1.5rem;
+			position: absolute;
+			text-align: center;
+			width: 100%;
+		}
+
+		.preview-file-document {
+			max-width: 100%;
+
+			&.preview-file-document-fit {
+				max-height: 100%;
+			}
 		}
 	}
 

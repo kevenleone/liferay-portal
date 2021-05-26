@@ -70,8 +70,7 @@ function transformFileEntryProperties({fileEntryTitle, fileEntryURL, value}) {
 			if (fileEntry.url) {
 				fileEntryURL = fileEntry.url;
 			}
-		}
-		catch (e) {
+		} catch (e) {
 			console.warn('Unable to parse JSON', value);
 		}
 	}
@@ -252,30 +251,34 @@ const GuestUploadFile = ({
 	);
 };
 
-const Main = ({
-	_onBlur,
-	_onFocus,
-	allowGuestUsers,
-	displayErrors: initialDisplayErrors,
-	editingLanguageId,
-	errorMessage: initialErrorMessage,
-	fieldName,
-	fileEntryTitle,
-	fileEntryURL,
-	guestUploadURL,
-	id,
-	itemSelectorURL,
-	maximumRepetitions,
-	maximumSubmissionLimitReached,
-	message,
-	name,
-	onChange,
-	placeholder,
-	readOnly,
-	valid: initialValid,
-	value = '{}',
-	...otherProps
-}) => {
+const Main = (props) => {
+	const {
+		_onBlur,
+		_onFocus,
+		allowGuestUsers,
+		displayErrors: initialDisplayErrors,
+		editingLanguageId,
+		errorMessage: initialErrorMessage,
+		fieldName,
+		fileEntryTitle,
+		fileEntryURL,
+		guestUploadURL,
+		id,
+		itemSelectorURL,
+		maximumRepetitions,
+		maximumSubmissionLimitReached,
+		message,
+		name,
+		onChange,
+		placeholder,
+		readOnly,
+		valid: initialValid,
+		value = '{}',
+		...otherProps
+	} = props;
+
+	console.log({props});
+
 	const {portletNamespace} = useConfig();
 	const {pages} = useFormState();
 
@@ -294,8 +297,7 @@ const Main = ({
 					'you-need-to-be-signed-in-to-edit-this-field'
 				)
 			);
-		}
-		else if (maximumSubmissionLimitReached) {
+		} else if (maximumSubmissionLimitReached) {
 			errorMessages.push(
 				Liferay.Language.get(
 					'the-maximum-number-of-submissions-allowed-for-this-form-has-been-reached'
@@ -344,6 +346,8 @@ const Main = ({
 	};
 
 	const handleSelectButtonClicked = ({portletNamespace}) => {
+		console.log({portletNamespace});
+
 		Liferay.Util.openSelectionModal({
 			onSelect: handleFieldChanged,
 			selectEventName: `${portletNamespace}selectDocumentLibrary`,
@@ -424,8 +428,7 @@ const Main = ({
 
 				if (error) {
 					handleGuestUploadFileChanged(error.message, event, null);
-				}
-				else {
+				} else {
 					handleGuestUploadFileChanged(
 						'',
 						event,

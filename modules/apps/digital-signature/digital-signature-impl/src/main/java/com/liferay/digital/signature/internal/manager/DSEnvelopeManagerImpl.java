@@ -56,7 +56,7 @@ public class DSEnvelopeManagerImpl implements DSEnvelopeManager {
 
 		dsEnvelope = _toDSEnvelope(
 			_dsHttp.post(
-				companyId, groupId, "envelopes", _toJSONObject(dsEnvelope)));
+				companyId, groupId, "envelopes", toJSONObject(dsEnvelope)));
 
 		_dsCustomFieldManager.addDSCustomFields(
 			companyId, groupId, dsEnvelope.getDSEnvelopeId(),
@@ -165,7 +165,7 @@ public class DSEnvelopeManagerImpl implements DSEnvelopeManager {
 		return JSONUtil.put(
 			"items",
 			JSONUtil.toJSONArray(
-				dsEnvelopes, dsEnvelope -> _toJSONObject(dsEnvelope), _log)
+				dsEnvelopes, dsEnvelope -> toJSONObject(dsEnvelope), _log)
 		).put(
 			"lastPage", String.valueOf(lastPage)
 		).put(
@@ -262,7 +262,7 @@ public class DSEnvelopeManagerImpl implements DSEnvelopeManager {
 		return dsEnvelope;
 	}
 
-	private JSONObject _toJSONObject(DSEnvelope dsEnvelope) {
+	public JSONObject toJSONObject(DSEnvelope dsEnvelope) {
 		return JSONUtil.put(
 			"createdLocalDateTime", dsEnvelope.getCreatedLocalDateTime()
 		).put(
