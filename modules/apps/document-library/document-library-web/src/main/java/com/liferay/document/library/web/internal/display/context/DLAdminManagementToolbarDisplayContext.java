@@ -122,6 +122,15 @@ public class DLAdminManagementToolbarDisplayContext
 		return DropdownItemListBuilder.add(
 			() -> stagedActions,
 			dropdownItem -> {
+				dropdownItem.putData("action", "collectDigitalSignature");
+				dropdownItem.setIcon("signature");
+				dropdownItem.setLabel(
+					LanguageUtil.get(_httpServletRequest, "collect-digital-signature"));
+				dropdownItem.setQuickAction(true);
+			}
+		).add(
+			() -> stagedActions,
+			dropdownItem -> {
 				dropdownItem.putData("action", "download");
 				dropdownItem.setIcon("download");
 				dropdownItem.setLabel(
