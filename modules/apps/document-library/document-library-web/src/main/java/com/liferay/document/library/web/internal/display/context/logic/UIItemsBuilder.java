@@ -15,6 +15,7 @@
 package com.liferay.document.library.web.internal.display.context.logic;
 
 import com.liferay.digital.signature.constants.DigitalSignatureConstants;
+import com.liferay.digital.signature.configuration.DigitalSignatureConfiguration;
 import com.liferay.digital.signature.configuration.DigitalSignatureConfigurationUtil;
 import com.liferay.document.library.constants.DLPortletKeys;
 import com.liferay.document.library.display.context.DLUIItemKeys;
