@@ -121,9 +121,9 @@ public class DLAdminManagementToolbarDisplayContext
 		boolean stagedActions = _isStagedActions();
 		User user = _themeDisplay.getUser();
 
-		DigitalSignatureConfiguration digitalSignatureConfiguration = DigitalSignatureConfigurationUtil.getDigitalSignatureConfiguration(
-			_themeDisplay.getCompanyId(), _themeDisplay.getSiteGroupId()
-		);
+		DigitalSignatureConfiguration digitalSignatureConfiguration =
+			DigitalSignatureConfigurationUtil.getDigitalSignatureConfiguration(
+				_themeDisplay.getCompanyId(), _themeDisplay.getSiteGroupId());
 
 		return DropdownItemListBuilder.add(
 			() -> stagedActions && digitalSignatureConfiguration.enabled(),
@@ -131,7 +131,8 @@ public class DLAdminManagementToolbarDisplayContext
 				dropdownItem.putData("action", "collectDigitalSignature");
 				dropdownItem.setIcon("signature");
 				dropdownItem.setLabel(
-					LanguageUtil.get(_httpServletRequest, "collect-digital-signature"));
+					LanguageUtil.get(
+						_httpServletRequest, "collect-digital-signature"));
 				dropdownItem.setQuickAction(true);
 			}
 		).add(
