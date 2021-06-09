@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * Copyright (c) 2000-present Liferay, Inc. All rights reserved.
  *
@@ -14,13 +15,19 @@
 
 import {
 	addParams,
+	createPortletURL,
+	createResourceURL,
+	fetch,
 	navigate,
+	objectToFormData,
 	openModal,
 	openSelectionModal,
+	openToast,
 } from 'frontend-js-web';
 
 export default function propsTransformer({
 	additionalProps: {
+		digitalSignatureCheckPermissionEntryURL,
 		downloadEntryURL,
 		editEntryURL,
 		folderConfiguration,
@@ -33,6 +40,14 @@ export default function propsTransformer({
 	portletNamespace,
 	...otherProps
 }) {
+	const getAllSelectedElements = () => {
+		const searchContainer = Liferay.SearchContainer.get(
+			otherProps.searchContainerId
+		);
+
+		return searchContainer.select.getAllSelectedElements();
+	};
+
 	const processAction = (action, url) => {
 		if (!action) {
 			return;
@@ -95,6 +110,61 @@ export default function propsTransformer({
 				processAction('checkin', editEntryURL);
 			});
 		});
+	};
+
+	const collectDigitalSignature = async () => {
+		const fileEntryIds = getAllSelectedElements().get('value');
+
+		const availableExtensionResource = createResourceURL(
+			digitalSignatureCheckPermissionEntryURL,
+			{
+				p_p_resource_id: '/digital_signature/check_available_extension',
+			}
+		);
+
+		const digitalSignaturePortletNamespace = new URLSearchParams(
+			availableExtensionResource.search
+		).get('p_p_id');
+
+		const response = await fetch(availableExtensionResource, {
+			body: objectToFormData({
+				[`_${digitalSignaturePortletNamespace}_fileEntryIds`]: fileEntryIds,
+			}),
+			method: 'POST',
+		});
+
+		const {invalidFileExtensions = []} = await response.json();
+
+		if (invalidFileExtensions.length) {
+			for (const {fileName} of invalidFileExtensions) {
+				openToast({
+					message: Liferay.Util.sub(
+						Liferay.Language.get(
+							'you-cannot-collect-digital-signature-for-this-x-format'
+						),
+						fileName
+					),
+					type: 'danger',
+				});
+			}
+		}
+		else {
+			navigate(
+				createPortletURL(
+					themeDisplay.getLayoutRelativeControlPanelURL(),
+					{
+						backURL: window.location.href,
+						fileEntryId:
+							fileEntryIds.length > 1
+								? fileEntryIds.join(',')
+								: fileEntryIds[0],
+						mvcRenderCommandName:
+							'/digital_signature/collect_digital_signature',
+						p_p_id: digitalSignaturePortletNamespace,
+					}
+				).toString()
+			);
+		}
 	};
 
 	const deleteEntries = () => {
@@ -230,6 +300,9 @@ export default function propsTransformer({
 			}
 			else if (action === 'checkout') {
 				processAction('checkout', editEntryURL);
+			}
+			else if (action === 'collectDigitalSignature') {
+				collectDigitalSignature();
 			}
 			else if (action === 'deleteEntries') {
 				deleteEntries();
