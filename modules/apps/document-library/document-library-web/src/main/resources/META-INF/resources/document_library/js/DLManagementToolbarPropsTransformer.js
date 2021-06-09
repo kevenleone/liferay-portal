@@ -97,13 +97,24 @@ export default function propsTransformer({
 		});
 	};
 
+	const collectDigitalSignature = () => {
+		const searchContainer = Liferay.SearchContainer.get(
+			otherProps.searchContainerId
+		);
+
+		const selectedFileEntries = searchContainer.select
+			.getAllSelectedElements()
+			.get('value');
+
+		console.log('CollectDigitalSignature', selectedFileEntries);
+	};
+
 	const deleteEntries = () => {
 		let action;
 
 		if (trashEnabled) {
 			action = 'move_to_trash';
-		}
-		else if (
+		} else if (
 			confirm(
 				Liferay.Language.get(
 					'are-you-sure-you-want-to-delete-the-selected-entries'
@@ -227,23 +238,19 @@ export default function propsTransformer({
 
 			if (action === 'checkin') {
 				checkIn();
-			}
-			else if (action === 'checkout') {
+			} else if (action === 'checkout') {
 				processAction('checkout', editEntryURL);
-			}
-			else if (action === 'deleteEntries') {
+			} else if (action === 'collectDigitalSignature') {
+				collectDigitalSignature();
+			} else if (action === 'deleteEntries') {
 				deleteEntries();
-			}
-			else if (action === 'download') {
+			} else if (action === 'download') {
 				processAction('download', downloadEntryURL);
-			}
-			else if (action === 'editCategories') {
+			} else if (action === 'editCategories') {
 				editCategories();
-			}
-			else if (action === 'editTags') {
+			} else if (action === 'editTags') {
 				editTags();
-			}
-			else if (action === 'move') {
+			} else if (action === 'move') {
 				move();
 			}
 		},
