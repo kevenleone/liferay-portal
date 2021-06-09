@@ -97,6 +97,18 @@ export default function propsTransformer({
 		});
 	};
 
+	const collectDigitalSignature = () => {
+		const searchContainer = Liferay.SearchContainer.get(
+			otherProps.searchContainerId
+		);
+
+		const selectedFileEntries = searchContainer.select
+			.getAllSelectedElements()
+			.get('value');
+
+		console.log('CollectDigitalSignature', selectedFileEntries);
+	};
+
 	const deleteEntries = () => {
 		let action;
 
@@ -230,6 +242,9 @@ export default function propsTransformer({
 			}
 			else if (action === 'checkout') {
 				processAction('checkout', editEntryURL);
+			}
+			else if (action === 'collectDigitalSignature') {
+				collectDigitalSignature();
 			}
 			else if (action === 'deleteEntries') {
 				deleteEntries();
