@@ -67,7 +67,7 @@ public class ObjectDefinitionSampleGenerator {
 			company.getCompanyId());
 
 		if (count > 0) {
-			return;
+			// return;
 		}
 
 		User user = _userLocalService.fetchUserByEmailAddress(
@@ -79,49 +79,45 @@ public class ObjectDefinitionSampleGenerator {
 
 		ObjectDefinition objectDefinition =
 			_objectDefinitionLocalService.addObjectDefinition(
-				user.getUserId(), "SampleObjectDefinition",
+				user.getUserId(), "RaylifeApplication",
 				Arrays.asList(
-					_createObjectField("able", "Long"),
-					_createObjectField("baker", "Boolean"),
-					_createObjectField("dog", "Date"),
-					_createObjectField("easy", "String"),
-					_createObjectField(true, true, null, "fox", "String"),
-					_createObjectField(
-						true, false, "en_US", "george", "String"),
-					_createObjectField(false, false, null, "how", "String"),
-					_createObjectField("item", "Double"),
-					_createObjectField("jig", "Integer"),
-					_createObjectField("king", "BigDecimal")));
+					_createObjectField("firstName", "String"),
+					_createObjectField("lastName", "String"),
+					_createObjectField("email", "String"),
+					_createObjectField("phone", "String"),
+					_createObjectField("website", "String"),
+					_createObjectField("address", "String"),
+					_createObjectField("zip", "String"),
+					_createObjectField("state", "String"),
+					_createObjectField("city", "String"),
+					_createObjectField("addressApt", "String")));
 
-		for (int i = 0; i < 100; i++) {
+		// for (int i = 0; i < 100; i++) {
 			_objectEntryLocalService.addObjectEntry(
 				user.getUserId(), 0, objectDefinition.getObjectDefinitionId(),
 				HashMapBuilder.<String, Serializable>put(
-					"able", 10 + i
+					"firstName", "Peter"
 				).put(
-					"baker", (i % 2) == 0
+					"lastName", "Druck"
 				).put(
-					"dog", new Date()
+					"email", "test@liferay.com"
 				).put(
-					"easy",
-					"The quick brown fox jumps over the lazy dog. " + i + "!"
+					"phone", "00000000"
 				).put(
-					"fox", "test" + i
+					"website", "test.com"
 				).put(
-					"george",
-					"The english brown fox trusted the lazy dog. " + i + "!"
+					"address", "123, street"
 				).put(
-					"how",
-					"The unsearchable brown fox jumps over the lazy dog. " + i
+					"zip", "00000"
 				).put(
-					"item", 180.5D + i
+					"state", "CA"
 				).put(
-					"jig", 5 + i
+					"city", "City 01"
 				).put(
-					"king", BigDecimal.valueOf(45L + i)
+					"addressApt", "01"
 				).build(),
 				new ServiceContext());
-		}
+		// }
 	}
 
 	private ObjectField _createObjectField(
