@@ -11,13 +11,28 @@
  * FOR A PARTICULAR PURPOSE. See the GNU Lesser General Public License for more
  * details.
  */
-export declare const STR_NULL_IMAGE_FILE_ENTRY_ID = "0";
-declare const imageSelectorCoverImageAtom: {
-    readonly default: {
-        readonly fileEntryId: string;
-        readonly src: string;
-    };
-    readonly key: string;
-    readonly 'Liferay.State.ATOM': true;
-};
-export default imageSelectorCoverImageAtom;
+
+package com.liferay.remote.web.component.admin.web.internal.util;
+
+import org.osgi.framework.Bundle;
+import org.osgi.framework.FrameworkUtil;
+
+/**
+ * @author Raymond Augé
+ */
+public class LastModified {
+
+	public static long get() {
+		Bundle bundle = FrameworkUtil.getBundle(LastModified.class);
+
+		return bundle.getLastModified();
+	}
+
+	public static String getString() {
+		return String.valueOf(get());
+	}
+
+	private LastModified() {
+	}
+
+}
