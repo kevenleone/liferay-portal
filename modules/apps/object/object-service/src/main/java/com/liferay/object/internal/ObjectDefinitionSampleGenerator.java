@@ -81,40 +81,40 @@ public class ObjectDefinitionSampleGenerator {
 			_objectDefinitionLocalService.addObjectDefinition(
 				user.getUserId(), "RaylifeApplication",
 				Arrays.asList(
+					_createObjectField("address", "String"),
+					_createObjectField("addressApt", "String"),
+					_createObjectField("city", "String"),
+					_createObjectField("email", "String"),
 					_createObjectField("firstName", "String"),
 					_createObjectField("lastName", "String"),
-					_createObjectField("email", "String"),
 					_createObjectField("phone", "String"),
-					_createObjectField("website", "String"),
-					_createObjectField("address", "String"),
-					_createObjectField("zip", "String"),
 					_createObjectField("state", "String"),
-					_createObjectField("city", "String"),
-					_createObjectField("addressApt", "String")));
+					_createObjectField("website", "String"),
+					_createObjectField("zip", "String")));
 
 		// for (int i = 0; i < 100; i++) {
 			_objectEntryLocalService.addObjectEntry(
 				user.getUserId(), 0, objectDefinition.getObjectDefinitionId(),
 				HashMapBuilder.<String, Serializable>put(
-					"firstName", "Peter"
+					"address", "123 Street"
 				).put(
-					"lastName", "Druck"
-				).put(
-					"email", "test@liferay.com"
-				).put(
-					"phone", "00000000"
-				).put(
-					"website", "test.com"
-				).put(
-					"address", "123, street"
-				).put(
-					"zip", "00000"
-				).put(
-					"state", "CA"
+					"addressApt", "01"
 				).put(
 					"city", "City 01"
 				).put(
-					"addressApt", "01"
+					"email", "test@liferay.com"
+				).put(
+					"firstName", "John"
+				).put(
+					"lastName", "Piper"
+				).put(
+					"phone", "00000000"
+				).put(
+					"state", "CA"
+				).put(
+					"website", "test.com"
+				).put(
+					"zip", "00000"
 				).build(),
 				new ServiceContext());
 		// }
