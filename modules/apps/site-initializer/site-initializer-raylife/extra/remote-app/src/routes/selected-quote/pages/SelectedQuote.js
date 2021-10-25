@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 
 import {CreateAnAccount} from '../components/Steps/CreateAnAccount';
 import Panel from '../components/Steps/Panel';
+import PaymentMethod from '../components/Steps/PaymentMethod';
 import UploadDocuments from '../components/Steps/UploadDocuments';
 import QuoteInfo from '../components/quote-info';
 
@@ -9,11 +10,11 @@ const SelectedQuote = () => {
 	const [panel, setPanel] = useState({
 		createAnAccount: {
 			checked: false,
-			expanded: true,
+			expanded: false,
 		},
 		selectPaymentMethod: {
 			checked: false,
-			expanded: false,
+			expanded: true,
 		},
 		uploadDocuments: {
 			checked: false,
@@ -86,7 +87,7 @@ const SelectedQuote = () => {
 					stepChecked={panel.selectPaymentMethod.checked}
 					title="3. Select Payment Method"
 				>
-					Select Payment Method...
+					<PaymentMethod />
 				</Panel>
 			</div>
 		</div>
