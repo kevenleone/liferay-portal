@@ -10,11 +10,11 @@ const SelectedQuote = () => {
 	const [panel, setPanel] = useState({
 		createAnAccount: {
 			checked: false,
-			expanded: false,
+			expanded: true,
 		},
 		selectPaymentMethod: {
 			checked: false,
-			expanded: true,
+			expanded: false,
 		},
 		uploadDocuments: {
 			checked: false,

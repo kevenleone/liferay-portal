@@ -1,3 +1,4 @@
+import {getItem, setItem} from '~/common/services/liferay/storage';
 import {NUMBER_REGEX, SYMBOL_REGEX} from '~/common/utils/patterns';
 
 import {
@@ -6,13 +7,24 @@ import {
 	NATURAL_VALUE,
 	UNCHECKED_VALUE,
 } from '../components/Steps/CreateAnAccount/constants';
+import {createAccount} from '../services/Account';
 
 const getValueFromValidation = (condition) =>
 	condition ? CHECK_VALUE : UNCHECKED_VALUE;
 
-export const SendAccountRequest = (email, password) => {
+export const SendAccountRequest = async (email, password) => {
 	/* eslint-disable no-console */
 	console.log(email, password);
+
+	const {
+		basics: {businessInformation},
+	} = JSON.parse(getItem('raylife-application-form'));
+
+	const {data} = await createAccount(
+		`${businessInformation.firstName} ${businessInformation.lastName}`
+	);
+
+	setItem('accountId', data.id);
 
 	return CHECK_VALUE;
 };

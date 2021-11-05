@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, {useEffect, useState} from 'react';
 import {WarningBadge} from '~/common/components/fragments/Badges/Warning';
 import {EMAIL_REGEX} from '~/common/utils/patterns';
@@ -32,14 +33,14 @@ export const CreateAnAccount = ({setExpanded, setStepChecked}) => {
 
 	const onCreateAccount = () => {
 		if (isMatchingAllRules) {
-			const response = SendAccountRequest(email, password);
+			SendAccountRequest(email, password).then((response) => {
+				if (response === CHECK_VALUE) {
+					setExpanded('uploadDocuments');
+					setStepChecked('createAnAccount', true);
+				}
 
-			if (response === CHECK_VALUE) {
-				setExpanded('uploadDocuments');
-				setStepChecked('createAnAccount', true);
-			}
-
-			setAlert(response);
+				setAlert(response);
+			});
 		}
 	};
 
