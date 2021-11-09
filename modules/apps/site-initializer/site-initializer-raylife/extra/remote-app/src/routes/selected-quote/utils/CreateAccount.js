@@ -1,4 +1,4 @@
-import {getItem, setItem} from '~/common/services/liferay/storage';
+import {getItem} from '~/common/services/liferay/storage';
 import {NUMBER_REGEX, SYMBOL_REGEX} from '~/common/utils/patterns';
 
 import {
@@ -12,7 +12,7 @@ import {createAccount} from '../services/Account';
 const getValueFromValidation = (condition) =>
 	condition ? CHECK_VALUE : UNCHECKED_VALUE;
 
-export const SendAccountRequest = async (email, password) => {
+export const SendAccountRequest = async (email, password, onSelectedQuote) => {
 	/* eslint-disable no-console */
 	console.log(email, password);
 
@@ -24,7 +24,7 @@ export const SendAccountRequest = async (email, password) => {
 		`${businessInformation.firstName} ${businessInformation.lastName}`
 	);
 
-	setItem('accountId', data.id);
+	onSelectedQuote('accountId', data.id);
 
 	return CHECK_VALUE;
 };

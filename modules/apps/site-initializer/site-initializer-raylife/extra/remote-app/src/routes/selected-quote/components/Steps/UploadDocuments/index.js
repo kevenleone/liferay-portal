@@ -26,6 +26,9 @@ const dropAreaProps = {
 const UploadDocuments = ({
 	changeSections,
 	discardChanges,
+	onSelectedQuote,
+	product,
+	selectedQuote,
 	setDiscardChanges,
 	setExpanded,
 	setSection,
@@ -154,13 +157,22 @@ const UploadDocuments = ({
 	};
 
 	const createOrder = () => {
-		const accountId = getItem('accountId');
-
 		Promise.all([getChannelId(), getSkuId()]).then((response) => {
 			const channelId = response[0];
 			const skuId = response[1];
 
-			createOrders(accountId, channelId, skuId);
+			createOrders(
+				selectedQuote.accountId,
+				channelId,
+				skuId,
+				product
+			).then((response) => {
+				const {
+					data: {id},
+				} = response;
+				console.log('id', id);
+				onSelectedQuote('orderId', id);
+			});
 		});
 	};
 

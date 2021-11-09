@@ -20,7 +20,11 @@ const _isEmailValid = (email) => {
 	return regex.test(email);
 };
 
-export const CreateAnAccount = ({setExpanded, setStepChecked}) => {
+export const CreateAnAccount = ({
+	onSelectedQuote,
+	setExpanded,
+	setStepChecked,
+}) => {
 	const [alert, setAlert] = useState(NATURAL_VALUE);
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [email, setEmail] = useState('');
@@ -33,14 +37,16 @@ export const CreateAnAccount = ({setExpanded, setStepChecked}) => {
 
 	const onCreateAccount = () => {
 		if (isMatchingAllRules) {
-			SendAccountRequest(email, password).then((response) => {
-				if (response === CHECK_VALUE) {
-					setExpanded('uploadDocuments');
-					setStepChecked('createAnAccount', true);
-				}
+			SendAccountRequest(email, password, onSelectedQuote).then(
+				(response) => {
+					if (response === CHECK_VALUE) {
+						setExpanded('uploadDocuments');
+						setStepChecked('createAnAccount', true);
+					}
 
-				setAlert(response);
-			});
+					setAlert(response);
+				}
+			);
 		}
 	};
 
