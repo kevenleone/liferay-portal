@@ -1,0 +1,49 @@
+components:
+    schemas:
+        OrderPayment:
+            properties:
+                callbackURL:
+                    description:
+                        The calback URL.
+                    type: string
+                paymentServletURL:
+                    description:
+                        The payment servlet URL.
+                    type: string
+info:
+    description: "HeadlessRaylife REST API"
+    license:
+        name: "Apache 2.0"
+        url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+    title: "HeadlessRaylife"
+    version: v1.0
+openapi: 3.0.1
+paths:
+    "/raylife/{orderId}":
+        post:
+            operationId: postOrderPayment
+            parameters:
+                - in: path
+                  name: orderId
+                  required: true
+                  schema:
+                      format: int64
+                      type: integer
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/OrderPayment"
+                    application/xml:
+                        schema:
+                            $ref: "#/components/schemas/OrderPayment"
+            responses:
+                200:
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/OrderPayment"
+                        application/xml:
+                            schema:
+                                $ref: "#/components/schemas/OrderPayment"
+            tags: ["OrderPayment"]

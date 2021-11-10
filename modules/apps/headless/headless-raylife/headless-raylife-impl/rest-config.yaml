@@ -1,0 +1,9 @@
+apiDir: "../headless-raylife-api/src/main/java"
+apiPackagePath: "headless.raylife"
+application:
+    baseURI: "/headless-raylife"
+    className: "HeadlessRaylifeApplication"
+    name: "HeadlessRaylife"
+author: "José Abelenda"
+clientDir: "../headless-raylife-client/src/main/java"
+testDir: "../headless-raylife-test/src/testIntegration/java"

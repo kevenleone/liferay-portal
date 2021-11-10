@@ -1,0 +1,6 @@
+Bundle-Name: headless-raylife-api
+Bundle-SymbolicName: headless.raylife.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	headless.raylife.dto.v1_0,\
+	headless.raylife.resource.v1_0
