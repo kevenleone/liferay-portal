@@ -1,11 +1,15 @@
 /* eslint-disable no-console */
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {WarningBadge} from '~/common/components/fragments/Badges/Warning';
 import {EMAIL_REGEX} from '~/common/utils/patterns';
 import {
 	SendAccountRequest,
 	validadePassword,
 } from '~/routes/selected-quote/utils/CreateAccount';
+import {
+	ACTIONS,
+	SelectedQuoteContext,
+} from '../../../context/SelectedQuoteContextProvider';
 import {ListRules} from '../CreateAnAccount/ListRules';
 import {
 	CHECK_VALUE,
@@ -20,11 +24,8 @@ const _isEmailValid = (email) => {
 	return regex.test(email);
 };
 
-export const CreateAnAccount = ({
-	onSelectedQuote,
-	setExpanded,
-	setStepChecked,
-}) => {
+export const CreateAnAccount = () => {
+	const [, dispatch] = useContext(SelectedQuoteContext);
 	const [alert, setAlert] = useState(NATURAL_VALUE);
 	const [confirmPassword, setConfirmPassword] = useState('');
 	const [email, setEmail] = useState('');
@@ -37,16 +38,22 @@ export const CreateAnAccount = ({
 
 	const onCreateAccount = () => {
 		if (isMatchingAllRules) {
-			SendAccountRequest(email, password, onSelectedQuote).then(
-				(response) => {
-					if (response === CHECK_VALUE) {
-						setExpanded('uploadDocuments');
-						setStepChecked('createAnAccount', true);
-					}
+			SendAccountRequest(email, password).then((response) => {
+				dispatch({
+					payload: 'uploadDocuments',
+					type: ACTIONS.SET_EXPANDED,
+				});
 
-					setAlert(response);
-				}
-			);
+				dispatch({
+					payload: {
+						panelKey: 'createAnAccount',
+						value: true,
+					},
+					type: ACTIONS.SET_STEP_CHECKED,
+				});
+
+				dispatch({payload: response.id, type: ACTIONS.SET_ACCOUNT_ID});
+			});
 		}
 	};
 

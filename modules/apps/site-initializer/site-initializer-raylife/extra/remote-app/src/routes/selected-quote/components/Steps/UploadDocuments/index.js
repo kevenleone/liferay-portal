@@ -1,4 +1,4 @@
-import {useContext, useEffect, useState} from 'react';
+import {useContext, useState} from 'react';
 import {WarningBadge} from '~/common/components/fragments/Badges/Warning';
 
 import {ApplicationPropertiesContext} from '~/common/context/ApplicationPropertiesProvider';
@@ -7,6 +7,10 @@ import {smoothScroll} from '~/common/utils/scroll';
 import {getChannel} from '~/routes/selected-quote/services/Channel';
 import {createOrders} from '~/routes/selected-quote/services/Order';
 import {getSku} from '~/routes/selected-quote/services/Product';
+import {
+	ACTIONS,
+	SelectedQuoteContext,
+} from '../../../context/SelectedQuoteContextProvider';
 
 import {
 	createDocumentInFolder,
@@ -22,73 +26,22 @@ const dropAreaProps = {
 	widthContainer: '100%',
 };
 
-const UploadDocuments = ({
-	discardChanges,
-	onSelectedQuote,
-	product,
-	selectedQuote,
-	setDiscardChanges,
-	setExpanded,
-	setSection,
-	setStepChecked,
-}) => {
+const UploadDocuments = () => {
+	const [{accountId, product, sections}, dispatch] = useContext(
+		SelectedQuoteContext
+	);
 	const properties = useContext(ApplicationPropertiesContext);
 	const [loading, setLoading] = useState(false);
 
-	const [sections, setSections] = useState([
-		{
-			error: false,
-			errorMessage: 'Please upload a copy of your business license.',
-			files: [],
-			required: true,
-			sectionId: null,
-			subtitle: 'Upload a copy of your business license.',
-			title: 'Business License',
-			type: 'document',
-		},
-		{
-			error: false,
-			files: [],
-			required: false,
-			sectionId: null,
-			subtitle: 'Upload a copy of your additional documents.',
-			title: 'Additional Documents',
-			type: 'document',
-		},
-		{
-			error: false,
-			errorMessage: 'Please upload a photo of your building interior.',
-			files: [],
-			required: true,
-			sectionId: null,
-			subtitle: 'Upload 4 photos of your building interior.',
-			title: 'Building Interior Photos',
-			type: 'image',
-		},
-	]);
-
-	const onDiscardChanges = () => {
-		try {
-			setSections(
-				sections?.map((section) => {
-					const discardFilesChanged = section?.files.filter(
-						(file) => file.documentId
-					);
-
-					return {
-						...section,
-						files: discardFilesChanged,
-					};
-				})
-			);
-		}
-		catch (error) {
-			console.error(error);
-		}
+	const setSections = (newSections) => {
+		dispatch({
+			payload: newSections,
+			type: ACTIONS.SET_SECTIONS,
+		});
 	};
 
 	const onSetError = (_section, value) => {
-		setSections((sections) =>
+		setSections(
 			sections.map((section) => {
 				if (section.title === _section.title) {
 					return {
@@ -103,7 +56,7 @@ const UploadDocuments = ({
 	};
 
 	const onSetFiles = (_section, files) => {
-		setSections((sections) =>
+		setSections(
 			sections.map((section) => {
 				if (section.title === _section.title) {
 					return {
@@ -118,7 +71,7 @@ const UploadDocuments = ({
 	};
 
 	const setFilePropertyValue = (id, key, value) => {
-		setSections((sections) =>
+		setSections(
 			sections.map((section) => ({
 				...section,
 				files: section.files.map((fileEntry) => {
@@ -159,17 +112,15 @@ const UploadDocuments = ({
 			const channelId = response[0];
 			const skuId = response[1];
 
-			createOrders(
-				selectedQuote.accountId,
-				channelId,
-				skuId,
-				product
-			).then((response) => {
-				const {
-					data: {id},
-				} = response;
-				onSelectedQuote('orderId', id);
-			});
+			createOrders(accountId, channelId, skuId, product).then(
+				(response) => {
+					const {
+						data: {id},
+					} = response;
+
+					dispatch({payload: id, type: ACTIONS.SET_ORDER_ID});
+				}
+			);
 		});
 	};
 
@@ -215,8 +166,7 @@ const UploadDocuments = ({
 					);
 
 					setFilePropertyValue(fileEntry.id, 'documentId', data.id);
-				}
-				catch (error) {
+				} catch (error) {
 					console.error(error);
 				}
 			}
@@ -224,24 +174,14 @@ const UploadDocuments = ({
 
 		createOrder();
 		setLoading(false);
-		setExpanded('selectPaymentMethod');
-		setExpanded('uploadDocuments');
-		setStepChecked('uploadDocuments', true);
+		dispatch({payload: 'selectPaymentMethod', type: ACTIONS.SET_EXPANDED});
+		dispatch({payload: 'uploadDocuments', type: ACTIONS.SET_EXPANDED});
+		dispatch({
+			payload: {panelKey: 'uploadDocuments', value: true},
+			type: ACTIONS.SET_STEP_CHECKED,
+		});
 		smoothScroll();
 	};
-
-	useEffect(() => {
-		setSection(sections);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [sections]);
-
-	useEffect(() => {
-		if (discardChanges) {
-			onDiscardChanges();
-			setDiscardChanges();
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [discardChanges]);
 
 	return (
 		<div className="upload-container">

@@ -12,7 +12,7 @@ import {createAccount} from '../services/Account';
 const getValueFromValidation = (condition) =>
 	condition ? CHECK_VALUE : UNCHECKED_VALUE;
 
-export const SendAccountRequest = async (email, password, onSelectedQuote) => {
+export const SendAccountRequest = async () => {
 	const {
 		basics: {businessInformation},
 	} = JSON.parse(getItem('raylife-application-form'));
@@ -21,9 +21,7 @@ export const SendAccountRequest = async (email, password, onSelectedQuote) => {
 		`${businessInformation.firstName} ${businessInformation.lastName}`
 	);
 
-	onSelectedQuote('accountId', data.id);
-
-	return CHECK_VALUE;
+	return data;
 };
 
 export function validadePassword(confirmPassword, password) {
@@ -32,8 +30,7 @@ export function validadePassword(confirmPassword, password) {
 	if (confirmPassword && password) {
 		if (password !== confirmPassword) {
 			rules.samePassword = UNCHECKED_VALUE;
-		}
-		else {
+		} else {
 			rules.samePassword =
 				password === confirmPassword ? CHECK_VALUE : NATURAL_VALUE;
 		}
@@ -48,8 +45,7 @@ export function validadePassword(confirmPassword, password) {
 			if (uniqueValues.size >= 5) {
 				rules.uniqueCharacter = CHECK_VALUE;
 				break;
-			}
-			else {
+			} else {
 				rules.uniqueCharacter = UNCHECKED_VALUE;
 			}
 		}

@@ -1,126 +1,140 @@
-import React, {useEffect, useState} from 'react';
-
-import {LiferayService} from '~/common/services/liferay';
-import {STORAGE_KEYS, Storage} from '~/common/services/liferay/storage';
+import ClayIcon from '@clayui/icon';
+import classNames from 'classnames';
+import React, {useContext, useEffect, useState} from 'react';
 import {CreateAnAccount} from '../components/Steps/CreateAnAccount';
 import Panel from '../components/Steps/Panel';
+import ViewFilesPanel from '../components/Steps/Panel/ViewFilesPanel';
 import PaymentMethod from '../components/Steps/PaymentMethod';
 import UploadDocuments from '../components/Steps/UploadDocuments';
 import QuoteInfo from '../components/quote-info';
+import SelectedQuoteContextProvider, {
+	ACTIONS,
+	SelectedQuoteContext,
+} from '../context/SelectedQuoteContextProvider';
 
-const productId = Storage.getItem(STORAGE_KEYS.PRODUCT_ID);
+const DiscardChanges = ({checked, expanded, hasError}) => {
+	const [showDiscardChanges, setShowDiscardChanges] = useState(false);
+	const [{sections}, dispatch] = useContext(SelectedQuoteContext);
 
-const SelectedQuote = () => {
-	const [panel, setPanel] = useState({
-		createAnAccount: {
-			checked: false,
-			expanded: true,
-		},
-		selectPaymentMethod: {
-			checked: false,
-			expanded: false,
-		},
-		uploadDocuments: {
-			checked: false,
-			expanded: false,
-		},
-	});
+	const onDiscardChanges = () => {
+		try {
+			dispatch({
+				payload: sections?.map((section) => {
+					const discardFilesChanged = section?.files.filter(
+						(file) => file.documentId
+					);
 
-	const [sections, setSections] = useState(null);
-	const [discardChanges, setDiscardChanges] = useState(false);
-	const [selectedQuote, setSelectedQuote] = useState({
-		accountId: 0,
-		orderId: 0,
-	});
-
-	const [product, setProduct] = useState({});
-
-	const _setPanel = (panelKey, panelKeyProperty, value) => {
-		const newPanel = {...panel};
-
-		newPanel[panelKey][panelKeyProperty] =
-			value ?? !newPanel[panelKey][panelKeyProperty];
-
-		setPanel(newPanel);
-	};
-
-	const setExpanded = (panelKey) => {
-		_setPanel(panelKey, 'expanded');
-	};
-
-	const setStepChecked = (panelKey, value) => {
-		_setPanel(panelKey, 'checked', value);
-	};
-
-	const hasUploadError = () => {
-		const hasError = sections?.some(({error}) => error);
-
-		return hasError;
-	};
-
-	const onSelectedQuote = (property, value) => {
-		setSelectedQuote({...selectedQuote, [`${property}`]: value});
+					return {
+						...section,
+						files: discardFilesChanged,
+					};
+				}),
+				type: ACTIONS.SET_SECTIONS,
+			});
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	useEffect(() => {
-		LiferayService.getQuoteComparisonById(productId)
-			.then((product) => {
-				setProduct({...product, mostPopular: true});
-			})
-			.catch((error) => console.error(error.message));
-	}, []);
+		let filesChanged = false;
+
+		sections?.forEach((section) => {
+			const noFileDocumentsId = section.files?.some(
+				(file) => !file.documentId
+			);
+
+			if (noFileDocumentsId) {
+				filesChanged = true;
+			}
+		});
+
+		setShowDiscardChanges(filesChanged);
+	}, [sections]);
+
+	return (
+		<div className="panel-right">
+			{checked && !hasError && (
+				<div className="change-link">
+					{!expanded ? (
+						<a
+							onClick={() => {
+								dispatch({
+									payload: 'uploadDocuments',
+									type: ACTIONS.SET_EXPANDED,
+								});
+							}}
+						>
+							Change
+						</a>
+					) : (
+						showDiscardChanges && (
+							<a
+								onClick={() => {
+									onDiscardChanges();
+								}}
+							>
+								Discard Changes
+							</a>
+						)
+					)}
+				</div>
+			)}
+
+			<div
+				className={classNames('panel-right-icon', {
+					checked: checked && !hasError && !expanded,
+				})}
+			>
+				<ClayIcon symbol="check" />
+			</div>
+		</div>
+	);
+};
+
+const SelectedQuote = () => {
+	const [{sections}] = useContext(SelectedQuoteContext);
 
 	return (
 		<div className="selected-quote">
-			<QuoteInfo product={product} />
+			<QuoteInfo />
 
 			<div className="selected-quote-right-page">
-				<Panel
-					defaultExpanded={panel.createAnAccount.expanded}
-					stepChecked={panel.createAnAccount.checked}
-					title="1. Create an Account"
-				>
-					<CreateAnAccount
-						onSelectedQuote={onSelectedQuote}
-						setExpanded={setExpanded}
-						setStepChecked={setStepChecked}
-					/>
+				<Panel id="createAnAccount" title="1. Create an Account">
+					<CreateAnAccount />
 				</Panel>
 
 				<Panel
+					PanelMiddle={({checked, showContentPanel}) => (
+						<div className="panel-middle">
+							{!showContentPanel && checked && (
+								<ViewFilesPanel sections={sections} />
+							)}
+						</div>
+					)}
+					PanelRight={DiscardChanges}
 					changeable
-					defaultExpanded={panel.uploadDocuments.expanded}
-					hasError={hasUploadError()}
-					sections={sections}
-					setDiscardChanges={() => setDiscardChanges(!discardChanges)}
-					stepChecked={panel.uploadDocuments.checked}
+					id="uploadDocuments"
 					title="2. Upload Documents"
 				>
-					<UploadDocuments
-						discardChanges={discardChanges}
-						onSelectedQuote={onSelectedQuote}
-						product={product}
-						selectedQuote={selectedQuote}
-						setDiscardChanges={() => setDiscardChanges(false)}
-						setExpanded={setExpanded}
-						setSection={(sections) => setSections(sections)}
-						setStepChecked={setStepChecked}
-					/>
+					<UploadDocuments />
 				</Panel>
 
 				<Panel
-					defaultExpanded={panel.selectPaymentMethod.expanded}
-					stepChecked={panel.selectPaymentMethod.checked}
+					id="selectPaymentMethod"
 					title="3. Select Payment Method"
 				>
-					<PaymentMethod
-						product={product}
-						selectedQuote={selectedQuote}
-					/>
+					<PaymentMethod />
 				</Panel>
 			</div>
 		</div>
 	);
 };
 
-export default SelectedQuote;
+export default function () {
+	return (
+		<SelectedQuoteContextProvider>
+			<SelectedQuote />
+		</SelectedQuoteContextProvider>
+	);
+}

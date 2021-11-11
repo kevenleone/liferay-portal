@@ -1,98 +1,35 @@
-import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
-import {useEffect, useState} from 'react';
-import ViewFilesPanel from './ViewFilesPanel';
+import {useContext} from 'react';
+import {SelectedQuoteContext} from '~/routes/selected-quote/context/SelectedQuoteContextProvider';
 
 const Panel = ({
-	changeable,
 	children,
-	defaultExpanded = false,
-	hasError = false,
-	sections,
-	setDiscardChanges,
-	stepChecked,
+	id,
+	PanelMiddle = () => null,
+	PanelRight = () => null,
 	title = '',
 }) => {
-	const [showContentPanel, setShowContentPanel] = useState(defaultExpanded);
-	const [showDiscardChanges, setShowDiscardChanges] = useState(false);
+	const [{panel}] = useContext(SelectedQuoteContext);
+	const {checked, expanded = false} = panel[id];
 
-	useEffect(() => {
-		setShowContentPanel(false);
-
-		if ((!stepChecked && defaultExpanded) || hasError) {
-			setShowContentPanel(true);
-		}
-	}, [stepChecked, defaultExpanded, hasError]);
-
-	useEffect(() => {
-		let filesChanged = false;
-
-		sections?.forEach((section) => {
-			const noFileDocumentsId = section.files?.some(
-				(file) => !file.documentId
-			);
-
-			if (noFileDocumentsId) {
-				filesChanged = true;
-			}
-		});
-
-		setShowDiscardChanges(filesChanged);
-	}, [sections]);
+	const showElement = !checked && expanded;
 
 	return (
 		<div className="panel-container">
 			<div className="panel-header">
 				<div className="panel-left">{title}</div>
 
-				<div className="panel-middle">
-					{!showContentPanel && stepChecked && (
-						<ViewFilesPanel sections={sections} />
-					)}
-				</div>
+				<PanelMiddle checked={checked} />
 
-				<div className="panel-right">
-					{changeable && stepChecked && !hasError && (
-						<div className="change-link">
-							{!showContentPanel ? (
-								<a
-									onClick={() => {
-										setShowContentPanel(true);
-									}}
-								>
-									Change
-								</a>
-							) : (
-								showDiscardChanges && (
-									<a
-										onClick={() => {
-											setDiscardChanges();
-										}}
-									>
-										Discard Changes
-									</a>
-								)
-							)}
-						</div>
-					)}
-
-					<div
-						className={classNames('panel-right-icon', {
-							stepChecked:
-								stepChecked && !hasError && !showContentPanel,
-						})}
-					>
-						<ClayIcon symbol="check" />
-					</div>
-				</div>
+				<PanelRight checked={checked} expanded={expanded} />
 			</div>
 
 			<div
 				className={classNames('panel-content', {
-					show: showContentPanel,
+					show: showElement,
 				})}
 			>
-				{defaultExpanded && children}
+				{showElement && children}
 			</div>
 		</div>
 	);
