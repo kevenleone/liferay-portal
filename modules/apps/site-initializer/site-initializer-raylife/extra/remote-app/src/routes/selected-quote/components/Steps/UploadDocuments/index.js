@@ -2,7 +2,11 @@ import {useContext, useEffect, useState} from 'react';
 import {WarningBadge} from '~/common/components/fragments/Badges/Warning';
 
 import {ApplicationPropertiesContext} from '~/common/context/ApplicationPropertiesProvider';
+import {getItem} from '~/common/services/liferay/storage';
 import {smoothScroll} from '~/common/utils/scroll';
+import {getChannel} from '~/routes/selected-quote/services/Channel';
+import {createOrders} from '~/routes/selected-quote/services/Order';
+import {getSku} from '~/routes/selected-quote/services/Product';
 
 import {
 	createDocumentInFolder,
@@ -19,8 +23,10 @@ const dropAreaProps = {
 };
 
 const UploadDocuments = ({
-	changeSections,
 	discardChanges,
+	onSelectedQuote,
+	product,
+	selectedQuote,
 	setDiscardChanges,
 	setExpanded,
 	setSection,
@@ -128,6 +134,45 @@ const UploadDocuments = ({
 		);
 	};
 
+	const getChannelId = async () => {
+		const {
+			data: {items},
+		} = await getChannel();
+
+		return items[0].id;
+	};
+
+	const getSkuId = async () => {
+		const {
+			basics: {productQuote},
+		} = JSON.parse(getItem('raylife-application-form'));
+
+		const {
+			data: {items},
+		} = await getSku(productQuote);
+
+		return items[0].id;
+	};
+
+	const createOrder = () => {
+		Promise.all([getChannelId(), getSkuId()]).then((response) => {
+			const channelId = response[0];
+			const skuId = response[1];
+
+			createOrders(
+				selectedQuote.accountId,
+				channelId,
+				skuId,
+				product
+			).then((response) => {
+				const {
+					data: {id},
+				} = response;
+				onSelectedQuote('orderId', id);
+			});
+		});
+	};
+
 	const onClickConfirmUpload = async () => {
 		setLoading(true);
 
@@ -177,6 +222,7 @@ const UploadDocuments = ({
 			}
 		}
 
+		createOrder();
 		setLoading(false);
 		setExpanded('selectPaymentMethod');
 		setExpanded('uploadDocuments');
@@ -188,12 +234,6 @@ const UploadDocuments = ({
 		setSection(sections);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [sections]);
-
-	useEffect(() => {
-		if (changeSections) {
-			setSections(changeSections);
-		}
-	}, [changeSections]);
 
 	useEffect(() => {
 		if (discardChanges) {

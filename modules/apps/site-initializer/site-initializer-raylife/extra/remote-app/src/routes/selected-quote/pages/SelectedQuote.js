@@ -1,9 +1,14 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
+import {LiferayService} from '~/common/services/liferay';
+import {STORAGE_KEYS, Storage} from '~/common/services/liferay/storage';
 import {CreateAnAccount} from '../components/Steps/CreateAnAccount';
 import Panel from '../components/Steps/Panel';
+import PaymentMethod from '../components/Steps/PaymentMethod';
 import UploadDocuments from '../components/Steps/UploadDocuments';
 import QuoteInfo from '../components/quote-info';
+
+const productId = Storage.getItem(STORAGE_KEYS.PRODUCT_ID);
 
 const SelectedQuote = () => {
 	const [panel, setPanel] = useState({
@@ -23,6 +28,12 @@ const SelectedQuote = () => {
 
 	const [sections, setSections] = useState(null);
 	const [discardChanges, setDiscardChanges] = useState(false);
+	const [selectedQuote, setSelectedQuote] = useState({
+		accountId: 0,
+		orderId: 0,
+	});
+
+	const [product, setProduct] = useState({});
 
 	const _setPanel = (panelKey, panelKeyProperty, value) => {
 		const newPanel = {...panel};
@@ -47,9 +58,21 @@ const SelectedQuote = () => {
 		return hasError;
 	};
 
+	const onSelectedQuote = (property, value) => {
+		setSelectedQuote({...selectedQuote, [`${property}`]: value});
+	};
+
+	useEffect(() => {
+		LiferayService.getQuoteComparisonById(productId)
+			.then((product) => {
+				setProduct({...product, mostPopular: true});
+			})
+			.catch((error) => console.error(error.message));
+	}, []);
+
 	return (
 		<div className="selected-quote">
-			<QuoteInfo />
+			<QuoteInfo product={product} />
 
 			<div className="selected-quote-right-page">
 				<Panel
@@ -58,6 +81,7 @@ const SelectedQuote = () => {
 					title="1. Create an Account"
 				>
 					<CreateAnAccount
+						onSelectedQuote={onSelectedQuote}
 						setExpanded={setExpanded}
 						setStepChecked={setStepChecked}
 					/>
@@ -74,6 +98,9 @@ const SelectedQuote = () => {
 				>
 					<UploadDocuments
 						discardChanges={discardChanges}
+						onSelectedQuote={onSelectedQuote}
+						product={product}
+						selectedQuote={selectedQuote}
 						setDiscardChanges={() => setDiscardChanges(false)}
 						setExpanded={setExpanded}
 						setSection={(sections) => setSections(sections)}
@@ -86,7 +113,10 @@ const SelectedQuote = () => {
 					stepChecked={panel.selectPaymentMethod.checked}
 					title="3. Select Payment Method"
 				>
-					Select Payment Method...
+					<PaymentMethod
+						product={product}
+						selectedQuote={selectedQuote}
+					/>
 				</Panel>
 			</div>
 		</div>

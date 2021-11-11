@@ -92,7 +92,7 @@ const Panel = ({
 					show: showContentPanel,
 				})}
 			>
-				{children}
+				{defaultExpanded && children}
 			</div>
 		</div>
 	);
