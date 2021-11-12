@@ -40,7 +40,18 @@ export const CreateAnAccount = () => {
 		if (isMatchingAllRules) {
 			SendAccountRequest(email, password).then((response) => {
 				dispatch({
-					payload: 'uploadDocuments',
+					payload: {
+						panelKey: 'uploadDocuments',
+						value: true,
+					},
+					type: ACTIONS.SET_EXPANDED,
+				});
+
+				dispatch({
+					payload: {
+						panelKey: 'createAnAccount',
+						value: false,
+					},
 					type: ACTIONS.SET_EXPANDED,
 				});
 

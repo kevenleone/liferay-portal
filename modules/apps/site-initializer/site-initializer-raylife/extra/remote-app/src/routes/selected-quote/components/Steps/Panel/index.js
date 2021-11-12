@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import classNames from 'classnames';
 import {useContext} from 'react';
 import {SelectedQuoteContext} from '~/routes/selected-quote/context/SelectedQuoteContextProvider';
@@ -19,7 +20,7 @@ const Panel = ({
 			<div className="panel-header">
 				<div className="panel-left">{title}</div>
 
-				<PanelMiddle checked={checked} />
+				<PanelMiddle checked={checked} expanded={expanded} />
 
 				<PanelRight checked={checked} expanded={expanded} />
 			</div>

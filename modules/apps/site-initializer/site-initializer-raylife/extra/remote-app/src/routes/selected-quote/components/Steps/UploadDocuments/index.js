@@ -59,10 +59,7 @@ const UploadDocuments = () => {
 		setSections(
 			sections.map((section) => {
 				if (section.title === _section.title) {
-					return {
-						...section,
-						files,
-					};
+					section.files = files;
 				}
 
 				return section;
@@ -174,8 +171,14 @@ const UploadDocuments = () => {
 
 		createOrder();
 		setLoading(false);
-		dispatch({payload: 'selectPaymentMethod', type: ACTIONS.SET_EXPANDED});
-		dispatch({payload: 'uploadDocuments', type: ACTIONS.SET_EXPANDED});
+		dispatch({
+			payload: {panelKey: 'selectPaymentMethod', value: true},
+			type: ACTIONS.SET_EXPANDED,
+		});
+		dispatch({
+			payload: {panelKey: 'uploadDocuments', value: false},
+			type: ACTIONS.SET_EXPANDED,
+		});
 		dispatch({
 			payload: {panelKey: 'uploadDocuments', value: true},
 			type: ACTIONS.SET_STEP_CHECKED,

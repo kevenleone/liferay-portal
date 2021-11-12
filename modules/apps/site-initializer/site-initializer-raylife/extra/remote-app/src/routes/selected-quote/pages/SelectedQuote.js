@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import ClayIcon from '@clayui/icon';
 import classNames from 'classnames';
 import React, {useContext, useEffect, useState} from 'react';
@@ -11,6 +12,18 @@ import SelectedQuoteContextProvider, {
 	ACTIONS,
 	SelectedQuoteContext,
 } from '../context/SelectedQuoteContextProvider';
+
+const CheckButton = ({checked, expanded, hasError = false}) => (
+	<div className="panel-right">
+		<div
+			className={classNames('panel-right-icon', {
+				'step-checked': checked && !hasError && !expanded,
+			})}
+		>
+			<ClayIcon symbol="check" />
+		</div>
+	</div>
+);
 
 const DiscardChanges = ({checked, expanded, hasError}) => {
 	const [showDiscardChanges, setShowDiscardChanges] = useState(false);
@@ -46,6 +59,8 @@ const DiscardChanges = ({checked, expanded, hasError}) => {
 
 			if (noFileDocumentsId) {
 				filesChanged = true;
+
+				return;
 			}
 		});
 
@@ -60,8 +75,19 @@ const DiscardChanges = ({checked, expanded, hasError}) => {
 						<a
 							onClick={() => {
 								dispatch({
-									payload: 'uploadDocuments',
+									payload: {
+										panelKey: 'uploadDocuments',
+										value: true,
+									},
 									type: ACTIONS.SET_EXPANDED,
+								});
+
+								dispatch({
+									payload: {
+										panelKey: 'uploadDocuments',
+										value: false,
+									},
+									type: ACTIONS.SET_STEP_CHECKED,
 								});
 							}}
 						>
@@ -81,13 +107,11 @@ const DiscardChanges = ({checked, expanded, hasError}) => {
 				</div>
 			)}
 
-			<div
-				className={classNames('panel-right-icon', {
-					checked: checked && !hasError && !expanded,
-				})}
-			>
-				<ClayIcon symbol="check" />
-			</div>
+			<CheckButton
+				checked={checked}
+				expanded={expanded}
+				hasError={hasError}
+			/>
 		</div>
 	);
 };
@@ -100,14 +124,18 @@ const SelectedQuote = () => {
 			<QuoteInfo />
 
 			<div className="selected-quote-right-page">
-				<Panel id="createAnAccount" title="1. Create an Account">
+				<Panel
+					PanelRight={CheckButton}
+					id="createAnAccount"
+					title="1. Create an Account"
+				>
 					<CreateAnAccount />
 				</Panel>
 
 				<Panel
-					PanelMiddle={({checked, showContentPanel}) => (
+					PanelMiddle={({checked, expanded}) => (
 						<div className="panel-middle">
-							{!showContentPanel && checked && (
+							{!expanded && checked && (
 								<ViewFilesPanel sections={sections} />
 							)}
 						</div>

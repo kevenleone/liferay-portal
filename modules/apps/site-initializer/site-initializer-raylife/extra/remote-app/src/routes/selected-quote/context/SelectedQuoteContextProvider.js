@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import {createContext, useEffect, useReducer} from 'react';
 import {LiferayService} from '~/common/services/liferay';
 import {STORAGE_KEYS, Storage} from '~/common/services/liferay/storage';
@@ -71,9 +72,6 @@ const SelectedQuoteReducer = (state = initialState, action) => {
 	const setPanel = (panelKey, panelKeyProperty, value) => {
 		const newPanel = {...state.panel};
 
-		// eslint-disable-next-line no-console
-		console.log(panelKey, panelKeyProperty, value);
-
 		newPanel[panelKey][panelKeyProperty] =
 			value ?? !newPanel[panelKey][panelKeyProperty];
 
@@ -84,7 +82,11 @@ const SelectedQuoteReducer = (state = initialState, action) => {
 		case ACTIONS.SET_EXPANDED: {
 			return {
 				...state,
-				panel: setPanel(action.payload, 'expanded'),
+				panel: setPanel(
+					action.payload.panelKey,
+					'expanded',
+					action.payload.value
+				),
 			};
 		}
 
