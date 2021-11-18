@@ -1,48 +1,84 @@
 import {useState} from 'react';
 import {LiferayTheme} from '../services/liferay';
 import {getAccountFlagByFilter} from '../services/liferay/graphql/account-flags';
-import {getUserAccountById} from '../services/liferay/graphql/user-accounts';
+import {PARAMS_KEYS} from '../services/liferay/search-params';
 import useGraphQL from './useGraphQL';
 
 const liferaySiteName = LiferayTheme.getLiferaySiteName();
+const PROJECT_PAGE_KEY = 'projects';
 
-const onboardingPageRedirection = (userAccount, accountFlags) => {
+const validateExternalReferenceCode = (
+	accountBriefs,
+	externalReferenceCode
+) => {
+	const accountBrief = accountBriefs.find(
+		(accountBrief) =>
+			accountBrief.externalReferenceCode === externalReferenceCode
+	);
+
+	return accountBrief;
+};
+
+const onboardingPageGuard = (
+	userAccount,
+	accountFlags,
+	externalReferenceCode
+) => {
 	return {
-		pageKey: 'onboarding',
+		location: `${liferaySiteName}/onboarding?${PARAMS_KEYS.PROJECT_APPLICATION_EXTERNAL_REFERENCE_CODE}=${externalReferenceCode}`,
 		validate:
 			!accountFlags.length &&
 			userAccount.roleBriefs.find(
 				({name}) => name === 'Account Administrator'
+			) &&
+			validateExternalReferenceCode(
+				userAccount.accountBriefs,
+				externalReferenceCode
 			),
 	};
 };
 
-const overviewPageRedirection = (userAccount) => {
-	return {
-		pageKey: 'project-overview',
-		validate: userAccount.accountBriefs.length === 1,
-	};
-};
+const overviewPageGuard = (
+	userAccount,
+	_accountFlags,
+	externalReferenceCode
+) => {
+	const isValidExternalReferenceCode = validateExternalReferenceCode(
+		userAccount.accountBriefs,
+		externalReferenceCode
+	);
+	const validation =
+		isValidExternalReferenceCode || userAccount.accountBriefs.length === 1;
 
-const projectsPageRedirection = (userAccount) => {
+	const getExternalReferenceCode = () => {
+		if (isValidExternalReferenceCode) {
+			return externalReferenceCode;
+		}
+		else if (userAccount.accountBriefs.length === 1) {
+			return userAccount.accountBriefs[0].externalReferenceCode;
+		}
+	};
+
 	return {
-		pageKey: 'projects-list',
-		validate: userAccount.accountBriefs.length !== 1,
+		location: `${liferaySiteName}/overview?${
+			PARAMS_KEYS.PROJECT_APPLICATION_EXTERNAL_REFERENCE_CODE
+		}=${getExternalReferenceCode()}`,
+		validate: validation,
 	};
 };
 
 const usePageGuard = (
-	externalReferenceCode,
-	pageRedirect,
-	otherRedirections
+	userAccount,
+	guard,
+	alternativeGuard,
+	externalReferenceCode
 ) => {
 	const [isLoading, setLoading] = useState(true);
 	const {data, isLoading: isLoadingGraphQL} = useGraphQL([
-		getUserAccountById(LiferayTheme.getUserId()),
 		getAccountFlagByFilter({
 			accountKey: externalReferenceCode,
 			name: 'onboarding',
-			userUuid: LiferayTheme.getUserId(),
+			userUuid: userAccount.externalReferenceCode,
 			value: 1,
 		}),
 	]);
@@ -51,19 +87,22 @@ const usePageGuard = (
 		setLoading(isLoadingGraphQL);
 
 		if (
-			!externalReferenceCode ||
-			!pageRedirect(data.userAccount, data.accountFlags).validate
+			!validateExternalReferenceCode(
+				userAccount.accountBriefs,
+				externalReferenceCode
+			) ||
+			!guard(userAccount, data.accountFlags, externalReferenceCode)
+				.validate
 		) {
-			otherRedirections.forEach((redirection) => {
-				const {pageKey, validate} = redirection(
-					data.userAccount,
-					data.accountFlags
-				);
+			const {location, validate: alternativeValidate} = alternativeGuard(
+				userAccount,
+				data.accountFlags,
+				externalReferenceCode
+			);
 
-				if (validate) {
-					window.location.href = `${liferaySiteName}/${pageKey}`;
-				}
-			});
+			window.location.href = alternativeValidate
+				? location
+				: `${liferaySiteName}/${PROJECT_PAGE_KEY}`;
 		}
 	}
 
@@ -72,9 +111,4 @@ const usePageGuard = (
 	};
 };
 
-export {
-	usePageGuard,
-	onboardingPageRedirection,
-	overviewPageRedirection,
-	projectsPageRedirection,
-};
+export {usePageGuard, onboardingPageGuard, overviewPageGuard};

@@ -1,9 +1,8 @@
 import {useContext} from 'react';
 import BaseButton from '~/common/components/BaseButton';
 import {
-	onboardingPageRedirection,
-	overviewPageRedirection,
-	projectsPageRedirection,
+	onboardingPageGuard,
+	overviewPageGuard,
 	usePageGuard,
 } from '~/common/hooks/usePageGuard';
 import Layout from '../../components/Layout';
@@ -12,12 +11,13 @@ import {actionTypes} from '../../context/reducer';
 import {steps} from '../../utils/constants';
 import WelcomeSkeleton from './Skeleton';
 
-const Welcome = ({externalReferenceCode}) => {
-	const [state, dispatch] = useContext(AppContext);
+const Welcome = ({userAccount}) => {
+	const [{assetsPath, project}, dispatch] = useContext(AppContext);
 	const {isLoading} = usePageGuard(
-		externalReferenceCode,
-		onboardingPageRedirection,
-		[overviewPageRedirection, projectsPageRedirection]
+		userAccount,
+		onboardingPageGuard,
+		overviewPageGuard,
+		project?.externalReferenceCode
 	);
 
 	if (isLoading) {
@@ -43,7 +43,7 @@ const Welcome = ({externalReferenceCode}) => {
 				),
 			}}
 			headerProps={{
-				greetings: 'Hello Sarah,',
+				greetings: `Hello ${userAccount.name},`,
 				title: 'Welcome to Liferay’s Customer Portal',
 			}}
 		>
@@ -52,16 +52,18 @@ const Welcome = ({externalReferenceCode}) => {
 				className="mb-4 pb-1"
 				draggable={false}
 				height={300}
-				src={`${state.assetsPath}/assets/intro_onboarding.svg`}
+				src={`${assetsPath}/assets/intro_onboarding.svg`}
 				width={391.58}
 			/>
 
 			<p className="mb-0 px-1 text-center text-neutral-2">
-				Let&apos;s download your DXP activation keys, add any team members to
-				your projects and give you a quick tour of the space.
+				Let&apos;s download your DXP activation keys, add any team
+				members to your projects and give you a quick tour of the space.
 			</p>
 		</Layout>
 	);
 };
+
+Welcome.Skeleton = WelcomeSkeleton;
 
 export default Welcome;
