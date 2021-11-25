@@ -1,0 +1,34 @@
+.congrats-buttons {
+	text-align: center;
+	}
+	
+.congrats-buttons .policy {	
+	background: none;
+	border-radius: 4px;
+	border: 1px solid #4C85FF;
+	color: #4C85FF;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 700;
+	height: 56px;
+	letter-spacing: 0.03em;  
+	line-height: 24px;
+	margin-right: 23px;
+	padding: 16px, 18px;
+	width: 215px;
+	}
+
+.congrats-buttons .dashboard {	 
+	background: #4C85FF;
+	border-radius: 4px;
+	border: 1px solid #4C85FF;
+	color: #FFFF;
+	cursor: pointer;
+	font-size: 16px;
+	font-weight: 700;
+	height: 56px;
+	letter-spacing: 0.03em;  	
+	line-height: 24px;
+	padding: 16px, 18px;
+	width: 215px;
+	}
