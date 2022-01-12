@@ -71,6 +71,7 @@ export function FormBasicBusinessInformation({form}) {
 			},
 			templateName: 'hi-template',
 		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	return (
