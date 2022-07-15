@@ -75,7 +75,9 @@ const yupSchema = {
 	}),
 	suite: yup.object({
 		autoanalyze: yup.boolean(),
+		caseParameters: yup.string(),
 		description: yup.string(),
+		id: yup.string(),
 		name: yup.string().required(),
 		smartSuite: yup.string(),
 	}),
