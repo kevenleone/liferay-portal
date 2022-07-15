@@ -57,7 +57,8 @@ const yupSchema = {
 		name: yup.string(),
 	}),
 	project: yup.object({
-		description: yup.string(),
+		description: yup.string().notRequired(),
+		id: yup.string().notRequired(),
 		name: yup.string().required(),
 	}),
 	requirement: yup.object({
