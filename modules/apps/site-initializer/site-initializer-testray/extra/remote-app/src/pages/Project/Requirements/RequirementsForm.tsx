@@ -16,6 +16,7 @@ import ClayForm from '@clayui/form';
 import {FocusEvent, useEffect} from 'react';
 import {useForm} from 'react-hook-form';
 import {useOutletContext, useParams} from 'react-router-dom';
+import {KeyedMutator} from 'swr';
 
 import Form from '../../../components/Form';
 import Container from '../../../components/Layout/Container';
@@ -53,7 +54,10 @@ const RequirementsForm = () => {
 	} = useFormActions();
 	const {projectId, requirementId} = useParams();
 	const {setTabs} = useHeader({shouldUpdate: false});
-	const context: {requirement?: TestrayRequirement} = useOutletContext();
+	const context: {
+		requirementsMutate: KeyedMutator<any>;
+		testrayRequirement?: TestrayRequirement;
+	} = useOutletContext();
 	const {
 		formState: {errors},
 		handleSubmit,
@@ -63,7 +67,7 @@ const RequirementsForm = () => {
 	} = useForm<RequirementsFormType>({
 		defaultValues: requirementId
 			? ({
-					...context,
+					...context.testrayRequirement,
 			  } as any)
 			: {},
 		resolver: yupResolver(yupSchema.requirement),
@@ -93,6 +97,7 @@ const RequirementsForm = () => {
 				update: updateRequirement,
 			}
 		)
+			.then(context.requirementsMutate)
 			.then(onSave)
 			.catch(onError);
 	};
@@ -122,12 +127,12 @@ const RequirementsForm = () => {
 	}, [testrayComponents, setValue]);
 
 	useEffect(() => {
-		if (!context.requirement) {
+		if (!context.testrayRequirement) {
 			setTimeout(() => {
 				setTabs([]);
 			}, 10);
 		}
-	}, [context.requirement, setTabs]);
+	}, [context.testrayRequirement, setTabs]);
 
 	return (
 		<Container className="container">
