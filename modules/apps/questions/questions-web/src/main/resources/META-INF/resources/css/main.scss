@@ -14,6 +14,10 @@
 	}
 }
 
+.questions-result-bar {
+	margin: 0 22px;
+}
+
 .question-row-article-body {
 	height: 2.5rem;
 
@@ -328,4 +332,9 @@
 	min-width: 300px;
 	padding-top: 250px;
 	text-align: center;
+}
+
+.filters-dropdown-menu {
+	min-width: 400px !important;
+	max-width: 500px !important;
 }
