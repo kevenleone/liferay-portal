@@ -26,9 +26,10 @@ import QATable from '../../../components/Table/QATable';
 import {useFetch} from '../../../hooks/useFetch';
 import useHeader from '../../../hooks/useHeader';
 import i18n from '../../../i18n';
-import {TestraySubTask, TestrayTask} from '../../../services/rest';
+import {APIResponse, TestraySubTask, TestrayTask} from '../../../services/rest';
 import {testraySubTaskImpl} from '../../../services/rest/TestraySubtask';
 import {getTimeFromNow} from '../../../util/date';
+import {searchUtil} from '../../../util/search';
 import SubtasksCaseResults from './SubtaskCaseResults';
 import SubtaskHeaderActions from './SubtaskHeaderActions';
 
@@ -46,6 +47,18 @@ const Subtasks = () => {
 	>(testraySubTaskImpl.getResource(subtaskId as string), (response) =>
 		testraySubTaskImpl.transformData(response)
 	);
+
+	const {data: testraySubtaskToMerged} = useFetch<
+		APIResponse<TestraySubTask>
+	>(
+		`${testraySubTaskImpl.resource}&filter=${searchUtil.eq(
+			'r_mergedToTestraySubtask_c_subtaskId',
+			subtaskId as string
+		)}&pageSize=100&fields=name`,
+		(response) => testraySubTaskImpl.transformDataFromList(response)
+	);
+
+	const subtasksMergedName = testraySubtaskToMerged?.items || [];
 
 	useEffect(() => {
 		if (testraySubtask) {
@@ -89,8 +102,7 @@ const Subtasks = () => {
 									value: (
 										<StatusBadge
 											type={
-												testraySubtask.dueStatus
-													.key as StatusBadgeType
+												testraySubtask.dueStatus.key.toLowerCase() as StatusBadgeType
 											}
 										>
 											{testraySubtask.dueStatus.name}
@@ -142,6 +154,16 @@ const Subtasks = () => {
 								{
 									title: i18n.translate('error'),
 									value: <Code>{testraySubtask.errors}</Code>,
+								},
+								{
+									title: subtasksMergedName.length
+										? i18n.translate('merged-with')
+										: '',
+									value: subtasksMergedName.length
+										? `${subtasksMergedName.map(
+												({name}) => name
+										  )}`
+										: null,
 								},
 							]}
 						/>
