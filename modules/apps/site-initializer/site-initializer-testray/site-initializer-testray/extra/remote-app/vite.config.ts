@@ -17,8 +17,32 @@ import path from 'path';
 import {defineConfig} from 'vite';
 import {UserConfigExport} from 'vitest/config';
 
+const assetsDir = 'static';
+const fileName = '[name]';
+
+const fileNamePattern = `${assetsDir}/${fileName}.js`;
+
 export default defineConfig({
-	build: {assetsDir: 'static', outDir: 'build'},
+	build: {
+		assetsDir,
+		outDir: 'build',
+		rollupOptions: {
+			output: {
+				assetFileNames: `${assetsDir}/${fileName}[extname]`,
+				chunkFileNames: fileNamePattern,
+				entryFileNames: fileNamePattern,
+				manualChunks: (id) => {
+					if (id.includes('billboard.js') || id.includes('d3')) {
+						return 'd3';
+					}
+
+					if (id.includes('node_modules')) {
+						return 'vendor';
+					}
+				},
+			},
+		},
+	},
 	plugins: [react()],
 	server: {
 		port: 3000,
