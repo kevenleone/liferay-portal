@@ -1836,6 +1836,11 @@ public class ServletDataImpl implements ServletData {
 							MessageBoardSectionResourceImpl.class,
 							"getMessageBoardSectionMessageBoardSectionsPage"));
 					put(
+						"query#messageBoardSectionByFriendlyUrlPath",
+						new ObjectValuePair<>(
+							MessageBoardSectionResourceImpl.class,
+							"getSiteMessageBoardSectionByFriendlyUrlPath"));
+					put(
 						"query#messageBoardSections",
 						new ObjectValuePair<>(
 							MessageBoardSectionResourceImpl.class,
