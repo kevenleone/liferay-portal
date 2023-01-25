@@ -98,11 +98,7 @@ const CaseResultHistory: React.FC<CaseResultHistoryProps> = ({
 					{
 						key: 'errors',
 						render: (errors: string) =>
-							errors && (
-								<Code>
-									{errors.substring(0, errors.length)}
-								</Code>
-							),
+							errors && <Code>{errors}</Code>,
 						size: 'xl',
 						value: i18n.translate('errors'),
 					},
