@@ -5,7 +5,9 @@
 			"[$DOCUMENT_URL:/site-initializer/documents/company/remote-app/site-initializer-testray/index.css$]"
 		],
 		"elementURLs": [
-			"[$DOCUMENT_URL:/site-initializer/documents/company/remote-app/site-initializer-testray/index.js$]"
+			"[$DOCUMENT_URL:/site-initializer/documents/company/remote-app/site-initializer-testray/billboard.js$]",
+			"[$DOCUMENT_URL:/site-initializer/documents/company/remote-app/site-initializer-testray/index.js$]",
+			"[$DOCUMENT_URL:/site-initializer/documents/company/remote-app/site-initializer-testray/liferay.js$]"
 		],
 		"externalReferenceCode": "TESTRAY001",
 		"htmlElementName": "liferay-remote-app-testray",

@@ -12,13 +12,32 @@
  * details.
  */
 
-import react from '@vitejs/plugin-react';
+import react from '@vitejs/plugin-react-swc';
 import path from 'path';
 import {defineConfig} from 'vite';
 import {UserConfigExport} from 'vitest/config';
 
 export default defineConfig({
-	build: {assetsDir: 'static', outDir: 'build'},
+	build: {
+		assetsDir: 'static',
+		outDir: 'build',
+		rollupOptions: {
+			output: {
+				assetFileNames: 'static/[name].[hash][extname]',
+				chunkFileNames: 'static/[name].js',
+				entryFileNames: 'static/[name].js',
+				manualChunks: (id) => {
+					if (id.includes('@clayui')) {
+						return 'liferay';
+					}
+
+					if (id.includes('billboard')) {
+						return 'billboard';
+					}
+				},
+			},
+		},
+	},
 	plugins: [react()],
 	server: {
 		port: 3000,
