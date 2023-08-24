@@ -1,0 +1,6 @@
+Bundle-Name: Liferay OSB Site Initializer M7K4
+Bundle-SymbolicName: com.liferay.osb.site.initializer.m7k4
+Bundle-Version: 1.0.0
+Liferay-Site-Initializer-Name: M7K4
+Provide-Capability: liferay.site.initializer
+Web-ContextPath: /osb-site-initializer-m7k4

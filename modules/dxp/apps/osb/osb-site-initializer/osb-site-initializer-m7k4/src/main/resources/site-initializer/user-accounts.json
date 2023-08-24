@@ -1,0 +1,13 @@
+[
+	{
+		"accountBriefs": [
+			{
+				"externalReferenceCode": "ACCOUNT-001"
+			}
+		],
+		"alternateName": "ray",
+		"emailAddress": "ray@liferay.com",
+		"familyName": "Liferay",
+		"givenName": "Ray",
+	}
+]

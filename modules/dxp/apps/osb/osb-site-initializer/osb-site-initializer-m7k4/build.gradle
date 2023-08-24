@@ -1,0 +1,4 @@
+ext.extraRemoteAppName = "com.liferay.osb.site.initializer.m7k4.extra.remote.app"
+ext.extraRemoteAppVersion = "20230823.1304"
+
+apply from: rootProject.file("build-site-initializer.gradle")
