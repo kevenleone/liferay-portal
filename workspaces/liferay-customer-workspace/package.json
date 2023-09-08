@@ -1,0 +1,8 @@
+{
+    "private": true,
+    "workspaces": {
+        "packages": [
+            "client-extensions/liferay-sites-navigation-custom-element"
+        ]
+    }
+}

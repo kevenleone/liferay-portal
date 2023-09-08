@@ -1,0 +1,68 @@
+.liferay-navigation-nav {
+  font-family: Source Sans Pro;
+
+  padding: 10px 0;
+
+  font-size: var(--font-size-base);
+  color: var(--color-neutral-10);
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--neutral-02, #e2e2e4);
+
+  .opacity-80 {
+    opacity: 0.8;
+  }
+
+  .opacity-50 {
+    opacity: 0.5;
+  }
+
+  &--menu {
+    display: flex;
+    flex-direction: column;
+
+    &__item:hover {
+      .shortcut-icon {
+        display: block !important;
+      }
+    }
+
+    &__item {
+      align-items: center;
+      border-radius: 5px;
+      color: black;
+      cursor: pointer;
+      display: flex;
+      font-size: 16px;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding: 5px;
+      text-decoration: none;
+
+      &__icon {
+        background-color: #0b5fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+
+        svg {
+          padding-top: 2px;
+          padding-left: 2px;
+          fill: var(--color-neutral-0);
+        }
+      }
+    }
+  }
+}
+
+.my-dropdown {
+  width: 400px;
+}
+
+.account-setting-menu {
+  span {
+    color: var(--color-neutral-8);
+    font-weight: 600;
+  }
+}

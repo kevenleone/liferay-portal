@@ -1,0 +1,15 @@
+assemble:
+  - from: build/vite
+    into: static
+liferay-sites-navigation-custom-element:
+  friendlyURLMapping: liferay-sites-navigation-custom-element
+  htmlElementName: liferay-sites-navigation-custom-element
+  instanceable: true
+  name: Liferay Sites Navigation
+  portletCategoryName: category.client-extensions
+  type: customElement
+  urls:
+    - http://localhost:5173/@vite/client
+    - http://localhost:5173/@vite/refresh.ts
+    - http://localhost:5173/src/main.tsx
+  useESM: true
