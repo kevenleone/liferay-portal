@@ -13,7 +13,4 @@ export default defineConfig({
 		outDir: 'build',
 	},
 	plugins: [react()],
-	server: {
-		origin: 'http://localhost:5173',
-	},
 });

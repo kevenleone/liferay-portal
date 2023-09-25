@@ -30,5 +30,5 @@ export default defineConfig({
 			return filename;
 		},
 	},
-	plugins: [react()]
+	plugins: [react()],
 });
