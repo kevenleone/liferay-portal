@@ -76,8 +76,10 @@ public class KoroneikiRestController extends BaseRestController {
 
 		Order order = _orderResource.getOrder(orderId);
 
+		OrderItemResource orderItemResource = _getOrderItemResource(jwt);
+
 		for (OrderItem orderItem :
-				_orderItemResource.getOrderIdOrderItemsPage(
+				orderItemResource.getOrderIdOrderItemsPage(
 					orderId,
 					com.liferay.headless.commerce.admin.order.client.pagination.
 						Pagination.of(1, 10)
@@ -238,9 +240,11 @@ public class KoroneikiRestController extends BaseRestController {
 
 		_orderResource.patchOrder(commerceOrderJSONObject.getLong("id"), order);
 
+		OrderItemResource orderItemResource = _getOrderItemResource(jwt);
+
 		com.liferay.headless.commerce.admin.order.client.pagination.Page
 			<OrderItem> orderItemPage =
-				_orderItemResource.getOrderIdOrderItemsPage(
+				orderItemResource.getOrderIdOrderItemsPage(
 					order.getId(),
 					com.liferay.headless.commerce.admin.order.client.pagination.
 						Pagination.of(1, 10));
@@ -267,7 +271,9 @@ public class KoroneikiRestController extends BaseRestController {
 			return;
 		}
 
-		Account account = _accountResource.getAccount(
+		AccountResource accountResource = _getAccountResource(jwt);
+
+		Account account = accountResource.getAccount(
 			commerceOrderJSONObject.getLong("accountId"));
 
 		if (!account.getExternalReferenceCode(
@@ -280,7 +286,7 @@ public class KoroneikiRestController extends BaseRestController {
 					account, jwt
 				).getKey());
 
-			_accountResource.patchAccount(account.getId(), account);
+			accountResource.patchAccount(account.getId(), account);
 		}
 
 		try {
@@ -297,6 +303,30 @@ public class KoroneikiRestController extends BaseRestController {
 		catch (Exception exception) {
 			_log.error("Unable to create account product purchase", exception);
 		}
+	}
+
+	private AccountResource _getAccountResource(Jwt jwt) throws Exception {
+		URL liferayDXPURL = new URL(
+			lxcDXPServerProtocol + "://" + lxcDXPMainDomain);
+
+		return AccountResource.builder(
+		).header(
+			HttpHeaders.AUTHORIZATION, "Bearer " + jwt.getTokenValue()
+		).endpoint(
+			liferayDXPURL
+		).build();
+	}
+
+	private OrderItemResource _getOrderItemResource(Jwt jwt) throws Exception {
+		URL liferayDXPURL = new URL(
+			lxcDXPServerProtocol + "://" + lxcDXPMainDomain);
+
+		return OrderItemResource.builder(
+		).header(
+			HttpHeaders.AUTHORIZATION, "Bearer " + jwt.getTokenValue()
+		).endpoint(
+			liferayDXPURL
+		).build();
 	}
 
 	private Map<String, String> _getProductSpecificationsMap(
@@ -322,13 +352,6 @@ public class KoroneikiRestController extends BaseRestController {
 		URL liferayDXPURL = new URL(
 			lxcDXPServerProtocol + "://" + lxcDXPMainDomain);
 
-		_accountResource = AccountResource.builder(
-		).header(
-			HttpHeaders.AUTHORIZATION, "Bearer " + jwt.getTokenValue()
-		).endpoint(
-			liferayDXPURL
-		).build();
-
 		URL liferayMarketplaceKoroneikiAuthURL = new URL(_koroneikiAuthURL);
 
 		_koroneikiAccountResource =
@@ -339,13 +362,6 @@ public class KoroneikiRestController extends BaseRestController {
 				).endpoint(
 					liferayMarketplaceKoroneikiAuthURL
 				).build();
-
-		_orderItemResource = OrderItemResource.builder(
-		).header(
-			HttpHeaders.AUTHORIZATION, "Bearer " + jwt.getTokenValue()
-		).endpoint(
-			liferayDXPURL
-		).build();
 
 		_orderResource = OrderResource.builder(
 		).header(
@@ -578,7 +594,6 @@ public class KoroneikiRestController extends BaseRestController {
 	private static final Log _log = LogFactory.getLog(
 		KoroneikiRestController.class);
 
-	private AccountResource _accountResource;
 	private
 		com.liferay.osb.koroneiki.phloem.rest.client.resource.v1_0.
 			AccountResource _koroneikiAccountResource;
@@ -589,7 +604,6 @@ public class KoroneikiRestController extends BaseRestController {
 	@Value("${liferay.marketplace.koroneiki.auth.url}")
 	private String _koroneikiAuthURL;
 
-	private OrderItemResource _orderItemResource;
 	private OrderResource _orderResource;
 	private PostalAddressResource _postalAddressResource;
 	private ProductPurchaseResource _productPurchaseResource;
