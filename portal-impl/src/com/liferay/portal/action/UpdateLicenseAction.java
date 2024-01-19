@@ -6,6 +6,7 @@
 package com.liferay.portal.action;
 
 import com.liferay.petra.string.StringPool;
+import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.json.JSONArray;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
 import com.liferay.portal.kernel.json.JSONObject;
@@ -13,6 +14,7 @@ import com.liferay.portal.kernel.license.util.LicenseManagerUtil;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
 import com.liferay.portal.kernel.model.User;
+import com.liferay.portal.kernel.security.auth.AuthTokenUtil;
 import com.liferay.portal.kernel.servlet.ServletResponseUtil;
 import com.liferay.portal.kernel.util.Constants;
 import com.liferay.portal.kernel.util.ContentTypes;
@@ -26,6 +28,7 @@ import com.liferay.portlet.admin.util.OmniadminUtil;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -50,7 +53,7 @@ public class UpdateLicenseAction implements Action {
 		// PLACEHOLDER 07
 		// PLACEHOLDER 08
 
-		if (_isValidRequest(httpServletRequest)) {
+		if (_isValidRequest(httpServletRequest, httpServletResponse)) {
 			String cmd = ParamUtil.getString(httpServletRequest, Constants.CMD);
 
 			String clusterNodeId = ParamUtil.getString(
@@ -122,7 +125,34 @@ public class UpdateLicenseAction implements Action {
 		return jsonObject.toString();
 	}
 
-	private boolean _isOmniadmin(HttpServletRequest httpServletRequest) {
+	private boolean _isCSRFTokenValid(
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse)
+		throws Exception {
+
+		if (Objects.equals(httpServletRequest.getMethod(), "GET")) {
+			return true;
+		}
+
+		try {
+			AuthTokenUtil.checkCSRFToken(
+				httpServletRequest, LicenseUtil.class.getName());
+
+			return true;
+		}
+		catch (PortalException portalException) {
+			_log.error(
+				"Invalid authentication token received", portalException);
+
+			PortalUtil.sendError(
+				HttpServletResponse.SC_UNAUTHORIZED, portalException,
+				httpServletRequest, httpServletResponse);
+		}
+
+		return false;
+	}
+
+	private boolean _isOmniAdmin(HttpServletRequest httpServletRequest) {
 		User user = null;
 
 		try {
@@ -141,7 +171,10 @@ public class UpdateLicenseAction implements Action {
 		return false;
 	}
 
-	private boolean _isValidRequest(HttpServletRequest httpServletRequest) {
+	private boolean _isValidRequest(
+			HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse)
+		throws Exception {
 
 		// PLACEHOLDER 09
 		// PLACEHOLDER 10
@@ -158,7 +191,9 @@ public class UpdateLicenseAction implements Action {
 		// PLACEHOLDER 21
 		// PLACEHOLDER 22
 
-		if (_isOmniadmin(httpServletRequest)) {
+		if (_isCSRFTokenValid(httpServletRequest, httpServletResponse) &&
+			_isOmniAdmin(httpServletRequest)) {
+
 			LicenseUtil.registerOrder(httpServletRequest);
 
 			return true;
