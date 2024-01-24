@@ -44,16 +44,15 @@ public class UpdateLicenseAction implements Action {
 			HttpServletResponse httpServletResponse)
 		throws Exception {
 
-		// PLACEHOLDER 01
-		// PLACEHOLDER 02
-		// PLACEHOLDER 03
-		// PLACEHOLDER 04
-		// PLACEHOLDER 05
-		// PLACEHOLDER 06
-		// PLACEHOLDER 07
-		// PLACEHOLDER 08
+		if (Objects.equals(httpServletRequest.getMethod(), "GET")) {
+			return actionMapping.getActionForward("portal.license");
+		}
 
-		if (_isValidRequest(httpServletRequest, httpServletResponse)) {
+		if (_isCSRFTokenValid(httpServletRequest, httpServletResponse) &&
+			_isOmniAdmin(httpServletRequest)) {
+
+			LicenseUtil.registerOrder(httpServletRequest);
+
 			String cmd = ParamUtil.getString(httpServletRequest, Constants.CMD);
 
 			String clusterNodeId = ParamUtil.getString(
@@ -130,10 +129,6 @@ public class UpdateLicenseAction implements Action {
 			HttpServletResponse httpServletResponse)
 		throws Exception {
 
-		if (Objects.equals(httpServletRequest.getMethod(), "GET")) {
-			return true;
-		}
-
 		try {
 			AuthTokenUtil.checkCSRFToken(
 				httpServletRequest, LicenseUtil.class.getName());
@@ -165,37 +160,6 @@ public class UpdateLicenseAction implements Action {
 		}
 
 		if ((user != null) && OmniadminUtil.isOmniadmin(user)) {
-			return true;
-		}
-
-		return false;
-	}
-
-	private boolean _isValidRequest(
-			HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse)
-		throws Exception {
-
-		// PLACEHOLDER 09
-		// PLACEHOLDER 10
-		// PLACEHOLDER 11
-		// PLACEHOLDER 12
-		// PLACEHOLDER 13
-		// PLACEHOLDER 14
-		// PLACEHOLDER 15
-		// PLACEHOLDER 16
-		// PLACEHOLDER 17
-		// PLACEHOLDER 18
-		// PLACEHOLDER 19
-		// PLACEHOLDER 20
-		// PLACEHOLDER 21
-		// PLACEHOLDER 22
-
-		if (_isCSRFTokenValid(httpServletRequest, httpServletResponse) &&
-			_isOmniAdmin(httpServletRequest)) {
-
-			LicenseUtil.registerOrder(httpServletRequest);
-
 			return true;
 		}
 
