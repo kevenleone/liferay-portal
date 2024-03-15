@@ -5,6 +5,7 @@
 
 package com.liferay.marketplace;
 
+import com.liferay.client.extension.util.spring.boot.LiferayOAuth2AccessTokenManager;
 import com.liferay.headless.commerce.admin.order.client.dto.v1_0.Order;
 import com.liferay.headless.commerce.admin.order.client.pagination.Page;
 import com.liferay.headless.commerce.admin.order.client.pagination.Pagination;
@@ -12,12 +13,10 @@ import com.liferay.headless.commerce.admin.order.client.resource.v1_0.OrderResou
 import com.liferay.headless.portal.instances.client.dto.v1_0.Admin;
 import com.liferay.headless.portal.instances.client.dto.v1_0.PortalInstance;
 import com.liferay.headless.portal.instances.client.resource.v1_0.PortalInstanceResource;
-import com.liferay.marketplace.util.AuthorizationUtil;
 
 import java.net.URL;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -27,6 +26,7 @@ import org.apache.http.HttpHeaders;
 
 import org.json.JSONObject;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -123,12 +123,16 @@ public class TrialRestController extends BaseRestController {
 	}
 
 	private void _initResourceBuilders() throws Exception {
+		String headlessServerExternalReferenceCode =
+			"liferay-marketplace-etc-spring-boot-oauth-application-headless-" +
+				"server";
+
+		String authorization =
+			_liferayOAuth2AccessTokenManager.getAuthorization(
+				headlessServerExternalReferenceCode);
+
 		URL liferayDXPURL = new URL(
 			lxcDXPServerProtocol + "://" + lxcDXPMainDomain);
-
-		String authorization = AuthorizationUtil.getOAuthAccessToken(
-			_authenticationMap, liferayDXPURL, _dxpAuthClientId,
-			_dxpAuthClientSecret);
 
 		_orderResource = OrderResource.builder(
 		).endpoint(
@@ -194,13 +198,14 @@ public class TrialRestController extends BaseRestController {
 	private static final Log _log = LogFactory.getLog(
 		TrialRestController.class);
 
-	private final Map<String, String> _authenticationMap = new HashMap<>();
-
 	@Value("${liferay.marketplace.dxp.auth.client.id}")
 	private String _dxpAuthClientId;
 
 	@Value("${liferay.marketplace.dxp.auth.client.secret}")
 	private String _dxpAuthClientSecret;
+
+	@Autowired
+	private LiferayOAuth2AccessTokenManager _liferayOAuth2AccessTokenManager;
 
 	private OrderResource _orderResource;
 	private PortalInstanceResource _portalInstanceResource;
