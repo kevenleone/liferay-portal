@@ -61,6 +61,12 @@ public class MarketplaceService extends BaseRestController {
 		).build();
 	}
 
+	public String getAuthorization() throws Exception {
+		return _liferayOAuth2AccessTokenManager.getAuthorization(
+			"liferay-marketplace-etc-spring-boot-oauth-application-" +
+				"headless-server");
+	}
+
 	public Order getOrder(Long id) throws Exception {
 		OrderResource orderResource = _getOrderResource();
 
@@ -69,6 +75,18 @@ public class MarketplaceService extends BaseRestController {
 
 	public OrderItemResource getOrderItemResource() throws Exception {
 		return OrderItemResource.builder(
+		).header(
+			HttpHeaders.AUTHORIZATION,
+			_liferayOAuth2AccessTokenManager.getAuthorization(
+				"liferay-marketplace-etc-spring-boot-oauth-application-" +
+					"headless-server")
+		).endpoint(
+			new URL(lxcDXPServerProtocol + "://" + lxcDXPMainDomain)
+		).build();
+	}
+
+	public OrderResource getOrderResource() throws Exception {
+		return OrderResource.builder(
 		).header(
 			HttpHeaders.AUTHORIZATION,
 			_liferayOAuth2AccessTokenManager.getAuthorization(

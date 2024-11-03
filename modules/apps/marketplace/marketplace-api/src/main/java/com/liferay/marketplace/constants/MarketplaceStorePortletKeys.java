@@ -17,4 +17,6 @@ public class MarketplaceStorePortletKeys {
 	public static final String MARKETPLACE_STORE =
 		"com_liferay_marketplace_store_web_portlet_MarketplaceStorePortlet";
 
+	public static final String SITE_ADMINISTRATION_CONTENT_MARKETPLACE =
+		"site_administration.content.marketplace";
 }

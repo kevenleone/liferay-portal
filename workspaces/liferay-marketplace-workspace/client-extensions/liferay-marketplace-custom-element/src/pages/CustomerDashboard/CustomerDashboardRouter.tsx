@@ -18,6 +18,7 @@ import ProjectSelection from './pages/Apps/App/CloudProvisioning/pages/ProjectSe
 import Download from './pages/Apps/App/Download/Download';
 import CreateLicense from './pages/Apps/App/Licenses/CreateLicense';
 import Licenses from './pages/Apps/App/Licenses/Licenses';
+import DXPConnectionTokens from './pages/ConnectionTokens';
 import Solutions from './pages/Solutions';
 import ConnectionTokens from './pages/Solutions/ConnectionTokens';
 import Solution from './pages/Solutions/Solution';
@@ -42,6 +43,11 @@ const CustomerDashboardRouter = () => {
 						/>
 					</Route>
 					<Route element={<Solutions />} path="solutions" />
+
+					<Route
+						element={<DXPConnectionTokens />}
+						path="connection-tokens"
+					/>
 
 					<Route
 						element={<SolutionOutlet />}

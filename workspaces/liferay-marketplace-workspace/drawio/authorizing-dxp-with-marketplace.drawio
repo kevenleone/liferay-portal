@@ -1,0 +1,25 @@
+<mxfile host="65bd71144e">
+    <diagram id="RvwjqNF64Rxw8ZTolVRS" name="Page-1">
+        <mxGraphModel dx="1449" dy="824" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="19" value="Authorizing DXP with Marketplace" style="swimlane;childLayout=stackLayout;resizeParent=1;resizeParentMax=0;horizontal=1;startSize=20;horizontalStack=0;html=1;" parent="1" vertex="1">
+                    <mxGeometry x="74" y="260" width="680" height="610" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="Marketplace DXP" style="swimlane;startSize=20;horizontal=0;html=1;" parent="19" vertex="1">
+                    <mxGeometry y="20" width="680" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="Marketplace Springboot" style="swimlane;startSize=20;horizontal=0;html=1;" parent="19" vertex="1">
+                    <mxGeometry y="200" width="680" height="240" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="Client DXP" style="swimlane;startSize=20;horizontal=0;html=1;" parent="19" vertex="1">
+                    <mxGeometry y="440" width="680" height="170" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="22" vertex="1">
+                    <mxGeometry x="56" y="50" width="100" height="70" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

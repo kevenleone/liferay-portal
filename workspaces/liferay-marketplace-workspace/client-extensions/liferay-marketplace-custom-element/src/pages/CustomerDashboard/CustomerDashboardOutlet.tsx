@@ -23,6 +23,11 @@ export const dashboardNavigationItems = [
 		path: '/solutions',
 		symbol: 'polls',
 	},
+	{
+		itemTitle: 'Connection Tokens',
+		path: '/connection-tokens',
+		symbol: 'liferay-ac',
+	},
 ];
 
 const CustomerDashboardOutlet = () => {

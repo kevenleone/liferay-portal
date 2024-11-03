@@ -23,10 +23,22 @@ class OAuth2Client {
 
 	constructor(
 		protected agentName: string,
-		protected basePath: string
+		protected basePath = ''
 	) {
 		this.oAuth2Client =
 			Liferay.OAuth2Client.FromUserAgentApplication(agentName);
+	}
+
+	protected async delete(resource: RequestInfo) {
+		await this.fetcher(resource, {method: 'DELETE'});
+	}
+
+	protected get<T>(resource: RequestInfo, options?: Options<T>): Promise<T> {
+		return this.fetcher(resource, options);
+	}
+
+	public getHomePageURL() {
+		return this.oAuth2Client.homePageURL;
 	}
 
 	private fetcher = async <T = any>(
@@ -67,14 +79,6 @@ class OAuth2Client {
 		return response.json();
 	};
 
-	protected async delete(resource: RequestInfo) {
-		await this.fetcher(resource, {method: 'DELETE'});
-	}
-
-	protected get<T>(resource: RequestInfo, options?: Options<T>): Promise<T> {
-		return this.fetcher(resource, options);
-	}
-
 	protected patch<T>(
 		resource: RequestInfo,
 		data?: unknown,
@@ -83,19 +87,7 @@ class OAuth2Client {
 		return this.fetcher(resource, {
 			...options,
 			body: JSON.stringify(data),
-			method: 'patch',
-		});
-	}
-
-	protected put<T>(
-		resource: RequestInfo,
-		data?: unknown,
-		options?: Options<T>
-	) {
-		return this.fetcher(resource, {
-			...options,
-			body: JSON.stringify(data),
-			method: 'put',
+			method: 'PATCH',
 		});
 	}
 
@@ -110,10 +102,22 @@ class OAuth2Client {
 			method: 'POST',
 		});
 	}
+
+	protected put<T>(
+		resource: RequestInfo,
+		data?: unknown,
+		options?: Options<T>
+	) {
+		return this.fetcher(resource, {
+			...options,
+			body: JSON.stringify(data),
+			method: 'PUT',
+		});
+	}
 }
 
 export class MarketplaceSpringBootOAuth2 extends OAuth2Client {
-	constructor(resource: string) {
+	constructor(resource = '') {
 		super(
 			'liferay-marketplace-etc-spring-boot-oauth-application-user-agent',
 			resource
