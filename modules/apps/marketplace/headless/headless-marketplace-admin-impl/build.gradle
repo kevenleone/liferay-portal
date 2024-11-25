@@ -1,0 +1,4 @@
+dependencies {
+	compileOnly group: "javax.annotation", name: "javax.annotation-api", version: "1.3.2"
+	compileOnly project(":apps:marketplace:headless:headless-marketplace-admin-api")
+}

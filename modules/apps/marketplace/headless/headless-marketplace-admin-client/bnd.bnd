@@ -1,0 +1,3 @@
+Bundle-Name: Liferay Headless Marketplace Admin Client
+Bundle-SymbolicName: com.liferay.headless.marketplace.admin.rest.client
+Bundle-Version: 1.0.0

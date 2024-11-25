@@ -1,0 +1,6 @@
+Bundle-Name: Liferay Headless Marketplace Admin API
+Bundle-SymbolicName: com.liferay.headless.marketplace.admin.api
+Bundle-Version: 1.0.0
+Export-Package:\
+	com.liferay.headless.marketplace.admin.api.dto.v1_0,\
+	com.liferay.headless.marketplace.admin.api.resource.v1_0

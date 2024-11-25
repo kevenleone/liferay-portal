@@ -1,0 +1,9 @@
+apiDir: "../headless-marketplace-admin-api/src/main/java"
+apiPackagePath: "com.liferay.headless.marketplace.admin.api"
+application:
+    baseURI: "/marketplace-admin"
+    className: "MarketplaceAdminApplication"
+    name: "Liferay.Headless.Marketplace.Admin"
+author: "Keven Leone"
+clientDir: "../headless-marketplace-admin-client/src/main/java"
+testDir: "../headless-marketplace-admin-test/src/testIntegration/java"

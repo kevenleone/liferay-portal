@@ -1,0 +1,5 @@
+Bundle-Name: marketplace-admin-rest-test
+Bundle-SymbolicName: marketplace.admin.rest.test
+Bundle-Version: 1.0.0
+-includeresource: marketplace.admin.rest.client.jar=../marketplace-admin-rest-client/build/libs/marketplace.admin.rest.client-1.0.0.jar;lib:=true
+-provider-policy: ${replacestring;${range;[==,==]};.*,(.*)];$1}
