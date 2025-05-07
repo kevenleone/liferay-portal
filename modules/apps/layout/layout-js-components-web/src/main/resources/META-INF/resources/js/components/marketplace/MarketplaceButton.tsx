@@ -22,6 +22,7 @@ interface MarketplaceButtonProps {
 	heading: string;
 	isMarketplaceButtonVisited: boolean;
 	permissions: AppsPermissions;
+	portletId?: string;
 	portletNamespace: string;
 }
 
@@ -57,6 +58,7 @@ function MarketplaceButton({
 		return (
 			<MarketplaceModal
 				permissions={permissions}
+				portletNamespace={portletNamespace}
 				{...marketplaceViewProps}
 			/>
 		);

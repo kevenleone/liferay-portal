@@ -30,6 +30,8 @@ interface MarketplaceModalProps {
 	children?: ReactNode;
 	openOnRender?: boolean;
 	permissions: AppsPermissions;
+	portletId?: string;
+	portletNamespace?: string;
 	trigger?: ReactElement | null;
 }
 
@@ -37,6 +39,8 @@ export default function MarketplaceModal({
 	children,
 	openOnRender,
 	permissions,
+	portletId,
+	portletNamespace,
 	trigger,
 	...marketplaceViewProps
 }: MarketplaceModalProps & ComponentProps<typeof MarketplaceViews>) {
@@ -47,7 +51,9 @@ export default function MarketplaceModal({
 		// @ts-ignore
 
 		<MarketplaceContextProvider
-			baseResourceURL={MarketplaceRest.getBaseResourceURL()}
+			baseResourceURL={MarketplaceRest.getBaseResourceURL(
+				portletId || portletNamespace
+			)}
 			permissions={permissions}
 			settings={{productFilter: 'fragments'}}
 		>
