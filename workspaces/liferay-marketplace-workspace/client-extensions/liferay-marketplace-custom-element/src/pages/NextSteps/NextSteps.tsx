@@ -14,6 +14,7 @@ import timesCircleIcon from '../../assets/icons/times_circle_icon.svg';
 import {AccountAndAppCard} from '../../components/Card/AccountAndAppCard';
 import {Header} from '../../components/Header/Header';
 import {PageRenderer} from '../../components/Page';
+import {MarketplaceCategories} from '../../enums/Categories';
 import {OrderTypes, PaymentStatus} from '../../enums/Order';
 import {
 	ProductSpecificationKey,
@@ -25,16 +26,15 @@ import useGetProductByOrderId from '../../hooks/useGetProductByOrderId';
 import i18n from '../../i18n';
 import {Liferay} from '../../liferay/liferay';
 import HeadlessAdminUser from '../../services/rest/HeadlessAdminUser';
-import {getSiteURL} from '../../utils/site';
-import {getAccountImage} from '../../utils/util';
-import ProductPurchaseNextSteps from '../ProductPurchase/pages/NextSteps';
-
 import {
 	getProductCategoriesByVocabularyName,
 	getProductSpecification,
 } from '../../utils/productUtils';
-import {MarketplaceCategories} from '../../enums/Categories';
+import {getSiteURL} from '../../utils/site';
+import {getAccountImage} from '../../utils/util';
 import LDPNextSteps from '../ProductPurchase/pages/LiferayService/LDPNextSteps';
+import ProductPurchaseNextSteps from '../ProductPurchase/pages/NextSteps';
+
 import './NextSteps.scss';
 
 type NextStepsBodyProps = ReturnType<typeof useGetProductByOrderId>['data'];

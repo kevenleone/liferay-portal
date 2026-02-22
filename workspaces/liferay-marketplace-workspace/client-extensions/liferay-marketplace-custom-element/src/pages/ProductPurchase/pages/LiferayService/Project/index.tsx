@@ -34,11 +34,9 @@ const ProjectSelection = () => {
 
 	const accountKey = selectedAccount?.externalReferenceCode;
 
-	const {
-		data: childAccounts,
-		isLoading,
-	} = useSWR(`/account/${accountKey}/child-accounts`, () =>
-		koroneikiOAuth2.getChildAccounts(accountKey)
+	const {data: childAccounts, isLoading} = useSWR(
+		`/account/${accountKey}/child-accounts`,
+		() => koroneikiOAuth2.getChildAccounts(accountKey)
 	);
 
 	const noChildAccount = !childAccounts?.items?.length;

@@ -5,18 +5,17 @@
 
 import {OrderCustomFields, OrderTypes} from '../../../enums/Order';
 import zodSchema, {z} from '../../../schema/zod';
-import HeadlessCommerceDeliveryCart from '../../../services/rest/HeadlessCommerceDeliveryCart';
 import {getSiteURL} from '../../../utils/site';
 import {sanitizeStringForURL} from '../../../utils/string';
 import ProductPurchase from './ProductPurchase';
 
-type CDPProvisioningForm = z.infer<typeof zodSchema.cdpProvisioning>;
+type LDPProvisioningForm = z.infer<typeof zodSchema.ldpProvisioning>;
 
-export default class ProductPurchaseCDP extends ProductPurchase {
-	private form?: CDPProvisioningForm;
+export default class ProductPurchaseLDP extends ProductPurchase {
+	private form?: LDPProvisioningForm;
 	protected orderTypeExternalReferenceCode = OrderTypes.ADDONS;
 
-	setForm(form: CDPProvisioningForm) {
+	setForm(form: LDPProvisioningForm) {
 		this.form = form;
 	}
 
@@ -36,6 +35,8 @@ export default class ProductPurchaseCDP extends ProductPurchase {
 			customFields: {
 				...baseCart?.customFields,
 				[OrderCustomFields.ORDER_METADATA]: JSON.stringify({
+					productKey,
+					productPurchaseKey,
 					provisioning: {
 						corpProjectName: this.form?.workspaceName,
 						corpProjectUuid: this.account.externalReferenceCode,
@@ -49,8 +50,6 @@ export default class ProductPurchaseCDP extends ProductPurchase {
 						ownerEmailAddress: this.form?.workspaceOwnerEmail,
 						serverLocation: this.form?.dataCenterLocation,
 					},
-					productKey,
-					productPurchaseKey,
 				}),
 			},
 		} as Cart;

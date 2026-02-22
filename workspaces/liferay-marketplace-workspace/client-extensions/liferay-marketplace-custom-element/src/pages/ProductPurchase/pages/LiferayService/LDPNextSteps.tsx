@@ -3,11 +3,11 @@
  * SPDX-License-Identifier: LGPL-2.1-or-later OR LicenseRef-Liferay-DXP-EULA-2.0.0-2023-06
  */
 
-import React from 'react';
-import Loading from '../../../../components/Loading';
+import React, {useEffect} from 'react';
 
-import {usePlacedOrder} from '../../../../hooks/data/usePlacedOrder';
+import Loading from '../../../../components/Loading';
 import {OrderStatus} from '../../../../enums/Order';
+import {usePlacedOrder} from '../../../../hooks/data/usePlacedOrder';
 
 import './LDPNextSteps.scss';
 
@@ -16,14 +16,14 @@ const Container = ({
 	loading,
 	title,
 }: {
-	title: string;
-	loading?: boolean;
 	description: string;
+	loading?: boolean;
+	title: string;
 }) => (
 	<div className="ldp-background">
 		<div className="d-flex justify-content-center w-100">
-			<div className="align-items-center d-flex flex-column justify-content-center col-3 mt-9">
-				<div className="loading-overlay ldp-next-steps">
+			<div className="align-items-center col-3 d-flex flex-column justify-content-center mt-9">
+				<div className="ldp-next-steps loading-overlay">
 					<div className="loading-container">
 						{loading && <Loading className="mb-6" />}
 
@@ -41,9 +41,9 @@ const Container = ({
 );
 
 const LDPNextSteps: React.FC<{
-	title: string;
 	description: string;
-}> = ({title, description}) => {
+	title: string;
+}> = ({description, title}) => {
 	const urlParams = new URLSearchParams(window.location.search);
 	const orderId = urlParams.get('orderId');
 
@@ -51,12 +51,14 @@ const LDPNextSteps: React.FC<{
 		refreshInterval: 10000,
 	});
 
-	if (order?.orderStatusInfo.label === OrderStatus.COMPLETED) {
-		window.location.href = `/liferay-service/launch?orderId=${orderId}`;
-	}
+	useEffect(() => {
+		if (order?.orderStatusInfo?.label === OrderStatus.COMPLETED) {
+			window.location.href = `/liferay-service/launch?orderId=${orderId}`;
+		}
+	}, [order?.orderStatusInfo?.label, orderId]);
 
 	if (error) {
-		return <Container title="Something went wrong" description="" />;
+		return <Container description="" title="Something went wrong" />;
 	}
 
 	return <Container description={description} loading title={title} />;

@@ -10,7 +10,7 @@ import {Liferay} from '../../../../liferay/liferay';
 import zodSchema, {z} from '../../../../schema/zod';
 import {formatCurrency} from '../../../../utils/currencies';
 import {useProductPurchaseOutletContext} from '../../ProductPurchaseOutlet';
-import ProductPurchaseCDP from '../../services/ProductPurchaseCDP';
+import ProductPurchaseCDP from '../../services/ProductPurchaseLDP';
 import LicenseTermsCheckbox from '../App/License/LicenseTermsCheckbox';
 
 const OrderSummary = () => {
@@ -35,7 +35,7 @@ const OrderSummary = () => {
 	};
 
 	const onSubmit = async (
-		form: z.infer<typeof zodSchema.cdpProvisioning>
+		form: z.infer<typeof zodSchema.ldpProvisioning>
 	) => {
 		const productPurchase = new ProductPurchaseCDP(
 			selectedAccount,
@@ -58,7 +58,7 @@ const OrderSummary = () => {
 					children: i18n.translate('get-started'),
 					onClick: () =>
 						onSubmit(
-							form as z.infer<typeof zodSchema.cdpProvisioning>
+							form as z.infer<typeof zodSchema.ldpProvisioning>
 						),
 				},
 			}}
