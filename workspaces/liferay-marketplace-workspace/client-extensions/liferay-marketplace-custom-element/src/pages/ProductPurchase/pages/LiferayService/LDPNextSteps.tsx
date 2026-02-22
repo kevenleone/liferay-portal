@@ -11,6 +11,35 @@ import {OrderStatus} from '../../../../enums/Order';
 
 import './LDPNextSteps.scss';
 
+const Container = ({
+	description,
+	loading,
+	title,
+}: {
+	title: string;
+	loading?: boolean;
+	description: string;
+}) => (
+	<div className="ldp-background">
+		<div className="d-flex justify-content-center w-100">
+			<div className="align-items-center d-flex flex-column justify-content-center col-3 mt-9">
+				<div className="loading-overlay ldp-next-steps">
+					<div className="loading-container">
+						{loading && <Loading className="mb-6" />}
+
+						<span className="mt-4">
+							<h1>{title}</h1>
+							<div className="my-5 text-center">
+								<span>{description}</span>
+							</div>
+						</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+);
+
 const LDPNextSteps: React.FC<{
 	title: string;
 	description: string;
@@ -27,48 +56,10 @@ const LDPNextSteps: React.FC<{
 	}
 
 	if (error) {
-		return (
-			<div className="ldp-background">
-				<div className="d-flex justify-content-center w-100">
-					<div className="align-items-center d-flex flex-column justify-content-center col-3 mt-9">
-						<div className="loading-overlay ldp-next-steps">
-							<div className="loading-container">
-								<span className="mt-4">
-									<h1>Something went wrong</h1>
-									<div className="my-5 text-center">
-										<span>
-											We couldn't set up your environment.
-											Please contact support.
-										</span>
-									</div>
-								</span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		);
+		return <Container title="Something went wrong" description="" />;
 	}
 
-	return (
-		<div className="ldp-background">
-			<div className="d-flex justify-content-center w-100">
-				<div className="align-items-center d-flex flex-column justify-content-center col-3 mt-9">
-					<div className="loading-overlay ldp-next-steps">
-						<div className="loading-container">
-							<Loading className="mb-6" />
-							<span className="mt-4">
-								<h1>{title}</h1>
-								<div className="my-5 text-center">
-									<span>{description}</span>
-								</div>
-							</span>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+	return <Container description={description} loading title={title} />;
 };
 
 export default LDPNextSteps;

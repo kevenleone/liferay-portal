@@ -11,7 +11,7 @@ class KoroneikiOAuth2 extends MarketplaceSpringBootOAuth2 {
 		return this.get<SubscriptionsType[]>(`/subscriptions/${orderId}`);
 	}
 	async getChildAccounts(accountKey: string) {
-		return this.get<KoroneikiChildAccounts[]>(
+		return this.get<APIResponse<KoroneikiChildAccounts>>(
 			`/account/${accountKey}/child-accounts`
 		);
 	}

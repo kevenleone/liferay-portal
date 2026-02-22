@@ -6,7 +6,6 @@
 import ClayButton from '@clayui/button';
 import ClayIcon from '@clayui/icon';
 import ClayLoadingIndicator from '@clayui/loading-indicator';
-import {Fragment} from 'react';
 import useSWR from 'swr';
 
 import checkCircleIcon from '../../assets/icons/check_circle_icon.svg';
@@ -30,13 +29,13 @@ import {getSiteURL} from '../../utils/site';
 import {getAccountImage} from '../../utils/util';
 import ProductPurchaseNextSteps from '../ProductPurchase/pages/NextSteps';
 
-import './NextSteps.scss';
 import {
 	getProductCategoriesByVocabularyName,
 	getProductSpecification,
 } from '../../utils/productUtils';
 import {MarketplaceCategories} from '../../enums/Categories';
 import LDPNextSteps from '../ProductPurchase/pages/LiferayService/LDPNextSteps';
+import './NextSteps.scss';
 
 type NextStepsBodyProps = ReturnType<typeof useGetProductByOrderId>['data'];
 
@@ -281,7 +280,7 @@ export function NextSteps() {
 
 	if (
 		productTypeCategory === ProductTypeVocabulary.LIFERAY_SERVICE &&
-		solutionTypeSpecificationValue === SolutionTypes.CONTENT_DATA_PLATFORM
+		solutionTypeSpecificationValue === SolutionTypes.LIFERAY_DATA_PLATFORM
 	) {
 		return (
 			<LDPNextSteps

@@ -32,14 +32,16 @@ const ProjectSelection = () => {
 		selectedAccount,
 	} = useProductPurchaseOutletContext();
 
-	const accountERC = selectedAccount?.externalReferenceCode;
+	const accountKey = selectedAccount?.externalReferenceCode;
 
-	const {data: childAccounts = [], isLoading} = useSWR(
-		`/account/${accountERC}/child-accounts`,
-		() => koroneikiOAuth2.getChildAccounts(accountERC)
+	const {
+		data: childAccounts,
+		isLoading,
+	} = useSWR(`/account/${accountKey}/child-accounts`, () =>
+		koroneikiOAuth2.getChildAccounts(accountKey)
 	);
 
-	const noChildAccount = !childAccounts.length;
+	const noChildAccount = !childAccounts?.items?.length;
 
 	if (isLoading) {
 		return <ClayLoadingIndicator />;
@@ -75,20 +77,23 @@ const ProjectSelection = () => {
 					]),
 				}}
 			/>
+
 			<RadioCardList
-				contentList={childAccounts.map((childAccount, index) => ({
-					fullTitle: true,
-					id: index,
-					selected: childAccount.key === koroneikiProject?.key,
-					title: (
-						<div>
-							<div className="h5 m-0">
-								{childAccount.code.toUpperCase()}
+				contentList={childAccounts?.items?.map(
+					(childAccount, index) => ({
+						fullTitle: true,
+						id: index,
+						selected: childAccount.key === koroneikiProject?.key,
+						title: (
+							<div>
+								<div className="h5 m-0">
+									{childAccount.code.toUpperCase()}
+								</div>
 							</div>
-						</div>
-					),
-					value: childAccount,
-				}))}
+						),
+						value: childAccount,
+					})
+				)}
 				leftRadio
 				onSelect={(radioOption: RadioOption<KoroneikiChildAccounts>) =>
 					productPurchaseStore.send({
