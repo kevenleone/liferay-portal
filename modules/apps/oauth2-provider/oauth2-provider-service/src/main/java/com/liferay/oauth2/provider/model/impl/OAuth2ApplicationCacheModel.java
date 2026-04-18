@@ -55,7 +55,7 @@ public class OAuth2ApplicationCacheModel
 
 	@Override
 	public String toString() {
-		StringBundler sb = new StringBundler(53);
+		StringBundler sb = new StringBundler(55);
 
 		sb.append("{uuid=");
 		sb.append(uuid);
@@ -109,6 +109,8 @@ public class OAuth2ApplicationCacheModel
 		sb.append(rememberDevice);
 		sb.append(", trustedApplication=");
 		sb.append(trustedApplication);
+		sb.append(", applicationType=");
+		sb.append(applicationType);
 		sb.append("}");
 
 		return sb.toString();
@@ -256,6 +258,7 @@ public class OAuth2ApplicationCacheModel
 
 		oAuth2ApplicationImpl.setRememberDevice(rememberDevice);
 		oAuth2ApplicationImpl.setTrustedApplication(trustedApplication);
+		oAuth2ApplicationImpl.setApplicationType(applicationType);
 
 		oAuth2ApplicationImpl.resetOriginalValues();
 
@@ -299,6 +302,8 @@ public class OAuth2ApplicationCacheModel
 		rememberDevice = objectInput.readBoolean();
 
 		trustedApplication = objectInput.readBoolean();
+
+		applicationType = objectInput.readInt();
 	}
 
 	@Override
@@ -428,6 +433,8 @@ public class OAuth2ApplicationCacheModel
 		objectOutput.writeBoolean(rememberDevice);
 
 		objectOutput.writeBoolean(trustedApplication);
+
+		objectOutput.writeInt(applicationType);
 	}
 
 	public String uuid;
@@ -456,6 +463,7 @@ public class OAuth2ApplicationCacheModel
 	public String redirectURIs;
 	public boolean rememberDevice;
 	public boolean trustedApplication;
+	public int applicationType;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1038855590
+// LIFERAY-SERVICE-BUILDER-HASH:585689954

@@ -48,6 +48,7 @@
 		</field>
 		<field name="rememberDevice" type="boolean" />
 		<field name="trustedApplication" type="boolean" />
+		<field name="applicationType" type="int" />
 	</model>
 	<model name="com.liferay.oauth2.provider.model.OAuth2ApplicationScopeAliases">
 		<field name="oAuth2ApplicationScopeAliasesId" type="long" />

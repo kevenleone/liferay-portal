@@ -33,11 +33,12 @@ public class OAuth2ApplicationServiceWrapper
 			addOAuth2Application(
 				java.util.List<com.liferay.oauth2.provider.constants.GrantType>
 					allowedGrantTypesList,
-				String clientAuthenticationMethod, long clientCredentialUserId,
-				String clientId, int clientProfile, String clientSecret,
-				String description, java.util.List<String> featuresList,
-				String homePageURL, long iconFileEntryId, String jwks,
-				String name, String privacyPolicyURL,
+				int applicationType, String clientAuthenticationMethod,
+				long clientCredentialUserId, String clientId, int clientProfile,
+				String clientSecret, String description,
+				java.util.List<String> featuresList, String homePageURL,
+				long iconFileEntryId, String jwks, String name,
+				String privacyPolicyURL,
 				java.util.List<String> redirectURIsList, boolean rememberDevice,
 				java.util.List<String> scopeAliasesList,
 				boolean trustedApplication,
@@ -45,7 +46,7 @@ public class OAuth2ApplicationServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _oAuth2ApplicationService.addOAuth2Application(
-			allowedGrantTypesList, clientAuthenticationMethod,
+			allowedGrantTypesList, applicationType, clientAuthenticationMethod,
 			clientCredentialUserId, clientId, clientProfile, clientSecret,
 			description, featuresList, homePageURL, iconFileEntryId, jwks, name,
 			privacyPolicyURL, redirectURIsList, rememberDevice,
@@ -174,4 +175,4 @@ public class OAuth2ApplicationServiceWrapper
 	private OAuth2ApplicationService _oAuth2ApplicationService;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-893493330
+// LIFERAY-SERVICE-BUILDER-HASH:373709791

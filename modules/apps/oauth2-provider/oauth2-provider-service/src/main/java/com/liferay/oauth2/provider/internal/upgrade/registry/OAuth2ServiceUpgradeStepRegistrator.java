@@ -144,6 +144,23 @@ public class OAuth2ServiceUpgradeStepRegistrator
 			UpgradeProcessFactory.alterColumnType(
 				"OAuth2Application", "externalReferenceCode",
 				"VARCHAR(1000) null"));
+
+		registry.register(
+			"4.2.7", "4.2.8",
+			UpgradeProcessFactory.addColumns(
+				"OAuth2Application", "applicationType INTEGER default 1"),
+			UpgradeProcessFactory.runSQL(
+				"update OAuth2Application set applicationType = 0 where " +
+					"externalReferenceCode = 'ANALYTICS-CLOUD'"),
+			UpgradeProcessFactory.runSQL(
+				"update OAuth2Application set applicationType = 0 where " +
+					"name = 'Dynamic Registrator'"),
+			UpgradeProcessFactory.runSQL(
+				"update OAuth2Application set applicationType = 0 where " +
+					"clientId = 'FragmentRenderer'"),
+			UpgradeProcessFactory.runSQL(
+				"update OAuth2Application set applicationType = 0 where " +
+					"name = 'Remote Publications Headless Server'"));
 	}
 
 	@Reference

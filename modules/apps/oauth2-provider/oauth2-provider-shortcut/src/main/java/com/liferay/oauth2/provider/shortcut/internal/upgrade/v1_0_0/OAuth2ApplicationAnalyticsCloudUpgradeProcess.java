@@ -7,6 +7,7 @@ package com.liferay.oauth2.provider.shortcut.internal.upgrade.v1_0_0;
 
 import com.liferay.oauth2.provider.constants.ClientProfile;
 import com.liferay.oauth2.provider.constants.GrantType;
+import com.liferay.oauth2.provider.constants.OAuth2ApplicationConstants;
 import com.liferay.oauth2.provider.constants.OAuth2ProviderActionKeys;
 import com.liferay.oauth2.provider.model.OAuth2Application;
 import com.liferay.oauth2.provider.service.OAuth2ApplicationLocalService;
@@ -134,6 +135,7 @@ public class OAuth2ApplicationAnalyticsCloudUpgradeProcess
 						add(GrantType.JWT_BEARER);
 					}
 				},
+				OAuth2ApplicationConstants.APPLICATION_TYPE_SYSTEM,
 				"client_secret_post", user.getUserId(),
 				OAuth2SecureRandomGenerator.generateClientId(),
 				ClientProfile.HEADLESS_SERVER.id(),

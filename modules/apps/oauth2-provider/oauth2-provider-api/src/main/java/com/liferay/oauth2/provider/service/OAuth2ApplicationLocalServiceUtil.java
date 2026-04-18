@@ -41,10 +41,10 @@ public class OAuth2ApplicationLocalServiceUtil {
 			long companyId, long userId, String userName,
 			List<com.liferay.oauth2.provider.constants.GrantType>
 				allowedGrantTypesList,
-			String clientAuthenticationMethod, long clientCredentialUserId,
-			String clientId, int clientProfile, String clientSecret,
-			String description, List<String> featuresList, String homePageURL,
-			long iconFileEntryId, String jwks, String name,
+			int applicationType, String clientAuthenticationMethod,
+			long clientCredentialUserId, String clientId, int clientProfile,
+			String clientSecret, String description, List<String> featuresList,
+			String homePageURL, long iconFileEntryId, String jwks, String name,
 			String privacyPolicyURL, List<String> redirectURIsList,
 			boolean rememberDevice, boolean trustedApplication,
 			java.util.function.Consumer
@@ -54,7 +54,7 @@ public class OAuth2ApplicationLocalServiceUtil {
 		throws PortalException {
 
 		return getService().addOAuth2Application(
-			companyId, userId, userName, allowedGrantTypesList,
+			companyId, userId, userName, allowedGrantTypesList, applicationType,
 			clientAuthenticationMethod, clientCredentialUserId, clientId,
 			clientProfile, clientSecret, description, featuresList, homePageURL,
 			iconFileEntryId, jwks, name, privacyPolicyURL, redirectURIsList,
@@ -66,10 +66,10 @@ public class OAuth2ApplicationLocalServiceUtil {
 			long companyId, long userId, String userName,
 			List<com.liferay.oauth2.provider.constants.GrantType>
 				allowedGrantTypesList,
-			String clientAuthenticationMethod, long clientCredentialUserId,
-			String clientId, int clientProfile, String clientSecret,
-			String description, List<String> featuresList, String homePageURL,
-			long iconFileEntryId, String jwks, String name,
+			int applicationType, String clientAuthenticationMethod,
+			long clientCredentialUserId, String clientId, int clientProfile,
+			String clientSecret, String description, List<String> featuresList,
+			String homePageURL, long iconFileEntryId, String jwks, String name,
 			String privacyPolicyURL, List<String> redirectURIsList,
 			boolean rememberDevice, List<String> scopeAliasesList,
 			boolean trustedApplication,
@@ -77,7 +77,7 @@ public class OAuth2ApplicationLocalServiceUtil {
 		throws PortalException {
 
 		return getService().addOAuth2Application(
-			companyId, userId, userName, allowedGrantTypesList,
+			companyId, userId, userName, allowedGrantTypesList, applicationType,
 			clientAuthenticationMethod, clientCredentialUserId, clientId,
 			clientProfile, clientSecret, description, featuresList, homePageURL,
 			iconFileEntryId, jwks, name, privacyPolicyURL, redirectURIsList,
@@ -105,10 +105,10 @@ public class OAuth2ApplicationLocalServiceUtil {
 			String externalReferenceCode, long userId, String userName,
 			List<com.liferay.oauth2.provider.constants.GrantType>
 				allowedGrantTypesList,
-			String clientAuthenticationMethod, long clientCredentialUserId,
-			String clientId, int clientProfile, String clientSecret,
-			String description, List<String> featuresList, String homePageURL,
-			long iconFileEntryId, String jwks, String name,
+			int applicationType, String clientAuthenticationMethod,
+			long clientCredentialUserId, String clientId, int clientProfile,
+			String clientSecret, String description, List<String> featuresList,
+			String homePageURL, long iconFileEntryId, String jwks, String name,
 			String privacyPolicyURL, List<String> redirectURIsList,
 			boolean rememberDevice, boolean trustedApplication,
 			java.util.function.Consumer
@@ -119,21 +119,21 @@ public class OAuth2ApplicationLocalServiceUtil {
 
 		return getService().addOrUpdateOAuth2Application(
 			externalReferenceCode, userId, userName, allowedGrantTypesList,
-			clientAuthenticationMethod, clientCredentialUserId, clientId,
-			clientProfile, clientSecret, description, featuresList, homePageURL,
-			iconFileEntryId, jwks, name, privacyPolicyURL, redirectURIsList,
-			rememberDevice, trustedApplication, builderConsumer,
-			serviceContext);
+			applicationType, clientAuthenticationMethod, clientCredentialUserId,
+			clientId, clientProfile, clientSecret, description, featuresList,
+			homePageURL, iconFileEntryId, jwks, name, privacyPolicyURL,
+			redirectURIsList, rememberDevice, trustedApplication,
+			builderConsumer, serviceContext);
 	}
 
 	public static OAuth2Application addOrUpdateOAuth2Application(
 			String externalReferenceCode, long userId, String userName,
 			List<com.liferay.oauth2.provider.constants.GrantType>
 				allowedGrantTypesList,
-			String clientAuthenticationMethod, long clientCredentialUserId,
-			String clientId, int clientProfile, String clientSecret,
-			String description, List<String> featuresList, String homePageURL,
-			long iconFileEntryId, String jwks, String name,
+			int applicationType, String clientAuthenticationMethod,
+			long clientCredentialUserId, String clientId, int clientProfile,
+			String clientSecret, String description, List<String> featuresList,
+			String homePageURL, long iconFileEntryId, String jwks, String name,
 			String privacyPolicyURL, List<String> redirectURIsList,
 			boolean rememberDevice, List<String> scopeAliasesList,
 			boolean trustedApplication,
@@ -142,11 +142,11 @@ public class OAuth2ApplicationLocalServiceUtil {
 
 		return getService().addOrUpdateOAuth2Application(
 			externalReferenceCode, userId, userName, allowedGrantTypesList,
-			clientAuthenticationMethod, clientCredentialUserId, clientId,
-			clientProfile, clientSecret, description, featuresList, homePageURL,
-			iconFileEntryId, jwks, name, privacyPolicyURL, redirectURIsList,
-			rememberDevice, scopeAliasesList, trustedApplication,
-			serviceContext);
+			applicationType, clientAuthenticationMethod, clientCredentialUserId,
+			clientId, clientProfile, clientSecret, description, featuresList,
+			homePageURL, iconFileEntryId, jwks, name, privacyPolicyURL,
+			redirectURIsList, rememberDevice, scopeAliasesList,
+			trustedApplication, serviceContext);
 	}
 
 	/**
@@ -544,4 +544,4 @@ public class OAuth2ApplicationLocalServiceUtil {
 			OAuth2ApplicationLocalService.class);
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1677176149
+// LIFERAY-SERVICE-BUILDER-HASH:-358677419

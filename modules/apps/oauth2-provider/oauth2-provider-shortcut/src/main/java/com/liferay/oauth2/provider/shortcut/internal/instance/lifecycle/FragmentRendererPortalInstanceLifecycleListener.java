@@ -7,6 +7,7 @@ package com.liferay.oauth2.provider.shortcut.internal.instance.lifecycle;
 
 import com.liferay.oauth2.provider.constants.ClientProfile;
 import com.liferay.oauth2.provider.constants.GrantType;
+import com.liferay.oauth2.provider.constants.OAuth2ApplicationConstants;
 import com.liferay.oauth2.provider.model.OAuth2Application;
 import com.liferay.oauth2.provider.service.OAuth2ApplicationLocalService;
 import com.liferay.osgi.util.configuration.ConfigurationPersistenceUtil;
@@ -64,10 +65,10 @@ public class FragmentRendererPortalInstanceLifecycleListener
 					add(GrantType.RESOURCE_OWNER_PASSWORD);
 				}
 			},
-			"none", user.getUserId(), _clientId,
-			ClientProfile.NATIVE_APPLICATION.id(), StringPool.BLANK, null, null,
-			null, 0, null, _applicationName, null, Collections.emptyList(),
-			false, false,
+			OAuth2ApplicationConstants.APPLICATION_TYPE_SYSTEM, "none",
+			user.getUserId(), _clientId, ClientProfile.NATIVE_APPLICATION.id(),
+			StringPool.BLANK, null, null, null, 0, null, _applicationName, null,
+			Collections.emptyList(), false, false,
 			builder -> builder.forApplication(
 				"liferay-json-web-services",
 				"com.liferay.oauth2.provider.jsonws",

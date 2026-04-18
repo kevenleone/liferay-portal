@@ -7,6 +7,7 @@ package com.liferay.scim.rest.internal.configuration;
 
 import com.liferay.oauth2.provider.constants.ClientProfile;
 import com.liferay.oauth2.provider.constants.GrantType;
+import com.liferay.oauth2.provider.constants.OAuth2ApplicationConstants;
 import com.liferay.oauth2.provider.model.OAuth2Application;
 import com.liferay.oauth2.provider.rest.spi.bearer.token.provider.BearerTokenProvider;
 import com.liferay.oauth2.provider.service.OAuth2ApplicationLocalService;
@@ -128,6 +129,7 @@ public class ScimClientOAuth2ApplicationConfigurationFactory {
 				_oAuth2ApplicationLocalService.addOAuth2Application(
 					companyId, user.getUserId(), user.getScreenName(),
 					ListUtil.fromArray(GrantType.CLIENT_CREDENTIALS),
+					OAuth2ApplicationConstants.APPLICATION_TYPE_SYSTEM,
 					"client_secret_post", user.getUserId(), clientId,
 					ClientProfile.HEADLESS_SERVER.id(),
 					OAuth2SecureRandomGenerator.generateClientSecret(), null,

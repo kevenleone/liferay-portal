@@ -869,6 +869,7 @@ public class LiferayOAuthDataProvider
 					externalReferenceCode, user.getUserId(),
 					user.getScreenName() + "_dynamic_registered",
 					_getAllowedGrantTypes(client),
+					OAuth2ApplicationConstants.APPLICATION_TYPE_USER,
 					client.getTokenEndpointAuthMethod(), user.getUserId(),
 					clientId, ClientProfile.WEB_APPLICATION.id(), clientSecret,
 					null, null, client.getApplicationWebUri(), 0, jwks,

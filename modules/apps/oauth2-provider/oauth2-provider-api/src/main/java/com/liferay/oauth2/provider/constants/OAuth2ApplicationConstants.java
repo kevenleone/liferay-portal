@@ -10,6 +10,12 @@ package com.liferay.oauth2.provider.constants;
  */
 public class OAuth2ApplicationConstants {
 
+	public static final int APPLICATION_TYPE_CLIENT_EXTENSION = 2;
+
+	public static final int APPLICATION_TYPE_SYSTEM = 0;
+
+	public static final int APPLICATION_TYPE_USER = 1;
+
 	public static final String NAME_DYNAMIC_REGISTRATOR = "Dynamic Registrator";
 
 }

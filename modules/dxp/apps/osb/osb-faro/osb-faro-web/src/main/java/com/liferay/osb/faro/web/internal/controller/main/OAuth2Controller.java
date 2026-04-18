@@ -8,6 +8,7 @@ package com.liferay.osb.faro.web.internal.controller.main;
 import com.liferay.expando.kernel.model.ExpandoBridge;
 import com.liferay.oauth2.provider.constants.ClientProfile;
 import com.liferay.oauth2.provider.constants.GrantType;
+import com.liferay.oauth2.provider.constants.OAuth2ApplicationConstants;
 import com.liferay.oauth2.provider.model.OAuth2Application;
 import com.liferay.oauth2.provider.model.OAuth2Authorization;
 import com.liferay.oauth2.provider.service.OAuth2ApplicationLocalService;
@@ -302,7 +303,8 @@ public class OAuth2Controller extends BaseFaroController {
 
 		return _oAuth2ApplicationLocalService.addOAuth2Application(
 			user.getCompanyId(), user.getUserId(), user.getFullName(),
-			Arrays.asList(GrantType.CLIENT_CREDENTIALS), StringPool.BLANK,
+			Arrays.asList(GrantType.CLIENT_CREDENTIALS),
+			OAuth2ApplicationConstants.APPLICATION_TYPE_USER, StringPool.BLANK,
 			user.getUserId(), clientId, clientProfile.id(),
 			_generateClientSecret(), StringPool.BLANK, Collections.emptyList(),
 			StringPool.BLANK, 0, StringPool.BLANK, _generateApplicationName(),

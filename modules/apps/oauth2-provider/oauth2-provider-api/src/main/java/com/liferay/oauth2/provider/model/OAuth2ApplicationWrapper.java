@@ -46,6 +46,7 @@ public class OAuth2ApplicationWrapper
 			"oAuth2ApplicationScopeAliasesId",
 			getOAuth2ApplicationScopeAliasesId());
 		attributes.put("allowedGrantTypes", getAllowedGrantTypes());
+		attributes.put("applicationType", getApplicationType());
 		attributes.put(
 			"clientAuthenticationMethod", getClientAuthenticationMethod());
 		attributes.put("clientCredentialUserId", getClientCredentialUserId());
@@ -231,6 +232,12 @@ public class OAuth2ApplicationWrapper
 		if (trustedApplication != null) {
 			setTrustedApplication(trustedApplication);
 		}
+
+		Integer applicationType = (Integer)attributes.get("applicationType");
+
+		if (applicationType != null) {
+			setApplicationType(applicationType);
+		}
 	}
 
 	@Override
@@ -253,6 +260,16 @@ public class OAuth2ApplicationWrapper
 		getAllowedGrantTypesList() {
 
 		return model.getAllowedGrantTypesList();
+	}
+
+	/**
+	 * Returns the application type of this o auth2 application.
+	 *
+	 * @return the application type of this o auth2 application
+	 */
+	@Override
+	public int getApplicationType() {
+		return model.getApplicationType();
 	}
 
 	/**
@@ -589,6 +606,16 @@ public class OAuth2ApplicationWrapper
 	}
 
 	/**
+	 * Sets the application type of this o auth2 application.
+	 *
+	 * @param applicationType the application type of this o auth2 application
+	 */
+	@Override
+	public void setApplicationType(int applicationType) {
+		model.setApplicationType(applicationType);
+	}
+
+	/**
 	 * Sets the client authentication method of this o auth2 application.
 	 *
 	 * @param clientAuthenticationMethod the client authentication method of this o auth2 application
@@ -901,4 +928,4 @@ public class OAuth2ApplicationWrapper
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-237298256
+// LIFERAY-SERVICE-BUILDER-HASH:951410180

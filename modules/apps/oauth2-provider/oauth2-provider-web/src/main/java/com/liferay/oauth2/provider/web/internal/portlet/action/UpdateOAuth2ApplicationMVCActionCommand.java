@@ -10,7 +10,10 @@ import com.liferay.document.library.util.DLURLHelper;
 import com.liferay.oauth2.provider.configuration.OAuth2ProviderConfiguration;
 import com.liferay.oauth2.provider.constants.ClientProfile;
 import com.liferay.oauth2.provider.constants.GrantType;
+import com.liferay.oauth2.provider.constants.OAuth2ApplicationConstants;
+import com.liferay.oauth2.provider.exception.DuplicateOAuth2ApplicationExternalReferenceCodeException;
 import com.liferay.oauth2.provider.model.OAuth2Application;
+import com.liferay.oauth2.provider.service.OAuth2ApplicationLocalService;
 import com.liferay.oauth2.provider.service.OAuth2ApplicationScopeAliasesLocalService;
 import com.liferay.oauth2.provider.service.OAuth2ApplicationService;
 import com.liferay.oauth2.provider.util.OAuth2SecureRandomGenerator;
@@ -165,12 +168,13 @@ public class UpdateOAuth2ApplicationMVCActionCommand
 
 				OAuth2Application oAuth2Application =
 					_oAuth2ApplicationService.addOAuth2Application(
-						allowedGrantTypesList, clientAuthenticationMethod,
-						clientCredentialUserId, clientId, clientProfile.id(),
-						clientSecret, description, featuresList, homePageURL, 0,
-						jwks, name, privacyPolicyURL, redirectURIsList,
-						rememberDevice, scopeAliasesList, trustedApplication,
-						serviceContext);
+						allowedGrantTypesList,
+						OAuth2ApplicationConstants.APPLICATION_TYPE_USER,
+						clientAuthenticationMethod, clientCredentialUserId,
+						clientId, clientProfile.id(), clientSecret, description,
+						featuresList, homePageURL, 0, jwks, name,
+						privacyPolicyURL, redirectURIsList, rememberDevice,
+						scopeAliasesList, trustedApplication, serviceContext);
 
 				response.setRenderParameter(
 					"oAuth2ApplicationId",
@@ -191,6 +195,12 @@ public class UpdateOAuth2ApplicationMVCActionCommand
 					privacyPolicyURL, redirectURIsList, rememberDevice,
 					trustedApplication);
 
+				String externalReferenceCode = ParamUtil.get(
+					request, "externalReferenceCode", StringPool.BLANK);
+
+				_oAuth2ApplicationLocalService.updateExternalReferenceCode(
+					oAuth2ApplicationId, externalReferenceCode);
+
 				long fileEntryId = ParamUtil.getLong(request, "fileEntryId");
 
 				if (ParamUtil.getBoolean(request, "deleteLogo")) {
@@ -209,6 +219,20 @@ public class UpdateOAuth2ApplicationMVCActionCommand
 					_dlAppService.deleteFileEntry(fileEntryId);
 				}
 			}
+		}
+		catch (DuplicateOAuth2ApplicationExternalReferenceCodeException
+					duplicateOAuth2ApplicationExternalReferenceCodeException) {
+
+			if (_log.isDebugEnabled()) {
+				_log.debug(
+					duplicateOAuth2ApplicationExternalReferenceCodeException);
+			}
+
+			SessionErrors.add(
+				request,
+				DuplicateOAuth2ApplicationExternalReferenceCodeException.class.
+					getName(),
+				duplicateOAuth2ApplicationExternalReferenceCodeException);
 		}
 		catch (PortalException portalException) {
 			if (_log.isDebugEnabled()) {
@@ -252,6 +276,9 @@ public class UpdateOAuth2ApplicationMVCActionCommand
 
 	@Reference
 	private DLURLHelper _dlurlHelper;
+
+	@Reference
+	private OAuth2ApplicationLocalService _oAuth2ApplicationLocalService;
 
 	@Reference
 	private OAuth2ApplicationScopeAliasesLocalService

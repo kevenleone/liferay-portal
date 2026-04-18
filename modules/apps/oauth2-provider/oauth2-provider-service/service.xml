@@ -37,6 +37,7 @@
 		<column name="redirectURIs" type="String" />
 		<column name="rememberDevice" type="boolean" />
 		<column name="trustedApplication" type="boolean" />
+		<column name="applicationType" type="int" />
 
 		<!-- Finder methods -->
 

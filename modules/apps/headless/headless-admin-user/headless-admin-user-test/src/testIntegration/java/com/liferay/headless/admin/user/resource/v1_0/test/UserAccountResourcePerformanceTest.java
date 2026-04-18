@@ -9,6 +9,7 @@ import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.headless.admin.user.client.http.HttpInvoker;
 import com.liferay.oauth.client.LocalOAuthClient;
 import com.liferay.oauth2.provider.constants.GrantType;
+import com.liferay.oauth2.provider.constants.OAuth2ApplicationConstants;
 import com.liferay.oauth2.provider.model.OAuth2Application;
 import com.liferay.oauth2.provider.service.OAuth2ApplicationLocalService;
 import com.liferay.petra.string.StringBundler;
@@ -172,6 +173,7 @@ public class UserAccountResourcePerformanceTest {
 					GrantType.CLIENT_CREDENTIALS, GrantType.REFRESH_TOKEN,
 					GrantType.JWT_BEARER, GrantType.RESOURCE_OWNER_PASSWORD,
 					GrantType.AUTHORIZATION_CODE),
+				OAuth2ApplicationConstants.APPLICATION_TYPE_USER,
 				"client_secret_post", user.getUserId(),
 				RandomTestUtil.randomString(), 0, RandomTestUtil.randomString(),
 				"", Collections.emptyList(), "", 0, "", "rest_token", "",

@@ -12,8 +12,10 @@ String redirect = ParamUtil.getString(request, "redirect");
 
 OAuth2Application oAuth2Application = oAuth2AdminPortletDisplayContext.getOAuth2Application();
 
+int applicationType = (oAuth2Application == null) ? 1 : oAuth2Application.getApplicationType();
 String clientId = (oAuth2Application == null) ? "" : oAuth2Application.getClientId();
 String clientSecret = (oAuth2Application == null) ? "" : oAuth2Application.getClientSecret();
+String externalReferenceCode = (oAuth2Application == null) ? "" : oAuth2Application.getExternalReferenceCode();
 %>
 
 <portlet:actionURL name="/oauth2_provider/update_oauth2_application" var="updateOAuth2ApplicationURL">
@@ -32,6 +34,8 @@ String clientSecret = (oAuth2Application == null) ? "" : oAuth2Application.getCl
 					lg="12"
 				>
 					<liferay-ui:error exception="<%= DuplicateOAuth2ApplicationClientIdException.class %>" focusField="clientId" message="client-id-already-exists" />
+
+					<liferay-ui:error exception="<%= DuplicateOAuth2ApplicationExternalReferenceCodeException.class %>" focusField="externalReferenceCode" message="please-enter-a-unique-external-reference-code" />
 
 					<liferay-ui:error exception="<%= OAuth2ApplicationClientGrantTypeException.class %>">
 						<liferay-ui:message arguments="<%= HtmlUtil.escape(((OAuth2ApplicationClientGrantTypeException)errorException).getMessage()) %>" key="grant-type-x-is-unsupported-for-this-client-type" />
@@ -92,11 +96,15 @@ String clientSecret = (oAuth2Application == null) ? "" : oAuth2Application.getCl
 								module="{EditClientDetails} from oauth2-provider-web"
 								props='<%=
 									HashMapBuilder.<String, Object>put(
+										"applicationType", applicationType
+									).put(
 										"baseResourceURL", String.valueOf(baseResourceURL)
 									).put(
 										"clientId", clientId
 									).put(
 										"clientSecret", clientSecret
+									).put(
+										"externalReferenceCode", externalReferenceCode
 									).build()
 								%>'
 							/>

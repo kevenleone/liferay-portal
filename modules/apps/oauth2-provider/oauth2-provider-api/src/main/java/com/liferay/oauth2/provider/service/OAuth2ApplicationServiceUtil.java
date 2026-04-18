@@ -36,10 +36,10 @@ public class OAuth2ApplicationServiceUtil {
 	public static OAuth2Application addOAuth2Application(
 			List<com.liferay.oauth2.provider.constants.GrantType>
 				allowedGrantTypesList,
-			String clientAuthenticationMethod, long clientCredentialUserId,
-			String clientId, int clientProfile, String clientSecret,
-			String description, List<String> featuresList, String homePageURL,
-			long iconFileEntryId, String jwks, String name,
+			int applicationType, String clientAuthenticationMethod,
+			long clientCredentialUserId, String clientId, int clientProfile,
+			String clientSecret, String description, List<String> featuresList,
+			String homePageURL, long iconFileEntryId, String jwks, String name,
 			String privacyPolicyURL, List<String> redirectURIsList,
 			boolean rememberDevice, List<String> scopeAliasesList,
 			boolean trustedApplication,
@@ -47,7 +47,7 @@ public class OAuth2ApplicationServiceUtil {
 		throws PortalException {
 
 		return getService().addOAuth2Application(
-			allowedGrantTypesList, clientAuthenticationMethod,
+			allowedGrantTypesList, applicationType, clientAuthenticationMethod,
 			clientCredentialUserId, clientId, clientProfile, clientSecret,
 			description, featuresList, homePageURL, iconFileEntryId, jwks, name,
 			privacyPolicyURL, redirectURIsList, rememberDevice,
@@ -148,4 +148,4 @@ public class OAuth2ApplicationServiceUtil {
 			OAuth2ApplicationServiceUtil.class, OAuth2ApplicationService.class);
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:1874331327
+// LIFERAY-SERVICE-BUILDER-HASH:-276166062

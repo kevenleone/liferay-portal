@@ -92,7 +92,7 @@ public class OAuth2ApplicationLocalServiceImpl
 	@Override
 	public OAuth2Application addOAuth2Application(
 			long companyId, long userId, String userName,
-			List<GrantType> allowedGrantTypesList,
+			List<GrantType> allowedGrantTypesList, int applicationType,
 			String clientAuthenticationMethod, long clientCredentialUserId,
 			String clientId, int clientProfile, String clientSecret,
 			String description, List<String> featuresList, String homePageURL,
@@ -163,6 +163,7 @@ public class OAuth2ApplicationLocalServiceImpl
 		oAuth2Application.setRedirectURIsList(redirectURIsList);
 		oAuth2Application.setRememberDevice(rememberDevice);
 		oAuth2Application.setTrustedApplication(trustedApplication);
+		oAuth2Application.setApplicationType(applicationType);
 
 		if (builderConsumer != null) {
 			OAuth2ApplicationScopeAliases oAuth2ApplicationScopeAliases =
@@ -187,7 +188,7 @@ public class OAuth2ApplicationLocalServiceImpl
 	@Override
 	public OAuth2Application addOAuth2Application(
 			long companyId, long userId, String userName,
-			List<GrantType> allowedGrantTypesList,
+			List<GrantType> allowedGrantTypesList, int applicationType,
 			String clientAuthenticationMethod, long clientCredentialUserId,
 			String clientId, int clientProfile, String clientSecret,
 			String description, List<String> featuresList, String homePageURL,
@@ -261,6 +262,7 @@ public class OAuth2ApplicationLocalServiceImpl
 		oAuth2Application.setRedirectURIsList(redirectURIsList);
 		oAuth2Application.setRememberDevice(rememberDevice);
 		oAuth2Application.setTrustedApplication(trustedApplication);
+		oAuth2Application.setApplicationType(applicationType);
 
 		if (ListUtil.isNotEmpty(scopeAliasesList)) {
 			OAuth2ApplicationScopeAliases oAuth2ApplicationScopeAliases =
@@ -285,7 +287,7 @@ public class OAuth2ApplicationLocalServiceImpl
 	@Override
 	public OAuth2Application addOrUpdateOAuth2Application(
 			String externalReferenceCode, long userId, String userName,
-			List<GrantType> allowedGrantTypesList,
+			List<GrantType> allowedGrantTypesList, int applicationType,
 			String clientAuthenticationMethod, long clientCredentialUserId,
 			String clientId, int clientProfile, String clientSecret,
 			String description, List<String> featuresList, String homePageURL,
@@ -330,11 +332,11 @@ public class OAuth2ApplicationLocalServiceImpl
 
 		oAuth2Application = addOAuth2Application(
 			user.getCompanyId(), userId, userName, allowedGrantTypesList,
-			clientAuthenticationMethod, clientCredentialUserId, clientId,
-			clientProfile, clientSecret, description, featuresList, homePageURL,
-			iconFileEntryId, jwks, name, privacyPolicyURL, redirectURIsList,
-			rememberDevice, trustedApplication, builderConsumer,
-			serviceContext);
+			applicationType, clientAuthenticationMethod, clientCredentialUserId,
+			clientId, clientProfile, clientSecret, description, featuresList,
+			homePageURL, iconFileEntryId, jwks, name, privacyPolicyURL,
+			redirectURIsList, rememberDevice, trustedApplication,
+			builderConsumer, serviceContext);
 
 		oAuth2Application.setExternalReferenceCode(externalReferenceCode);
 
@@ -344,7 +346,7 @@ public class OAuth2ApplicationLocalServiceImpl
 	@Override
 	public OAuth2Application addOrUpdateOAuth2Application(
 			String externalReferenceCode, long userId, String userName,
-			List<GrantType> allowedGrantTypesList,
+			List<GrantType> allowedGrantTypesList, int applicationType,
 			String clientAuthenticationMethod, long clientCredentialUserId,
 			String clientId, int clientProfile, String clientSecret,
 			String description, List<String> featuresList, String homePageURL,
@@ -383,11 +385,11 @@ public class OAuth2ApplicationLocalServiceImpl
 
 		oAuth2Application = addOAuth2Application(
 			user.getCompanyId(), userId, userName, allowedGrantTypesList,
-			clientAuthenticationMethod, clientCredentialUserId, clientId,
-			clientProfile, clientSecret, description, featuresList, homePageURL,
-			iconFileEntryId, jwks, name, privacyPolicyURL, redirectURIsList,
-			rememberDevice, scopeAliasesList, trustedApplication,
-			serviceContext);
+			applicationType, clientAuthenticationMethod, clientCredentialUserId,
+			clientId, clientProfile, clientSecret, description, featuresList,
+			homePageURL, iconFileEntryId, jwks, name, privacyPolicyURL,
+			redirectURIsList, rememberDevice, scopeAliasesList,
+			trustedApplication, serviceContext);
 
 		oAuth2Application.setExternalReferenceCode(externalReferenceCode);
 

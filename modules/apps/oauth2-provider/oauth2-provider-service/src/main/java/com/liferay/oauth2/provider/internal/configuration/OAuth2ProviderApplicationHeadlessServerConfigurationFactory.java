@@ -8,6 +8,7 @@ package com.liferay.oauth2.provider.internal.configuration;
 import com.liferay.oauth2.provider.configuration.OAuth2ProviderApplicationHeadlessServerConfiguration;
 import com.liferay.oauth2.provider.constants.ClientProfile;
 import com.liferay.oauth2.provider.constants.GrantType;
+import com.liferay.oauth2.provider.constants.OAuth2ApplicationConstants;
 import com.liferay.oauth2.provider.model.OAuth2Application;
 import com.liferay.oauth2.provider.scope.liferay.ScopeLocator;
 import com.liferay.oauth2.provider.util.OAuth2SecureRandomGenerator;
@@ -182,6 +183,7 @@ public class OAuth2ProviderApplicationHeadlessServerConfigurationFactory
 				externalReferenceCode, user.getUserId(), user.getScreenName(),
 				ListUtil.fromArray(
 					GrantType.CLIENT_CREDENTIALS, GrantType.JWT_BEARER),
+				OAuth2ApplicationConstants.APPLICATION_TYPE_CLIENT_EXTENSION,
 				"client_secret_post", serviceUser.getUserId(), clientId,
 				ClientProfile.HEADLESS_SERVER.id(), clientSecret,
 				oAuth2ProviderApplicationHeadlessServerConfiguration.

@@ -71,6 +71,7 @@ public class DynamicRegistrationPortalInstanceLifecycleListener
 			_oAuth2ApplicationLocalService.addOAuth2Application(
 				company.getCompanyId(), user.getUserId(), user.getScreenName(),
 				Collections.singletonList(GrantType.CLIENT_CREDENTIALS),
+				OAuth2ApplicationConstants.APPLICATION_TYPE_SYSTEM,
 				"client_secret_post", user.getUserId(),
 				OAuth2SecureRandomGenerator.generateClientId(),
 				ClientProfile.HEADLESS_SERVER.id(),

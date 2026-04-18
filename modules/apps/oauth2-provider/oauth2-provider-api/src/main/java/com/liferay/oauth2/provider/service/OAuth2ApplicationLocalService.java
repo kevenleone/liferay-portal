@@ -62,7 +62,7 @@ public interface OAuth2ApplicationLocalService
 	 */
 	public OAuth2Application addOAuth2Application(
 			long companyId, long userId, String userName,
-			List<GrantType> allowedGrantTypesList,
+			List<GrantType> allowedGrantTypesList, int applicationType,
 			String clientAuthenticationMethod, long clientCredentialUserId,
 			String clientId, int clientProfile, String clientSecret,
 			String description, List<String> featuresList, String homePageURL,
@@ -75,7 +75,7 @@ public interface OAuth2ApplicationLocalService
 
 	public OAuth2Application addOAuth2Application(
 			long companyId, long userId, String userName,
-			List<GrantType> allowedGrantTypesList,
+			List<GrantType> allowedGrantTypesList, int applicationType,
 			String clientAuthenticationMethod, long clientCredentialUserId,
 			String clientId, int clientProfile, String clientSecret,
 			String description, List<String> featuresList, String homePageURL,
@@ -101,7 +101,7 @@ public interface OAuth2ApplicationLocalService
 
 	public OAuth2Application addOrUpdateOAuth2Application(
 			String externalReferenceCode, long userId, String userName,
-			List<GrantType> allowedGrantTypesList,
+			List<GrantType> allowedGrantTypesList, int applicationType,
 			String clientAuthenticationMethod, long clientCredentialUserId,
 			String clientId, int clientProfile, String clientSecret,
 			String description, List<String> featuresList, String homePageURL,
@@ -114,7 +114,7 @@ public interface OAuth2ApplicationLocalService
 
 	public OAuth2Application addOrUpdateOAuth2Application(
 			String externalReferenceCode, long userId, String userName,
-			List<GrantType> allowedGrantTypesList,
+			List<GrantType> allowedGrantTypesList, int applicationType,
 			String clientAuthenticationMethod, long clientCredentialUserId,
 			String clientId, int clientProfile, String clientSecret,
 			String description, List<String> featuresList, String homePageURL,
@@ -406,4 +406,4 @@ public interface OAuth2ApplicationLocalService
 		throws PortalException;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1041698936
+// LIFERAY-SERVICE-BUILDER-HASH:-957444928

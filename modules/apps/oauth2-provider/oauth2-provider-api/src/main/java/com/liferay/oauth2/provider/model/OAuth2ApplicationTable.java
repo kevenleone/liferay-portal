@@ -103,10 +103,14 @@ public class OAuth2ApplicationTable extends BaseTable<OAuth2ApplicationTable> {
 		createColumn(
 			"trustedApplication", Boolean.class, Types.BOOLEAN,
 			Column.FLAG_DEFAULT);
+	public final Column<OAuth2ApplicationTable, Integer> applicationType =
+		createColumn(
+			"applicationType", Integer.class, Types.INTEGER,
+			Column.FLAG_DEFAULT);
 
 	private OAuth2ApplicationTable() {
 		super("OAuth2Application", OAuth2ApplicationTable::new);
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1631243351
+// LIFERAY-SERVICE-BUILDER-HASH:-886840389

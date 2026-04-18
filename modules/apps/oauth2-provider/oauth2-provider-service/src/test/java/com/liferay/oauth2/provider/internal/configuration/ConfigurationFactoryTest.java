@@ -116,8 +116,8 @@ public class ConfigurationFactoryTest {
 		Mockito.when(
 			_oAuth2ApplicationLocalService.addOrUpdateOAuth2Application(
 				Mockito.anyString(), Mockito.anyLong(), Mockito.anyString(),
-				Mockito.anyList(), Mockito.anyString(), Mockito.anyLong(),
-				Mockito.anyString(), Mockito.anyInt(),
+				Mockito.anyList(), Mockito.anyInt(), Mockito.anyString(),
+				Mockito.anyLong(), Mockito.anyString(), Mockito.anyInt(),
 				AdditionalMatchers.or(Mockito.anyString(), Mockito.isNull()),
 				Mockito.anyString(), Mockito.anyList(), Mockito.anyString(),
 				Mockito.anyLong(),

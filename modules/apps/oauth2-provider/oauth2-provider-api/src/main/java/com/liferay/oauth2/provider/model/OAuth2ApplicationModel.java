@@ -490,6 +490,20 @@ public interface OAuth2ApplicationModel
 	 */
 	public void setTrustedApplication(boolean trustedApplication);
 
+	/**
+	 * Returns the application type of this o auth2 application.
+	 *
+	 * @return the application type of this o auth2 application
+	 */
+	public int getApplicationType();
+
+	/**
+	 * Sets the application type of this o auth2 application.
+	 *
+	 * @param applicationType the application type of this o auth2 application
+	 */
+	public void setApplicationType(int applicationType);
+
 	@Override
 	public OAuth2Application cloneWithOriginalValues();
 
@@ -498,4 +512,4 @@ public interface OAuth2ApplicationModel
 	}
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:-1896141665
+// LIFERAY-SERVICE-BUILDER-HASH:-1191866482

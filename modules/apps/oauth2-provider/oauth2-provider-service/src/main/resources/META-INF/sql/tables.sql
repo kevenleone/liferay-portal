@@ -31,7 +31,8 @@ create table OAuth2Application (
 	privacyPolicyURL STRING null,
 	redirectURIs STRING null,
 	rememberDevice BOOLEAN,
-	trustedApplication BOOLEAN
+	trustedApplication BOOLEAN,
+	applicationType INTEGER
 );
 
 create table OAuth2ApplicationScopeAliases (

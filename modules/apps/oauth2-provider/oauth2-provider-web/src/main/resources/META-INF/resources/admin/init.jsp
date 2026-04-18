@@ -15,6 +15,7 @@ page import="com.liferay.item.selector.criteria.UUIDItemSelectorReturnType" %><%
 page import="com.liferay.oauth2.provider.constants.ClientProfile" %><%@
 page import="com.liferay.oauth2.provider.constants.GrantType" %><%@
 page import="com.liferay.oauth2.provider.exception.DuplicateOAuth2ApplicationClientIdException" %><%@
+page import="com.liferay.oauth2.provider.exception.DuplicateOAuth2ApplicationExternalReferenceCodeException" %><%@
 page import="com.liferay.oauth2.provider.exception.OAuth2ApplicationClientCredentialUserIdException" %><%@
 page import="com.liferay.oauth2.provider.exception.OAuth2ApplicationClientGrantTypeException" %><%@
 page import="com.liferay.oauth2.provider.exception.OAuth2ApplicationHomePageURLException" %><%@

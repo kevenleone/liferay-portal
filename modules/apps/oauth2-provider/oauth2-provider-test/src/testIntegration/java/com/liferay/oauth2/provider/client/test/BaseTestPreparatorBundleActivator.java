@@ -7,6 +7,7 @@ package com.liferay.oauth2.provider.client.test;
 
 import com.liferay.oauth2.provider.configuration.OAuth2ProviderConfiguration;
 import com.liferay.oauth2.provider.constants.GrantType;
+import com.liferay.oauth2.provider.constants.OAuth2ApplicationConstants;
 import com.liferay.oauth2.provider.model.OAuth2Application;
 import com.liferay.oauth2.provider.model.OAuth2Authorization;
 import com.liferay.oauth2.provider.scope.spi.prefix.handler.PrefixHandler;
@@ -371,9 +372,10 @@ public abstract class BaseTestPreparatorBundleActivator
 		OAuth2Application oAuth2Application =
 			oAuth2ApplicationLocalService.addOAuth2Application(
 				companyId, user.getUserId(), user.getFullName(),
-				allowedGrantTypesList, clientAuthenticationMethod,
-				user.getUserId(), clientId, 0, clientSecret,
-				"test oauth application",
+				allowedGrantTypesList,
+				OAuth2ApplicationConstants.APPLICATION_TYPE_USER,
+				clientAuthenticationMethod, user.getUserId(), clientId, 0,
+				clientSecret, "test oauth application",
 				Collections.singletonList("token.introspection"),
 				"http://localhost:8080", 0, jwks, "test application",
 				"http://localhost:8080", redirectURIsList, rememberDevice,

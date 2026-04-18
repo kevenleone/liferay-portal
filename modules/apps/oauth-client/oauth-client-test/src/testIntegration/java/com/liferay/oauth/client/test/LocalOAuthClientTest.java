@@ -8,6 +8,7 @@ package com.liferay.oauth.client.test;
 import com.liferay.arquillian.extension.junit.bridge.junit.Arquillian;
 import com.liferay.oauth.client.LocalOAuthClient;
 import com.liferay.oauth2.provider.constants.GrantType;
+import com.liferay.oauth2.provider.constants.OAuth2ApplicationConstants;
 import com.liferay.oauth2.provider.model.OAuth2Application;
 import com.liferay.oauth2.provider.service.OAuth2ApplicationLocalService;
 import com.liferay.portal.kernel.json.JSONFactoryUtil;
@@ -49,6 +50,7 @@ public class LocalOAuthClientTest {
 			_oAuth2ApplicationLocalService.addOAuth2Application(
 				user.getCompanyId(), user.getUserId(), user.getLogin(),
 				Arrays.asList(GrantType.RESOURCE_OWNER_PASSWORD),
+				OAuth2ApplicationConstants.APPLICATION_TYPE_USER,
 				"client_secret_post", user.getUserId(), "testClient", 0,
 				"testClientSecret", "test oauth client",
 				Collections.singletonList("token.introspection"),

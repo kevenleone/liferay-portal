@@ -8,9 +8,11 @@ import React from 'react';
 import ReadOnlyInput from './ReadOnlyInput';
 
 interface IEditClientDetailsProps extends React.HTMLAttributes<HTMLElement> {
+	applicationType: number;
 	baseResourceURL: string;
 	clientId: string;
 	clientSecret: string;
+	externalReferenceCode: string;
 	portletNamespace: string;
 }
 
@@ -40,6 +42,21 @@ const EditClientDetails: React.FC<IEditClientDetailsProps> = (props) => {
 				title={Liferay.Language.get('edit-client-secret')}
 				tooltip={Liferay.Language.get('client-secret-help[oauth2]')}
 				type="password"
+			/>
+
+			<ReadOnlyInput
+				alertText={Liferay.Language.get(
+					'if-changed-the-external-reference-code-must-be-unique-across-all-oauth2-applications-in-this-instance'
+				)}
+				editable={props.applicationType === 1}
+				id={`${props.portletNamespace}externalReferenceCode`}
+				initialValue={props.externalReferenceCode}
+				label={Liferay.Language.get('external-reference-code')}
+				required={false}
+				title={Liferay.Language.get('edit-external-reference-code')}
+				tooltip={Liferay.Language.get(
+					'external-reference-code-help[oauth2]'
+				)}
 			/>
 		</>
 	);

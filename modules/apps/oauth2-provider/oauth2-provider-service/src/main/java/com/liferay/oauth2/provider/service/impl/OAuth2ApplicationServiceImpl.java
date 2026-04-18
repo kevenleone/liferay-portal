@@ -40,7 +40,7 @@ public class OAuth2ApplicationServiceImpl
 
 	@Override
 	public OAuth2Application addOAuth2Application(
-			List<GrantType> allowedGrantTypesList,
+			List<GrantType> allowedGrantTypesList, int applicationType,
 			String clientAuthenticationMethod, long clientCredentialUserId,
 			String clientId, int clientProfile, String clientSecret,
 			String description, List<String> featuresList, String homePageURL,
@@ -78,7 +78,7 @@ public class OAuth2ApplicationServiceImpl
 
 		return oAuth2ApplicationLocalService.addOAuth2Application(
 			user.getCompanyId(), user.getUserId(), user.getFullName(),
-			allowedGrantTypesList, clientAuthenticationMethod,
+			allowedGrantTypesList, applicationType, clientAuthenticationMethod,
 			clientCredentialUserId, clientId, clientProfile, clientSecret,
 			description, featuresList, homePageURL, iconFileEntryId, jwks, name,
 			privacyPolicyURL, redirectURIsList, rememberDevice,

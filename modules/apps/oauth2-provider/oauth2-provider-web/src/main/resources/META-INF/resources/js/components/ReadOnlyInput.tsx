@@ -13,10 +13,12 @@ import {EditClientOAuth2ModalContent} from './modals/EditClientOAuth2ModalConten
 interface IReadOnlyInputProps extends React.HTMLAttributes<HTMLElement> {
 	alertText: string;
 	baseResourceURL?: string;
+	editable?: boolean;
 	id: string;
 	initialValue: string;
 	isSecret?: boolean;
 	label: string;
+	required?: boolean;
 	title: string;
 	tooltip: string;
 	type?: string;
@@ -26,10 +28,12 @@ const ReadOnlyInput: React.FC<IReadOnlyInputProps> = (props) => {
 	const {
 		alertText,
 		baseResourceURL = '',
+		editable = true,
 		id,
 		initialValue,
 		isSecret = false,
 		label,
+		required = true,
 		title,
 		tooltip,
 		type = 'text',
@@ -43,7 +47,7 @@ const ReadOnlyInput: React.FC<IReadOnlyInputProps> = (props) => {
 
 	return (
 		<>
-			<FieldBase id={id} label={label} required={true} tooltip={tooltip}>
+			<FieldBase id={id} label={label} required={required} tooltip={tooltip}>
 				<ClayInput.Group>
 					<ClayInput.GroupItem prepend>
 						<ClayInput
@@ -55,38 +59,40 @@ const ReadOnlyInput: React.FC<IReadOnlyInputProps> = (props) => {
 						/>
 					</ClayInput.GroupItem>
 
-					<ClayInput.GroupItem append shrink>
-						<ClayButton
-							displayType="secondary"
-							onClick={() =>
-								openModal({
-									center: true,
-									contentComponent: ({
-										closeModal,
-									}: {
-										closeModal: () => void;
-									}) =>
-										EditClientOAuth2ModalContent({
-											alertText,
-											baseResourceURL,
+					{editable && (
+						<ClayInput.GroupItem append shrink>
+							<ClayButton
+								displayType="secondary"
+								onClick={() =>
+									openModal({
+										center: true,
+										contentComponent: ({
 											closeModal,
-											handleSetInputValue,
-											id,
-											initialValue,
-											isSecret,
-											label,
-											title,
-											tooltip,
-										}),
-									id: 'editClientOAuth2Modal',
-									size: 'md',
-									status: 'warning',
-								})
-							}
-						>
-							{Liferay.Language.get('edit')}
-						</ClayButton>
-					</ClayInput.GroupItem>
+										}: {
+											closeModal: () => void;
+										}) =>
+											EditClientOAuth2ModalContent({
+												alertText,
+												baseResourceURL,
+												closeModal,
+												handleSetInputValue,
+												id,
+												initialValue,
+												isSecret,
+												label,
+												title,
+												tooltip,
+											}),
+										id: 'editClientOAuth2Modal',
+										size: 'md',
+										status: 'warning',
+									})
+								}
+							>
+								{Liferay.Language.get('edit')}
+							</ClayButton>
+						</ClayInput.GroupItem>
+					)}
 				</ClayInput.Group>
 			</FieldBase>
 		</>

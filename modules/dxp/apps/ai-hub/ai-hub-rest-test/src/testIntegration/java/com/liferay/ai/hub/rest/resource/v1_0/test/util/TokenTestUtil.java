@@ -8,6 +8,7 @@ package com.liferay.ai.hub.rest.resource.v1_0.test.util;
 import com.liferay.ai.hub.cell.configuration.AIHubCellConfiguration;
 import com.liferay.oauth2.provider.constants.ClientProfile;
 import com.liferay.oauth2.provider.constants.GrantType;
+import com.liferay.oauth2.provider.constants.OAuth2ApplicationConstants;
 import com.liferay.oauth2.provider.model.OAuth2Application;
 import com.liferay.oauth2.provider.service.OAuth2ApplicationLocalServiceUtil;
 import com.liferay.oauth2.provider.util.OAuth2SecureRandomGenerator;
@@ -34,8 +35,9 @@ public class TokenTestUtil {
 		OAuth2Application oAuth2Application =
 			OAuth2ApplicationLocalServiceUtil.addOAuth2Application(
 				user.getCompanyId(), user.getUserId(), user.getFullName(),
-				List.of(GrantType.CLIENT_CREDENTIALS), "client_secret_post",
-				user.getUserId(),
+				List.of(GrantType.CLIENT_CREDENTIALS),
+				OAuth2ApplicationConstants.APPLICATION_TYPE_USER,
+				"client_secret_post", user.getUserId(),
 				OAuth2SecureRandomGenerator.generateClientId(),
 				ClientProfile.WEB_APPLICATION.id(),
 				OAuth2SecureRandomGenerator.generateClientSecret(), "",

@@ -35,11 +35,12 @@ public class OAuth2ApplicationLocalServiceWrapper
 				long companyId, long userId, String userName,
 				java.util.List<com.liferay.oauth2.provider.constants.GrantType>
 					allowedGrantTypesList,
-				String clientAuthenticationMethod, long clientCredentialUserId,
-				String clientId, int clientProfile, String clientSecret,
-				String description, java.util.List<String> featuresList,
-				String homePageURL, long iconFileEntryId, String jwks,
-				String name, String privacyPolicyURL,
+				int applicationType, String clientAuthenticationMethod,
+				long clientCredentialUserId, String clientId, int clientProfile,
+				String clientSecret, String description,
+				java.util.List<String> featuresList, String homePageURL,
+				long iconFileEntryId, String jwks, String name,
+				String privacyPolicyURL,
 				java.util.List<String> redirectURIsList, boolean rememberDevice,
 				boolean trustedApplication,
 				java.util.function.Consumer
@@ -49,7 +50,7 @@ public class OAuth2ApplicationLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _oAuth2ApplicationLocalService.addOAuth2Application(
-			companyId, userId, userName, allowedGrantTypesList,
+			companyId, userId, userName, allowedGrantTypesList, applicationType,
 			clientAuthenticationMethod, clientCredentialUserId, clientId,
 			clientProfile, clientSecret, description, featuresList, homePageURL,
 			iconFileEntryId, jwks, name, privacyPolicyURL, redirectURIsList,
@@ -63,11 +64,12 @@ public class OAuth2ApplicationLocalServiceWrapper
 				long companyId, long userId, String userName,
 				java.util.List<com.liferay.oauth2.provider.constants.GrantType>
 					allowedGrantTypesList,
-				String clientAuthenticationMethod, long clientCredentialUserId,
-				String clientId, int clientProfile, String clientSecret,
-				String description, java.util.List<String> featuresList,
-				String homePageURL, long iconFileEntryId, String jwks,
-				String name, String privacyPolicyURL,
+				int applicationType, String clientAuthenticationMethod,
+				long clientCredentialUserId, String clientId, int clientProfile,
+				String clientSecret, String description,
+				java.util.List<String> featuresList, String homePageURL,
+				long iconFileEntryId, String jwks, String name,
+				String privacyPolicyURL,
 				java.util.List<String> redirectURIsList, boolean rememberDevice,
 				java.util.List<String> scopeAliasesList,
 				boolean trustedApplication,
@@ -75,7 +77,7 @@ public class OAuth2ApplicationLocalServiceWrapper
 		throws com.liferay.portal.kernel.exception.PortalException {
 
 		return _oAuth2ApplicationLocalService.addOAuth2Application(
-			companyId, userId, userName, allowedGrantTypesList,
+			companyId, userId, userName, allowedGrantTypesList, applicationType,
 			clientAuthenticationMethod, clientCredentialUserId, clientId,
 			clientProfile, clientSecret, description, featuresList, homePageURL,
 			iconFileEntryId, jwks, name, privacyPolicyURL, redirectURIsList,
@@ -109,11 +111,12 @@ public class OAuth2ApplicationLocalServiceWrapper
 				String externalReferenceCode, long userId, String userName,
 				java.util.List<com.liferay.oauth2.provider.constants.GrantType>
 					allowedGrantTypesList,
-				String clientAuthenticationMethod, long clientCredentialUserId,
-				String clientId, int clientProfile, String clientSecret,
-				String description, java.util.List<String> featuresList,
-				String homePageURL, long iconFileEntryId, String jwks,
-				String name, String privacyPolicyURL,
+				int applicationType, String clientAuthenticationMethod,
+				long clientCredentialUserId, String clientId, int clientProfile,
+				String clientSecret, String description,
+				java.util.List<String> featuresList, String homePageURL,
+				long iconFileEntryId, String jwks, String name,
+				String privacyPolicyURL,
 				java.util.List<String> redirectURIsList, boolean rememberDevice,
 				boolean trustedApplication,
 				java.util.function.Consumer
@@ -124,11 +127,11 @@ public class OAuth2ApplicationLocalServiceWrapper
 
 		return _oAuth2ApplicationLocalService.addOrUpdateOAuth2Application(
 			externalReferenceCode, userId, userName, allowedGrantTypesList,
-			clientAuthenticationMethod, clientCredentialUserId, clientId,
-			clientProfile, clientSecret, description, featuresList, homePageURL,
-			iconFileEntryId, jwks, name, privacyPolicyURL, redirectURIsList,
-			rememberDevice, trustedApplication, builderConsumer,
-			serviceContext);
+			applicationType, clientAuthenticationMethod, clientCredentialUserId,
+			clientId, clientProfile, clientSecret, description, featuresList,
+			homePageURL, iconFileEntryId, jwks, name, privacyPolicyURL,
+			redirectURIsList, rememberDevice, trustedApplication,
+			builderConsumer, serviceContext);
 	}
 
 	@Override
@@ -137,11 +140,12 @@ public class OAuth2ApplicationLocalServiceWrapper
 				String externalReferenceCode, long userId, String userName,
 				java.util.List<com.liferay.oauth2.provider.constants.GrantType>
 					allowedGrantTypesList,
-				String clientAuthenticationMethod, long clientCredentialUserId,
-				String clientId, int clientProfile, String clientSecret,
-				String description, java.util.List<String> featuresList,
-				String homePageURL, long iconFileEntryId, String jwks,
-				String name, String privacyPolicyURL,
+				int applicationType, String clientAuthenticationMethod,
+				long clientCredentialUserId, String clientId, int clientProfile,
+				String clientSecret, String description,
+				java.util.List<String> featuresList, String homePageURL,
+				long iconFileEntryId, String jwks, String name,
+				String privacyPolicyURL,
 				java.util.List<String> redirectURIsList, boolean rememberDevice,
 				java.util.List<String> scopeAliasesList,
 				boolean trustedApplication,
@@ -150,11 +154,11 @@ public class OAuth2ApplicationLocalServiceWrapper
 
 		return _oAuth2ApplicationLocalService.addOrUpdateOAuth2Application(
 			externalReferenceCode, userId, userName, allowedGrantTypesList,
-			clientAuthenticationMethod, clientCredentialUserId, clientId,
-			clientProfile, clientSecret, description, featuresList, homePageURL,
-			iconFileEntryId, jwks, name, privacyPolicyURL, redirectURIsList,
-			rememberDevice, scopeAliasesList, trustedApplication,
-			serviceContext);
+			applicationType, clientAuthenticationMethod, clientCredentialUserId,
+			clientId, clientProfile, clientSecret, description, featuresList,
+			homePageURL, iconFileEntryId, jwks, name, privacyPolicyURL,
+			redirectURIsList, rememberDevice, scopeAliasesList,
+			trustedApplication, serviceContext);
 	}
 
 	/**
@@ -637,4 +641,4 @@ public class OAuth2ApplicationLocalServiceWrapper
 	private OAuth2ApplicationLocalService _oAuth2ApplicationLocalService;
 
 }
-// LIFERAY-SERVICE-BUILDER-HASH:682669637
+// LIFERAY-SERVICE-BUILDER-HASH:1372745597

@@ -8,6 +8,7 @@ package com.liferay.oauth2.provider.internal.configuration;
 import com.liferay.oauth2.provider.configuration.OAuth2ProviderApplicationUserAgentConfiguration;
 import com.liferay.oauth2.provider.constants.ClientProfile;
 import com.liferay.oauth2.provider.constants.GrantType;
+import com.liferay.oauth2.provider.constants.OAuth2ApplicationConstants;
 import com.liferay.oauth2.provider.model.OAuth2Application;
 import com.liferay.oauth2.provider.redirect.OAuth2RedirectURIInterpolator;
 import com.liferay.oauth2.provider.util.OAuth2SecureRandomGenerator;
@@ -156,6 +157,7 @@ public class OAuth2ProviderApplicationUserAgentConfigurationFactory
 				externalReferenceCode, user.getUserId(), user.getScreenName(),
 				ListUtil.fromArray(
 					GrantType.AUTHORIZATION_CODE_PKCE, GrantType.JWT_BEARER),
+				OAuth2ApplicationConstants.APPLICATION_TYPE_CLIENT_EXTENSION,
 				"none", user.getUserId(), clientId,
 				ClientProfile.USER_AGENT_APPLICATION.id(), null,
 				oAuth2ProviderApplicationUserAgentConfiguration.description(),
